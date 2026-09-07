@@ -12,7 +12,7 @@ const quickLinks = ["Home", "Community Q&A", "Lost & Found", "About"];
 
 export default function FooterComponent() {
   return (
-    <footer className="font-brand relative overflow-hidden bg-brand-primary text-gray-300">
+    <footer className="font-brand relative overflow-hidden bg-brand-primary text-white/85">
       {/* subtle vertical stripe background, matches reference */}
       <div
         className="pointer-events-none absolute inset-0 opacity-10"
@@ -34,7 +34,7 @@ export default function FooterComponent() {
                 Ask &amp; Found
               </span>
             </div>
-            <p className="text-sm leading-relaxed text-gray-400 max-w-[220px]">
+            <p className="text-sm leading-relaxed text-white/85 max-w-[220px]">
               We are a leading company dedicated to products and services to
               cater to their needs.
             </p>
@@ -50,7 +50,7 @@ export default function FooterComponent() {
                 <li key={link}>
                   <a
                     href="#"
-                    className="text-sm text-gray-400 hover:text-brand-secondary transition-colors duration-200 no-underline"
+                    className="text-sm text-white/85 hover:text-brand-secondary transition-colors duration-200 no-underline"
                   >
                     {link}
                   </a>
@@ -69,7 +69,7 @@ export default function FooterComponent() {
                 <li key={link}>
                   <a
                     href="#"
-                    className="text-sm text-gray-400 hover:text-brand-secondary transition-colors duration-200 no-underline"
+                    className="text-sm text-white/85 hover:text-brand-secondary transition-colors duration-200 no-underline"
                   >
                     {link}
                   </a>
@@ -84,18 +84,18 @@ export default function FooterComponent() {
               ADDRESS &amp; CONTACT
             </h3>
             <ul className="space-y-3">
-              <li className="flex items-start gap-2.5 text-sm text-gray-400">
+              <li className="flex items-start gap-2.5 text-sm text-white/85">
                 <MapPin size={16} className="mt-0.5 shrink-0 text-brand-secondary" />
                 <span>
                   #40, St 273, Sangkat Boeung Kak II, Khan Toul Kork, Phnom
                   Penh, Cambodia
                 </span>
               </li>
-              <li className="flex items-center gap-2.5 text-sm text-gray-400">
+              <li className="flex items-center gap-2.5 text-sm text-white/85">
                 <Phone size={16} className="shrink-0 text-brand-secondary" />
                 <span>(+855) 95-990-910</span>
               </li>
-              <li className="flex items-center gap-2.5 text-sm text-gray-400">
+              <li className="flex items-center gap-2.5 text-sm text-white/85">
                 <Mail size={16} className="shrink-0 text-brand-secondary" />
                 <span>info.istad@gmail.com</span>
               </li>
@@ -112,7 +112,7 @@ export default function FooterComponent() {
                 src={istadLogo}
                 alt="ISTAD logo"
                 style={{
-                  height: "44px",
+                  height: "autox",
                   width: "auto",
                   objectFit: "contain",
                   flexShrink: 0,
@@ -125,7 +125,7 @@ export default function FooterComponent() {
 
         {/* Bottom bar */}
         <div className="mt-12 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-gray-500 order-2 sm:order-1">
+          <p className="text-xs text-white/60 order-2 sm:order-1">
             © 2023 Estrella Inc. All rights reserved
           </p>
           <div className="flex items-center gap-3 order-1 sm:order-2">
@@ -134,7 +134,7 @@ export default function FooterComponent() {
                 key={i}
                 href="#"
                 aria-label="Social link"
-                className="flex items-center justify-center w-8 h-8 rounded-full bg-white/10 text-gray-300 hover:bg-brand-secondary hover:text-white transition-colors duration-200"
+                className="flex items-center justify-center w-8 h-8 rounded-full bg-white/10 text-white/85 hover:bg-brand-secondary hover:text-white transition-colors duration-200"
               >
                 <Icon size={13} />
               </a>
