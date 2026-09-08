@@ -3,7 +3,8 @@ import { Link } from "react-router";
 import Navbar from "../Nav/NavBarComponent.jsx";
 import FooterComponent from "../Footer/FooterComponet.jsx";
 import missionImg from "../../assets/Website/mission.png";
-
+import networkImg from "../../assets/Website/network.png";
+import visionImg from "../../assets/Website/vision.png";
 // ---------- Icons ----------
 function CheckIcon() {
   return (
@@ -80,9 +81,9 @@ function IllustrationImage({ src, alt, className = "w-full max-w-sm" }) {
   return <img src={src} alt={alt} className={`${className} object-contain`} />;
 }
 
-const NETWORK_IMAGE_SRC = "";
+const NETWORK_IMAGE_SRC = networkImg;
 const MISSION_IMAGE_SRC = missionImg;
-const VISION_IMAGE_SRC = "";
+const VISION_IMAGE_SRC = visionImg;
 
 // ---------- Data ----------
 const features = [
@@ -155,22 +156,22 @@ const visionPoints = [
 ];
 
 const mentors = [
-  { num: "01", name: "Srorng Sokcheat", roleLabel: "Senior IT Instructor", role: "Mentor", photo: "", github: "", telegram: "" },
-  { num: "02", name: "Pech Rattanakmony", roleLabel: "Senior IT Instructor", role: "Mentor", photo: "", github: "", telegram: "" },
+  { num: "01", name: "Srorng Sokcheat", roleLabel: "Senior IT Instructor", role: "Mentor", photo:"./src/assets/Mentor/srorng_sokcheat.jpg", github: "https://github.com/Sokcheatsrorng", telegram: "https://t.me/Sokcheat_srorng" },
+  { num: "02", name: "Pech Rattanakmony", roleLabel: "Senior IT Instructor", role: "Mentor", photo: "./src/assets/Mentor/pech_rattanakmony.jpg", github: "https://github.com/aintantony", telegram: "https://t.me/rattanakmony" },
 ];
 
 const teamLeads = [
-  { num: "03", name: "Mom Lisa", roleLabel: "Junior", role: "Leader", photo: "", github: "", telegram: "" },
-  { num: "04", name: "Leang Seavminh", roleLabel: "Junior", role: "Sub-Lead", photo: "", github: "", telegram: "" },
+  { num: "03", name: "Mom Lisa", roleLabel: "Junior", role: "Leader", photo: "", github: "https://github.com/LisaMom", telegram: "https://t.me/lisamom369" },
+  { num: "04", name: "Leang Seavminh", roleLabel: "Junior", role: "Sub-Lead", photo: "", github: "https://github.com/seavminhleang-art", telegram: "https://t.me/puthea_reach" },
 ];
 
 const teamMembers = [
-  { num: "05", name: "Cheakching Lyheng", roleLabel: "Junior", role: "Member", photo: "", github: "", telegram: "" },
-  { num: "06", name: "Cheat Chanmoniza", roleLabel: "Junior", role: "Member", photo: "", github: "", telegram: "" },
-  { num: "07", name: "Hor Tongan", roleLabel: "Junior", role: "Member", photo: "", github: "", telegram: "" },
-  { num: "08", name: "Sroeun Sothearith", roleLabel: "Junior", role: "Member", photo: "", github: "", telegram: "" },
-  { num: "09", name: "Neang Thana", roleLabel: "Junior", role: "Member", photo: "", github: "", telegram: "" },
-  { num: "10", name: "Venthan Tharath", roleLabel: "Junior", role: "Member", photo: "", github: "", telegram: "" },
+  { num: "05", name: "Cheakching Lyheng", roleLabel: "Junior", role: "Member", photo: "", github: "https://github.com/lyheng142", telegram: "https://t.me/cclh142" },
+  { num: "06", name: "Cheat Chanmoniza", roleLabel: "Junior", role: "Member", photo: "", github: "https://github.com/moniza-Dev", telegram: "https://t.me/chanmoniza_cheat" },
+  { num: "07", name: "Hor Tongan", roleLabel: "Junior", role: "Member", photo: "", github: "https://github.com/TongAnWasHere", telegram: "https://t.me/TongAnWasHere" },
+  { num: "08", name: "Sroeun Sothearith", roleLabel: "Junior", role: "Member", photo: "", github: "https://github.com/Rith857", telegram: "https://t.me/sothearithsroeun" },
+  { num: "09", name: "Neang Thana", roleLabel: "Junior", role: "Member", photo: "", github: "https://github.com/mrrhello894-byte", telegram: "https://t.me/neangthana" },
+  { num: "10", name: "Venthan Tharath", roleLabel: "Junior", role: "Member", photo: "", github: "https://github.com/tharath780-commits", telegram: "https://t.me/helterqt" },
 ];
 
 // ---------- Reusable card ----------
@@ -276,7 +277,7 @@ export default function AboutAskKh() {
           </Link>
         </div>
         <div className="flex justify-center">
-          <IllustrationImage src={NETWORK_IMAGE_SRC} alt="About AskKh" className="w-full max-w-sm" />
+          <IllustrationImage src={NETWORK_IMAGE_SRC} alt="About AskKh" className="w-full max-w-m" />
         </div>
       </section>
 
@@ -317,7 +318,7 @@ export default function AboutAskKh() {
       {/* MISSION */}
       <section className="max-w-6xl mx-auto px-6 py-20 grid md:grid-cols-2 gap-12 items-center">
         <div className="flex justify-center order-2 md:order-1">
-          <IllustrationImage src={MISSION_IMAGE_SRC} alt="Our Mission" className="w-full max-w-xs" />
+          <IllustrationImage src={MISSION_IMAGE_SRC} alt="Our Mission" className="w-full max-w-md" />
         </div>
         <div className="order-1 md:order-2">
           <span className="text-brand-primary text-sm font-semibold">MISSION</span>
@@ -357,7 +358,7 @@ export default function AboutAskKh() {
             </ul>
           </div>
           <div className="flex justify-center">
-            <IllustrationImage src={VISION_IMAGE_SRC} alt="Our Vision" className="w-full max-w-xs" />
+            <IllustrationImage src={VISION_IMAGE_SRC} alt="Our Vision" className="w-full max-w-md" />
           </div>
         </div>
       </section>
