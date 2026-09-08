@@ -19,7 +19,7 @@ const NAV_ITEMS = [
     ],
   },
   { label: "Leaderboard", href: "#leaderboard" },
-  { label: "About Us", href: "#about" },
+  { label: "About Us", href: "about" },
 ];
 
 export default function Navbar() {
@@ -71,8 +71,8 @@ export default function Navbar() {
   const linkClasses = (label) =>
     `inline-flex items-center gap-1 px-4 py-2.5 rounded-lg text-[15px] font-medium transition-colors duration-200 ${
       activeItem === label
-        ? "text-[#0B2A4A] font-semibold"
-        : "text-gray-600 hover:text-[#0B2A4A] hover:bg-[#EEF2F6]"
+        ? "text-brand-primary font-semibold"
+        : "text-gray-600 hover:text-brand-primary hover:bg-brand-primary-light"
     }`;
 
   return (
@@ -87,10 +87,10 @@ export default function Navbar() {
           className="flex items-center gap-2.5 shrink-0 no-underline"
           onClick={() => handleNavClick("Home")}
         >
-          <span className="flex items-center justify-center w-[38px] h-[38px] rounded-[10px] bg-[#0B2A4A] text-white font-bold text-lg">
+          <span className="flex items-center justify-center w-[38px] h-[38px] rounded-[10px] bg-brand-primary text-white font-bold text-lg">
             N
           </span>
-          <span className="text-xl font-bold text-[#0B2A4A] tracking-tight">
+          <span className="text-xl font-bold text-brand-primary tracking-tight">
             Nexa
           </span>
         </a>
@@ -138,7 +138,7 @@ export default function Navbar() {
                       key={sub.label}
                       href={sub.href}
                       role="menuitem"
-                      className="block px-3.5 py-2.5 rounded-lg text-sm font-medium text-gray-800 no-underline transition-colors duration-150 hover:bg-[#FEF2F2] hover:text-[#DC2626]"
+                      className="block px-3.5 py-2.5 rounded-lg text-sm font-medium text-gray-800 no-underline transition-colors duration-150 hover:bg-brand-secondary-light hover:text-brand-secondary"
                       onClick={() => {
                         setCommunityOpen(false);
                         handleNavClick(item.label);
@@ -167,7 +167,7 @@ export default function Navbar() {
         <div className="hidden lg:flex items-center gap-2.5 shrink-0">
           <button
             type="button"
-            className="inline-flex items-center justify-center w-10 h-10 rounded-[10px] border border-gray-200 bg-white text-gray-600 transition-all duration-200 hover:bg-[#EEF2F6] hover:border-[#0B2A4A] hover:text-[#0B2A4A] hover:-translate-y-0.5"
+            className="inline-flex items-center justify-center w-10 h-10 rounded-[10px] border border-gray-200 bg-white text-gray-600 transition-all duration-200 hover:bg-brand-primary-light hover:border-brand-primary hover:text-brand-primary hover:-translate-y-0.5"
             aria-label="Toggle theme"
           >
             <Sun size={20} />
@@ -175,18 +175,18 @@ export default function Navbar() {
 
           <button
             type="button"
-            className="relative inline-flex items-center justify-center w-10 h-10 rounded-[10px] border border-gray-200 bg-white text-gray-600 transition-all duration-200 hover:bg-[#EEF2F6] hover:border-[#0B2A4A] hover:text-[#0B2A4A] hover:-translate-y-0.5"
+            className="relative inline-flex items-center justify-center w-10 h-10 rounded-[10px] border border-gray-200 bg-white text-gray-600 transition-all duration-200 hover:bg-brand-primary-light hover:border-brand-primary hover:text-brand-primary hover:-translate-y-0.5"
             aria-label="Notifications"
           >
             <Bell size={20} />
-            <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-[#DC2626] text-white text-[11px] font-bold flex items-center justify-center border-2 border-white">
+            <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-brand-secondary text-white text-[11px] font-bold flex items-center justify-center border-2 border-white">
               5
             </span>
           </button>
 
           <button
             type="button"
-            className="inline-flex items-center gap-1.5 h-10 px-3.5 rounded-[10px] border border-gray-200 bg-white text-gray-600 text-sm font-medium transition-all duration-200 hover:bg-[#EEF2F6] hover:border-[#0B2A4A] hover:text-[#0B2A4A]"
+            className="inline-flex items-center gap-1.5 h-10 px-3.5 rounded-[10px] border border-gray-200 bg-white text-gray-600 text-sm font-medium transition-all duration-200 hover:bg-brand-primary-light hover:border-brand-primary hover:text-brand-primary"
             aria-label="Change language"
           >
             <Globe size={18} />
@@ -195,7 +195,7 @@ export default function Navbar() {
 
           <button
             type="button"
-            className="h-10 px-5.5 rounded-[10px] border-none bg-[#0B2A4A] text-white text-sm font-semibold transition-all duration-200 hover:bg-[#DC2626] hover:shadow-[0_6px_16px_rgba(220,38,38,0.25)] hover:-translate-y-0.5"
+            className="h-10 px-5.5 rounded-[10px] border-none bg-brand-primary text-white text-sm font-semibold transition-all duration-200 hover:bg-brand-secondary hover:shadow-[0_6px_16px_rgba(237,43,42,0.25)] hover:-translate-y-0.5"
           >
             Get Started
           </button>
@@ -204,7 +204,7 @@ export default function Navbar() {
         {/* Hamburger (mobile) */}
         <button
           type="button"
-          className="lg:hidden inline-flex items-center justify-center w-10 h-10 rounded-[10px] border border-gray-200 bg-white text-[#0B2A4A] shrink-0"
+          className="lg:hidden inline-flex items-center justify-center w-10 h-10 rounded-[10px] border border-gray-200 bg-white text-brand-primary shrink-0"
           aria-label="Toggle menu"
           aria-expanded={mobileOpen}
           onClick={() => setMobileOpen((prev) => !prev)}
@@ -229,7 +229,7 @@ export default function Navbar() {
                   type="button"
                   className={`w-full flex items-center justify-between bg-transparent border-none text-base py-3.5 px-1 cursor-pointer ${
                     activeItem === item.label
-                      ? "text-[#0B2A4A] font-semibold"
+                      ? "text-brand-primary font-semibold"
                       : "text-gray-800 font-medium"
                   }`}
                   onClick={() => setMobileCommunityOpen((prev) => !prev)}
@@ -251,7 +251,7 @@ export default function Navbar() {
                     <a
                       key={sub.label}
                       href={sub.href}
-                      className="mx-1 my-0.5 px-4 py-2.5 rounded-lg bg-[#EEF2F6] text-gray-800 no-underline text-sm font-medium transition-colors duration-150 hover:bg-[#FEF2F2] hover:text-[#DC2626]"
+                      className="mx-1 my-0.5 px-4 py-2.5 rounded-lg bg-brand-primary-light text-gray-800 no-underline text-sm font-medium transition-colors duration-150 hover:bg-brand-secondary-light hover:text-brand-secondary"
                       onClick={() => handleNavClick(item.label)}
                     >
                       {sub.label}
@@ -265,7 +265,7 @@ export default function Navbar() {
                   href={item.href}
                   className={`block py-3.5 px-1 no-underline text-base ${
                     activeItem === item.label
-                      ? "text-[#0B2A4A] font-semibold"
+                      ? "text-brand-primary font-semibold"
                       : "text-gray-800 font-medium"
                   }`}
                   onClick={() => handleNavClick(item.label)}
@@ -291,7 +291,7 @@ export default function Navbar() {
             aria-label="Notifications"
           >
             <Bell size={20} />
-            <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-[#DC2626] text-white text-[11px] font-bold flex items-center justify-center border-2 border-white">
+            <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-brand-secondary text-white text-[11px] font-bold flex items-center justify-center border-2 border-white">
               5
             </span>
           </button>
@@ -307,7 +307,7 @@ export default function Navbar() {
 
         <button
           type="button"
-          className="w-full h-11 rounded-[10px] border-none bg-[#0B2A4A] text-white text-sm font-semibold transition-colors duration-200 hover:bg-[#DC2626]"
+          className="w-full h-11 rounded-[10px] border-none bg-brand-primary text-white text-sm font-semibold transition-colors duration-200 hover:bg-brand-secondary"
         >
           Get Started
         </button>

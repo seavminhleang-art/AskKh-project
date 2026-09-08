@@ -12,7 +12,7 @@ const quickLinks = ["Home", "Community Q&A", "Lost & Found", "About"];
 
 export default function FooterComponent() {
   return (
-    <footer className="relative overflow-hidden bg-[#0B2A4A] text-gray-300">
+    <footer className="relative overflow-hidden bg-brand-primary-light text-gray-300">
       {/* subtle vertical stripe background, matches reference */}
       <div
         className="pointer-events-none absolute inset-0 opacity-10"
@@ -27,7 +27,7 @@ export default function FooterComponent() {
           {/* Brand */}
           <div className="lg:col-span-1">
             <div className="flex items-center gap-2 mb-4">
-              <span className="flex items-center justify-center w-9 h-9 rounded-full bg-[#DC2626] text-white font-bold text-sm shrink-0">
+              <span className="flex items-center justify-center w-9 h-9 rounded-full bg-brand-secondary text-white font-bold text-sm shrink-0">
                 A
               </span>
               <span className="text-lg font-semibold text-white">
@@ -50,7 +50,7 @@ export default function FooterComponent() {
                 <li key={link}>
                   <a
                     href="#"
-                    className="text-sm text-gray-400 hover:text-[#DC2626] transition-colors duration-200 no-underline"
+                    className="text-sm text-gray-400 hover:text-brand-secondary transition-colors duration-200 no-underline"
                   >
                     {link}
                   </a>
@@ -69,7 +69,7 @@ export default function FooterComponent() {
                 <li key={link}>
                   <a
                     href="#"
-                    className="text-sm text-gray-400 hover:text-[#DC2626] transition-colors duration-200 no-underline"
+                    className="text-sm text-gray-400 hover:text-brand-secondary transition-colors duration-200 no-underline"
                   >
                     {link}
                   </a>
@@ -85,18 +85,18 @@ export default function FooterComponent() {
             </h3>
             <ul className="space-y-3">
               <li className="flex items-start gap-2.5 text-sm text-gray-400">
-                <MapPin size={16} className="mt-0.5 shrink-0 text-[#DC2626]" />
+                <MapPin size={16} className="mt-0.5 shrink-0 text-brand-secondary" />
                 <span>
                   #40, St 273, Sangkat Boeung Kak II, Khan Toul Kork, Phnom
                   Penh, Cambodia
                 </span>
               </li>
               <li className="flex items-center gap-2.5 text-sm text-gray-400">
-                <Phone size={16} className="shrink-0 text-[#DC2626]" />
+                <Phone size={16} className="shrink-0 text-brand-secondary" />
                 <span>(+855) 95-990-910</span>
               </li>
               <li className="flex items-center gap-2.5 text-sm text-gray-400">
-                <Mail size={16} className="shrink-0 text-[#DC2626]" />
+                <Mail size={16} className="shrink-0 text-brand-secondary" />
                 <span>info.istad@gmail.com</span>
               </li>
             </ul>
@@ -134,7 +134,7 @@ export default function FooterComponent() {
                 key={i}
                 href="#"
                 aria-label="Social link"
-                className="flex items-center justify-center w-8 h-8 rounded-full bg-white/10 text-gray-300 hover:bg-[#DC2626] hover:text-white transition-colors duration-200"
+                className="flex items-center justify-center w-8 h-8 rounded-full bg-white/10 text-gray-300 hover:bg-brand-secondary hover:text-white transition-colors duration-200"
               >
                 <Icon size={13} />
               </a>
