@@ -9,9 +9,9 @@ function App() {
   
   return (
     <>
-   <Navbar/>
+   {/* <Navbar/>
    <hr />
-   <FooterComponent/>
+   <FooterComponent/> */}
     </>
   )
 }
