@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router";
 import { Icon } from "@iconify/react";
+
 import {
   ArrowLeft,
   Eye,
@@ -10,12 +11,12 @@ import {
 } from "lucide-react";
 
 import {
-  signInWithEmailAndPassword,
-  signInWithPopup,
-  sendPasswordResetEmail,
-  setPersistence,
   browserLocalPersistence,
   browserSessionPersistence,
+  sendPasswordResetEmail,
+  setPersistence,
+  signInWithEmailAndPassword,
+  signInWithPopup,
 } from "firebase/auth";
 
 import {
@@ -23,20 +24,124 @@ import {
   googleProvider,
 } from "../Firebase/firebase.js";
 
+import { useLanguage } from "../Language/LanguageContext.jsx";
+
 import loginIllustration from "../../assets/Website/login-illustration.png";
 
+const translations = {
+  km: {
+    back: "ត្រឡប់ទៅគេហទំព័រ",
+    title: "ចូលទៅកាន់គណនីរបស់អ្នក",
+    email: "អ៊ីមែល",
+    emailPlaceholder: "បញ្ចូលអ៊ីមែលរបស់អ្នក",
+    password: "ពាក្យសម្ងាត់",
+    passwordPlaceholder: "បញ្ចូលពាក្យសម្ងាត់",
+    remember: "ចងចាំខ្ញុំ",
+    forgot: "ភ្លេចពាក្យសម្ងាត់?",
+    login: "ចូលគណនី",
+    loggingIn: "កំពុងចូល...",
+    continueWith: "ឬបន្តជាមួយ",
+    google: "Google",
+    github: "Github",
+    noAccount: "មិនទាន់មានគណនី?",
+    signup: "ចុះឈ្មោះ",
+    resetSending: "កំពុងផ្ញើ...",
+
+    enterEmail: "សូមបញ្ចូលអ៊ីមែលរបស់អ្នក។",
+    enterPassword: "សូមបញ្ចូលពាក្យសម្ងាត់។",
+    invalidEmail: "សូមបញ្ចូលអ៊ីមែលឱ្យបានត្រឹមត្រូវ។",
+    wrongCredentials:
+      "អ៊ីមែល ឬពាក្យសម្ងាត់មិនត្រឹមត្រូវ។",
+    disabled:
+      "គណនីនេះត្រូវបានបិទដំណើរការ។",
+    network:
+      "មានបញ្ហាបណ្តាញ។ សូមពិនិត្យអ៊ីនធឺណិតរបស់អ្នក។",
+    tooMany:
+      "ការព្យាយាមច្រើនពេក។ សូមព្យាយាមម្ដងទៀតនៅពេលក្រោយ។",
+    loginFailed:
+      "ការចូលគណនីបរាជ័យ។ សូមព្យាយាមម្ដងទៀត។",
+    resetSent:
+      "បានផ្ញើអ៊ីមែលកំណត់ពាក្យសម្ងាត់ឡើងវិញ។ សូមពិនិត្យប្រអប់សារ។",
+    enterEmailBeforeReset:
+      "សូមបញ្ចូលអ៊ីមែលជាមុនសិន។",
+    googleFailed:
+      "ការចូលតាម Google បរាជ័យ។",
+    popupBlocked:
+      "Browser បានបិទ Google popup។ សូមអនុញ្ញាត popup។",
+    githubDisabled:
+      "GitHub Authentication មិនទាន់បានបើកទេ។",
+    welcome: "សូមស្វាគមន៍",
+  },
+
+  en: {
+    back: "Back to website",
+    title: "Sign in to your account",
+    email: "Email",
+    emailPlaceholder: "example@gmail.com",
+    password: "Password",
+    passwordPlaceholder: "Enter your password",
+    remember: "Remember me",
+    forgot: "Forgot password?",
+    login: "Login",
+    loggingIn: "Signing in...",
+    continueWith: "or continue with",
+    google: "Google",
+    github: "Github",
+    noAccount: "Don't have an account?",
+    signup: "Sign up",
+    resetSending: "Sending...",
+
+    enterEmail: "Please enter your email.",
+    enterPassword: "Please enter your password.",
+    invalidEmail: "Please enter a valid email.",
+    wrongCredentials:
+      "Incorrect email or password.",
+    disabled: "This account has been disabled.",
+    network:
+      "Network error. Please check your internet connection.",
+    tooMany:
+      "Too many attempts. Please try again later.",
+    loginFailed:
+      "Login failed. Please try again.",
+    resetSent:
+      "Password reset email sent. Please check your inbox.",
+    enterEmailBeforeReset:
+      "Enter your email first.",
+    googleFailed:
+      "Google login failed.",
+    popupBlocked:
+      "Your browser blocked the Google popup.",
+    githubDisabled:
+      "GitHub authentication is not enabled yet.",
+    welcome: "Welcome",
+  },
+};
+
 const LoginPage = () => {
-  const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
+  const { language, isKhmer } = useLanguage();
 
-  const [loading, setLoading] = useState(false);
-  const [googleLoading, setGoogleLoading] = useState(false);
-  const [resetLoading, setResetLoading] = useState(false);
+  const t = translations[language];
 
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
+  const [showPassword, setShowPassword] =
+    useState(false);
+
+  const [rememberMe, setRememberMe] =
+    useState(false);
+
+  const [loading, setLoading] =
+    useState(false);
+
+  const [googleLoading, setGoogleLoading] =
+    useState(false);
+
+  const [resetLoading, setResetLoading] =
+    useState(false);
+
+  const [formData, setFormData] =
+    useState({
+      email: "",
+      password: "",
+    });
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -50,28 +155,24 @@ const LoginPage = () => {
   const getFirebaseErrorMessage = (error) => {
     switch (error.code) {
       case "auth/invalid-email":
-        return "Please enter a valid email address.";
+        return t.invalidEmail;
 
       case "auth/user-disabled":
-        return "This account has been disabled.";
+        return t.disabled;
 
       case "auth/invalid-credential":
-        return "Incorrect email or password.";
-
       case "auth/user-not-found":
-        return "No account was found with this email.";
-
       case "auth/wrong-password":
-        return "Incorrect password.";
-
-      case "auth/too-many-requests":
-        return "Too many failed attempts. Please try again later.";
+        return t.wrongCredentials;
 
       case "auth/network-request-failed":
-        return "Network error. Please check your internet connection.";
+        return t.network;
+
+      case "auth/too-many-requests":
+        return t.tooMany;
 
       default:
-        return error.message || "Login failed. Please try again.";
+        return t.loginFailed;
     }
   };
 
@@ -79,60 +180,47 @@ const LoginPage = () => {
     event.preventDefault();
 
     if (!formData.email.trim()) {
-      alert("Please enter your email.");
+      alert(t.enterEmail);
       return;
     }
 
     if (!formData.password) {
-      alert("Please enter your password.");
+      alert(t.enterPassword);
       return;
     }
 
     try {
       setLoading(true);
 
-      /*
-       * Remember me checked:
-       * Firebase keeps the user signed in after browser restart.
-       *
-       * Not checked:
-       * User stays signed in only for this browser session.
-       */
       await setPersistence(
         auth,
         rememberMe
           ? browserLocalPersistence
-          : browserSessionPersistence
+          : browserSessionPersistence,
       );
 
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        formData.email.trim(),
-        formData.password
-      );
+      const userCredential =
+        await signInWithEmailAndPassword(
+          auth,
+          formData.email.trim(),
+          formData.password,
+        );
 
       const user = userCredential.user;
 
-      console.log("Firebase logged-in user:", user);
+      alert(
+        `${t.welcome}${
+          user.displayName
+            ? `, ${user.displayName}`
+            : ""
+        }!`,
+      );
+    } catch (error) {
+      console.error(error);
 
       alert(
-        `Welcome back${
-          user.displayName ? `, ${user.displayName}` : ""
-        }!`
+        getFirebaseErrorMessage(error),
       );
-
-      /*
-       * Later, when your team builds the real homepage/dashboard,
-       * you can add:
-       *
-       * navigate("/");
-       *
-       * Do NOT add it yet if "/" currently redirects back to /login.
-       */
-    } catch (error) {
-      console.error("Firebase login error:", error);
-
-      alert(getFirebaseErrorMessage(error));
     } finally {
       setLoading(false);
     }
@@ -142,114 +230,91 @@ const LoginPage = () => {
     try {
       setGoogleLoading(true);
 
-      await setPersistence(
-        auth,
-        rememberMe
-          ? browserLocalPersistence
-          : browserSessionPersistence
-      );
-
       const result = await signInWithPopup(
         auth,
-        googleProvider
+        googleProvider,
       );
 
-      console.log("Google logged-in user:", result.user);
-
       alert(
-        `Welcome${
+        `${t.welcome}${
           result.user.displayName
             ? `, ${result.user.displayName}`
             : ""
-        }!`
+        }!`,
       );
     } catch (error) {
-      console.error("Google login error:", error);
-
-      if (error.code === "auth/popup-closed-by-user") {
-        return;
-      }
-
-      if (error.code === "auth/popup-blocked") {
-        alert(
-          "Your browser blocked the Google popup. Please allow popups and try again."
-        );
+      if (
+        error.code ===
+        "auth/popup-closed-by-user"
+      ) {
         return;
       }
 
       if (
         error.code ===
-        "auth/account-exists-with-different-credential"
+        "auth/popup-blocked"
       ) {
-        alert(
-          "An account already exists with this email using another sign-in method."
-        );
+        alert(t.popupBlocked);
         return;
       }
 
-      alert("Google login failed. Please try again.");
+      alert(t.googleFailed);
     } finally {
       setGoogleLoading(false);
     }
   };
 
-  const handleGithubLogin = () => {
-    alert(
-      "GitHub authentication is not enabled yet. Please use Email/Password or Google."
-    );
-  };
+  const handleForgotPassword =
+    async () => {
+      const email = formData.email.trim();
 
-  const handleForgotPassword = async () => {
-    const email = formData.email.trim();
-
-    if (!email) {
-      alert(
-        "Enter your email address first, then click Forgot password."
-      );
-      return;
-    }
-
-    try {
-      setResetLoading(true);
-
-      await sendPasswordResetEmail(auth, email);
-
-      alert(
-        "Password reset email sent. Please check your inbox."
-      );
-    } catch (error) {
-      console.error("Password reset error:", error);
-
-      if (error.code === "auth/invalid-email") {
-        alert("Please enter a valid email address.");
+      if (!email) {
+        alert(t.enterEmailBeforeReset);
         return;
       }
 
-      if (error.code === "auth/user-not-found") {
-        alert("No account was found with this email.");
-        return;
-      }
+      try {
+        setResetLoading(true);
 
-      alert(
-        "Unable to send password reset email. Please try again."
-      );
-    } finally {
-      setResetLoading(false);
-    }
-  };
+        await sendPasswordResetEmail(
+          auth,
+          email,
+        );
+
+        alert(t.resetSent);
+      } catch (error) {
+        console.error(error);
+
+        alert(
+          error.code === "auth/invalid-email"
+            ? t.invalidEmail
+            : t.loginFailed,
+        );
+      } finally {
+        setResetLoading(false);
+      }
+    };
 
   return (
-    <main className="auth-page">
+    <main
+      className={`auth-page ${
+        isKhmer ? "font-khmer" : "font-brand"
+      }`}
+    >
       <section className="auth-visual-section">
-        <Link to="/" className="back-button">
-          <ArrowLeft size={18} strokeWidth={2} />
-          <span>Back to website</span>
+        <Link
+          to="/"
+          className="back-button"
+        >
+          <ArrowLeft size={18} />
+
+          <span>{t.back}</span>
         </Link>
 
         <div className="auth-illustration-wrapper">
           <img
             src={loginIllustration}
-            alt="Login illustration"
+            alt=""
             className="auth-illustration login-illustration"
           />
         </div>
@@ -258,7 +323,7 @@ const LoginPage = () => {
       <section className="auth-form-section">
         <div className="login-form-container">
           <div className="auth-heading">
-            <h1>Sign in to your account</h1>
+            <h1>{t.title}</h1>
           </div>
 
           <form
@@ -267,13 +332,12 @@ const LoginPage = () => {
           >
             <div className="form-group">
               <label htmlFor="login-email">
-                Email <span>*</span>
+                {t.email} <span>*</span>
               </label>
 
               <div className="input-wrapper">
                 <Mail
                   size={19}
-                  strokeWidth={1.8}
                   className="input-icon"
                 />
 
@@ -281,11 +345,11 @@ const LoginPage = () => {
                   id="login-email"
                   type="email"
                   name="email"
-                  placeholder="example@gmail.com"
+                  placeholder={
+                    t.emailPlaceholder
+                  }
                   value={formData.email}
                   onChange={handleChange}
-                  autoComplete="email"
-                  disabled={loading}
                   required
                 />
               </div>
@@ -293,25 +357,28 @@ const LoginPage = () => {
 
             <div className="form-group">
               <label htmlFor="login-password">
-                Password <span>*</span>
+                {t.password} <span>*</span>
               </label>
 
               <div className="input-wrapper">
                 <LockKeyhole
                   size={19}
-                  strokeWidth={1.8}
                   className="input-icon"
                 />
 
                 <input
                   id="login-password"
-                  type={showPassword ? "text" : "password"}
+                  type={
+                    showPassword
+                      ? "text"
+                      : "password"
+                  }
                   name="password"
-                  placeholder="Enter your password"
+                  placeholder={
+                    t.passwordPlaceholder
+                  }
                   value={formData.password}
                   onChange={handleChange}
-                  autoComplete="current-password"
-                  disabled={loading}
                   required
                 />
 
@@ -319,18 +386,15 @@ const LoginPage = () => {
                   type="button"
                   className="password-toggle"
                   onClick={() =>
-                    setShowPassword((previous) => !previous)
-                  }
-                  aria-label={
-                    showPassword
-                      ? "Hide password"
-                      : "Show password"
+                    setShowPassword(
+                      (previous) => !previous,
+                    )
                   }
                 >
                   {showPassword ? (
-                    <Eye size={19} strokeWidth={1.8} />
+                    <Eye size={19} />
                   ) : (
-                    <EyeOff size={19} strokeWidth={1.8} />
+                    <EyeOff size={19} />
                   )}
                 </button>
               </div>
@@ -342,26 +406,29 @@ const LoginPage = () => {
                   type="checkbox"
                   checked={rememberMe}
                   onChange={(event) =>
-                    setRememberMe(event.target.checked)
+                    setRememberMe(
+                      event.target.checked,
+                    )
                   }
                 />
 
                 <span className="custom-checkbox" />
 
                 <span className="checkbox-text">
-                  Remember me
+                  {t.remember}
                 </span>
               </label>
 
               <button
                 type="button"
                 className="forgot-password"
-                onClick={handleForgotPassword}
-                disabled={resetLoading}
+                onClick={
+                  handleForgotPassword
+                }
               >
                 {resetLoading
-                  ? "Sending..."
-                  : "Forgot password?"}
+                  ? t.resetSending
+                  : t.forgot}
               </button>
             </div>
 
@@ -370,12 +437,14 @@ const LoginPage = () => {
               className="primary-auth-button"
               disabled={loading}
             >
-              {loading ? "Signing in..." : "Login"}
+              {loading
+                ? t.loggingIn
+                : t.login}
             </button>
 
             <div className="auth-divider">
               <span />
-              <p>or continue with</p>
+              <p>{t.continueWith}</p>
               <span />
             </div>
 
@@ -384,39 +453,41 @@ const LoginPage = () => {
                 type="button"
                 className="social-button"
                 onClick={handleGoogleLogin}
-                disabled={googleLoading}
               >
                 <Icon
                   icon="flat-color-icons:google"
                   width="24"
-                  height="24"
                 />
 
                 <span>
                   {googleLoading
-                    ? "Connecting..."
-                    : "Google"}
+                    ? "..."
+                    : t.google}
                 </span>
               </button>
 
               <button
                 type="button"
                 className="social-button"
-                onClick={handleGithubLogin}
+                onClick={() =>
+                  alert(t.githubDisabled)
+                }
               >
                 <Icon
                   icon="mdi:github"
                   width="25"
-                  height="25"
                 />
 
-                <span>Github</span>
+                <span>{t.github}</span>
               </button>
             </div>
 
             <p className="auth-switch-text">
-              Don&apos;t have an account?
-              <Link to="/register">Sign up</Link>
+              {t.noAccount}
+
+              <Link to="/register">
+                {t.signup}
+              </Link>
             </p>
           </form>
         </div>

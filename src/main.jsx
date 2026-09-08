@@ -9,7 +9,9 @@ import "./index.css";
 import App from "./App.jsx";
 import LoginPage from "./Components/Pages/LoginPage.jsx";
 import RegisterPage from "./Components/Pages/RegisterPage.jsx";
+
 import { store } from "./Components/redux/store.js";
+import { LanguageProvider } from "./Components/Language/LanguageContext.jsx";
 
 const router = createBrowserRouter([
   {
@@ -29,7 +31,9 @@ const router = createBrowserRouter([
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <Provider store={store}>
-      <RouterProvider router={router} />
+      <LanguageProvider>
+        <RouterProvider router={router} />
+      </LanguageProvider>
     </Provider>
   </StrictMode>,
 );
