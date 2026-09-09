@@ -161,17 +161,17 @@ const mentors = [
 ];
 
 const teamLeads = [
-  { num: "03", name: "Mom Lisa", roleLabel: "Junior", role: "Leader", photo: "", github: "https://github.com/LisaMom", telegram: "https://t.me/lisamom369" },
-  { num: "04", name: "Leang Seavminh", roleLabel: "Junior", role: "Sub-Lead", photo: "", github: "https://github.com/seavminhleang-art", telegram: "https://t.me/puthea_reach" },
+  { num: "03", name: "Mom Lisa", roleLabel: "Frontend Developer", role: "Leader", photo: "", github: "https://github.com/LisaMom", telegram: "https://t.me/lisamom369" },
+  { num: "04", name: "Leang Seavminh", roleLabel: "Java Developer", role: "Sub-Lead", photo: "", github: "https://github.com/seavminhleang-art", telegram: "https://t.me/puthea_reach" },
 ];
 
 const teamMembers = [
-  { num: "05", name: "Cheakching Lyheng", roleLabel: "Junior", role: "Member", photo: "", github: "https://github.com/lyheng142", telegram: "https://t.me/cclh142" },
-  { num: "06", name: "Cheat Chanmoniza", roleLabel: "Junior", role: "Member", photo: "", github: "https://github.com/moniza-Dev", telegram: "https://t.me/chanmoniza_cheat" },
-  { num: "07", name: "Hor Tongan", roleLabel: "Junior", role: "Member", photo: "", github: "https://github.com/TongAnWasHere", telegram: "https://t.me/TongAnWasHere" },
-  { num: "08", name: "Sroeun Sothearith", roleLabel: "Junior", role: "Member", photo: "", github: "https://github.com/Rith857", telegram: "https://t.me/sothearithsroeun" },
-  { num: "09", name: "Neang Thana", roleLabel: "Junior", role: "Member", photo: "", github: "https://github.com/mrrhello894-byte", telegram: "https://t.me/neangthana" },
-  { num: "10", name: "Venthan Tharath", roleLabel: "Junior", role: "Member", photo: "", github: "https://github.com/tharath780-commits", telegram: "https://t.me/helterqt" },
+  { num: "05", name: "Cheakching Lyheng", roleLabel: "Java Developer", role: "Member", photo: "", github: "https://github.com/lyheng142", telegram: "https://t.me/cclh142" },
+  { num: "06", name: "Cheat Chanmoniza", roleLabel: "Frontend Developer", role: "Member", photo: "", github: "https://github.com/moniza-Dev", telegram: "https://t.me/chanmoniza_cheat" },
+  { num: "07", name: "Hor Tongan", roleLabel: "Java Developer", role: "Member", photo: "", github: "https://github.com/TongAnWasHere", telegram: "https://t.me/TongAnWasHere" },
+  { num: "08", name: "Sroeun Sothearith", roleLabel: "Frontend Developer", role: "Member", photo: "", github: "https://github.com/Rith857", telegram: "https://t.me/sothearithsroeun" },
+  { num: "09", name: "Neang Thana", roleLabel: "Frontend Developer", role: "Member", photo: "", github: "https://github.com/mrrhello894-byte", telegram: "https://t.me/neangthana" },
+  { num: "10", name: "Venthan Tharath", roleLabel: "Frontend Developer", role: "Member", photo: "", github: "https://github.com/tharath780-commits", telegram: "https://t.me/helterqt" },
 ];
 
 // ---------- Reusable card ----------
@@ -207,7 +207,7 @@ function MemberCard({ num, name, roleLabel, role, photo, github, telegram }) {
         )}
 
         <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 bg-white rounded-full p-1.5 shadow border border-slate-100">
-          <StarIcon />
+          
         </span>
       </div>
 

@@ -9,7 +9,7 @@ import {
 import istadLogo from "../../assets/Website/istad-logo.png";
 
 const quickLinks = ["Home", "Community Q&A", "Lost & Found", "About"];
-
+const Legal = ["Privacy Policy", "Terms & Conditions"];
 export default function FooterComponent() {
   return (
     <footer className="relative overflow-hidden bg-brand-primary text-gray-300">
@@ -62,10 +62,10 @@ export default function FooterComponent() {
           {/* Quick Link (duplicate, as shown in reference) */}
           <div>
             <h3 className="text-white font-semibold text-sm tracking-wide mb-4">
-              QUICK LINK
+              LEGAL & POLICIES
             </h3>
             <ul className="space-y-3">
-              {quickLinks.map((link) => (
+              {Legal.map((link) => (
                 <li key={link}>
                   <a
                     href="#"
