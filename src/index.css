@@ -8,13 +8,12 @@
    ========================================================= */
 
 @theme {
-  --color-brand-primary: #0050f3;
-  --color-brand-primary-light: #e6eefe;
-
-  --color-brand-secondary: #ed2b2a;
-  --color-brand-secondary-light: #fdecec;
-
-  --color-brand-accent: #4caf4f;
+  --color-brand-primary: #0050F3;
+  --color-brand-primary-light: #E6EEFE;
+  --color-brand-primary-dark :#001C55;
+  --color-brand-secondary: #ED2B2A;
+  --color-brand-secondary-light: #FDECEC;
+  --color-brand-accent: #4CAF4F;
 
   --font-brand:
     "Google Sans",
