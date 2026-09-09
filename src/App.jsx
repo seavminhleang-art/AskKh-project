@@ -6,8 +6,8 @@ function App() {
     <>
       <Navbar />
 
-      <main style={{ minHeight: "70vh" }}>
-        {/* Your homepage/content will go here later */}
+      <main className="min-h-[70vh] bg-background text-foreground transition-colors duration-300">
+        {/* Homepage sections will be added here */}
       </main>
 
       <FooterComponent />
