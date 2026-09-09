@@ -1,8 +1,8 @@
 import { useState } from "react";
 
-import { Link } from "react-router";
-
-import { Icon } from "@iconify/react";
+import {
+  Link,
+} from "react-router";
 
 import {
   ArrowLeft,
@@ -18,16 +18,18 @@ import {
   sendPasswordResetEmail,
   setPersistence,
   signInWithEmailAndPassword,
-  signInWithPopup,
 } from "firebase/auth";
 
 import {
   auth,
-  githubProvider,
-  googleProvider,
 } from "../Firebase/firebase.js";
 
-import { useLanguage } from "../Language/LanguageContext.jsx";
+import {
+  useLanguage,
+} from "../Language/LanguageContext.jsx";
+
+import GoogleComponent from "../oauth/GoogleComponent.jsx";
+import GithubComponent from "../oauth/GithubComponent.jsx";
 
 import {
   AnimatedToastStack,
@@ -38,34 +40,50 @@ import loginIllustration from "../../assets/Website/login-illustration.png";
 
 const translations = {
   km: {
-    back: "ត្រឡប់ទៅគេហទំព័រ",
-    title: "ចូលទៅកាន់គណនីរបស់អ្នក",
+    back:
+      "ត្រឡប់ទៅគេហទំព័រ",
 
-    email: "អ៊ីមែល",
+    title:
+      "ចូលទៅកាន់គណនីរបស់អ្នក",
+
+    email:
+      "អ៊ីមែល",
+
     emailPlaceholder:
       "បញ្ចូលអ៊ីមែលរបស់អ្នក",
 
-    password: "ពាក្យសម្ងាត់",
+    password:
+      "ពាក្យសម្ងាត់",
+
     passwordPlaceholder:
       "បញ្ចូលពាក្យសម្ងាត់",
 
-    remember: "ចងចាំខ្ញុំ",
+    remember:
+      "ចងចាំខ្ញុំ",
+
     forgot:
       "ភ្លេចពាក្យសម្ងាត់?",
 
-    login: "ចូលគណនី",
-    loggingIn: "កំពុងចូល...",
+    login:
+      "ចូលគណនី",
+
+    loggingIn:
+      "កំពុងចូល...",
 
     continueWith:
       "ឬបន្តជាមួយ",
 
-    google: "Google",
-    github: "GitHub",
+    google:
+      "Google",
+
+    github:
+      "GitHub",
 
     noAccount:
       "មិនទាន់មានគណនី?",
 
-    signup: "ចុះឈ្មោះ",
+    signup:
+      "ចុះឈ្មោះ",
 
     resetSending:
       "កំពុងផ្ញើ...",
@@ -132,36 +150,50 @@ const translations = {
   },
 
   en: {
-    back: "Back to website",
+    back:
+      "Back to website",
+
     title:
       "Sign in to your account",
 
-    email: "Email",
+    email:
+      "Email",
+
     emailPlaceholder:
       "example@gmail.com",
 
-    password: "Password",
+    password:
+      "Password",
+
     passwordPlaceholder:
       "Enter your password",
 
-    remember: "Remember me",
+    remember:
+      "Remember me",
+
     forgot:
       "Forgot password?",
 
-    login: "Login",
+    login:
+      "Login",
+
     loggingIn:
       "Signing in...",
 
     continueWith:
       "or continue with",
 
-    google: "Google",
-    github: "GitHub",
+    google:
+      "Google",
+
+    github:
+      "GitHub",
 
     noAccount:
       "Don't have an account?",
 
-    signup: "Sign up",
+    signup:
+      "Sign up",
 
     resetSending:
       "Sending...",
@@ -211,7 +243,8 @@ const translations = {
     enterEmailBeforeReset:
       "Enter your email first.",
 
-    welcome: "Welcome",
+    welcome:
+      "Welcome",
 
     successTitle:
       "Login successful",
@@ -262,16 +295,6 @@ export default function LoginPage() {
   ] = useState(false);
 
   const [
-    googleLoading,
-    setGoogleLoading,
-  ] = useState(false);
-
-  const [
-    githubLoading,
-    setGithubLoading,
-  ] = useState(false);
-
-  const [
     resetLoading,
     setResetLoading,
   ] = useState(false);
@@ -289,7 +312,8 @@ export default function LoginPage() {
   ) => {
     showToast({
       status: "error",
-      title: t.errorTitle,
+      title:
+        t.errorTitle,
       description,
     });
   };
@@ -310,43 +334,47 @@ export default function LoginPage() {
     );
   };
 
-  const getFirebaseErrorMessage =
-    (error) => {
-      switch (error.code) {
-        case "auth/invalid-email":
-          return t.invalidEmail;
-
-        case "auth/user-disabled":
-          return t.disabled;
-
-        case "auth/invalid-credential":
-        case "auth/user-not-found":
-        case "auth/wrong-password":
-          return t.wrongCredentials;
-
-        case "auth/network-request-failed":
-          return t.network;
-
-        case "auth/too-many-requests":
-          return t.tooMany;
-
-        default:
-          return t.loginFailed;
-      }
-    };
-
   const showLoginSuccess = (
     user,
   ) => {
     showToast({
       status: "success",
-      title: t.successTitle,
-      description: `${t.welcome}${
-        user.displayName
-          ? `, ${user.displayName}`
-          : ""
-      }!`,
+      title:
+        t.successTitle,
+
+      description:
+        `${t.welcome}${
+          user?.displayName
+            ? `, ${user.displayName}`
+            : ""
+        }!`,
     });
+  };
+
+  const getFirebaseErrorMessage = (
+    error,
+  ) => {
+    switch (error.code) {
+      case "auth/invalid-email":
+        return t.invalidEmail;
+
+      case "auth/user-disabled":
+        return t.disabled;
+
+      case "auth/invalid-credential":
+      case "auth/user-not-found":
+      case "auth/wrong-password":
+        return t.wrongCredentials;
+
+      case "auth/network-request-failed":
+        return t.network;
+
+      case "auth/too-many-requests":
+        return t.tooMany;
+
+      default:
+        return t.loginFailed;
+    }
   };
 
   const handleSubmit = async (
@@ -357,7 +385,10 @@ export default function LoginPage() {
     if (
       !formData.email.trim()
     ) {
-      notifyError(t.enterEmail);
+      notifyError(
+        t.enterEmail,
+      );
+
       return;
     }
 
@@ -365,6 +396,7 @@ export default function LoginPage() {
       notifyError(
         t.enterPassword,
       );
+
       return;
     }
 
@@ -373,6 +405,7 @@ export default function LoginPage() {
 
       await setPersistence(
         auth,
+
         rememberMe
           ? browserLocalPersistence
           : browserSessionPersistence,
@@ -404,115 +437,55 @@ export default function LoginPage() {
     }
   };
 
-  const handleGoogleLogin =
-    async () => {
-      try {
-        setGoogleLoading(true);
+  const handleOAuthError = (
+    error,
+    provider,
+  ) => {
+    console.error(
+      `${provider} authentication error:`,
+      error,
+    );
 
-        const result =
-          await signInWithPopup(
-            auth,
-            googleProvider,
-          );
+    if (
+      error.code ===
+      "auth/popup-blocked"
+    ) {
+      notifyError(
+        t.popupBlocked,
+      );
 
-        showLoginSuccess(
-          result.user,
-        );
-      } catch (error) {
-        console.error(
-          "Google auth error:",
-          error,
-        );
+      return;
+    }
 
-        if (
-          error.code ===
-          "auth/popup-closed-by-user"
-        ) {
-          return;
-        }
+    if (
+      error.code ===
+      "auth/account-exists-with-different-credential"
+    ) {
+      notifyError(
+        t.accountExists,
+      );
 
-        if (
-          error.code ===
-          "auth/popup-blocked"
-        ) {
-          notifyError(
-            t.popupBlocked,
-          );
-          return;
-        }
+      return;
+    }
 
-        notifyError(
-          t.googleFailed,
-        );
-      } finally {
-        setGoogleLoading(false);
-      }
-    };
+    if (
+      provider === "GitHub" &&
+      error.code ===
+        "auth/operation-not-allowed"
+    ) {
+      notifyError(
+        t.githubDisabled,
+      );
 
-  const handleGithubLogin =
-    async () => {
-      try {
-        setGithubLoading(true);
+      return;
+    }
 
-        const result =
-          await signInWithPopup(
-            auth,
-            githubProvider,
-          );
-
-        showLoginSuccess(
-          result.user,
-        );
-      } catch (error) {
-        console.error(
-          "GitHub auth error:",
-          error,
-        );
-
-        if (
-          error.code ===
-          "auth/popup-closed-by-user"
-        ) {
-          return;
-        }
-
-        if (
-          error.code ===
-          "auth/popup-blocked"
-        ) {
-          notifyError(
-            t.popupBlocked,
-          );
-          return;
-        }
-
-        if (
-          error.code ===
-          "auth/operation-not-allowed"
-        ) {
-          notifyError(
-            t.githubDisabled,
-          );
-          return;
-        }
-
-        if (
-          error.code ===
-          "auth/account-exists-with-different-credential"
-        ) {
-          notifyError(
-            t.accountExists,
-          );
-          return;
-        }
-
-        notifyError(
-          t.githubFailed,
-        );
-      } finally {
-        setGithubLoading(false);
-      }
-    };
+    notifyError(
+      provider === "Google"
+        ? t.googleFailed
+        : t.githubFailed,
+    );
+  };
 
   const handleForgotPassword =
     async () => {
@@ -522,7 +495,10 @@ export default function LoginPage() {
       if (!email) {
         showToast({
           status: "info",
-          title: t.infoTitle,
+
+          title:
+            t.infoTitle,
+
           description:
             t.enterEmailBeforeReset,
         });
@@ -540,13 +516,16 @@ export default function LoginPage() {
 
         showToast({
           status: "success",
-          title: t.resetTitle,
+
+          title:
+            t.resetTitle,
+
           description:
             t.resetSent,
         });
       } catch (error) {
         console.error(
-          "Reset password error:",
+          "Password reset error:",
           error,
         );
 
@@ -621,8 +600,11 @@ export default function LoginPage() {
             >
               <div className="form-group">
                 <label htmlFor="login-email">
-                  {t.email}{" "}
-                  <span>*</span>
+                  {t.email}
+
+                  <span>
+                    *
+                  </span>
                 </label>
 
                 <div className="input-wrapper">
@@ -652,8 +634,11 @@ export default function LoginPage() {
 
               <div className="form-group">
                 <label htmlFor="login-password">
-                  {t.password}{" "}
-                  <span>*</span>
+                  {t.password}
+
+                  <span>
+                    *
+                  </span>
                 </label>
 
                 <div className="input-wrapper">
@@ -771,56 +756,48 @@ export default function LoginPage() {
                 <span />
 
                 <p>
-                  {t.continueWith}
+                  {
+                    t.continueWith
+                  }
                 </p>
 
                 <span />
               </div>
 
               <div className="social-buttons">
-                <button
-                  type="button"
-                  className="social-button"
-                  onClick={
-                    handleGoogleLogin
+                <GoogleComponent
+                  label={
+                    t.google
                   }
-                  disabled={
-                    googleLoading
+                  onSuccess={
+                    showLoginSuccess
                   }
-                >
-                  <Icon
-                    icon="flat-color-icons:google"
-                    width="24"
-                  />
+                  onError={(
+                    error,
+                  ) =>
+                    handleOAuthError(
+                      error,
+                      "Google",
+                    )
+                  }
+                />
 
-                  <span>
-                    {googleLoading
-                      ? "..."
-                      : t.google}
-                  </span>
-                </button>
-
-                <button
-                  type="button"
-                  className="social-button"
-                  onClick={
-                    handleGithubLogin
+                <GithubComponent
+                  label={
+                    t.github
                   }
-                  disabled={
-                    githubLoading
+                  onSuccess={
+                    showLoginSuccess
                   }
-                >
-                  <Icon
-                    icon="mdi:github"
-                    width="25"
-                  />
-
-                  <span>
-                    {githubLoading
-                      ? "..."
-                      : t.github}
-                  </span>
-                </button>
+                  onError={(
+                    error,
+                  ) =>
+                    handleOAuthError(
+                      error,
+                      "GitHub",
+                    )
+                  }
+                />
               </div>
 
               <p className="auth-switch-text">

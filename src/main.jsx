@@ -20,9 +20,9 @@ import "./index.css";
 
 import App from "./App.jsx";
 
-import LoginPage from "./Components/Pages/LoginPage.jsx";
+import LoginPage from "./Components/Auth/LoginPage.jsx";
 
-import RegisterPage from "./Components/Pages/RegisterPage.jsx";
+import RegisterPage from "./Components/Auth/RegisterPage.jsx";
 
 import {
   store,

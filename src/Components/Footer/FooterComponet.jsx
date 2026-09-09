@@ -155,7 +155,7 @@ export default function FooterComponent() {
 
           <div className="self-start">
             <h3 className="mb-4 text-sm font-semibold tracking-wide text-white">
-              ORGANIZED AND SPONSORS
+              SPONSORS AND ORGANIZED BY ISTAD
             </h3>
 
             <img
