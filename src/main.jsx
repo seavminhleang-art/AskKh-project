@@ -6,6 +6,8 @@ import ReactDOM from "react-dom/client";
 import { createBrowserRouter } from "react-router";
 import { RouterProvider } from "react-router/dom";
 import About from './Components/Pages/About.jsx';
+import TermsAndConditions from './Components/Pages/TermAndConditions.jsx';
+import PrivacyPolicy from './Components/Pages/Policy.jsx';
 
 
 
@@ -18,6 +20,14 @@ const router = createBrowserRouter([
   {
     path: "/about",
     element: <About/>,
+  },
+  {
+    path: "/terms",
+    element: <TermsAndConditions/>,
+  },
+  {
+    path: "/privacy-policy",
+    element: <PrivacyPolicy/>,
   },
   {
   }

@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router";
 import { MapPin, Phone, Mail } from "lucide-react";
 import {
   FaFacebookF,
@@ -9,7 +10,10 @@ import {
 import istadLogo from "../../assets/Website/istad-logo.png";
 
 const quickLinks = ["Home", "Community Q&A", "Lost & Found", "About"];
-
+const Legal = [
+  { label: "Privacy Policy", to: "/privacy-policy" },
+  { label: "Terms & Conditions", to: "/terms" },
+];
 export default function FooterComponent() {
   return (
     <footer className="relative overflow-hidden bg-brand-primary text-gray-300">
@@ -62,17 +66,17 @@ export default function FooterComponent() {
           {/* Quick Link (duplicate, as shown in reference) */}
           <div>
             <h3 className="text-white font-semibold text-sm tracking-wide mb-4">
-              QUICK LINK
+              LEGAL & POLICIES
             </h3>
             <ul className="space-y-3">
-              {quickLinks.map((link) => (
-                <li key={link}>
-                  <a
-                    href="#"
+              {Legal.map((item) => (
+                <li key={item.label}>
+                  <Link
+                    to={item.to}
                     className="text-sm text-gray-400 hover:text-brand-secondary transition-colors duration-200 no-underline"
                   >
-                    {link}
-                  </a>
+                    {item.label}
+                  </Link>
                 </li>
               ))}
             </ul>
