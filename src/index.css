@@ -1,1 +1,27 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap");
 @import "tailwindcss";
+
+@theme {
+  --color-brand-primary: #0050F3;
+  --color-brand-primary-light: #E6EEFE;
+  --color-brand-primary-dark :#001C55;
+  --color-brand-secondary: #ED2B2A;
+  --color-brand-secondary-light: #FDECEC;
+  --color-brand-accent: #4CAF4F;
+
+  --font-brand: "Google Sans", "Product Sans", Roboto, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+/*
+  Note: "Google Sans" itself is not published on Google Fonts (it's a
+  proprietary Google typeface), so it can't be @imported directly.
+  Roboto is used as the closest open substitute and is wired up as the
+  fallback in --font-brand above. If you get a licensed Google Sans
+  .woff2 later, add an @font-face block here and it'll be picked up
+  first automatically (no other changes needed).
+*/
+
+body {
+  font-family: var(--font-brand);
+}
