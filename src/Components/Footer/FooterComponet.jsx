@@ -20,6 +20,13 @@ const quickLinks = [
   "About",
 ];
 
+const legalLinks = [
+  "Contact",
+  "Privacy Policy",
+  "Terms of Service",
+  "Legal",
+];
+
 export default function FooterComponent() {
   const socialLinks = [
     {
@@ -42,6 +49,7 @@ export default function FooterComponent() {
 
   return (
     <footer className="relative overflow-hidden bg-brand-primary-dark text-gray-300 transition-colors duration-300 dark:bg-black">
+      {/* Background vertical pattern */}
       <div
         className="pointer-events-none absolute inset-0 opacity-10"
         style={{
@@ -52,6 +60,7 @@ export default function FooterComponent() {
 
       <div className="relative mx-auto max-w-7xl px-6 pb-8 pt-14">
         <div className="grid grid-cols-1 items-start gap-10 sm:grid-cols-2 lg:grid-cols-5">
+          {/* Brand */}
           <div>
             <div className="mb-4 flex items-center gap-2">
               <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-secondary text-sm font-bold text-white">
@@ -69,48 +78,47 @@ export default function FooterComponent() {
             </p>
           </div>
 
+          {/* Quick Links */}
           <div>
             <h3 className="mb-4 text-sm font-semibold tracking-wide text-white">
               QUICK LINK
             </h3>
 
             <ul className="space-y-3">
-              {quickLinks.map(
-                (link) => (
-                  <li key={link}>
-                    <a
-                      href="#"
-                      className="text-sm text-gray-400 transition-colors hover:text-brand-secondary"
-                    >
-                      {link}
-                    </a>
-                  </li>
-                ),
-              )}
+              {quickLinks.map((link) => (
+                <li key={link}>
+                  <a
+                    href="#"
+                    className="text-sm text-gray-400 transition-colors duration-200 hover:text-brand-secondary"
+                  >
+                    {link}
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
 
+          {/* Legal / Support Links */}
           <div>
             <h3 className="mb-4 text-sm font-semibold tracking-wide text-white">
               QUICK LINK
             </h3>
 
             <ul className="space-y-3">
-              {quickLinks.map(
-                (link) => (
-                  <li key={link}>
-                    <a
-                      href="#"
-                      className="text-sm text-gray-400 transition-colors hover:text-brand-secondary"
-                    >
-                      {link}
-                    </a>
-                  </li>
-                ),
-              )}
+              {legalLinks.map((link) => (
+                <li key={link}>
+                  <a
+                    href="#"
+                    className="text-sm text-gray-400 transition-colors duration-200 hover:text-brand-secondary"
+                  >
+                    {link}
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
 
+          {/* Address & Contact */}
           <div>
             <h3 className="mb-4 text-sm font-semibold tracking-wide text-white">
               ADDRESS &amp; CONTACT
@@ -153,9 +161,10 @@ export default function FooterComponent() {
             </ul>
           </div>
 
+          {/* Sponsor */}
           <div className="self-start">
             <h3 className="mb-4 text-sm font-semibold tracking-wide text-white">
-              SPONSORS AND ORGANIZED BY ISTAD
+            ORGANIZED AND SPONSORED BY 
             </h3>
 
             <img
@@ -166,6 +175,7 @@ export default function FooterComponent() {
           </div>
         </div>
 
+        {/* Bottom */}
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-6 sm:flex-row">
           <p className="order-2 text-xs text-gray-500 sm:order-1">
             © 2026 AskKH. All rights reserved.
@@ -181,11 +191,9 @@ export default function FooterComponent() {
                   key={label}
                   href="#"
                   aria-label={label}
-                  className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-gray-300 transition-colors hover:bg-brand-secondary hover:text-white"
+                  className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-gray-300 transition-colors duration-200 hover:bg-brand-secondary hover:text-white"
                 >
-                  <Icon
-                    size={13}
-                  />
+                  <Icon size={13} />
                 </a>
               ),
             )}

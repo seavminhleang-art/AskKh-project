@@ -1,4 +1,7 @@
-import { useState } from "react";
+import {
+  useMemo,
+  useState,
+} from "react";
 
 import {
   Link,
@@ -19,6 +22,18 @@ import {
   setPersistence,
   signInWithEmailAndPassword,
 } from "firebase/auth";
+
+import {
+  useForm,
+} from "react-hook-form";
+
+import {
+  zodResolver,
+} from "@hookform/resolvers/zod";
+
+import {
+  z,
+} from "zod";
 
 import {
   auth,
@@ -91,11 +106,23 @@ const translations = {
     enterEmail:
       "សូមបញ្ចូលអ៊ីមែលរបស់អ្នក។",
 
-    enterPassword:
-      "សូមបញ្ចូលពាក្យសម្ងាត់។",
-
     invalidEmail:
       "សូមបញ្ចូលអ៊ីមែលឱ្យបានត្រឹមត្រូវ។",
+
+    emailMissingAt:
+      "អ៊ីមែលត្រូវមានសញ្ញា @",
+
+    gmailSuggestion:
+      "តើអ្នកចង់សរសេរ @gmail.com មែនទេ?",
+
+    invalidEmailFormat:
+      "ទម្រង់អ៊ីមែលមិនត្រឹមត្រូវ (ឧ. name@example.com)",
+
+    emailDomainExtension:
+      "Domain របស់អ៊ីមែលត្រូវមានផ្នែកបន្ថែមដូចជា .com (ឧ. gmail.com)",
+
+    enterPassword:
+      "សូមបញ្ចូលពាក្យសម្ងាត់។",
 
     wrongCredentials:
       "អ៊ីមែល ឬពាក្យសម្ងាត់មិនត្រឹមត្រូវ។",
@@ -132,6 +159,9 @@ const translations = {
 
     enterEmailBeforeReset:
       "សូមបញ្ចូលអ៊ីមែលជាមុនសិន។",
+
+    resetFailed:
+      "មិនអាចផ្ញើអ៊ីមែលកំណត់ពាក្យសម្ងាត់ឡើងវិញបានទេ។",
 
     welcome:
       "សូមស្វាគមន៍",
@@ -201,11 +231,23 @@ const translations = {
     enterEmail:
       "Please enter your email.",
 
-    enterPassword:
-      "Please enter your password.",
-
     invalidEmail:
       "Please enter a valid email.",
+
+    emailMissingAt:
+      "Email must include @",
+
+    gmailSuggestion:
+      "Did you mean @gmail.com?",
+
+    invalidEmailFormat:
+      "Invalid email format (e.g. name@example.com)",
+
+    emailDomainExtension:
+      "Email domain must include an extension like .com (e.g. gmail.com)",
+
+    enterPassword:
+      "Please enter your password.",
 
     wrongCredentials:
       "Incorrect email or password.",
@@ -243,6 +285,9 @@ const translations = {
     enterEmailBeforeReset:
       "Enter your email first.",
 
+    resetFailed:
+      "Unable to send password reset email.",
+
     welcome:
       "Welcome",
 
@@ -260,6 +305,167 @@ const translations = {
   },
 };
 
+const createEmailSchema = (t) =>
+  z
+    .string()
+    .trim()
+    .min(
+      1,
+      t.enterEmail,
+    )
+    .superRefine(
+      (
+        value,
+        ctx,
+      ) => {
+        if (!value) {
+          return;
+        }
+
+        if (
+          !value.includes(
+            "@",
+          )
+        ) {
+          ctx.addIssue({
+            code: "custom",
+            message:
+              t.emailMissingAt,
+          });
+
+          return;
+        }
+
+        const parts =
+          value.split(
+            "@",
+          );
+
+        if (
+          parts.length !== 2
+        ) {
+          ctx.addIssue({
+            code: "custom",
+            message:
+              t.invalidEmailFormat,
+          });
+
+          return;
+        }
+
+        const [
+          localPart,
+          domain,
+        ] = parts;
+
+        if (
+          !localPart ||
+          !domain
+        ) {
+          ctx.addIssue({
+            code: "custom",
+            message:
+              t.invalidEmail,
+          });
+
+          return;
+        }
+
+        if (
+          domain.endsWith(
+            ".",
+          )
+        ) {
+          ctx.addIssue({
+            code: "custom",
+            message:
+              t.emailDomainExtension,
+          });
+
+          return;
+        }
+
+        const gmailTypoPattern =
+          /^gmail\.(co|con|cmo)$/i;
+
+        if (
+          gmailTypoPattern.test(
+            domain,
+          )
+        ) {
+          ctx.addIssue({
+            code: "custom",
+            message:
+              t.gmailSuggestion,
+          });
+
+          return;
+        }
+
+        const domainParts =
+          domain.split(
+            ".",
+          );
+
+        const extension =
+          domainParts[
+            domainParts.length -
+              1
+          ];
+
+        if (
+          domainParts.length <
+            2 ||
+          !extension ||
+          extension.length < 2
+        ) {
+          ctx.addIssue({
+            code: "custom",
+            message:
+              t.invalidEmailFormat,
+          });
+
+          return;
+        }
+
+        const emailPattern =
+          /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+        if (
+          !emailPattern.test(
+            value,
+          )
+        ) {
+          ctx.addIssue({
+            code: "custom",
+            message:
+              t.invalidEmail,
+          });
+        }
+      },
+    );
+
+const createLoginSchema = (
+  t,
+) =>
+  z.object({
+    email:
+      createEmailSchema(
+        t,
+      ),
+
+    password: z
+      .string()
+      .min(
+        1,
+        t.enterPassword,
+      ),
+
+    rememberMe: z
+      .boolean()
+      .optional(),
+  });
+
 export default function LoginPage() {
   const {
     language,
@@ -267,7 +473,44 @@ export default function LoginPage() {
   } = useLanguage();
 
   const t =
-    translations[language];
+    translations[
+      language
+    ];
+
+  const loginSchema =
+    useMemo(
+      () =>
+        createLoginSchema(
+          t,
+        ),
+      [t],
+    );
+
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    formState: {
+      errors,
+      isSubmitting,
+    },
+  } = useForm({
+    resolver:
+      zodResolver(
+        loginSchema,
+      ),
+
+    mode: "onBlur",
+
+    reValidateMode:
+      "onChange",
+
+    defaultValues: {
+      email: "",
+      password: "",
+      rememberMe: false,
+    },
+  });
 
   const {
     toasts,
@@ -285,27 +528,9 @@ export default function LoginPage() {
   ] = useState(false);
 
   const [
-    rememberMe,
-    setRememberMe,
-  ] = useState(false);
-
-  const [
-    loading,
-    setLoading,
-  ] = useState(false);
-
-  const [
     resetLoading,
     setResetLoading,
   ] = useState(false);
-
-  const [
-    formData,
-    setFormData,
-  ] = useState({
-    email: "",
-    password: "",
-  });
 
   const notifyError = (
     description,
@@ -318,27 +543,13 @@ export default function LoginPage() {
     });
   };
 
-  const handleChange = (
-    event,
-  ) => {
-    const {
-      name,
-      value,
-    } = event.target;
-
-    setFormData(
-      (previous) => ({
-        ...previous,
-        [name]: value,
-      }),
-    );
-  };
-
   const showLoginSuccess = (
     user,
   ) => {
     showToast({
-      status: "success",
+      status:
+        "success",
+
       title:
         t.successTitle,
 
@@ -351,91 +562,69 @@ export default function LoginPage() {
     });
   };
 
-  const getFirebaseErrorMessage = (
-    error,
-  ) => {
-    switch (error.code) {
-      case "auth/invalid-email":
-        return t.invalidEmail;
+  const getFirebaseErrorMessage =
+    (error) => {
+      switch (
+        error.code
+      ) {
+        case "auth/invalid-email":
+          return t.invalidEmail;
 
-      case "auth/user-disabled":
-        return t.disabled;
+        case "auth/user-disabled":
+          return t.disabled;
 
-      case "auth/invalid-credential":
-      case "auth/user-not-found":
-      case "auth/wrong-password":
-        return t.wrongCredentials;
+        case "auth/invalid-credential":
+        case "auth/user-not-found":
+        case "auth/wrong-password":
+          return t.wrongCredentials;
 
-      case "auth/network-request-failed":
-        return t.network;
+        case "auth/network-request-failed":
+          return t.network;
 
-      case "auth/too-many-requests":
-        return t.tooMany;
+        case "auth/too-many-requests":
+          return t.tooMany;
 
-      default:
-        return t.loginFailed;
-    }
-  };
+        default:
+          return t.loginFailed;
+      }
+    };
 
-  const handleSubmit = async (
-    event,
-  ) => {
-    event.preventDefault();
-
-    if (
-      !formData.email.trim()
-    ) {
-      notifyError(
-        t.enterEmail,
-      );
-
-      return;
-    }
-
-    if (!formData.password) {
-      notifyError(
-        t.enterPassword,
-      );
-
-      return;
-    }
-
-    try {
-      setLoading(true);
-
-      await setPersistence(
-        auth,
-
-        rememberMe
-          ? browserLocalPersistence
-          : browserSessionPersistence,
-      );
-
-      const result =
-        await signInWithEmailAndPassword(
+  const onSubmit =
+    async (data) => {
+      try {
+        await setPersistence(
           auth,
-          formData.email.trim(),
-          formData.password,
+
+          data.rememberMe
+            ? browserLocalPersistence
+            : browserSessionPersistence,
         );
 
-      showLoginSuccess(
-        result.user,
-      );
-    } catch (error) {
-      console.error(
-        "Login error:",
-        error,
-      );
+        const result =
+          await signInWithEmailAndPassword(
+            auth,
+            data.email
+              .trim()
+              .toLowerCase(),
+            data.password,
+          );
 
-      notifyError(
-        getFirebaseErrorMessage(
+        showLoginSuccess(
+          result.user,
+        );
+      } catch (error) {
+        console.error(
+          "Login error:",
           error,
-        ),
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+        );
+
+        notifyError(
+          getFirebaseErrorMessage(
+            error,
+          ),
+        );
+      }
+    };
 
   const handleOAuthError = (
     error,
@@ -469,7 +658,8 @@ export default function LoginPage() {
     }
 
     if (
-      provider === "GitHub" &&
+      provider ===
+        "GitHub" &&
       error.code ===
         "auth/operation-not-allowed"
     ) {
@@ -481,7 +671,8 @@ export default function LoginPage() {
     }
 
     notifyError(
-      provider === "Google"
+      provider ===
+        "Google"
         ? t.googleFailed
         : t.githubFailed,
     );
@@ -490,11 +681,16 @@ export default function LoginPage() {
   const handleForgotPassword =
     async () => {
       const email =
-        formData.email.trim();
+        getValues(
+          "email",
+        )
+          ?.trim()
+          .toLowerCase();
 
       if (!email) {
         showToast({
-          status: "info",
+          status:
+            "info",
 
           title:
             t.infoTitle,
@@ -506,8 +702,30 @@ export default function LoginPage() {
         return;
       }
 
+      const result =
+        createEmailSchema(
+          t,
+        ).safeParse(
+          email,
+        );
+
+      if (
+        !result.success
+      ) {
+        notifyError(
+          result.error
+            .issues[0]
+            ?.message ||
+            t.invalidEmail,
+        );
+
+        return;
+      }
+
       try {
-        setResetLoading(true);
+        setResetLoading(
+          true,
+        );
 
         await sendPasswordResetEmail(
           auth,
@@ -515,7 +733,8 @@ export default function LoginPage() {
         );
 
         showToast({
-          status: "success",
+          status:
+            "success",
 
           title:
             t.resetTitle,
@@ -529,21 +748,45 @@ export default function LoginPage() {
           error,
         );
 
-        notifyError(
-          error.code ===
-            "auth/invalid-email"
-            ? t.invalidEmail
-            : t.loginFailed,
-        );
+        switch (
+          error.code
+        ) {
+          case "auth/invalid-email":
+            notifyError(
+              t.invalidEmail,
+            );
+            break;
+
+          case "auth/too-many-requests":
+            notifyError(
+              t.tooMany,
+            );
+            break;
+
+          case "auth/network-request-failed":
+            notifyError(
+              t.network,
+            );
+            break;
+
+          default:
+            notifyError(
+              t.resetFailed,
+            );
+        }
       } finally {
-        setResetLoading(false);
+        setResetLoading(
+          false,
+        );
       }
     };
 
   return (
     <>
       <AnimatedToastStack
-        toasts={toasts}
+        toasts={
+          toasts
+        }
         onDismiss={
           dismissToast
         }
@@ -565,11 +808,15 @@ export default function LoginPage() {
             className="back-button"
           >
             <ArrowLeft
-              size={18}
+              size={
+                18
+              }
             />
 
             <span>
-              {t.back}
+              {
+                t.back
+              }
             </span>
           </Link>
 
@@ -588,62 +835,95 @@ export default function LoginPage() {
           <div className="login-form-container">
             <div className="auth-heading">
               <h1>
-                {t.title}
+                {
+                  t.title
+                }
               </h1>
             </div>
 
             <form
               className="auth-form"
-              onSubmit={
-                handleSubmit
-              }
+              onSubmit={handleSubmit(
+                onSubmit,
+              )}
+              noValidate
             >
               <div className="form-group">
                 <label htmlFor="login-email">
-                  {t.email}
+                  {
+                    t.email
+                  }
 
                   <span>
                     *
                   </span>
                 </label>
 
-                <div className="input-wrapper">
+                <div
+                  className={`input-wrapper ${
+                    errors.email
+                      ? "border-red-500"
+                      : ""
+                  }`}
+                >
                   <Mail
-                    size={19}
+                    size={
+                      19
+                    }
                     className="input-icon"
                   />
 
                   <input
                     id="login-email"
                     type="email"
-                    name="email"
                     autoComplete="email"
                     placeholder={
                       t.emailPlaceholder
                     }
-                    value={
-                      formData.email
+                    aria-invalid={
+                      errors.email
+                        ? "true"
+                        : "false"
                     }
-                    onChange={
-                      handleChange
-                    }
-                    required
+                    {...register(
+                      "email",
+                    )}
                   />
                 </div>
+
+                {errors.email && (
+                  <p className="mt-1.5 text-xs font-medium text-red-500">
+                    {
+                      errors
+                        .email
+                        .message
+                    }
+                  </p>
+                )}
               </div>
 
               <div className="form-group">
                 <label htmlFor="login-password">
-                  {t.password}
+                  {
+                    t.password
+                  }
 
                   <span>
                     *
                   </span>
                 </label>
 
-                <div className="input-wrapper">
+                <div
+                  className={`input-wrapper ${
+                    errors.password
+                      ? "border-red-500"
+                      : ""
+                  }`}
+                >
                   <LockKeyhole
-                    size={19}
+                    size={
+                      19
+                    }
                     className="input-icon"
                   />
 
@@ -654,18 +934,18 @@ export default function LoginPage() {
                         ? "text"
                         : "password"
                     }
-                    name="password"
                     autoComplete="current-password"
                     placeholder={
                       t.passwordPlaceholder
                     }
-                    value={
-                      formData.password
+                    aria-invalid={
+                      errors.password
+                        ? "true"
+                        : "false"
                     }
-                    onChange={
-                      handleChange
-                    }
-                    required
+                    {...register(
+                      "password",
+                    )}
                   />
 
                   <button
@@ -687,32 +967,38 @@ export default function LoginPage() {
                   >
                     {showPassword ? (
                       <Eye
-                        size={19}
+                        size={
+                          19
+                        }
                       />
                     ) : (
                       <EyeOff
-                        size={19}
+                        size={
+                          19
+                        }
                       />
                     )}
                   </button>
                 </div>
+
+                {errors.password && (
+                  <p className="mt-1.5 text-xs font-medium text-red-500">
+                    {
+                      errors
+                        .password
+                        .message
+                    }
+                  </p>
+                )}
               </div>
 
               <div className="login-options">
                 <label className="checkbox-label">
                   <input
                     type="checkbox"
-                    checked={
-                      rememberMe
-                    }
-                    onChange={(
-                      event,
-                    ) =>
-                      setRememberMe(
-                        event.target
-                          .checked,
-                      )
-                    }
+                    {...register(
+                      "rememberMe",
+                    )}
                   />
 
                   <span className="custom-checkbox" />
@@ -744,10 +1030,10 @@ export default function LoginPage() {
                 type="submit"
                 className="primary-auth-button"
                 disabled={
-                  loading
+                  isSubmitting
                 }
               >
-                {loading
+                {isSubmitting
                   ? t.loggingIn
                   : t.login}
               </button>
@@ -806,7 +1092,9 @@ export default function LoginPage() {
                 }
 
                 <Link to="/register">
-                  {t.signup}
+                  {
+                    t.signup
+                  }
                 </Link>
               </p>
             </form>
