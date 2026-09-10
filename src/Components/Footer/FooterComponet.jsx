@@ -16,7 +16,7 @@ const Legal = [
 ];
 export default function FooterComponent() {
   return (
-    <footer className="relative overflow-hidden bg-brand-primary text-gray-300">
+    <footer className="relative overflow-hidden bg-brand-primary-dark text-gray-300 ">
       {/* subtle vertical stripe background, matches reference */}
       <div
         className="pointer-events-none absolute inset-0 opacity-10"
