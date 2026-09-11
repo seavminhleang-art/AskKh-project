@@ -1,10 +1,11 @@
 import React from "react";
 import { Link } from "react-router";
-import Navbar from "../Nav/NavBarComponent.jsx";
+
 import FooterComponent from "../Footer/FooterComponet.jsx";
 import missionImg from "../../assets/Website/mission.png";
-import networkImg from "../../assets/Website/network.png";
+import communityImg from "../../assets/Website/community.jpg";
 import visionImg from "../../assets/Website/vision.png";
+import Navbar from "../Nav/NavBarComponent.jsx";
 // ---------- Icons ----------
 function CheckIcon() {
   return (
@@ -81,7 +82,7 @@ function IllustrationImage({ src, alt, className = "w-full max-w-sm" }) {
   return <img src={src} alt={alt} className={`${className} object-contain`} />;
 }
 
-const NETWORK_IMAGE_SRC = networkImg;
+const NETWORK_IMAGE_SRC = communityImg;
 const MISSION_IMAGE_SRC = missionImg;
 const VISION_IMAGE_SRC = visionImg;
 
@@ -161,17 +162,17 @@ const mentors = [
 ];
 
 const teamLeads = [
-  { num: "03", name: "Mom Lisa", roleLabel: "Frontend Developer", role: "Leader", photo: "", github: "https://github.com/LisaMom", telegram: "https://t.me/lisamom369" },
-  { num: "04", name: "Leang Seavminh", roleLabel: "Java Developer", role: "Sub-Lead", photo: "", github: "https://github.com/seavminhleang-art", telegram: "https://t.me/puthea_reach" },
+  { num: "03", name: "Mom Lisa", roleLabel: "Frontend Developer", role: "Leader", photo: "./src/assets/Team/mom_lisa.jpg", github: "https://github.com/LisaMom", telegram: "https://t.me/lisamom369" },
+  { num: "04", name: "Leang Seavminh", roleLabel: "Java Developer", role: "Sub-Lead", photo: "./src/assets/Team/leang_seavminh.jpg", github: "https://github.com/seavminhleang-art", telegram: "https://t.me/puthea_reach" },
 ];
 
 const teamMembers = [
-  { num: "05", name: "Cheakching Lyheng", roleLabel: "Java Developer", role: "Member", photo: "", github: "https://github.com/lyheng142", telegram: "https://t.me/cclh142" },
-  { num: "06", name: "Cheat Chanmoniza", roleLabel: "Frontend Developer", role: "Member", photo: "", github: "https://github.com/moniza-Dev", telegram: "https://t.me/chanmoniza_cheat" },
-  { num: "07", name: "Hor Tongan", roleLabel: "Java Developer", role: "Member", photo: "", github: "https://github.com/TongAnWasHere", telegram: "https://t.me/TongAnWasHere" },
-  { num: "08", name: "Sroeun Sothearith", roleLabel: "Frontend Developer", role: "Member", photo: "", github: "https://github.com/Rith857", telegram: "https://t.me/sothearithsroeun" },
-  { num: "09", name: "Neang Thana", roleLabel: "Frontend Developer", role: "Member", photo: "", github: "https://github.com/mrrhello894-byte", telegram: "https://t.me/neangthana" },
-  { num: "10", name: "Venthan Tharath", roleLabel: "Frontend Developer", role: "Member", photo: "", github: "https://github.com/tharath780-commits", telegram: "https://t.me/helterqt" },
+  { num: "05", name: "Cheakching Lyheng", roleLabel: "Java Developer", role: "Member", photo: "./src/assets/Team/cheakching_lyheng.jpg", github: "https://github.com/lyheng142", telegram: "https://t.me/cclh142" },
+  { num: "06", name: "Cheat Chanmoniza", roleLabel: "Frontend Developer", role: "Member", photo: "./src/assets/Team/cheat_chanmoniza.jpg", github: "https://github.com/moniza-Dev", telegram: "https://t.me/chanmoniza_cheat" },
+  { num: "07", name: "Hor Tongan", roleLabel: "Java Developer", role: "Member", photo: "./src/assets/Team/hor_tongan.jpg", github: "https://github.com/TongAnWasHere", telegram: "https://t.me/TongAnWasHere" },
+  { num: "08", name: "Sroeun Sothearith", roleLabel: "Frontend Developer", role: "Member", photo: "./src/assets/Team/sroeun_sothearith.jpg", github: "https://github.com/Rith857", telegram: "https://t.me/sothearithsroeun" },
+  { num: "09", name: "Neang Thana", roleLabel: "Frontend Developer", role: "Member", photo: "./src/assets/Team/neang_thana.jpg", github: "https://github.com/mrrhello894-byte", telegram: "https://t.me/neangthana" },
+  { num: "10", name: "Venthan Tharath", roleLabel: "Frontend Developer", role: "Member", photo: "./src/assets/Team/venthan_tharath.jpg", github: "https://github.com/tharath780-commits", telegram: "https://t.me/helterqt" },
 ];
 
 // ---------- Reusable card ----------

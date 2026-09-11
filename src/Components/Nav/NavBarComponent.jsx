@@ -19,7 +19,7 @@ const NAV_ITEMS = [
     ],
   },
   { label: "Leaderboard", href: "#leaderboard" },
-  { label: "About Us", href: "#about" },
+  { label: "About Us", href: "about" },
 ];
 
 export default function Navbar() {

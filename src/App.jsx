@@ -1,5 +1,3 @@
-
-import './App.jsx'
 import FooterComponent from './Components/Footer/FooterComponet.jsx'
 import Navbar from './Components/Nav/NavBarComponent.jsx'
 
