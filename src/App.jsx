@@ -1,19 +1,37 @@
+import React, { useState, useEffect } from "react";
+import NavBarComponent from "./Components/Nav/NavBarComponent";
+import FooterComponent from "./Components/Footer/FooterComponet";
+import { Outlet } from "react-router-dom";
 
-import './App.jsx'
-import FooterComponent from './Components/Footer/FooterComponet.jsx'
-import Navbar from './Components/Nav/NavBarComponent.jsx'
+export default function App() {
+  // Initialize state from localStorage (defaults to light mode)
+  const [darkMode, setDarkMode] = useState(() => {
+    return localStorage.getItem("theme") === "dark";
+  });
 
+  // Sync state with HTML document element for Tailwind CSS
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  }, [darkMode]);
 
-
-function App() {
-  
   return (
-    <>
-   <Navbar/>
-   <hr />
-   <FooterComponent/>
-    </>
-  )
-}
+    <div className={`min-h-screen transition-colors duration-300 ${
+      darkMode ? "bg-zinc-950 text-slate-100 dark" : "bg-white text-gray-900"
+    }`}>
+      <NavBarComponent darkMode={darkMode} setDarkMode={setDarkMode} />
+      
+      {/* Outlet context allows child pages to access darkMode if needed */}
+      <main>
+        <Outlet context={{ darkMode, setDarkMode }} />
+      </main>
 
-export default App
+      <FooterComponent darkMode={darkMode} />
+    </div>
+  );
+}
