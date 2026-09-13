@@ -2,7 +2,7 @@
 // beui.dev/components/motion/animated-toast-stack
 
 import { AlertCircle, Bell, Check, Info, LoaderCircle, X } from "lucide-react";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { AnimatePresence, motion, useReducedMotion } from "@/lib/motion";
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { EASE_OUT } from "@/lib/ease";

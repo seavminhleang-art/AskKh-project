@@ -1,4 +1,4 @@
-import { baseApi } from "../../api/baseApi";
+import { baseApi } from "./baseApi.js";
 
 export const notificationsApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
@@ -56,7 +56,7 @@ export const notificationsApi = baseApi.injectEndpoints({
         // e.g.:
         //
         //   const es = new EventSource(
-        //     `${import.meta.env.VITE_API_BASE_URL}/notifications/stream?token=${accessToken}`
+        //     `${import.meta.env.VITE_BASE_FORUM_LOST_URL}/notifications/stream?token=${accessToken}`
         //   );
         //   es.onmessage = (e) => { ...update cache/UI... };
         //
@@ -64,7 +64,7 @@ export const notificationsApi = baseApi.injectEndpoints({
         // call `.initiate()` on it expecting a normal JSON response.
         getNotificationStreamUrl: builder.query({
             queryFn: () => ({
-                data: `${import.meta.env.VITE_API_BASE_URL}/notifications/stream`,
+                data: `${import.meta.env.VITE_BASE_FORUM_LOST_URL}/notifications/stream`,
             }),
         }),
     }),

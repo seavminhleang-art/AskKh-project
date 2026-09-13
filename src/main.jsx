@@ -24,6 +24,8 @@ import LoginPage from "./Components/Auth/LoginPage.jsx";
 
 import RegisterPage from "./Components/Auth/RegisterPage.jsx";
 
+import LeaderboardPage from "./Components/Pages/leaderboard/LeaderBoarderPage.jsx";
+
 import {
   store,
 } from "./Components/redux/store.js";
@@ -51,6 +53,11 @@ const router =
     {
       path: "/register",
       element: <RegisterPage />,
+    },
+
+    {
+      path: "/leaderboard",
+      element: <LeaderboardPage />,
     },
   ]);
 

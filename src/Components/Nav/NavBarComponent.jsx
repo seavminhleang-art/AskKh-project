@@ -40,7 +40,7 @@ const NAVIGATION = {
     },
     {
       label: "តារាងពិន្ទុ",
-      href: "#leaderboard",
+      href: "/leaderboard",
     },
     {
       label: "អំពីយើង",
@@ -69,7 +69,7 @@ const NAVIGATION = {
     },
     {
       label: "Leaderboard",
-      href: "#leaderboard",
+      href: "/leaderboard",
     },
     {
       label: "About Us",
