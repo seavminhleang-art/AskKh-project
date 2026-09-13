@@ -1,0 +1,81 @@
+import { baseApi } from "../../api/baseApi";
+
+export const commentsApi = baseApi.injectEndpoints({
+    endpoints: (builder) => ({
+        // GET /comments/{commentId}
+        getCommentById: builder.query({
+            query: (commentId) => `/comments/${commentId}`,
+            providesTags: (result, error, commentId) => [
+                { type: "Comment", id: commentId },
+            ],
+        }),
+
+        // GET /comments/post/{postId}
+        getCommentsByPost: builder.query({
+            query: (postId) => `/comments/post/${postId}`,
+            providesTags: (result, error, postId) => [
+                { type: "Comment", id: `POST-${postId}` },
+            ],
+        }),
+
+        // GET /comments/user/{userId}
+        getCommentsByUser: builder.query({
+            query: (userId) => `/comments/user/${userId}`,
+        }),
+
+        // GET /comments/search?query=
+        searchComments: builder.query({
+            query: (query) => ({
+                url: "/comments/search",
+                params: { query },
+            }),
+        }),
+
+        // POST /comments   body: { postId, text }
+        createComment: builder.mutation({
+            query: (body) => ({
+                url: "/comments",
+                method: "POST",
+                body,
+            }),
+            invalidatesTags: (result, error, { postId }) => [
+                { type: "Comment", id: `POST-${postId}` },
+            ],
+        }),
+
+        // PUT /comments/{commentId}   body: { postId, text }
+        updateComment: builder.mutation({
+            query: ({ commentId, ...body }) => ({
+                url: `/comments/${commentId}`,
+                method: "PUT",
+                body,
+            }),
+            invalidatesTags: (result, error, { commentId, postId }) => [
+                { type: "Comment", id: commentId },
+                { type: "Comment", id: `POST-${postId}` },
+            ],
+        }),
+
+        // DELETE /comments/{commentId}
+        deleteComment: builder.mutation({
+            query: (commentId) => ({
+                url: `/comments/${commentId}`,
+                method: "DELETE",
+            }),
+            invalidatesTags: (result, error, commentId) => [
+                { type: "Comment", id: commentId },
+            ],
+        }),
+    }),
+    overrideExisting: false,
+});
+
+export const {
+    useGetCommentByIdQuery,
+    useGetCommentsByPostQuery,
+    useGetCommentsByUserQuery,
+    useSearchCommentsQuery,
+    useCreateCommentMutation,
+    useUpdateCommentMutation,
+    useDeleteCommentMutation,
+} = commentsApi;
