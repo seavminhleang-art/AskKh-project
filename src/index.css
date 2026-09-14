@@ -13,15 +13,27 @@
     BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
-/*
-  Note: "Google Sans" itself is not published on Google Fonts (it's a
-  proprietary Google typeface), so it can't be @imported directly.
-  Roboto is used as the closest open substitute and is wired up as the
-  fallback in --font-brand above. If you get a licensed Google Sans
-  .woff2 later, add an @font-face block here and it'll be picked up
-  first automatically (no other changes needed).
-*/
+:root {
+  --bg-main: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-card: #ffffff;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --border-color: #e2e8f0;
+}
+
+.dark {
+  --bg-main: #09090b;
+  --bg-secondary: #18181b;
+  --bg-card: #18181b;
+  --text-main: #f8fafc;
+  --text-muted: #a1a1aa;
+  --border-color: #27272a;
+}
 
 body {
   font-family: var(--font-brand);
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }

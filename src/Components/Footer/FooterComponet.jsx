@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useTheme } from "../../context/ThemeContext.jsx";
 import { MapPin, Phone, Mail } from "lucide-react";
 import {
   FaFacebookF,
@@ -12,6 +13,7 @@ import istadLogo from "../../assets/Website/istad-logo.png";
 
 export default function FooterComponent() {
   const { t } = useTranslation();
+  const { darkMode } = useTheme();
 
   const quickLinks = [
     { label: t("footer.quickLinks.home"), to: "/" },
@@ -26,7 +28,7 @@ export default function FooterComponent() {
   ];
 
   return (
-    <footer className="relative overflow-hidden bg-brand-primary-dark text-gray-300 ">
+    <footer className={`relative overflow-hidden transition-colors duration-300 ${darkMode ? "bg-zinc-950 text-gray-300" : "bg-brand-primary-dark text-gray-300"}`}>
       {/* subtle vertical stripe background, matches reference */}
       <div
         className="pointer-events-none absolute inset-0 opacity-10"

@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
-import { 
-  SunIcon, 
-  MoonIcon, 
-  BellIcon, 
-  GlobeAltIcon, 
-  Bars3Icon, 
+import {
+  SunIcon,
+  MoonIcon,
+  BellIcon,
+  GlobeAltIcon,
+  Bars3Icon,
   XMarkIcon,
   ChevronDownIcon,
   ArrowUpRightIcon,
@@ -13,8 +13,10 @@ import {
 } from "@heroicons/react/24/outline";
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useTheme } from "../../context/ThemeContext.jsx";
 
-export default function NavBarComponent({ darkMode, setDarkMode }) {
+export default function NavBarComponent() {
+  const { darkMode, toggleTheme } = useTheme();
   const { t, i18n } = useTranslation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [communityDropdownOpen, setCommunityDropdownOpen] = useState(false);
@@ -192,10 +194,10 @@ export default function NavBarComponent({ darkMode, setDarkMode }) {
 
           <button
             type="button"
-            onClick={() => setDarkMode((prev) => !prev)}
+            onClick={toggleTheme}
             className={`p-2.5 rounded-full transition shadow-xs cursor-pointer border ${
-              darkMode 
-                ? "bg-zinc-900 border-zinc-800 text-amber-400 hover:bg-zinc-800" 
+              darkMode
+                ? "bg-zinc-900 border-zinc-800 text-amber-400 hover:bg-zinc-800"
                 : "bg-[#eaeaea] border-gray-200 text-gray-700 hover:bg-[var(--color-brand-primary-light)]"
             }`}
             aria-label={t("themeLabel")}

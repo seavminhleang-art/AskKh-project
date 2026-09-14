@@ -1,13 +1,12 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
-import Navbar from "../Nav/NavBarComponent.jsx";
-import FooterComponent from "../Footer/FooterComponet.jsx";
+import { useTheme } from "../../context/ThemeContext.jsx";
 
 function BulletList({ items }) {
   return (
     <ul className="space-y-2 mb-3">
       {items.map((item, i) => (
-        <li key={i} className="flex items-start gap-2 text-slate-600">
+        <li key={i} className="flex items-start gap-2 text-[var(--text-muted)]">
           <span className="mt-2 w-1.5 h-1.5 rounded-full bg-brand-primary shrink-0" />
           <span>{item}</span>
         </li>
@@ -24,9 +23,9 @@ function SectionBlock({ num, title, paragraphs = [], list, groups, outro = [] })
           {num}
         </span>
         <div className="flex-1">
-          <h2 className="text-xl font-bold text-slate-900 mb-3">{title}</h2>
+          <h2 className="text-xl font-bold text-[var(--text-main)] mb-3">{title}</h2>
           {paragraphs.map((p, i) => (
-            <p key={i} className="text-slate-600 leading-relaxed mb-3">
+            <p key={i} className="text-[var(--text-muted)] leading-relaxed mb-3">
               {p}
             </p>
           ))}
@@ -44,7 +43,7 @@ function SectionBlock({ num, title, paragraphs = [], list, groups, outro = [] })
             </div>
           )}
           {outro.map((p, i) => (
-            <p key={i} className="text-slate-600 leading-relaxed mb-3">
+            <p key={i} className="text-[var(--text-muted)] leading-relaxed mb-3">
               {p}
             </p>
           ))}
@@ -56,6 +55,7 @@ function SectionBlock({ num, title, paragraphs = [], list, groups, outro = [] })
 
 export default function PrivacyPolicy() {
   const { t } = useTranslation();
+  const { darkMode } = useTheme();
 
   // Transform the i18n object into the format expected by SectionBlock
   const sections = Object.entries(t("policyPage.sections", { returnObjects: true })).map(([num, data]) => ({
@@ -68,21 +68,20 @@ export default function PrivacyPolicy() {
   }));
 
   return (
-    <div className="bg-white text-slate-800 antialiased">
-      <Navbar />
-      <section className="bg-brand-primary-light">
+    <div className="bg-[var(--bg-main)] text-[var(--text-main)] antialiased transition-colors duration-300">
+      <section className={`${darkMode ? "bg-zinc-900" : "bg-brand-primary-light"} transition-colors duration-300`}>
         <div className="max-w-4xl mx-auto px-6 py-16 text-center">
           <span className="text-brand-primary text-sm font-semibold uppercase tracking-wide">
             {t("policyPage.legalLabel")}
           </span>
-          <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mt-2">
+          <h1 className="text-3xl md:text-4xl font-bold text-[var(--text-main)] mt-2">
             {t("policyPage.title")}
           </h1>
-          <p className="text-slate-500 mt-3">{t("policyPage.lastUpdated")}</p>
+          <p className="text-[var(--text-muted)] mt-3">{t("policyPage.lastUpdated")}</p>
         </div>
       </section>
       <section className="max-w-4xl mx-auto px-6 py-12">
-        <p className="text-slate-600 leading-relaxed">
+        <p className="text-[var(--text-muted)] leading-relaxed">
           {t("policyPage.intro")}
         </p>
       </section>
@@ -93,7 +92,6 @@ export default function PrivacyPolicy() {
           ))}
         </div>
       </section>
-      <FooterComponent />
     </div>
   );
 }
