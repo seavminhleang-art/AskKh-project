@@ -4,6 +4,12 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import "./i18n";
 import App from "./App.jsx";
+import ReactDOM from "react-dom/client";
+import { createBrowserRouter } from "react-router";
+import { RouterProvider } from "react-router/dom";
+import About from "./Components/Pages/About.jsx";
+import TermsAndConditions from "./Components/Pages/TermAndConditions.jsx";
+import PrivacyPolicy from "./Components/Pages/Policy.jsx";
 import HomePage from "./Components/Pages/HomePage.jsx";
 import LostAndFoundPage from "./Components/Pages/LostAndFoundPage.jsx";
 import LeaderboardPage from "./Components/Pages/leaderboard/LeaderBoarderPage.jsx";
@@ -36,6 +42,19 @@ const router = createBrowserRouter([
   { path: "/register", element: <RegisterPage /> },
   {
     path: "/",
+    element: <App />,
+  },
+  {
+    path: "/about",
+    element: <About />,
+  },
+  {
+    path: "/terms",
+    element: <TermsAndConditions />,
+  },
+  {
+    path: "/privacy-policy",
+    element: <PrivacyPolicy />,
     element: <RootLayout />,
     children: [
       { index: true, element: <HomePage /> },
@@ -54,6 +73,8 @@ const router = createBrowserRouter([
   },
 ]);
 
+const root = document.getElementById("root");
+ReactDOM.createRoot(root).render(<RouterProvider router={router} />);
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <ThemeProvider defaultTheme="light">

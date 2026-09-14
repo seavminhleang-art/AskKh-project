@@ -1,9 +1,6 @@
-import {
-  Mail,
-  MapPin,
-  Phone,
-} from "lucide-react";
-
+import React from "react";
+import { Link } from "react-router";
+import { MapPin, Phone, Mail } from "lucide-react";
 import {
   FaFacebookF,
   FaInstagram,
@@ -13,20 +10,11 @@ import {
 
 import istadLogo from "../../assets/Website/istad-logo.png";
 
-const quickLinks = [
-  "Home",
-  "Community Q&A",
-  "Lost & Found",
-  "About",
+const quickLinks = ["Home", "Community Q&A", "Lost & Found", "About"];
+const Legal = [
+  { label: "Privacy Policy", to: "/privacy-policy" },
+  { label: "Terms & Conditions", to: "/terms" },
 ];
-
-const legalLinks = [
-  "Contact",
-  "Privacy Policy",
-  "Terms of Service",
-  "Legal",
-];
-
 export default function FooterComponent() {
   const socialLinks = [
     {
@@ -48,8 +36,8 @@ export default function FooterComponent() {
   ];
 
   return (
-    <footer className="relative overflow-hidden bg-brand-primary-dark text-gray-300 transition-colors duration-300 dark:bg-black">
-      {/* Background vertical pattern */}
+    <footer className="relative overflow-hidden bg-brand-primary-dark text-gray-300 ">
+      {/* subtle vertical stripe background, matches reference */}
       <div
         className="pointer-events-none absolute inset-0 opacity-10"
         style={{
@@ -62,9 +50,9 @@ export default function FooterComponent() {
       <div className="relative mx-auto max-w-7xl px-6 pb-8 pt-14">
         <div className="grid grid-cols-1 items-start gap-10 sm:grid-cols-2 lg:grid-cols-5">
           {/* Brand */}
-          <div>
-            <div className="mb-4 flex items-center gap-2">
-              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-secondary text-sm font-bold text-white">
+          <div className="lg:col-span-1">
+            <div className="flex items-center gap-2 mb-4">
+              <span className="flex items-center justify-center w-9 h-9 rounded-full bg-brand-secondary text-white font-bold text-sm shrink-0">
                 A
               </span>
 
@@ -90,7 +78,7 @@ export default function FooterComponent() {
                 <li key={idx}>
                   <a
                     href="#"
-                    className="text-sm text-gray-400 transition-colors duration-200 hover:text-brand-secondary"
+                    className="text-sm text-gray-400 hover:text-brand-secondary transition-colors duration-200 no-underline"
                   >
                     {link.label}
                   </a>
@@ -101,19 +89,19 @@ export default function FooterComponent() {
 
           {/* Legal / Support Links */}
           <div>
-            <h3 className="mb-4 text-sm font-semibold tracking-wide text-white">
-              QUICK LINK
+            <h3 className="text-white font-semibold text-sm tracking-wide mb-4">
+              LEGAL & POLICIES
             </h3>
 
             <ul className="space-y-3">
-              {legalLinks.map((link) => (
-                <li key={link}>
-                  <a
-                    href="#"
-                    className="text-sm text-gray-400 transition-colors duration-200 hover:text-brand-secondary"
+              {Legal.map((item) => (
+                <li key={item.label}>
+                  <Link
+                    to={item.to}
+                    className="text-sm text-gray-400 hover:text-brand-secondary transition-colors duration-200 no-underline"
                   >
-                    {link.label}
-                  </a>
+                    {item.label}
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -127,11 +115,7 @@ export default function FooterComponent() {
 
             <ul className="space-y-3">
               <li className="flex items-start gap-2.5 text-sm text-gray-400">
-                <MapPin
-                  size={16}
-                  className="mt-0.5 shrink-0 text-brand-secondary"
-                />
-
+                <MapPin size={16} className="mt-0.5 shrink-0 text-brand-secondary" />
                 <span>
                   #40, St 273, Sangkat Boeung Kak II, Khan Toul Kork, Phnom
                   Penh, Cambodia
@@ -139,25 +123,13 @@ export default function FooterComponent() {
               </li>
 
               <li className="flex items-center gap-2.5 text-sm text-gray-400">
-                <Phone
-                  size={16}
-                  className="shrink-0 text-brand-secondary"
-                />
-
-                <span>
-                  (+855) 95-990-910
-                </span>
+                <Phone size={16} className="shrink-0 text-brand-secondary" />
+                <span>(+855) 95-990-910</span>
               </li>
 
               <li className="flex items-center gap-2.5 text-sm text-gray-400">
-                <Mail
-                  size={16}
-                  className="shrink-0 text-brand-secondary"
-                />
-
-                <span>
-                  info.istad@gmail.com
-                </span>
+                <Mail size={16} className="shrink-0 text-brand-secondary" />
+                <span>info.istad@gmail.com</span>
               </li>
             </ul>
           </div>
@@ -181,23 +153,17 @@ export default function FooterComponent() {
           <p className="order-2 text-xs text-gray-500 sm:order-1">
             © 2026 AskKH. All rights reserved.
           </p>
-
-          <div className="order-1 flex items-center gap-3 sm:order-2">
-            {socialLinks.map(
-              ({
-                icon: Icon,
-                label,
-              }) => (
-                <a
-                  key={label}
-                  href="#"
-                  aria-label={label}
-                  className="flex h-8 w-8 items-center justify-center rounded-full bg-white/10 text-gray-300 transition-colors duration-200 hover:bg-brand-secondary hover:text-white"
-                >
-                  <Icon size={13} />
-                </a>
-              ),
-            )}
+          <div className="flex items-center gap-3 order-1 sm:order-2">
+            {[FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn].map((Icon, i) => (
+              <a
+                key={i}
+                href="#"
+                aria-label="Social link"
+                className="flex items-center justify-center w-8 h-8 rounded-full bg-white/10 text-gray-300 hover:bg-brand-secondary hover:text-white transition-colors duration-200"
+              >
+                <Icon size={13} />
+              </a>
+            ))}
           </div>
         </div>
       </div>

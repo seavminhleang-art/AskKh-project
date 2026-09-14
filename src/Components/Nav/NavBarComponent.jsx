@@ -14,69 +14,19 @@ import {
   X,
 } from "lucide-react";
 
-import { ThemeToggle } from "@/components/motion/theme-toggle";
-
-import { useLanguage } from "../Language/LanguageContext.jsx";
-
-const NAVIGATION = {
-  km: [
-    {
-      label: "ទំព័រដើម",
-      href: "#home",
-    },
-    {
-      label: "សហគមន៍",
-      href: "#community",
-      dropdown: [
-        {
-          label: "សំណួរ និង ចម្លើយ",
-          href: "#qa",
-        },
-        {
-          label: "បាត់ និង រកឃើញ",
-          href: "#lost-and-found",
-        },
-      ],
-    },
-    {
-      label: "តារាងពិន្ទុ",
-      href: "/leaderboard",
-    },
-    {
-      label: "អំពីយើង",
-      href: "#about",
-    },
-  ],
-
-  en: [
-    {
-      label: "Home",
-      href: "#home",
-    },
-    {
-      label: "Community",
-      href: "#community",
-      dropdown: [
-        {
-          label: "Question & Answer",
-          href: "#qa",
-        },
-        {
-          label: "Lost & Found Community",
-          href: "#lost-and-found",
-        },
-      ],
-    },
-    {
-      label: "Leaderboard",
-      href: "/leaderboard",
-    },
-    {
-      label: "About Us",
-      href: "#about",
-    },
-  ],
-};
+const NAV_ITEMS = [
+  { label: "Home", href: "#home" },
+  {
+    label: "Community",
+    href: "#community",
+    dropdown: [
+      { label: "Question & Answer", href: "#qa" },
+      { label: "Lost & Found Community", href: "#lost-and-found" },
+    ],
+  },
+  { label: "Leaderboard", href: "#leaderboard" },
+  { label: "About Us", href: "about" },
+];
 
 export default function Navbar({
   notificationCount = 0,
@@ -247,59 +197,27 @@ export default function Navbar({
   ) =>
     `inline-flex items-center gap-1 rounded-lg px-4 py-2.5 text-[15px] font-medium transition-colors duration-200 ${
       activeItem === label
-        ? "font-semibold text-brand-primary"
-        : "text-muted-foreground hover:bg-brand-primary/5 hover:text-brand-primary"
+        ? "text-brand-primary font-semibold"
+        : "text-gray-600 hover:text-brand-primary hover:bg-brand-primary-light"
     }`;
-
-  const NotificationBadge =
-    () => {
-      if (
-        notificationCount <= 0
-      ) {
-        return null;
-      }
-
-      return (
-        <span
-          className={`notification-badge ${
-            badgeAnimate
-              ? "notification-badge-animate"
-              : ""
-          }`}
-        >
-          {notificationCount > 99
-            ? "99+"
-            : notificationCount}
-        </span>
-      );
-    };
 
   return (
     <nav
-      className={`sticky top-0 z-[1000] w-full bg-background text-foreground transition-colors duration-300 ${
-        isKhmer
-          ? "font-khmer"
-          : "font-brand"
-      }`}
+      className="font-brand bg-white border-b border-gray-200 sticky top-0 z-[1000] w-full"
       aria-label="Main navigation"
     >
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-6 px-6">
         {/* Logo */}
         <a
           href="#home"
-          className="flex shrink-0 items-center gap-2.5"
-          onClick={() =>
-            handleNavClick(
-              navItems[0].label,
-            )
-          }
+          className="flex items-center gap-2.5 shrink-0 no-underline"
+          onClick={() => handleNavClick("Home")}
         >
-          <span className="flex h-[38px] w-[38px] items-center justify-center rounded-[10px] bg-brand-primary text-lg font-bold !text-white">
-            A
+          <span className="flex items-center justify-center w-[38px] h-[38px] rounded-[10px] bg-brand-primary text-white font-bold text-lg">
+            N
           </span>
-
-          <span className="text-xl font-bold tracking-tight text-brand-primary">
-            AskKH
+          <span className="text-xl font-bold text-brand-primary tracking-tight">
+            Nexa
           </span>
         </a>
 
@@ -357,119 +275,86 @@ export default function Navbar({
                     />
                   </button>
 
-                  <div
-                    className={`absolute left-1/2 top-[calc(100%+8px)] flex min-w-[240px] -translate-x-1/2 flex-col rounded-xl border border-border bg-popover p-2 text-popover-foreground shadow-xl transition-all duration-200 ${
-                      communityOpen
-                        ? "visible translate-y-0 opacity-100"
-                        : "invisible -translate-y-1.5 opacity-0 pointer-events-none"
-                    }`}
-                  >
-                    {item.dropdown.map(
-                      (
-                        sub,
-                      ) => (
-                        <a
-                          key={
-                            sub.label
-                          }
-                          href={
-                            sub.href
-                          }
-                          className="block rounded-lg px-3.5 py-2.5 text-sm font-medium transition-colors hover:bg-brand-secondary/10 hover:text-brand-secondary"
-                          onClick={() =>
-                            handleNavClick(
-                              item.label,
-                            )
-                          }
-                        >
-                          {
-                            sub.label
-                          }
-                        </a>
-                      ),
-                    )}
-                  </div>
-                </li>
-              ) : (
-                <li
-                  key={
-                    item.label
-                  }
+                <div
+                  role="menu"
+                  className={`absolute top-[calc(100%+8px)] left-1/2 -translate-x-1/2 min-w-[240px] bg-white border border-gray-200 rounded-xl shadow-[0_4px_16px_rgba(11,42,74,0.08)] p-2 flex flex-col gap-0.5 transition-all duration-200 ${
+                    communityOpen
+                      ? "opacity-100 visible translate-y-0 pointer-events-auto"
+                      : "opacity-0 invisible -translate-y-1.5 pointer-events-none"
+                  }`}
                 >
-                  <a
-                    href={
-                      item.href
-                    }
-                    className={linkClasses(
-                      item.label,
-                    )}
-                    onClick={() =>
-                      handleNavClick(
-                        item.label,
-                      )
-                    }
-                  >
-                    {
-                      item.label
-                    }
-                  </a>
-                </li>
-              ),
+                  {item.dropdown.map((sub) => (
+                    <a
+                      key={sub.label}
+                      href={sub.href}
+                      role="menuitem"
+                      className="block px-3.5 py-2.5 rounded-lg text-sm font-medium text-gray-800 no-underline transition-colors duration-150 hover:bg-brand-secondary-light hover:text-brand-secondary"
+                      onClick={() => {
+                        setCommunityOpen(false);
+                        handleNavClick(item.label);
+                      }}
+                    >
+                      {sub.label}
+                    </a>
+                  ))}
+                </div>
+              </li>
+            ) : (
+              <li key={item.label}>
+                <a
+                  href={item.href}
+                  className={linkClasses(item.label) + " no-underline"}
+                  onClick={() => handleNavClick(item.label)}
+                >
+                  {item.label}
+                </a>
+              </li>
+            )
           )}
         </ul>
 
-        {/* Desktop Actions */}
-        <div className="hidden shrink-0 items-center gap-1.5 lg:flex">
-          <ThemeToggle
-            variant="circle"
-            start="top-right"
-            className="h-9 w-9 rounded-full bg-transparent text-muted-foreground transition-all duration-200 hover:bg-muted hover:text-brand-primary"
-            iconClassName="h-[18px] w-[18px]"
-          />
-
+        {/* Right side actions (desktop) */}
+        <div className="hidden lg:flex items-center gap-2.5 shrink-0">
           <button
             type="button"
-            className="relative inline-flex h-9 w-9 items-center justify-center rounded-full bg-transparent text-muted-foreground transition-all duration-200 hover:bg-muted hover:text-brand-primary"
-            aria-label="Notifications"
+            className="inline-flex items-center justify-center w-10 h-10 rounded-[10px] border border-gray-200 bg-white text-gray-600 transition-all duration-200 hover:bg-brand-primary-light hover:border-brand-primary hover:text-brand-primary hover:-translate-y-0.5"
+            aria-label="Toggle theme"
           >
-            <Bell size={18} />
-
-            <NotificationBadge />
+            <Sun size={20} />
           </button>
 
           <button
             type="button"
-            onClick={
-              toggleLanguage
-            }
-            className="inline-flex h-9 items-center gap-2 rounded-full bg-transparent px-3 text-sm font-medium text-muted-foreground transition-all duration-200 hover:bg-muted hover:text-brand-primary"
+            className="relative inline-flex items-center justify-center w-10 h-10 rounded-[10px] border border-gray-200 bg-white text-gray-600 transition-all duration-200 hover:bg-brand-primary-light hover:border-brand-primary hover:text-brand-primary hover:-translate-y-0.5"
+            aria-label="Notifications"
           >
-            <Globe
-              size={17}
-            />
-
-            <span>
-              {isKhmer
-                ? "ខ្មែរ / EN"
-                : "KH / English"}
+            <Bell size={20} />
+            <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-brand-secondary text-white text-[11px] font-bold flex items-center justify-center border-2 border-white">
+              5
             </span>
           </button>
 
-          {/* Get Started */}
-          <Link
-            to="/register"
-            className="ml-1 inline-flex h-10 items-center justify-center rounded-[10px] bg-brand-primary px-5 text-sm font-semibold !text-white no-underline transition-all duration-200 hover:bg-brand-secondary hover:!text-white focus:!text-white active:!text-white visited:!text-white dark:!text-white"
+          <button
+            type="button"
+            className="inline-flex items-center gap-1.5 h-10 px-3.5 rounded-[10px] border border-gray-200 bg-white text-gray-600 text-sm font-medium transition-all duration-200 hover:bg-brand-primary-light hover:border-brand-primary hover:text-brand-primary"
+            aria-label="Change language"
           >
-            {isKhmer
-              ? "ចាប់ផ្តើម"
-              : "Get Started"}
-          </Link>
+            <Globe size={18} />
+            <span>KH / EN</span>
+          </button>
+
+          <button
+            type="button"
+            className="h-10 px-5.5 rounded-[10px] border-none bg-brand-primary text-white text-sm font-semibold transition-all duration-200 hover:bg-brand-secondary hover:shadow-[0_6px_16px_rgba(237,43,42,0.25)] hover:-translate-y-0.5"
+          >
+            Get Started
+          </button>
         </div>
 
         {/* Mobile Menu Button */}
         <button
           type="button"
-          className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-transparent text-brand-primary transition-colors hover:bg-muted lg:hidden"
+          className="lg:hidden inline-flex items-center justify-center w-10 h-10 rounded-[10px] border border-gray-200 bg-white text-brand-primary shrink-0"
           aria-label="Toggle menu"
           onClick={() =>
             setMobileOpen(
@@ -498,99 +383,59 @@ export default function Navbar({
             : "max-h-0 px-5 py-0"
         }`}
       >
-        <ul className="m-0 flex list-none flex-col gap-1 p-0">
-          {navItems.map(
-            (item) =>
-              item.dropdown ? (
-                <li
-                  key={
-                    item.label
-                  }
-                  className="border-b border-border/60"
+        <ul className="flex flex-col gap-1 list-none m-0 p-0">
+          {NAV_ITEMS.map((item) =>
+            item.dropdown ? (
+              <li key={item.label} className="border-b border-gray-200">
+                <button
+                  type="button"
+                  className={`w-full flex items-center justify-between bg-transparent border-none text-base py-3.5 px-1 cursor-pointer ${
+                    activeItem === item.label
+                      ? "text-brand-primary font-semibold"
+                      : "text-gray-800 font-medium"
+                  }`}
+                  onClick={() => setMobileCommunityOpen((prev) => !prev)}
                 >
-                  <button
-                    type="button"
-                    className="flex w-full items-center justify-between bg-transparent px-1 py-3.5 text-base font-medium"
-                    onClick={() =>
-                      setMobileCommunityOpen(
-                        (
-                          previous,
-                        ) =>
-                          !previous,
-                      )
-                    }
-                  >
-                    {
-                      item.label
-                    }
-
-                    <ChevronDown
-                      size={16}
-                      className={`transition-transform ${
-                        mobileCommunityOpen
-                          ? "rotate-180"
-                          : ""
-                      }`}
-                    />
-                  </button>
-
-                  <div
-                    className={`overflow-hidden transition-all ${
-                      mobileCommunityOpen
-                        ? "max-h-[200px] pb-2.5"
-                        : "max-h-0"
+                  {item.label}
+                  <ChevronDown
+                    size={16}
+                    className={`transition-transform duration-200 ${
+                      mobileCommunityOpen ? "rotate-180" : ""
                     }`}
-                  >
-                    {item.dropdown.map(
-                      (
-                        sub,
-                      ) => (
-                        <a
-                          key={
-                            sub.label
-                          }
-                          href={
-                            sub.href
-                          }
-                          className="block rounded-lg px-4 py-3 text-sm hover:bg-muted"
-                          onClick={() =>
-                            handleNavClick(
-                              item.label,
-                            )
-                          }
-                        >
-                          {
-                            sub.label
-                          }
-                        </a>
-                      ),
-                    )}
-                  </div>
-                </li>
-              ) : (
-                <li
-                  key={
-                    item.label
-                  }
-                  className="border-b border-border/60"
+                  />
+                </button>
+                <div
+                  className={`flex flex-col gap-0.5 overflow-hidden transition-all duration-200 ${
+                    mobileCommunityOpen ? "max-h-[200px] pb-2.5" : "max-h-0"
+                  }`}
                 >
-                  <a
-                    href={
-                      item.href
-                    }
-                    className="block py-3.5 font-medium"
-                    onClick={() =>
-                      handleNavClick(
-                        item.label,
-                      )
-                    }
-                  >
-                    {
-                      item.label
-                    }
-                  </a>
-                </li>
-              ),
+                  {item.dropdown.map((sub) => (
+                    <a
+                      key={sub.label}
+                      href={sub.href}
+                      className="mx-1 my-0.5 px-4 py-2.5 rounded-lg bg-brand-primary-light text-gray-800 no-underline text-sm font-medium transition-colors duration-150 hover:bg-brand-secondary-light hover:text-brand-secondary"
+                      onClick={() => handleNavClick(item.label)}
+                    >
+                      {sub.label}
+                    </a>
+                  ))}
+                </div>
+              </li>
+            ) : (
+              <li key={item.label} className="border-b border-gray-200">
+                <a
+                  href={item.href}
+                  className={`block py-3.5 px-1 no-underline text-base ${
+                    activeItem === item.label
+                      ? "text-brand-primary font-semibold"
+                      : "text-gray-800 font-medium"
+                  }`}
+                  onClick={() => handleNavClick(item.label)}
+                >
+                  {item.label}
+                </a>
+              </li>
+            )
           )}
         </ul>
 
@@ -609,24 +454,26 @@ export default function Navbar({
             aria-label="Notifications"
           >
             <Bell size={20} />
-
-            <NotificationBadge />
+            <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-brand-secondary text-white text-[11px] font-bold flex items-center justify-center border-2 border-white">
+              5
+            </span>
+          </button>
+          <button
+            type="button"
+            className="inline-flex items-center gap-1.5 h-10 px-3.5 rounded-[10px] border border-gray-200 bg-white text-gray-600 text-sm font-medium"
+            aria-label="Change language"
+          >
+            <Globe size={18} />
+            <span>KH / EN</span>
           </button>
         </div>
 
         {/* Mobile Language */}
         <button
           type="button"
-          onClick={
-            toggleLanguage
-          }
-          className="flex h-11 w-full items-center justify-center gap-2 rounded-[10px] bg-muted text-foreground"
+          className="w-full h-11 rounded-[10px] border-none bg-brand-primary text-white text-sm font-semibold transition-colors duration-200 hover:bg-brand-secondary"
         >
-          <Globe size={18} />
-
-          {isKhmer
-            ? "ប្តូរទៅ English"
-            : "ប្តូរទៅ ខ្មែរ"}
+          Get Started
         </button>
 
         {/* Mobile Get Started */}
