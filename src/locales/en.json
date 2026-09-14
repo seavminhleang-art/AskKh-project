@@ -10,19 +10,19 @@
   "notificationLabel": "Notifications",
   "themeLabel": "Toggle Theme",
   "menuLabel": "Menu",
-  "brand": "AskKh",
+  "brand": "NEXA",
   "aboutPage": {
-    "title": "About AskKh",
-    "description": "AskKh is a knowledge-sharing platform built for the ISTAD community and beyond. We connect people through questions, answers, and real-time discussions.",
+    "title": "About <brand>NEXA</brand>",
+    "description": "NEXA is a knowledge-sharing platform built for the ISTAD community and beyond. We connect people through questions, answers, and real-time discussions.",
     "communityButton": "Be Part of Our Community",
-    "whyChooseTitle": "Why Choose AskKh?",
-    "whyChooseDesc": "We believe knowledge grows when people share. AskKh was created to solve real problems faced by students and the ISTAD community.",
+    "whyChooseTitle": "Why Choose <brand>NEXA</brand>?",
+    "whyChooseDesc": "We believe knowledge grows when people share. NEXA was created to solve real problems faced by students and the ISTAD community.",
     "missionTitle": "Our Mission",
     "missionDesc": "To empower the ISTAD community by providing an open, collaborative, and reliable platform where everyone can ask, learn, and grow together.",
     "visionTitle": "Our Vision",
     "visionDesc": "To become the leading knowledge hub for ISTAD and a trusted platform that connects people, ideas, and opportunities for a better future.",
-    "mentorsTitle": "OUR MENTORS",
-    "teamTitle": "OUR TEAM",
+    "mentorsTitle": "OUR <brand>MENTORS</brand>",
+    "teamTitle": "OUR <brand>TEAM</brand>",
     "features": {
       "askAnswer": {
         "title": "Ask & Answer",
@@ -50,7 +50,30 @@
       "A thriving community of curious and helpful minds.",
       "A platform that inspires learning and innovation.",
       "Bridging knowledge today, building leaders tomorrow."
-    ]
+    ],
+    "members": {
+      "roles": {
+        "seniorItInstructor": "Senior IT Instructor",
+        "mentor": "Mentor",
+        "frontendDeveloper": "Frontend Developer",
+        "javaDeveloper": "Java Developer",
+        "leader": "Leader",
+        "subLead": "Sub-Lead",
+        "member": "Member"
+      },
+      "names": {
+        "sokcheat": "Srorng Sokcheat",
+        "rattanakmony": "Pech Rattanakmony",
+        "lisa": "Mom Lisa",
+        "seavminh": "Leang Seavminh",
+        "lyheng": "Cheakching Lyheng",
+        "moniza": "Cheat Chanmoniza",
+        "tongan": "Hor Tongan",
+        "sothearith": "Sroeun Sothearith",
+        "thana": "Neang Thana",
+        "tharath": "Venthan Tharath"
+      }
+    }
   },
   "policyPage": {
     "title": "Privacy Policy",
@@ -360,8 +383,8 @@
     }
   },
   "footer": {
-    "brandTitle": "Ask & Found",
-    "brandDesc": "We are a leading company dedicated to products and services to cater to their needs.",
+    "brandTitle": "NEXA",
+    "brandDesc": "A place to connect with others, share knowledge, ask questions, and help the community find what they need.",
     "quickLinksTitle": "QUICK LINK",
     "quickLinks": {
       "home": "Home",
@@ -376,6 +399,6 @@
     },
     "contactTitle": "ADDRESS & CONTACT",
     "organizedTitle": "ORGANIZED AND SPONSORS",
-    "copyright": "© 2023 Estrella Inc. All rights reserved"
+    "copyright": "© 2026 SastraCode. All rights reserved."
   }
 }

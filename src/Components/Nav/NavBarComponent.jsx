@@ -60,10 +60,10 @@ export default function NavBarComponent() {
         
         {/* Brand Logo */}
         <Link to="/" className="flex items-center group py-0.5 shrink-0">
-          <img 
-            src="src/assets/Website/download.png" 
-            alt={`${t("brand")} Logo`} 
-            className="h-11 w-auto object-contain group-hover:scale-105 transition-transform" 
+          <img
+            src={darkMode ? "src/assets/Website/download_dark.png" : "src/assets/Website/download.png"}
+            alt={`${t("brand")} Logo`}
+            className="h-12 w-auto object-contain group-hover:scale-105 transition-transform"
           />
         </Link>
 

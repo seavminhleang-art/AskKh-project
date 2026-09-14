@@ -1,11 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useTranslation } from "react-i18next";
+import { useTranslation, Trans } from "react-i18next";
 import { useTheme } from "../../context/ThemeContext.jsx";
 
 import missionImg from "../../assets/Website/mission.png";
+import missionDarkImg from "../../assets/Website/mission_dark.png";
 import communityImg from "../../assets/Website/community.jpg";
+import communityDarkImg from "../../assets/Website/community_dark.png";
 import visionImg from "../../assets/Website/vision.png";
+import visionDarkImg from "../../assets/Website/vision_dark.png";
 
 // ---------- Icons ----------
 function CheckIcon() {
@@ -65,10 +68,6 @@ function IllustrationImage({ src, alt, className = "w-full max-w-sm" }) {
   return <img src={src} alt={alt} className={`${className} object-contain`} />;
 }
 
-const NETWORK_IMAGE_SRC = communityImg;
-const MISSION_IMAGE_SRC = missionImg;
-const VISION_IMAGE_SRC = visionImg;
-
 // ---------- Data Keys ----------
 const featuresKeys = [
   { key: "aboutPage.features.askAnswer", color: "blue", icon: (<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 10h8M8 14h5M21 12c0 4.418-4.03 8-9 8-1.18 0-2.304-.202-3.335-.568L3 21l1.395-3.72C3.512 16.226 3 14.683 3 13c0-4.418 4.03-8 9-8s9 3.582 9 8z" />) },
@@ -81,25 +80,26 @@ const missionPointsKey = "aboutPage.missionPoints";
 const visionPointsKey = "aboutPage.visionPoints";
 
 const mentors = [
-  { num: "01", name: "Srorng Sokcheat", roleLabel: "Senior IT Instructor", role: "Mentor", photo:"./src/assets/Mentor/srorng_sokcheat.jpg", github: "https://github.com/Sokcheatsrorng", telegram: "https://t.me/Sokcheat_srorng" },
-  { num: "02", name: "Pech Rattanakmony", roleLabel: "Senior IT Instructor", role: "Mentor", photo: "./src/assets/Mentor/pech_rattanakmony.jpg", github: "https://github.com/aintantony", telegram: "https://t.me/rattanakmony" },
+  { num: "01", name: "aboutPage.members.names.sokcheat", roleLabel: "Senior IT Instructor", role: "aboutPage.members.roles.mentor", photo:"./src/assets/Mentor/srorng_sokcheat.jpg", github: "https://github.com/Sokcheatsrorng", telegram: "https://t.me/Sokcheat_srorng" },
+  { num: "02", name: "aboutPage.members.names.rattanakmony", roleLabel: "Senior IT Instructor", role: "aboutPage.members.roles.mentor", photo: "./src/assets/Mentor/pech_rattanakmony.jpg", github: "https://github.com/aintantony", telegram: "https://t.me/rattanakmony" },
 ];
 
 const teamLeads = [
-  { num: "03", name: "Mom Lisa", roleLabel: "Frontend Developer", role: "Leader", photo: "./src/assets/Team/mom_lisa.jpg", github: "https://github.com/LisaMom", telegram: "https://t.me/lisamom369" },
-  { num: "04", name: "Leang Seavminh", roleLabel: "Java Developer", role: "Sub-Lead", photo: "./src/assets/Team/leang_seavminh.jpg", github: "https://github.com/seavminhleang-art", telegram: "https://t.me/puthea_reach" },
+  { num: "03", name: "aboutPage.members.names.lisa", roleLabel: "Frontend Developer", role: "aboutPage.members.roles.leader", photo: "./src/assets/Team/mom_lisa.jpg", github: "https://github.com/LisaMom", telegram: "https://t.me/lisamom369" },
+  { num: "04", name: "aboutPage.members.names.seavminh", roleLabel: "Java Developer", role: "aboutPage.members.roles.subLead", photo: "./src/assets/Team/leang_seavminh.jpg", github: "https://github.com/seavminhleang-art", telegram: "https://t.me/puthea_reach" },
 ];
 
 const teamMembers = [
-  { num: "05", name: "Cheakching Lyheng", roleLabel: "Java Developer", role: "Member", photo: "./src/assets/Team/cheakching_lyheng.jpg", github: "https://github.com/lyheng142", telegram: "https://t.me/cclh142" },
-  { num: "06", name: "Cheat Chanmoniza", roleLabel: "Frontend Developer", role: "Member", photo: "./src/assets/Team/cheat_chanmoniza.jpg", github: "https://github.com/moniza-Dev", telegram: "https://t.me/chanmoniza_cheat" },
-  { num: "07", name: "Hor Tongan", roleLabel: "Java Developer", role: "Member", photo: "./src/assets/Team/hor_tongan.jpg", github: "https://github.com/TongAnWasHere", telegram: "https://t.me/TongAnWasHere" },
-  { num: "08", name: "Sroeun Sothearith", roleLabel: "Frontend Developer", role: "Member", photo: "./src/assets/Team/sroeun_sothearith.jpg", github: "https://github.com/Rith857", telegram: "https://t.me/sothearithsroeun" },
-  { num: "09", name: "Neang Thana", roleLabel: "Frontend Developer", role: "Member", photo: "./src/assets/Team/neang_thana.jpg", github: "https://github.com/mrrhello894-byte", telegram: "https://t.me/neangthana" },
-  { num: "10", name: "Venthan Tharath", roleLabel: "Frontend Developer", role: "Member", photo: "./src/assets/Team/venthan_tharath.jpg", github: "https://github.com/tharath780-commits", telegram: "https://t.me/helterqt" },
+  { num: "05", name: "aboutPage.members.names.lyheng", roleLabel: "Java Developer", role: "aboutPage.members.roles.member", photo: "./src/assets/Team/cheakching_lyheng.jpg", github: "https://github.com/lyheng142", telegram: "https://t.me/cclh142" },
+  { num: "06", name: "aboutPage.members.names.moniza", roleLabel: "Frontend Developer", role: "aboutPage.members.roles.member", photo: "./src/assets/Team/cheat_chanmoniza.jpg", github: "https://github.com/moniza-Dev", telegram: "https://t.me/chanmoniza_cheat" },
+  { num: "07", name: "aboutPage.members.names.tongan", roleLabel: "Java Developer", role: "aboutPage.members.roles.member", photo: "./src/assets/Team/hor_tongan.jpg", github: "https://github.com/TongAnWasHere", telegram: "https://t.me/TongAnWasHere" },
+  { num: "08", name: "aboutPage.members.names.sothearith", roleLabel: "Frontend Developer", role: "aboutPage.members.roles.member", photo: "./src/assets/Team/sroeun_sothearith.jpg", github: "https://github.com/Rith857", telegram: "https://t.me/sothearithsroeun" },
+  { num: "09", name: "aboutPage.members.names.thana", roleLabel: "Frontend Developer", role: "aboutPage.members.roles.member", photo: "./src/assets/Team/neang_thana.jpg", github: "https://github.com/mrrhello894-byte", telegram: "https://t.me/neangthana" },
+  { num: "10", name: "aboutPage.members.names.tharath", roleLabel: "Frontend Developer", role: "aboutPage.members.roles.member", photo: "./src/assets/Team/venthan_tharath.jpg", github: "https://github.com/tharath780-commits", telegram: "https://t.me/helterqt" },
 ];
 
 function MemberCard({ num, name, roleLabel, role, photo, github, telegram, darkMode }) {
+  const { t } = useTranslation();
   return (
     <div className={`rounded-3xl border shadow-md overflow-hidden text-center pt-6 hover:shadow-lg transition ${darkMode ? "bg-zinc-900 border-zinc-800" : "bg-white border-slate-200"}`}>
       <div className="flex justify-between items-start px-5">
@@ -115,7 +115,7 @@ function MemberCard({ num, name, roleLabel, role, photo, github, telegram, darkM
         <span className="absolute top-1/2 -left-1.5 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-brand-primary" />
         <span className="absolute top-1/2 -right-1.5 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-brand-primary" />
         {photo ? (
-          <img src={photo} alt={name} className={`absolute inset-1.5 w-[calc(100%-0.75rem)] h-[calc(100%-0.75rem)] rounded-full object-cover border-4 shadow ${darkMode ? "border-zinc-900" : "border-white"}`} />
+          <img src={photo} alt={name} className={`absolute inset-1.5 w-[calc(100%-0.75rem)] h-[calc(100%-0.75rem)] rounded-full object-cover border-4 shadow ${darkMode ? "border-zinc-800 ring-4 ring-brand-primary/20" : "border-white"}`} />
         ) : (
           <div className={`absolute inset-1.5 rounded-full border-4 shadow flex items-center justify-center ${darkMode ? "bg-zinc-800 border-zinc-900" : "bg-slate-200 border-white"}`}>
 
@@ -123,7 +123,7 @@ function MemberCard({ num, name, roleLabel, role, photo, github, telegram, darkM
         )}
         <span className={`absolute -bottom-1 left-1/2 -translate-x-1/2 rounded-full p-1.5 shadow border ${darkMode ? "bg-zinc-900 border-zinc-800" : "bg-white border-slate-100"}`}></span>
       </div>
-      <h3 className="text-brand-primary font-bold text-lg">{name}</h3>
+      <h3 className="text-brand-primary font-bold text-lg">{t(name)}</h3>
       <div className="flex items-center justify-center gap-2 mt-2">
         <span className="w-4 h-px bg-brand-secondary/40" />
         <p className="text-brand-secondary text-xs font-bold uppercase tracking-wide">{roleLabel}</p>
@@ -132,7 +132,7 @@ function MemberCard({ num, name, roleLabel, role, photo, github, telegram, darkM
       <div className="mt-4">
         <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-brand-primary border border-brand-primary/50 rounded-full px-4 py-1.5">
           <PeopleIcon />
-          {role.toUpperCase()}
+          {t(role).toUpperCase()}
         </span>
       </div>
       <div className="flex justify-center items-center gap-3 my-5">
@@ -157,7 +157,11 @@ export default function AboutAskKh() {
       <section className="max-w-6xl mx-auto px-6 py-20 grid md:grid-cols-2 gap-12 items-center">
         <div>
           <h1 className="text-4xl font-bold text-[var(--text-main)]">
-            {t("aboutPage.title")}
+            <Trans
+              t={t}
+              i18nKey="aboutPage.title"
+              components={{ brand: <span className="text-brand-primary" /> }}
+            />
           </h1>
           <div className="w-14 h-1 bg-brand-primary rounded-full mt-4 mb-6" />
           <p className="text-[var(--text-muted)] leading-relaxed max-w-md">
@@ -168,13 +172,17 @@ export default function AboutAskKh() {
           </Link>
         </div>
         <div className="flex justify-center">
-          <IllustrationImage src={NETWORK_IMAGE_SRC} alt="About AskKh" className="w-full max-w-m" />
+          <IllustrationImage src={darkMode ? communityDarkImg : communityImg} alt="About AskKh" className="w-full max-w-m" />
         </div>
       </section>
       <section className="bg-[var(--bg-secondary)] py-20 transition-colors duration-300">
         <div className="max-w-4xl mx-auto text-center px-6">
           <h2 className="text-3xl font-bold text-[var(--text-main)]">
-            {t("aboutPage.whyChooseTitle")}
+            <Trans
+              t={t}
+              i18nKey="aboutPage.whyChooseTitle"
+              components={{ brand: <span className="text-brand-primary" /> }}
+            />
           </h2>
           <p className="text-[var(--text-muted)] mt-4 leading-relaxed">
             {t("aboutPage.whyChooseDesc")}
@@ -196,7 +204,7 @@ export default function AboutAskKh() {
       </section>
       <section className="max-w-6xl mx-auto px-6 py-20 grid md:grid-cols-2 gap-12 items-center">
         <div className="flex justify-center order-2 md:order-1">
-          <IllustrationImage src={MISSION_IMAGE_SRC} alt="Our Mission" className="w-full max-w-md" />
+          <IllustrationImage src={darkMode ? missionDarkImg : missionImg} alt="Our Mission" className="w-full max-w-md" />
         </div>
         <div className="order-1 md:order-2">
           <span className="text-brand-primary text-sm font-semibold">{t("aboutPage.missionTitle")}</span>
@@ -240,13 +248,17 @@ export default function AboutAskKh() {
             </ul>
           </div>
           <div className="flex justify-center">
-            <IllustrationImage src={VISION_IMAGE_SRC} alt="Our Vision" className="w-full max-w-md" />
+            <IllustrationImage src={darkMode ? visionDarkImg : visionImg} alt="Our Vision" className="w-full max-w-md" />
           </div>
         </div>
       </section>
       <section className="max-w-6xl mx-auto px-6 py-20">
         <h2 className="text-center text-2xl font-bold text-[var(--text-main)] mb-14">
-          {t("aboutPage.mentorsTitle")}
+          <Trans
+            t={t}
+            i18nKey="aboutPage.mentorsTitle"
+            components={{ brand: <span className="text-brand-primary" /> }}
+          />
         </h2>
         <div className="grid sm:grid-cols-2 gap-8 max-w-2xl mx-auto">
           {mentors.map((m) => (
@@ -257,7 +269,11 @@ export default function AboutAskKh() {
       <section className="bg-[var(--bg-secondary)] transition-colors duration-300">
         <div className="max-w-6xl mx-auto px-6 py-20">
           <h2 className="text-center text-2xl font-bold text-[var(--text-main)] mb-14">
-            {t("aboutPage.teamTitle")}
+            <Trans
+            t={t}
+            i18nKey="aboutPage.teamTitle"
+            components={{ brand: <span className="text-brand-primary" /> }}
+          />
           </h2>
           <div className="grid sm:grid-cols-2 gap-8 max-w-2xl mx-auto mb-8">
             {teamLeads.map((m) => (

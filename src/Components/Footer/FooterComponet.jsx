@@ -42,13 +42,14 @@ export default function FooterComponent() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-10 items-start">
           {/* Brand */}
           <div className="lg:col-span-1">
-            <div className="flex items-center gap-2 mb-4">
-              <span className="flex items-center justify-center w-9 h-9 rounded-full bg-brand-secondary text-white font-bold text-sm shrink-0">
-                A
-              </span>
-              <span className="text-lg font-semibold text-white">
-                {t("footer.brandTitle")}
-              </span>
+            <div className="flex items-center gap-2 mb-1">
+              <Link to="/" className="flex items-center group py-0.9 shrink-0">
+                        <img
+                          src={darkMode ? "src/assets/Website/download_dark.png" : "src/assets/Website/download.png"}
+                          alt={`${t("brand")} Logo`}
+                          className="h-18 w-50 object-contain group-hover:scale-105 transition-transform"
+                        />
+                      </Link>
             </div>
             <p className="text-sm leading-relaxed text-gray-400 max-w-[220px]">
               {t("footer.brandDesc")}
