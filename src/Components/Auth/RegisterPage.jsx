@@ -901,13 +901,12 @@ export default function RegisterPage() {
       />
 
       <main
-        className={`auth-page ${
+        className={`auth-page register-page ${
           isKhmer
             ? "font-khmer"
             : "font-brand"
         }`}
       >
-        <section className="auth-visual-section">
           <Link
             to="/"
             className="back-button"
@@ -925,6 +924,7 @@ export default function RegisterPage() {
             </span>
           </Link>
 
+        <section className="auth-visual-section">
           <div className="auth-illustration-wrapper">
             <img
               src={
@@ -948,7 +948,7 @@ export default function RegisterPage() {
               <p>
                 {
                   t.alreadyAccount
-                }
+                }{" "}
 
                 <Link to="/login">
                   {

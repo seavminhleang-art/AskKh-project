@@ -38,7 +38,7 @@ export default function HomePage() {
         darkMode ? "bg-[#121212] text-gray-100" : "bg-[#f5f5f5] text-gray-800"
       }`}
     >
-      
+     
 
       {/* Custom Mouse Follower Tooltip */}
       <motion.div

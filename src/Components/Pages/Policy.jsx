@@ -259,9 +259,9 @@ function SectionBlock({ num, title, paragraphs = [], list, groups, outro = [] })
 // ---------- Page ----------
 export default function PrivacyPolicy() {
   return (
-    <div className="shared-page bg-white text-slate-800 antialiased">
+    <div className="shared-page text-slate-800 antialiased">
       {/* HERO */}
-      <section className="bg-brand-primary-light">
+      <section>
         <div className="max-w-4xl mx-auto px-6 py-16 text-center">
           <span className="text-brand-primary text-sm font-semibold uppercase tracking-wide">
             Legal

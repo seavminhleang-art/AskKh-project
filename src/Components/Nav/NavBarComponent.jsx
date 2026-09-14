@@ -1,10 +1,12 @@
 import {
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
 
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { LayoutGroup, motion, useReducedMotion } from "framer-motion";
 
 import {
   Bell,
@@ -25,8 +27,11 @@ export default function Navbar({
     isKhmer,
   } = useLanguage();
   const { t } = useTranslation();
+  const { pathname } = useLocation();
+  const reducedMotion = useReducedMotion();
+  const [hoveredItem, setHoveredItem] = useState(null);
 
-  const navItems = [
+  const navItems = useMemo(() => [
     { label: t("home"), to: "/" },
     {
       label: t("community"),
@@ -37,7 +42,7 @@ export default function Navbar({
     },
     { label: t("leaderboard"), to: "/leaderboard" },
     { label: t("about"), to: "/about" },
-  ];
+  ], [t]);
 
   const [
     activeItem,
@@ -76,10 +81,15 @@ export default function Navbar({
     useRef(notificationCount);
 
   useEffect(() => {
-    setActiveItem(
-      navItems[0].label,
+    const current = navItems.find((item) =>
+      item.dropdown
+        ? item.dropdown.some((sub) => pathname.startsWith(sub.to))
+        : item.to === pathname,
     );
-  }, [language]);
+    setActiveItem(current?.label ?? null);
+    setHoveredItem(null);
+    setCommunityOpen(false);
+  }, [language, pathname, navItems]);
 
   useEffect(() => {
     const handleClickOutside = (
@@ -194,15 +204,24 @@ export default function Navbar({
   const linkClasses = (
     label,
   ) =>
-    `inline-flex items-center gap-1 rounded-lg px-4 py-2.5 text-[15px] font-medium transition-colors duration-200 ${
+    `relative z-10 inline-flex items-center gap-1 rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary px-4 py-2.5 text-[15px] font-medium transition-colors duration-200 ${
       activeItem === label
         ? "text-brand-primary font-semibold"
-        : "text-gray-600 dark:text-gray-300 hover:text-brand-primary hover:bg-brand-primary-light dark:hover:bg-gray-800"
+        : "text-gray-600 dark:text-gray-300 hover:text-brand-primary"
     }`;
+
+  const renderPill = (label) => (hoveredItem ?? activeItem) === label && (
+    <motion.span
+      layoutId="nav-pill"
+      aria-hidden="true"
+      className="pointer-events-none absolute inset-0 rounded-full bg-brand-primary-light dark:bg-slate-700"
+      transition={reducedMotion ? { duration: 0 } : { type: "spring", stiffness: 420, damping: 35 }}
+    />
+  );
 
   return (
     <nav
-      className="site-navbar font-brand sticky top-0 z-[1000] w-full rounded-b-2xl border border-gray-200 bg-white shadow-[0_4px_20px_rgba(37,99,235,0.08)] transition-colors duration-300 dark:border-gray-700 dark:bg-gray-900"
+      className="site-navbar font-brand sticky top-0 z-[1000] w-full rounded-b-2xl border border-gray-200 bg-white transition-colors duration-300 dark:border-gray-700 dark:bg-gray-900"
       aria-label="Main navigation"
     >
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-6 px-6">
@@ -221,7 +240,14 @@ export default function Navbar({
         </Link>
 
         {/* Desktop Navigation */}
-        <ul className="m-0 hidden flex-1 list-none items-center justify-center gap-2 rounded-full border border-gray-200 p-2 dark:border-gray-700 lg:flex">
+        <LayoutGroup id="main-navigation">
+        <ul
+          className="m-0 hidden list-none items-center justify-center gap-1 rounded-full border border-gray-200 bg-gray-50/80 p-1.5 dark:border-gray-700 dark:bg-slate-900 lg:flex"
+          onMouseLeave={() => setHoveredItem(null)}
+          onBlur={(event) => {
+            if (!event.currentTarget.contains(event.relatedTarget)) setHoveredItem(null);
+          }}
+        >
           {navItems.map(
             (item) =>
               item.dropdown ? (
@@ -233,15 +259,21 @@ export default function Navbar({
                     communityRef
                   }
                   className="relative"
-                  onMouseEnter={
-                    handleMouseEnter
-                  }
+                  onFocus={() => setHoveredItem(item.label)}
+                  onMouseEnter={() => {
+                    setHoveredItem(item.label);
+                    handleMouseEnter();
+                  }}
                   onMouseLeave={
                     handleMouseLeave
                   }
                 >
+                  {renderPill(item.label)}
                   <button
                     type="button"
+                    onKeyDown={(event) => {
+                      if (event.key === "Escape") setCommunityOpen(false);
+                    }}
                     className={linkClasses(
                       item.label,
                     )}
@@ -276,7 +308,7 @@ export default function Navbar({
 
                 <div
                   role="menu"
-                  className={`absolute top-[calc(100%+8px)] left-1/2 -translate-x-1/2 min-w-[240px] bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-[0_4px_16px_rgba(37,99,235,0.12)] p-2 flex flex-col gap-0.5 transition-all duration-200 ${
+                  className={`absolute top-[calc(100%+8px)] left-1/2 -translate-x-1/2 min-w-[240px] bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-2 flex flex-col gap-0.5 transition-all duration-200 ${
                     communityOpen
                       ? "opacity-100 visible translate-y-0 pointer-events-auto"
                       : "opacity-0 invisible -translate-y-1.5 pointer-events-none"
@@ -299,7 +331,8 @@ export default function Navbar({
                 </div>
               </li>
             ) : (
-              <li key={item.label}>
+              <li key={item.label} className="relative" onMouseEnter={() => setHoveredItem(item.label)} onFocus={() => setHoveredItem(item.label)}>
+                {renderPill(item.label)}
                 <Link
                   to={item.to}
                   className={linkClasses(item.label) + " no-underline"}
@@ -311,6 +344,7 @@ export default function Navbar({
             )
           )}
         </ul>
+        </LayoutGroup>
 
         {/* Right side actions (desktop) */}
         <div className="hidden lg:flex items-center gap-2.5 shrink-0">
@@ -346,7 +380,7 @@ export default function Navbar({
 
           <Link
             to="/register"
-            className="h-10 px-5.5 inline-flex items-center rounded-full border border-[rgba(255,255,255,0.35)] bg-brand-primary text-white text-sm font-semibold no-underline transition-all duration-200 hover:bg-brand-secondary hover:border-brand-secondary hover:shadow-[0_6px_16px_rgba(237,43,42,0.25)] hover:-translate-y-0.5"
+            className="h-10 px-5.5 inline-flex items-center rounded-full border border-[rgba(255,255,255,0.35)] bg-brand-primary text-white text-sm font-semibold no-underline transition-all duration-200 hover:bg-brand-secondary hover:border-brand-secondary hover:-translate-y-0.5"
           >
             {t("getStarted")}
           </Link>

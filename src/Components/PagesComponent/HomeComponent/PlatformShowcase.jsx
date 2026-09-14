@@ -2,50 +2,45 @@ import React from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 
-export default function PlatformShowcase({ setCursorText, setIsHovered, darkMode }) {
+export default function PlatformShowcase({ darkMode }) {
   const { t } = useTranslation();
 
   const cards = [
     {
       label: t("showcaseCard1Label"),
       labelColor: darkMode 
-        ? "bg-zinc-800 text-[var(--color-brand-primary)] border border-zinc-700" 
+        ? "bg-zinc-800 text-[var(--color-brand-primary)]" 
         : "bg-[var(--color-brand-primary-light)] text-[var(--color-brand-primary)]",
       text: t("showcaseCard1Text"),
       img: "https://i.pinimg.com/1200x/ed/7a/c1/ed7ac18f0a66acd81f8a54a9846aa975.jpg",
-      hoverLabel: t("showcaseCard1Hover"),
     },
     {
       label: t("showcaseCard2Label"),
       labelColor: darkMode 
-        ? "bg-emerald-950/80 text-emerald-400 border border-emerald-800" 
+        ? "bg-emerald-950/80 text-emerald-400" 
         : "bg-emerald-50 text-[var(--color-brand-accent)]",
       text: t("showcaseCard2Text"),
       img: "https://i.pinimg.com/736x/4d/ba/61/4dba6191ebd18650c52de2ed5fb47f7d.jpg",
-      hoverLabel: t("showcaseCard2Hover"),
     },
     {
       label: t("showcaseCard3Label"),
       labelColor: darkMode 
-        ? "bg-zinc-800 text-[var(--color-brand-secondary)] border border-zinc-700" 
+        ? "bg-zinc-800 text-[var(--color-brand-secondary)]" 
         : "bg-[var(--color-brand-secondary-light)] text-[var(--color-brand-secondary)]",
       text: t("showcaseCard3Text"),
       img: "https://i.pinimg.com/1200x/05/34/f7/0534f7df0b08edc70592d10d4bd908c0.jpg",
-      hoverLabel: t("showcaseCard3Hover"),
     },
   ];
 
   return (
     <section className="grid md:grid-cols-3 gap-8 mb-20 relative z-10 font-[family-name:var(--font-brand)]">
       <motion.div 
-        onMouseEnter={() => { setCursorText(t("showcaseMainHover")); setIsHovered(true); }}
-        onMouseLeave={() => setIsHovered(false)}
         whileHover={{ y: -5 }}
         transition={{ duration: 0.3 }}
-        className={`md:col-span-2 backdrop-blur-md rounded-3xl shadow-sm overflow-hidden flex flex-col justify-between transition-colors duration-300 ${
+        className={`md:col-span-2 backdrop-blur-md rounded-3xl overflow-hidden flex flex-col justify-between transition-colors duration-300 ${
           darkMode 
-            ? "bg-zinc-900/90 border border-zinc-800 text-slate-100" 
-            : "bg-white/95 border border-gray-100 text-gray-800"
+            ? "bg-zinc-900/90 text-slate-100" 
+            : "bg-white/95 text-gray-800"
         }`}
       >
         <div className="relative text-white overflow-hidden">
@@ -74,7 +69,7 @@ export default function PlatformShowcase({ setCursorText, setIsHovered, darkMode
         <div className="p-8">
           <span className={`inline-block text-xs font-semibold px-3 py-1 rounded-full mb-3 ${
             darkMode 
-              ? "bg-zinc-800 text-[var(--color-brand-primary)] border border-zinc-700" 
+              ? "bg-zinc-800 text-[var(--color-brand-primary)]" 
               : "bg-[var(--color-brand-primary-light)] text-[var(--color-brand-primary)]"
           }`}>
             {t("showcaseCoreFeatureTag")}
@@ -90,7 +85,7 @@ export default function PlatformShowcase({ setCursorText, setIsHovered, darkMode
           }`}>
             <div className="flex items-center gap-3">
               <span className={`text-xl p-2 rounded-xl ${
-                darkMode ? "bg-zinc-800 border border-zinc-700" : "bg-[var(--color-brand-primary-light)]"
+                darkMode ? "bg-zinc-800" : "bg-[var(--color-brand-primary-light)]"
               }`}>👥</span>
               <div>
                 <p className={`font-medium ${darkMode ? "text-slate-100" : "text-gray-900"}`}>
@@ -112,14 +107,12 @@ export default function PlatformShowcase({ setCursorText, setIsHovered, darkMode
         {cards.map((card, index) => (
           <motion.div
             key={index}
-            onMouseEnter={() => { setCursorText(card.hoverLabel); setIsHovered(true); }}
-            onMouseLeave={() => setIsHovered(false)}
             whileHover={{ scale: 1.02, x: 4 }}
             transition={{ duration: 0.2 }}
-            className={`backdrop-blur-md rounded-3xl shadow-sm p-5 flex items-center justify-between cursor-pointer transition-colors duration-300 ${
+            className={`backdrop-blur-md rounded-3xl p-5 flex items-center justify-between cursor-pointer transition-colors duration-300 ${
               darkMode 
-                ? "bg-zinc-900/90 border border-zinc-800 text-slate-100" 
-                : "bg-white/95 border border-gray-100 text-gray-800"
+                ? "bg-zinc-900/90 text-slate-100" 
+                : "bg-white/95 text-gray-800"
             }`}
           >
             <div className="flex-1 pr-4">
@@ -130,7 +123,7 @@ export default function PlatformShowcase({ setCursorText, setIsHovered, darkMode
                 {card.text}
               </p>
             </div>
-            <div className={`w-28 h-20 flex-shrink-0 overflow-hidden rounded-2xl ${darkMode ? "border border-zinc-800" : ""}`}>
+            <div className="w-28 h-20 flex-shrink-0 overflow-hidden rounded-2xl">
               <img src={card.img} alt={card.label} className="w-full h-full object-cover transform hover:scale-110 transition duration-500" />
             </div>
           </motion.div>

@@ -278,7 +278,7 @@ export default function AboutAskKh() {
           </Link>
         </div>
         <div className="flex justify-center">
-          <IllustrationImage src={NETWORK_IMAGE_SRC} alt="About AskKh" className="w-full max-w-m" />
+          <IllustrationImage src={NETWORK_IMAGE_SRC} alt="About AskKh" className="w-full max-w-xl mix-blend-multiply dark:mix-blend-normal" />
         </div>
       </motion.section>
 
