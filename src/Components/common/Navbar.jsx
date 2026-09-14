@@ -64,7 +64,6 @@ export default function Navbar() {
         <div className="flex items-center gap-2 lg:hidden">
           <ThemeToggle className="sm:flex" />
           <NotificationButton />
-
           <button
             type="button"
             onClick={() => setMobileMenuOpen((prev) => !prev)}

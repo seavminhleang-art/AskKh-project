@@ -1,7 +1,7 @@
 import React from "react";
 import { ShieldCheck, MapPin, Calendar, FileText, User } from "lucide-react";
-import Card from "../../components/ui/Card";
-import StatusBadge from "../../components/ui/StatusBadge";
+// import Card from "../../components/ui/Card";
+// import StatusBadge from "../../components/ui/StatusBadge";
 import Avatar from "../../components/ui/Avatar";
 
 export default function ClaimCard({ claim }) {

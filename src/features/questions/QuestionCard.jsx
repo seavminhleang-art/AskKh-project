@@ -8,9 +8,9 @@ import {
   Tag,
   Clock,
 } from "lucide-react";
-import Card from "../../components/ui/Card";
+// import Card from "../../components/ui/Card";
 import Avatar from "../../components/ui/Avatar";
-import Badge from "../../components/ui/Badge";
+// import Badge from "../../components/ui/Badge";
 import { useVotePostMutation } from "../../store/api/apiSlice";
 import { toast } from "sonner";
 

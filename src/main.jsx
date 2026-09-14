@@ -18,4 +18,3 @@ if (rootElement) {
     </StrictMode>
   );
 }
-

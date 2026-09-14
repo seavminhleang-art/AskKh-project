@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { X, ShieldCheck, AlertCircle } from 'lucide-react';
 // import Button from '../ui/Button';
-import Textarea from '../ui/Textarea';
+// import Textarea from '../ui/Textarea';
 import Input from '../ui/Input';
 import { useCreateClaimMutation } from '../../store/api/apiSlice';
 import { toast } from 'sonner';
