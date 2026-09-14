@@ -1,8 +1,8 @@
 import "./index.css";
 import App from "./App.jsx";
 import ReactDOM from "react-dom/client";
-import { createBrowserRouter } from "react-router";
-import { RouterProvider } from "react-router/dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import "./i18n";
 import About from "./Components/Pages/About.jsx";
 import TermsAndConditions from "./Components/Pages/TermAndConditions.jsx";
 import PrivacyPolicy from "./Components/Pages/Policy.jsx";

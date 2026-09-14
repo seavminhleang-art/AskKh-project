@@ -1,5 +1,6 @@
 import React from "react";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { MapPin, Phone, Mail } from "lucide-react";
 import {
   FaFacebookF,
@@ -9,12 +10,21 @@ import {
 } from "react-icons/fa";
 import istadLogo from "../../assets/Website/istad-logo.png";
 
-const quickLinks = ["Home", "Community Q&A", "Lost & Found", "About"];
-const Legal = [
-  { label: "Privacy Policy", to: "/privacy-policy" },
-  { label: "Terms & Conditions", to: "/terms" },
-];
 export default function FooterComponent() {
+  const { t } = useTranslation();
+
+  const quickLinks = [
+    { label: t("footer.quickLinks.home"), to: "/" },
+    { label: t("footer.quickLinks.qa"), to: "/community/qa" },
+    { label: t("footer.quickLinks.lostFound"), to: "/community/lost-found" },
+    { label: t("footer.quickLinks.about"), to: "/about" },
+  ];
+
+  const Legal = [
+    { label: t("footer.legal.privacy"), to: "/privacy-policy" },
+    { label: t("footer.legal.terms"), to: "/terms" },
+  ];
+
   return (
     <footer className="relative overflow-hidden bg-brand-primary-dark text-gray-300 ">
       {/* subtle vertical stripe background, matches reference */}
@@ -35,38 +45,37 @@ export default function FooterComponent() {
                 A
               </span>
               <span className="text-lg font-semibold text-white">
-                Ask &amp; Found
+                {t("footer.brandTitle")}
               </span>
             </div>
             <p className="text-sm leading-relaxed text-gray-400 max-w-[220px]">
-              We are a leading company dedicated to products and services to
-              cater to their needs.
+              {t("footer.brandDesc")}
             </p>
           </div>
 
           {/* Quick Link */}
           <div>
             <h3 className="text-white font-semibold text-sm tracking-wide mb-4">
-              QUICK LINK
+              {t("footer.quickLinksTitle")}
             </h3>
             <ul className="space-y-3">
               {quickLinks.map((link) => (
-                <li key={link}>
-                  <a
-                    href="#"
+                <li key={link.label}>
+                  <Link
+                    to={link.to}
                     className="text-sm text-gray-400 hover:text-brand-secondary transition-colors duration-200 no-underline"
                   >
-                    {link}
-                  </a>
+                    {link.label}
+                  </Link>
                 </li>
               ))}
             </ul>
           </div>
 
-          {/* Quick Link (duplicate, as shown in reference) */}
+          {/* Legal & Policies */}
           <div>
             <h3 className="text-white font-semibold text-sm tracking-wide mb-4">
-              LEGAL & POLICIES
+              {t("footer.legalTitle")}
             </h3>
             <ul className="space-y-3">
               {Legal.map((item) => (
@@ -85,7 +94,7 @@ export default function FooterComponent() {
           {/* Address & Contact */}
           <div>
             <h3 className="text-white font-semibold text-sm tracking-wide mb-4">
-              ADDRESS &amp; CONTACT
+              {t("footer.contactTitle")}
             </h3>
             <ul className="space-y-3">
               <li className="flex items-start gap-2.5 text-sm text-gray-400">
@@ -109,7 +118,7 @@ export default function FooterComponent() {
           {/* Organized and Sponsors */}
           <div className="self-start">
             <h3 className="text-white font-semibold text-sm tracking-wide mb-4">
-              ORGANIZED AND SPONSORS
+              {t("footer.organizedTitle")}
             </h3>
             <div className="flex items-center gap-2 mt-0">
               <img
@@ -130,7 +139,7 @@ export default function FooterComponent() {
         {/* Bottom bar */}
         <div className="mt-12 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs text-gray-500 order-2 sm:order-1">
-            © 2023 Estrella Inc. All rights reserved
+            {t("footer.copyright")}
           </p>
           <div className="flex items-center gap-3 order-1 sm:order-2">
             {[FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn].map((Icon, i) => (
