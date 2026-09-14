@@ -1,6 +1,7 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { useTheme } from "../../context/ThemeContext.jsx";
+import ScrollReveal from "../Animations/ScrollReveal.jsx";
 
 function SectionBlock({ num, title, paragraphs = [], list, outro = [] }) {
   return (
@@ -53,24 +54,30 @@ export default function TermsAndConditions() {
     <div className="bg-[var(--bg-main)] text-[var(--text-main)] antialiased transition-colors duration-300">
       <section className={`${darkMode ? "bg-zinc-900" : "bg-brand-primary-light"} transition-colors duration-300`}>
         <div className="max-w-4xl mx-auto px-6 py-16 text-center">
-          <span className="text-brand-primary text-sm font-semibold uppercase tracking-wide">
-            {t("termsPage.legalLabel")}
-          </span>
-          <h1 className="text-3xl md:text-4xl font-bold text-[var(--text-main)] mt-2">
-            {t("termsPage.title")}
-          </h1>
-          <p className="text-[var(--text-muted)] mt-3">{t("termsPage.lastUpdated")}</p>
+          <ScrollReveal animation="fadeInUp">
+            <span className="text-brand-primary text-sm font-semibold uppercase tracking-wide">
+              {t("termsPage.legalLabel")}
+            </span>
+            <h1 className="text-3xl md:text-4xl font-bold text-[var(--text-main)] mt-2">
+              {t("termsPage.title")}
+            </h1>
+            <p className="text-[var(--text-muted)] mt-3">{t("termsPage.lastUpdated")}</p>
+          </ScrollReveal>
         </div>
       </section>
       <section className="max-w-4xl mx-auto px-6 py-12">
-        <p className="text-[var(--text-muted)] leading-relaxed">
-          {t("termsPage.intro")}
-        </p>
+        <ScrollReveal animation="fadeInUp">
+          <p className="text-[var(--text-muted)] leading-relaxed">
+            {t("termsPage.intro")}
+          </p>
+        </ScrollReveal>
       </section>
       <section className="max-w-4xl mx-auto px-6 pb-20">
         <div className="space-y-10">
-          {sections.map((s) => (
-            <SectionBlock key={s.num} {...s} />
+          {sections.map((s, index) => (
+            <ScrollReveal key={s.num} animation="fadeInUp" delay={index * 50}>
+              <SectionBlock {...s} />
+            </ScrollReveal>
           ))}
         </div>
       </section>

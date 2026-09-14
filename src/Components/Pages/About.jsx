@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useTranslation, Trans } from "react-i18next";
 import { useTheme } from "../../context/ThemeContext.jsx";
+import ScrollReveal from "../Animations/ScrollReveal.jsx";
 
 import missionImg from "../../assets/Website/mission.png";
 import missionDarkImg from "../../assets/Website/mission_dark.png";
@@ -101,7 +102,7 @@ const teamMembers = [
 function MemberCard({ num, name, roleLabel, role, photo, github, telegram, darkMode }) {
   const { t } = useTranslation();
   return (
-    <div className={`rounded-3xl border shadow-md overflow-hidden text-center pt-6 hover:shadow-lg transition ${darkMode ? "bg-zinc-900 border-zinc-800" : "bg-white border-slate-200"}`}>
+    <div className={`rounded-3xl border shadow-md overflow-hidden text-center pt-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-2 hover:border-brand-primary/50 ${darkMode ? "bg-zinc-900 border-zinc-800 hover:shadow-brand-primary/10" : "bg-white border-slate-200 hover:shadow-brand-primary/20"}`}>
       <div className="flex justify-between items-start px-5">
         <span className="bg-brand-primary text-white text-xs font-bold px-3 py-1.5 rounded-lg">{num}</span>
         <div className="grid grid-cols-3 gap-1 mt-1">
@@ -118,7 +119,6 @@ function MemberCard({ num, name, roleLabel, role, photo, github, telegram, darkM
           <img src={photo} alt={name} className={`absolute inset-1.5 w-[calc(100%-0.75rem)] h-[calc(100%-0.75rem)] rounded-full object-cover border-4 shadow ${darkMode ? "border-zinc-800 ring-4 ring-brand-primary/20" : "border-white"}`} />
         ) : (
           <div className={`absolute inset-1.5 rounded-full border-4 shadow flex items-center justify-center ${darkMode ? "bg-zinc-800 border-zinc-900" : "bg-slate-200 border-white"}`}>
-
           </div>
         )}
         <span className={`absolute -bottom-1 left-1/2 -translate-x-1/2 rounded-full p-1.5 shadow border ${darkMode ? "bg-zinc-900 border-zinc-800" : "bg-white border-slate-100"}`}></span>
@@ -136,11 +136,11 @@ function MemberCard({ num, name, roleLabel, role, photo, github, telegram, darkM
         </span>
       </div>
       <div className="flex justify-center items-center gap-3 my-5">
-        <a href={github || "#"} target={github ? "_blank" : undefined} rel={github ? "noopener noreferrer" : undefined} aria-label="GitHub" className="w-9 h-9 rounded-full bg-slate-900 text-white flex items-center justify-center hover:bg-slate-700 transition">
+        <a href={github || "#"} target={github ? "_blank" : undefined} rel={github ? "noopener noreferrer" : undefined} aria-label="GitHub" className="w-9 h-9 rounded-full bg-slate-900 text-white flex items-center justify-center hover:bg-slate-700 transition-all duration-300 hover:scale-110">
           <GithubIcon />
         </a>
         <span className={`w-px h-5 ${darkMode ? "bg-zinc-700" : "bg-slate-200"}`} />
-        <a href={telegram || "#"} target={telegram ? "_blank" : undefined} rel={telegram ? "noopener noreferrer" : undefined} aria-label="Telegram" className="w-9 h-9 rounded-full bg-sky-500 text-white flex items-center justify-center hover:bg-sky-600 transition">
+        <a href={telegram || "#"} target={telegram ? "_blank" : undefined} rel={telegram ? "noopener noreferrer" : undefined} aria-label="Telegram" className="w-9 h-9 rounded-full bg-sky-500 text-white flex items-center justify-center hover:bg-sky-600 transition-all duration-300 hover:scale-110">
           <TelegramIcon />
         </a>
       </div>
@@ -155,136 +155,156 @@ export default function AboutAskKh() {
   return (
     <div className="bg-[var(--bg-main)] text-[var(--text-main)] antialiased transition-colors duration-300">
       <section className="max-w-6xl mx-auto px-6 py-20 grid md:grid-cols-2 gap-12 items-center">
-        <div>
-          <h1 className="text-4xl font-bold text-[var(--text-main)]">
-            <Trans
-              t={t}
-              i18nKey="aboutPage.title"
-              components={{ brand: <span className="text-brand-primary" /> }}
-            />
-          </h1>
-          <div className="w-14 h-1 bg-brand-primary rounded-full mt-4 mb-6" />
-          <p className="text-[var(--text-muted)] leading-relaxed max-w-md">
-            {t("aboutPage.description")}
-          </p>
-          <Link to="/community" className="mt-8 inline-flex items-center gap-2 bg-brand-primary hover:bg-brand-primary/90 transition text-white font-medium px-6 py-3 rounded-full">
-            {t("aboutPage.communityButton")} <span>→</span>
-          </Link>
-        </div>
+        <ScrollReveal animation="fadeInUp">
+          <div className="no-transition">
+            <h1 className="text-4xl font-bold text-[var(--text-main)]">
+              <Trans
+                t={t}
+                i18nKey="aboutPage.title"
+                components={{ brand: <span className="text-brand-primary" /> }}
+              />
+            </h1>
+            <div className="w-14 h-1 bg-brand-primary rounded-full mt-4 mb-6" />
+            <p className="text-[var(--text-muted)] leading-relaxed max-w-md">
+              {t("aboutPage.description")}
+            </p>
+            <Link to="/community" className="mt-8 inline-flex items-center gap-2 bg-brand-primary hover:bg-brand-primary/90 transition text-white font-medium px-6 py-3 rounded-full active:scale-95 transition-transform duration-200">
+              {t("aboutPage.communityButton")} <span>→</span>
+            </Link>
+          </div>
+        </ScrollReveal>
         <div className="flex justify-center">
-          <IllustrationImage src={darkMode ? communityDarkImg : communityImg} alt="About AskKh" className="w-full max-w-m" />
+          <ScrollReveal animation="scaleIn" delay={200}>
+            <IllustrationImage src={darkMode ? communityDarkImg : communityImg} alt="About AskKh" className="w-full max-w-m animate-float" />
+          </ScrollReveal>
         </div>
       </section>
       <section className="bg-[var(--bg-secondary)] py-20 transition-colors duration-300">
         <div className="max-w-4xl mx-auto text-center px-6">
-          <h2 className="text-3xl font-bold text-[var(--text-main)]">
-            <Trans
-              t={t}
-              i18nKey="aboutPage.whyChooseTitle"
-              components={{ brand: <span className="text-brand-primary" /> }}
-            />
-          </h2>
-          <p className="text-[var(--text-muted)] mt-4 leading-relaxed">
-            {t("aboutPage.whyChooseDesc")}
-          </p>
+          <ScrollReveal animation="fadeInUp">
+            <h2 className="text-3xl font-bold text-[var(--text-main)]">
+              <Trans
+                t={t}
+                i18nKey="aboutPage.whyChooseTitle"
+                components={{ brand: <span className="text-brand-primary" /> }}
+              />
+            </h2>
+            <p className="text-[var(--text-muted)] mt-4 leading-relaxed">
+              {t("aboutPage.whyChooseDesc")}
+            </p>
+          </ScrollReveal>
         </div>
         <div className="max-w-6xl mx-auto px-6 mt-14 grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {featuresKeys.map((f) => (
-            <div key={f.key} className="bg-[var(--bg-card)] rounded-2xl shadow-sm p-6 text-center hover:shadow-md transition border border-[var(--border-color)]">
-              <div className={`w-14 h-14 mx-auto rounded-full border-2 flex items-center justify-center mb-4 bg-[var(--bg-card)] ${f.color === "red" ? "border-brand-secondary/40 text-brand-secondary" : "border-brand-primary/50 text-brand-primary"}`}>
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  {f.icon}
-                </svg>
+          {featuresKeys.map((f, index) => (
+            <ScrollReveal key={f.key} animation="fadeInUp" delay={index * 100}>
+              <div className="bg-[var(--bg-card)] rounded-2xl shadow-sm p-6 text-center hover:shadow-md transition-all duration-300 hover:-translate-y-1 border border-[var(--border-color)]">
+                <div className={`w-14 h-14 mx-auto rounded-full border-2 flex items-center justify-center mb-4 bg-[var(--bg-card)] ${f.color === "red" ? "border-brand-secondary/40 text-brand-secondary" : "border-brand-primary/50 text-brand-primary"}`}>
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    {f.icon}
+                  </svg>
+                </div>
+                <h3 className="font-semibold text-[var(--text-main)]">{t(`${f.key}.title`)}</h3>
+                <p className="text-sm text-[var(--text-muted)] mt-2">{t(`${f.key}.desc`)}</p>
               </div>
-              <h3 className="font-semibold text-[var(--text-main)]">{t(`${f.key}.title`)}</h3>
-              <p className="text-sm text-[var(--text-muted)] mt-2">{t(`${f.key}.desc`)}</p>
-            </div>
+            </ScrollReveal>
           ))}
         </div>
       </section>
       <section className="max-w-6xl mx-auto px-6 py-20 grid md:grid-cols-2 gap-12 items-center">
         <div className="flex justify-center order-2 md:order-1">
-          <IllustrationImage src={darkMode ? missionDarkImg : missionImg} alt="Our Mission" className="w-full max-w-md" />
+          <ScrollReveal animation="scaleIn">
+            <IllustrationImage src={darkMode ? missionDarkImg : missionImg} alt="Our Mission" className="w-full max-w-md animate-float" />
+          </ScrollReveal>
         </div>
         <div className="order-1 md:order-2">
-          <span className="text-brand-primary text-sm font-semibold">{t("aboutPage.missionTitle")}</span>
-          <h2 className="text-3xl font-bold text-[var(--text-main)] mt-2 mb-4">{t("aboutPage.missionTitle")}</h2>
-          <p className="text-[var(--text-muted)] leading-relaxed mb-6">
-            {t("aboutPage.missionDesc")}
-          </p>
-          <ul className="space-y-3">
-            {Array.isArray(t(missionPointsKey, { returnObjects: true })) ? (
-              t(missionPointsKey, { returnObjects: true }).map((point) => (
-                <li key={point} className="flex items-start gap-3">
-                  <CheckIcon />
-                  <span className="text-[var(--text-muted)]">{point}</span>
-                </li>
-              ))
-            ) : (
-              <li><span className="text-[var(--text-muted)]">{t(missionPointsKey)}</span></li>
-            )}
-          </ul>
-        </div>
-      </section>
-      <section className="bg-[var(--bg-secondary)] transition-colors duration-300">
-        <div className="max-w-6xl mx-auto px-6 py-20 grid md:grid-cols-2 gap-12 items-center">
-          <div>
-            <span className="text-brand-primary text-sm font-semibold">{t("aboutPage.visionTitle")}</span>
-            <h2 className="text-3xl font-bold text-[var(--text-main)] mt-2 mb-4">{t("aboutPage.visionTitle")}</h2>
+          <ScrollReveal animation="fadeInUp">
+            <span className="text-brand-primary text-sm font-semibold">{t("aboutPage.missionTitle")}</span>
+            <h2 className="text-3xl font-bold text-[var(--text-main)] mt-2 mb-4">{t("aboutPage.missionTitle")}</h2>
             <p className="text-[var(--text-muted)] leading-relaxed mb-6">
-              {t("aboutPage.visionDesc")}
+              {t("aboutPage.missionDesc")}
             </p>
             <ul className="space-y-3">
-              {Array.isArray(t(visionPointsKey, { returnObjects: true })) ? (
-                t(visionPointsKey, { returnObjects: true }).map((point) => (
+              {Array.isArray(t(missionPointsKey, { returnObjects: true })) ? (
+                t(missionPointsKey, { returnObjects: true }).map((point) => (
                   <li key={point} className="flex items-start gap-3">
                     <CheckIcon />
                     <span className="text-[var(--text-muted)]">{point}</span>
                   </li>
                 ))
               ) : (
-                <li><span className="text-[var(--text-muted)]">{t(visionPointsKey)}</span></li>
+                <li><span className="text-[var(--text-muted)]">{t(missionPointsKey)}</span></li>
               )}
             </ul>
+          </ScrollReveal>
+        </div>
+      </section>
+      <section className="bg-[var(--bg-secondary)] transition-colors duration-300">
+        <div className="max-w-6xl mx-auto px-6 py-20 grid md:grid-cols-2 gap-12 items-center">
+          <div className="no-transition">
+            <ScrollReveal animation="fadeInUp">
+              <span className="text-brand-primary text-sm font-semibold">{t("aboutPage.visionTitle")}</span>
+              <h2 className="text-3xl font-bold text-[var(--text-main)] mt-2 mb-4">{t("aboutPage.visionTitle")}</h2>
+              <p className="text-[var(--text-muted)] leading-relaxed mb-6">
+                {t("aboutPage.visionDesc")}
+              </p>
+              <ul className="space-y-3">
+                {Array.isArray(t(visionPointsKey, { returnObjects: true })) ? (
+                  t(visionPointsKey, { returnObjects: true }).map((point) => (
+                    <li key={point} className="flex items-start gap-3">
+                      <CheckIcon />
+                      <span className="text-[var(--text-muted)]">{point}</span>
+                    </li>
+                  ))
+                ) : (
+                  <li><span className="text-[var(--text-muted)]">{t(visionPointsKey)}</span></li>
+                )}
+              </ul>
+            </ScrollReveal>
           </div>
           <div className="flex justify-center">
-            <IllustrationImage src={darkMode ? visionDarkImg : visionImg} alt="Our Vision" className="w-full max-w-md" />
+            <ScrollReveal animation="scaleIn" delay={200}>
+              <IllustrationImage src={darkMode ? visionDarkImg : visionImg} alt="Our Vision" className="w-full max-w-md animate-float" />
+            </ScrollReveal>
           </div>
         </div>
       </section>
       <section className="max-w-6xl mx-auto px-6 py-20">
-        <h2 className="text-center text-2xl font-bold text-[var(--text-main)] mb-14">
-          <Trans
-            t={t}
-            i18nKey="aboutPage.mentorsTitle"
-            components={{ brand: <span className="text-brand-primary" /> }}
-          />
-        </h2>
-        <div className="grid sm:grid-cols-2 gap-8 max-w-2xl mx-auto">
-          {mentors.map((m) => (
-            <MemberCard key={m.num} {...m} darkMode={darkMode} />
-          ))}
-        </div>
+        <ScrollReveal animation="fadeInUp">
+          <h2 className="text-center text-2xl font-bold text-[var(--text-main)] mb-14">
+            <Trans
+              t={t}
+              i18nKey="aboutPage.mentorsTitle"
+              components={{ brand: <span className="text-brand-primary" /> }}
+            />
+          </h2>
+          <div className="grid sm:grid-cols-2 gap-8 max-w-2xl mx-auto">
+            {mentors.map((m) => (
+              <MemberCard key={m.num} {...m} darkMode={darkMode} />
+            ))}
+          </div>
+        </ScrollReveal>
       </section>
       <section className="bg-[var(--bg-secondary)] transition-colors duration-300">
         <div className="max-w-6xl mx-auto px-6 py-20">
-          <h2 className="text-center text-2xl font-bold text-[var(--text-main)] mb-14">
-            <Trans
-            t={t}
-            i18nKey="aboutPage.teamTitle"
-            components={{ brand: <span className="text-brand-primary" /> }}
-          />
-          </h2>
-          <div className="grid sm:grid-cols-2 gap-8 max-w-2xl mx-auto mb-8">
-            {teamLeads.map((m) => (
-              <MemberCard key={m.num} {...m} darkMode={darkMode} />
-            ))}
-          </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {teamMembers.map((m) => (
-              <MemberCard key={m.num} {...m} darkMode={darkMode} />
-            ))}
-          </div>
+          <ScrollReveal animation="fadeInUp">
+            <h2 className="text-center text-2xl font-bold text-[var(--text-main)] mb-14">
+              <Trans
+              t={t}
+              i18nKey="aboutPage.teamTitle"
+              components={{ brand: <span className="text-brand-primary" /> }}
+            />
+            </h2>
+            <div className="grid sm:grid-cols-2 gap-8 max-w-2xl mx-auto mb-8">
+              {teamLeads.map((m) => (
+                <MemberCard key={m.num} {...m} darkMode={darkMode} />
+              ))}
+            </div>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {teamMembers.map((m) => (
+                <MemberCard key={m.num} {...m} darkMode={darkMode} />
+              ))}
+            </div>
+          </ScrollReveal>
         </div>
       </section>
     </div>

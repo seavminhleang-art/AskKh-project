@@ -44,12 +44,12 @@ export default function FooterComponent() {
           <div className="lg:col-span-1">
             <div className="flex items-center gap-2 mb-1">
               <Link to="/" className="flex items-center group py-0.9 shrink-0">
-                        <img
-                          src={darkMode ? "src/assets/Website/download_dark.png" : "src/assets/Website/download.png"}
-                          alt={`${t("brand")} Logo`}
-                          className="h-18 w-50 object-contain group-hover:scale-105 transition-transform"
-                        />
-                      </Link>
+                <img
+                  src={darkMode ? "src/assets/Website/download_dark.png" : "src/assets/Website/download.png"}
+                  alt={`${t("brand")} Logo`}
+                  className="h-18 w-50 object-contain group-hover:scale-105 transition-transform duration-300"
+                />
+              </Link>
             </div>
             <p className="text-sm leading-relaxed text-gray-400 max-w-[220px]">
               {t("footer.brandDesc")}
@@ -57,7 +57,7 @@ export default function FooterComponent() {
           </div>
 
           {/* Quick Link */}
-          <div>
+          <div className="no-transition">
             <h3 className="text-white font-semibold text-sm tracking-wide mb-4">
               {t("footer.quickLinksTitle")}
             </h3>
@@ -66,7 +66,7 @@ export default function FooterComponent() {
                 <li key={link.label}>
                   <Link
                     to={link.to}
-                    className="text-sm text-gray-400 hover:text-brand-secondary transition-colors duration-200 no-underline"
+                    className="text-sm text-gray-400 hover:text-brand-secondary transition-all duration-200 no-underline hover:translate-x-1 inline-block"
                   >
                     {link.label}
                   </Link>
@@ -76,7 +76,7 @@ export default function FooterComponent() {
           </div>
 
           {/* Legal & Policies */}
-          <div>
+          <div className="no-transition">
             <h3 className="text-white font-semibold text-sm tracking-wide mb-4">
               {t("footer.legalTitle")}
             </h3>
@@ -85,7 +85,7 @@ export default function FooterComponent() {
                 <li key={item.label}>
                   <Link
                     to={item.to}
-                    className="text-sm text-gray-400 hover:text-brand-secondary transition-colors duration-200 no-underline"
+                    className="text-sm text-gray-400 hover:text-brand-secondary transition-all duration-200 no-underline hover:translate-x-1 inline-block"
                   >
                     {item.label}
                   </Link>
@@ -95,7 +95,7 @@ export default function FooterComponent() {
           </div>
 
           {/* Address & Contact */}
-          <div>
+          <div className="no-transition">
             <h3 className="text-white font-semibold text-sm tracking-wide mb-4">
               {t("footer.contactTitle")}
             </h3>
@@ -150,7 +150,7 @@ export default function FooterComponent() {
                 key={i}
                 href="#"
                 aria-label="Social link"
-                className="flex items-center justify-center w-8 h-8 rounded-full bg-white/10 text-gray-300 hover:bg-brand-secondary hover:text-white transition-colors duration-200"
+                className="flex items-center justify-center w-8 h-8 rounded-full bg-white/10 text-gray-300 hover:bg-brand-secondary hover:text-white transition-all duration-300 hover:scale-110"
               >
                 <Icon size={13} />
               </a>

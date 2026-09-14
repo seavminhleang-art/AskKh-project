@@ -68,16 +68,16 @@ export default function NavBarComponent() {
         </Link>
 
         {/* Desktop Nav Links Container */}
-        <div className={`hidden md:flex items-center px-2 py-1.5 rounded-full backdrop-blur-md text-xs font-medium gap-1 ${
+        <div className={`hidden md:flex items-center px-3 py-2 rounded-full backdrop-blur-md text-sm font-medium gap-2 ${
           darkMode ? "bg-zinc-900/80 text-slate-300 border border-zinc-800 shadow-inner" : "bg-[#eaeaea] text-gray-600 border border-transparent"
         }`}>
-          <Link 
-            to="/" 
-            className={`px-3.5 py-1.5 rounded-full transition-all whitespace-nowrap ${
-              isHomeActive 
-                ? "bg-[var(--color-brand-primary-light)] text-[var(--color-brand-primary)] font-semibold shadow-xs" 
-                : darkMode 
-                  ? "hover:bg-zinc-800 hover:text-white" 
+          <Link
+            to="/"
+            className={`px-4 py-2 rounded-full transition-all duration-300 hover:scale-105 whitespace-nowrap ${
+              isHomeActive
+                ? "bg-[var(--color-brand-primary-light)] text-[var(--color-brand-primary)] font-semibold shadow-xs"
+                : darkMode
+                  ? "hover:bg-zinc-800 hover:text-white"
                   : "hover:bg-[var(--color-brand-primary-light)] hover:text-[var(--color-brand-primary)]"
             }`}
           >
@@ -89,7 +89,7 @@ export default function NavBarComponent() {
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
           >
-            <div className={`px-3.5 py-1.5 rounded-full transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
+            <div className={`px-4 py-2 rounded-full transition-all flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
               isCommunityActive 
                 ? "bg-[var(--color-brand-primary-light)] text-[var(--color-brand-primary)] font-semibold shadow-xs" 
                 : darkMode 
@@ -97,17 +97,17 @@ export default function NavBarComponent() {
                   : "hover:bg-[var(--color-brand-primary-light)] hover:text-[var(--color-brand-primary)]"
             }`}>
               <span>{t("community")}</span>
-              <ChevronDownIcon className={`w-3 h-3 transition-transform duration-200 ${communityDropdownOpen ? "rotate-180" : ""}`} />
+              <ChevronDownIcon className={`w-4 h-4 transition-transform duration-200 ${communityDropdownOpen ? "rotate-180" : ""}`} />
             </div>
 
             {communityDropdownOpen && (
-              <div className={`absolute top-full left-1/2 -translate-x-1/2 mt-2 w-56 rounded-2xl shadow-2xl p-1.5 flex flex-col gap-1 z-50 ${
+              <div className={`absolute top-full left-1/2 -translate-x-1/2 mt-2 w-60 rounded-2xl shadow-2xl p-2 flex flex-col gap-1 z-50 ${
                 darkMode ? "bg-zinc-900 border border-zinc-800 text-slate-200" : "bg-white border border-gray-200/80 text-gray-700"
               }`}>
                 <Link
                   to="/community/qa"
                   onClick={() => setCommunityDropdownOpen(false)}
-                  className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs transition ${
+                  className={`flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-sm transition ${
                     location.pathname === "/community/qa"
                       ? "bg-[var(--color-brand-primary-light)] text-[var(--color-brand-primary)] font-medium"
                       : darkMode 
@@ -121,7 +121,7 @@ export default function NavBarComponent() {
                 <Link
                   to="/community/lost-found"
                   onClick={() => setCommunityDropdownOpen(false)}
-                  className={`flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs transition ${
+                  className={`flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-sm transition ${
                     location.pathname === "/community/lost-found"
                       ? "bg-[var(--color-brand-secondary-light)] text-[var(--color-brand-secondary)] font-medium"
                       : darkMode 
@@ -136,26 +136,26 @@ export default function NavBarComponent() {
             )}
           </div>
 
-          <Link 
-            to="/about" 
-            className={`px-3.5 py-1.5 rounded-full transition-all whitespace-nowrap ${
-              isAboutActive 
-                ? "bg-[var(--color-brand-primary-light)] text-[var(--color-brand-primary)] font-semibold shadow-xs" 
-                : darkMode 
-                  ? "hover:bg-zinc-800 hover:text-white" 
+          <Link
+            to="/about"
+            className={`px-4 py-2 rounded-full transition-all duration-300 hover:scale-105 whitespace-nowrap ${
+              isAboutActive
+                ? "bg-[var(--color-brand-primary-light)] text-[var(--color-brand-primary)] font-semibold shadow-xs"
+                : darkMode
+                  ? "hover:bg-zinc-800 hover:text-white"
                   : "hover:bg-[var(--color-brand-primary-light)] hover:text-[var(--color-brand-primary)]"
             }`}
           >
             {t("about")}
           </Link>
 
-          <Link 
-            to="/leaderboard" 
-            className={`px-3.5 py-1.5 rounded-full transition-all whitespace-nowrap ${
-              isLeaderboardActive 
-                ? "bg-[var(--color-brand-primary-light)] text-[var(--color-brand-primary)] font-semibold shadow-xs" 
-                : darkMode 
-                  ? "hover:bg-zinc-800 hover:text-white" 
+          <Link
+            to="/leaderboard"
+            className={`px-4 py-2 rounded-full transition-all duration-300 hover:scale-105 whitespace-nowrap ${
+              isLeaderboardActive
+                ? "bg-[var(--color-brand-primary-light)] text-[var(--color-brand-primary)] font-semibold shadow-xs"
+                : darkMode
+                  ? "hover:bg-zinc-800 hover:text-white"
                   : "hover:bg-[var(--color-brand-primary-light)] hover:text-[var(--color-brand-primary)]"
             }`}
           >
