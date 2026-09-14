@@ -46,14 +46,7 @@ export default function HomePage() {
         darkMode ? "bg-[#121212] text-gray-100" : "bg-[#f5f5f5] text-gray-800"
       }`}
     >
-      <ShootingStars darkMode={darkMode} count={14} />
-      <SpaceBackground darkMode={darkMode} />
-      <LightRibbons darkMode={darkMode} count={5} />
-      {/* <ParticleNetwork darkMode={darkMode} particleCount={90} /> */}
-      {/* <StarfieldCanvas darkMode={darkMode} starCount={500} /> */}
-      {/* <FireWarpCanvas darkMode={darkMode} particleCount={400} /> */}
-      {/* <SpaceWarpCanvas darkMode={darkMode} particleCount={400} /> */}
-      
+     
 
       {/* Custom Mouse Follower Tooltip */}
       <motion.div

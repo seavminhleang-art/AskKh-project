@@ -43,10 +43,10 @@ export default function LostAndFoundPage() {
       }`}
     >
       {/* Dynamic Background Effects */}
-      <ShootingStars darkMode={darkMode} count={14} />
+      {/* <ShootingStars darkMode={darkMode} count={14} />
       <SpaceBackground darkMode={darkMode} />
       <LightRibbons darkMode={darkMode} count={5} />
-      <LiveBackground darkMode={darkMode} />
+      <LiveBackground darkMode={darkMode} /> */}
 
       {/* Custom Mouse Follower Tooltip */}
       <motion.div

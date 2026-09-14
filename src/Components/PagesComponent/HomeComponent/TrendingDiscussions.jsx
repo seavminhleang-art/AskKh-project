@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { ChatBubbleLeftIcon, ArrowUpIcon } from "@heroicons/react/24/outline";
 
-export default function TrendingDiscussions({ setCursorText, setIsHovered, darkMode }) {
+export default function TrendingDiscussions({ darkMode }) {
   const { t } = useTranslation();
 
   const discussions = [
@@ -11,10 +11,10 @@ export default function TrendingDiscussions({ setCursorText, setIsHovered, darkM
       tags: ["#React", "#ISTAD"],
       tagColors: [
         darkMode 
-          ? "bg-blue-950/80 text-blue-400 border border-blue-800" 
+          ? "bg-blue-950/80 text-blue-400" 
           : "bg-blue-50 text-blue-600",
         darkMode 
-          ? "bg-zinc-800 text-slate-300 border border-zinc-700" 
+          ? "bg-zinc-800 text-slate-300" 
           : "bg-gray-100 text-gray-600"
       ],
       title: t("disc1Title"),
@@ -23,16 +23,15 @@ export default function TrendingDiscussions({ setCursorText, setIsHovered, darkM
       avatar: "https://randomuser.me/api/portraits/men/32.jpg",
       answers: t("disc1Answers"),
       votes: "24",
-      hoverText: t("disc1Hover"),
     },
     {
       tags: ["#Database", "#SQL"],
       tagColors: [
         darkMode 
-          ? "bg-emerald-950/80 text-emerald-400 border border-emerald-800" 
+          ? "bg-emerald-950/80 text-emerald-400" 
           : "bg-emerald-50 text-emerald-600",
         darkMode 
-          ? "bg-zinc-800 text-slate-300 border border-zinc-700" 
+          ? "bg-zinc-800 text-slate-300" 
           : "bg-gray-100 text-gray-600"
       ],
       title: t("disc2Title"),
@@ -41,16 +40,15 @@ export default function TrendingDiscussions({ setCursorText, setIsHovered, darkM
       avatar: "https://randomuser.me/api/portraits/men/44.jpg",
       answers: t("disc2Answers"),
       votes: "42",
-      hoverText: t("disc2Hover"),
     },
     {
       tags: ["#Career", "#Internship"],
       tagColors: [
         darkMode 
-          ? "bg-amber-950/80 text-amber-400 border border-amber-800" 
+          ? "bg-amber-950/80 text-amber-400" 
           : "bg-amber-50 text-amber-600",
         darkMode 
-          ? "bg-zinc-800 text-slate-300 border border-zinc-700" 
+          ? "bg-zinc-800 text-slate-300" 
           : "bg-gray-100 text-gray-600"
       ],
       title: t("disc3Title"),
@@ -59,7 +57,6 @@ export default function TrendingDiscussions({ setCursorText, setIsHovered, darkM
       avatar: "https://randomuser.me/api/portraits/men/55.jpg",
       answers: t("disc3Answers"),
       votes: "24",
-      hoverText: t("disc3Hover"),
     },
   ];
 
@@ -70,9 +67,10 @@ export default function TrendingDiscussions({ setCursorText, setIsHovered, darkM
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className={`inline-block text-xs font-bold uppercase tracking-wider px-4 py-1.5 rounded-full mb-3 shadow-sm ${
+          whileHover={{ scale: 1.05 }}
+          className={`inline-block text-xs font-bold uppercase tracking-wider px-4 py-1.5 rounded-full mb-3 shadow-sm cursor-pointer ${
             darkMode 
-              ? "bg-red-950/80 text-red-400 border border-red-900" 
+              ? "bg-red-950/80 text-red-400" 
               : "bg-[#fde0e0]/90 text-[#f44336]"
           }`}
         >
@@ -96,14 +94,12 @@ export default function TrendingDiscussions({ setCursorText, setIsHovered, darkM
         {discussions.map((discussion, idx) => (
           <motion.div
             key={idx}
-            onMouseEnter={() => { setCursorText(discussion.hoverText); setIsHovered(true); }}
-            onMouseLeave={() => setIsHovered(false)}
             whileHover={{ y: -6 }}
             transition={{ duration: 0.3 }}
             className={`backdrop-blur-md rounded-3xl shadow-sm p-6 flex flex-col justify-between cursor-pointer transition-colors duration-300 ${
               darkMode 
-                ? "bg-zinc-900/90 border border-zinc-800 text-slate-100" 
-                : "bg-white/95 border border-gray-100 text-gray-800"
+                ? "bg-zinc-900/90 text-slate-100" 
+                : "bg-white/95 text-gray-800"
             }`}
           >
             <div>
@@ -131,7 +127,7 @@ export default function TrendingDiscussions({ setCursorText, setIsHovered, darkM
               darkMode ? "border-zinc-800 text-slate-400" : "border-gray-100 text-gray-500"
             }`}>
               <div className="flex items-center gap-2">
-                <img src={discussion.avatar} alt={discussion.author} className={`w-7 h-7 rounded-full object-cover border ${
+                <img src={discussion.avatar} alt={discussion.author} className={`w-7 h-7 rounded-full object-cover ${
                   darkMode ? "border-zinc-700" : "border-gray-200"
                 }`} />
                 <span className={`font-medium ${darkMode ? "text-slate-300" : "text-gray-700"}`}>
