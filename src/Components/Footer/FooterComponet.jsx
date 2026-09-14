@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 import { MapPin, Phone, Mail } from "lucide-react";
 import {
   FaFacebookF,
@@ -9,13 +9,22 @@ import {
 } from "react-icons/fa";
 
 import istadLogo from "../../assets/Website/istad-logo.png";
+import { useTheme } from "../theme-provider.jsx";
 
-const quickLinks = ["Home", "Community Q&A", "Lost & Found", "About"];
+const quickLinks = [
+  { label: "Home", to: "/" },
+  { label: "Community Q&A", to: "/community/qa" },
+  { label: "Lost & Found", to: "/community/lost-found" },
+  { label: "About", to: "/about" },
+];
 const Legal = [
   { label: "Privacy Policy", to: "/privacy-policy" },
   { label: "Terms & Conditions", to: "/terms" },
 ];
 export default function FooterComponent() {
+  const { resolvedTheme } = useTheme();
+  const darkMode = resolvedTheme === "dark";
+
   const socialLinks = [
     {
       label: "Facebook",
@@ -36,7 +45,7 @@ export default function FooterComponent() {
   ];
 
   return (
-    <footer className="relative overflow-hidden bg-brand-primary-dark text-gray-300 ">
+    <footer className="site-footer relative overflow-hidden bg-brand-primary-dark text-gray-300 ">
       {/* subtle vertical stripe background, matches reference */}
       <div
         className="pointer-events-none absolute inset-0 opacity-10"
@@ -76,12 +85,12 @@ export default function FooterComponent() {
             <ul className="space-y-3">
               {quickLinks.map((link, idx) => (
                 <li key={idx}>
-                  <a
-                    href="#"
+                  <Link
+                    to={link.to}
                     className="text-sm text-gray-400 hover:text-brand-secondary transition-colors duration-200 no-underline"
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -169,4 +178,4 @@ export default function FooterComponent() {
       </div>
     </footer>
   );
-} 
+}

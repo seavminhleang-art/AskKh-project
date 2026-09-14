@@ -3,10 +3,6 @@ import { motion, useMotionValue, useSpring } from "framer-motion";
 import { useOutletContext } from "react-router-dom";
 
 // Visual Effects Components (Matches HomePage)
-import LiveBackground from "../PagesComponent/HomeComponent/LiveBackground";
-import ShootingStars from "../PagesComponent/HomeComponent/ShootingStars";
-import SpaceBackground from "../PagesComponent/HomeComponent/SpaceBackground";
-import LightRibbons from "../PagesComponent/HomeComponent/LightRibbons";
 
 // Sub-components
 import ItemFeedView from "../PagesComponent/HomeComponent/Lost&FoundComponent/ItemFeedView";
@@ -38,15 +34,15 @@ export default function LostAndFoundPage() {
   return (
     <div
       onMouseMove={handleMouseMove}
-      className={`relative min-h-screen px-6 sm:px-12 md:px-20 lg:px-28 py-10 overflow-hidden font-sans cursor-default transition-colors duration-300 ${
+      className={`shared-page relative min-h-screen px-6 sm:px-12 md:px-20 lg:px-28 py-10 overflow-hidden font-sans cursor-default transition-colors duration-300 ${
         darkMode ? "bg-[#121212] text-gray-100" : "bg-[#f5f5f5] text-gray-800"
       }`}
     >
       {/* Dynamic Background Effects */}
-      <ShootingStars darkMode={darkMode} count={14} />
-      <SpaceBackground darkMode={darkMode} />
-      <LightRibbons darkMode={darkMode} count={5} />
-      <LiveBackground darkMode={darkMode} />
+
+
+
+
 
       {/* Custom Mouse Follower Tooltip */}
       <motion.div

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 
 /* ---------------------------------------------------------------------- */
 /* Theme tokens (light / dark)                                            */
@@ -252,201 +252,6 @@ function categoryStyle(t, category) {
     "Data Science": { bg: t.primaryLight, text: t.primary },
   };
   return map[category] || { bg: t.primaryLight, text: t.primary };
-}
-
-/* ---------------------------------------------------------------------- */
-/* Particle network background                                            */
-/* ---------------------------------------------------------------------- */
-
-function ParticleNetwork({ dark }) {
-  const canvasRef = useRef(null);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-    let width = 0;
-    let height = 0;
-    let dpr = 1;
-    let particles = [];
-    let rafId = null;
-
-    const reduceQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const isTouch = "ontouchstart" in window || navigator.maxTouchPoints > 0;
-
-    const mouse = { x: -9999, y: -9999, active: false };
-
-    const lineColor = dark ? "91, 141, 255" : "0, 80, 243";
-    const nodeColorA = dark ? "rgba(91, 141, 255, 0.45)" : "rgba(0, 80, 243, 0.35)";
-    const nodeColorB = dark ? "rgba(234, 240, 255, 0.25)" : "rgba(0, 28, 85, 0.35)";
-    const glowColor = dark ? "91, 141, 255" : "0, 80, 243";
-
-    function nodeCountFor(w) {
-      if (w < 640) return 28;
-      if (w < 1024) return 45;
-      return 70;
-    }
-
-    function initParticles() {
-      const count = nodeCountFor(width);
-      particles = new Array(count).fill(0).map(() => ({
-        x: Math.random() * width,
-        y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 0.4,
-        vy: (Math.random() - 0.5) * 0.4,
-        r: Math.random() * 2 + 1,
-        darkNode: Math.random() < 0.2,
-      }));
-    }
-
-    function resize() {
-      dpr = window.devicePixelRatio || 1;
-      width = window.innerWidth;
-      height = window.innerHeight;
-      canvas.width = width * dpr;
-      canvas.height = height * dpr;
-      canvas.style.width = width + "px";
-      canvas.style.height = height + "px";
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      initParticles();
-    }
-
-    function drawConnections() {
-      for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          const a = particles[i];
-          const b = particles[j];
-          const dx = a.x - b.x;
-          const dy = a.y - b.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 160) {
-            let opacity = 0.15 * (1 - dist / 160);
-            opacity = Math.max(0.05, Math.min(0.15, opacity));
-            if (mouse.active) {
-              const mdx = (a.x + b.x) / 2 - mouse.x;
-              const mdy = (a.y + b.y) / 2 - mouse.y;
-              const mdist = Math.sqrt(mdx * mdx + mdy * mdy);
-              if (mdist < 120) {
-                opacity = Math.min(0.28, opacity + 0.1 * (1 - mdist / 120));
-              }
-            }
-            ctx.strokeStyle = `rgba(${lineColor}, ${opacity})`;
-            ctx.lineWidth = 1;
-            ctx.beginPath();
-            ctx.moveTo(a.x, a.y);
-            ctx.lineTo(b.x, b.y);
-            ctx.stroke();
-          }
-        }
-      }
-    }
-
-    function drawNodes() {
-      for (const p of particles) {
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = p.darkNode ? nodeColorB : nodeColorA;
-        ctx.fill();
-      }
-    }
-
-    function drawMouseGlow() {
-      if (!mouse.active) return;
-      const radius = 190;
-      const grad = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, radius);
-      grad.addColorStop(0, `rgba(${glowColor}, 0.07)`);
-      grad.addColorStop(0.55, `rgba(${glowColor}, 0.025)`);
-      grad.addColorStop(1, `rgba(${glowColor}, 0)`);
-      ctx.fillStyle = grad;
-      ctx.beginPath();
-      ctx.arc(mouse.x, mouse.y, radius, 0, Math.PI * 2);
-      ctx.fill();
-    }
-
-    function drawStaticFrame() {
-      ctx.clearRect(0, 0, width, height);
-      drawConnections();
-      drawNodes();
-    }
-
-    function step() {
-      for (const p of particles) {
-        p.x += p.vx;
-        p.y += p.vy;
-        if (p.x < 0 || p.x > width) p.vx *= -1;
-        if (p.y < 0 || p.y > height) p.vy *= -1;
-        if (mouse.active) {
-          const dx = p.x - mouse.x;
-          const dy = p.y - mouse.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 100 && dist > 0) {
-            const force = ((100 - dist) / 100) * 0.02;
-            p.x += (dx / dist) * force;
-            p.y += (dy / dist) * force;
-          }
-        }
-      }
-      ctx.clearRect(0, 0, width, height);
-      drawMouseGlow();
-      drawConnections();
-      drawNodes();
-      rafId = requestAnimationFrame(step);
-    }
-
-    function start() {
-      resize();
-      if (reduceQuery.matches) {
-        drawStaticFrame();
-      } else {
-        step();
-      }
-    }
-
-    function handleMouseMove(e) {
-      mouse.x = e.clientX;
-      mouse.y = e.clientY;
-      mouse.active = true;
-    }
-    function handleMouseLeave() {
-      mouse.active = false;
-    }
-    function handleMotionChange() {
-      if (rafId) cancelAnimationFrame(rafId);
-      if (reduceQuery.matches) {
-        mouse.active = false;
-        drawStaticFrame();
-      } else {
-        step();
-      }
-    }
-
-    start();
-    window.addEventListener("resize", resize);
-    if (!isTouch) {
-      window.addEventListener("mousemove", handleMouseMove);
-      window.addEventListener("mouseleave", handleMouseLeave);
-    }
-    if (reduceQuery.addEventListener) {
-      reduceQuery.addEventListener("change", handleMotionChange);
-    }
-
-    return () => {
-      window.removeEventListener("resize", resize);
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mouseleave", handleMouseLeave);
-      if (reduceQuery.removeEventListener) {
-        reduceQuery.removeEventListener("change", handleMotionChange);
-      }
-      if (rafId) cancelAnimationFrame(rafId);
-    };
-  }, [dark]);
-
-  return (
-    <canvas
-      ref={canvasRef}
-      style={{ position: "fixed", inset: 0, zIndex: 0, pointerEvents: "none" }}
-      aria-hidden="true"
-    />
-  );
 }
 
 /* ---------------------------------------------------------------------- */
@@ -855,8 +660,8 @@ export default function App({ dark: darkProp, lang: langProp } = {}) {
 
   return (
     <div
-      className="min-h-screen relative transition-colors duration-300"
-      style={{ backgroundColor: t.bg, fontFamily: FONT_STACK }}
+      className="shared-page min-h-screen relative transition-colors duration-300"
+      style={{ fontFamily: FONT_STACK }}
     >
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap');
@@ -866,7 +671,6 @@ export default function App({ dark: darkProp, lang: langProp } = {}) {
         ::selection { background-color: ${t.primaryLight}; }
       `}</style>
 
-      <ParticleNetwork dark={dark} />
 
       <div className="relative" style={{ zIndex: 1 }}>
         <div className="max-w-7xl mx-auto px-6 pt-8 flex flex-col sm:flex-row sm:justify-between gap-8">

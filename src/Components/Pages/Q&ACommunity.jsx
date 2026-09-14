@@ -76,7 +76,7 @@ export default function QACommunity({ darkMode: propDarkMode, language: propLang
   return (
     <div 
       style={googleSansStyle} 
-      className={`min-h-screen flex flex-col justify-between transition-colors duration-300 ${
+      className={`shared-page min-h-screen flex flex-col justify-between transition-colors duration-300 ${
         darkMode ? "bg-zinc-950 text-slate-100" : "bg-gray-50 text-gray-900"
       }`}
     >

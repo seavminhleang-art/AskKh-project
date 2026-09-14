@@ -24,7 +24,6 @@ import { useAppDispatch, useAppSelector } from '../../hooks/useAppStore';
 import { logout } from '../../store/slices/authSlice';
 import { ROLES } from '../../constants';
 import { cn } from '@/lib/utils';
-import { toast } from 'sonner';
 
 export default function Sidebar({ mode = 'user' }) {
   const navigate = useNavigate();
@@ -33,17 +32,21 @@ export default function Sidebar({ mode = 'user' }) {
 
   const userNavItems = [
     { label: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
+    { label: 'Questions', path: '/dashboard/questions', icon: HelpCircle },
+    { label: 'Lost & Found', path: '/dashboard/lost-found', icon: Search },
+    { label: 'Smart Matches', path: '/dashboard/matches', icon: Sparkles },
+    { label: 'My Claims', path: '/dashboard/claims', icon: Bookmark },
+    { label: 'Notifications', path: '/dashboard/notifications', icon: Bell },
   ];
 
   const adminNavItems = [
-    { label: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
+    { label: 'Dashboard', path: '/admin/dashboard', icon: LayoutDashboard },
   ];
 
   const navItems = mode === 'admin' ? adminNavItems : userNavItems;
 
   const handleLogout = () => {
     dispatch(logout());
-    toast.success('Logged out');
     navigate('/dashboard');
   };
 

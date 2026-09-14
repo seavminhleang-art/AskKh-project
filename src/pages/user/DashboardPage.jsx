@@ -13,11 +13,11 @@ import {
   Clock,
   ShieldCheck,
 } from 'lucide-react';
-import StatCard from '../../components/common/StatCard';
-import Card from '../../components/ui/Card';
-import Button from '../../components/ui/Button';
-import Avatar from '../../components/ui/Avatar';
-import StatusBadge from '../../components/ui/StatusBadge';
+import StatCard from '../../Components/common/StatCard';
+import Card from '../../Components/ui/card';
+import Button from '../../Components/ui/button';
+import Avatar from '../../Components/ui/Avatar';
+import StatusBadge from '../../Components/ui/StatusBadge';
 import { useAppSelector } from '../../hooks/useAppStore';
 import {
   useGetQuestionsQuery,
@@ -61,13 +61,13 @@ export default function DashboardPage() {
         </div>
 
         <div className="flex flex-wrap items-center gap-2.5">
-          <Link to="/dashboard">
+          <Link to="/dashboard/questions/new">
             <Button variant="secondary" size="sm" className="gap-1.5 rounded-xl font-bold">
               <HelpCircle className="w-4 h-4 text-blue-600" />
               <span>Ask Question</span>
             </Button>
           </Link>
-          <Link to="/dashboard">
+          <Link to="/dashboard/matches">
             <Button variant="coral" size="sm" className="gap-1.5 rounded-xl font-bold shadow-md">
               <Sparkles className="w-4 h-4" />
               <span>Match Center</span>
@@ -132,7 +132,7 @@ export default function DashboardPage() {
               <Sparkles className="w-5 h-5 text-amber-500" />
               <span>Smart Matches Ready</span>
             </h3>
-            <Link to="/dashboard" className="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline">
+            <Link to="/dashboard/matches" className="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline">
               View all
             </Link>
           </div>
@@ -159,7 +159,7 @@ export default function DashboardPage() {
                         </p>
                       </div>
                     </div>
-                    <Link to="/dashboard">
+                    <Link to="/dashboard/matches">
                       <Button size="sm" variant="outline" className="text-xs rounded-xl">
                         Review
                       </Button>
@@ -178,7 +178,7 @@ export default function DashboardPage() {
               <Bookmark className="w-5 h-5 text-blue-500" />
               <span>Active Ownership Claims</span>
             </h3>
-            <Link to="/dashboard" className="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline">
+            <Link to="/dashboard/claims" className="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline">
               View all
             </Link>
           </div>
@@ -218,7 +218,7 @@ export default function DashboardPage() {
             <h3 className="text-lg font-bold text-slate-900 dark:text-white">
               My Posted Questions
             </h3>
-            <Link to="/dashboard" className="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline">
+            <Link to="/dashboard/questions" className="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline">
               Activity History
             </Link>
           </div>
@@ -230,7 +230,7 @@ export default function DashboardPage() {
               </Card>
             ) : (
               myQuestions.slice(0, 3).map((q) => (
-                <Link key={q.id} to="/dashboard" className="block group">
+                <Link key={q.id} to="/dashboard/questions" className="block group">
                   <Card className="p-4 border-slate-200 dark:border-slate-800" hover>
                     <div className="flex items-center justify-between gap-4">
                       <div className="space-y-1 min-w-0">
@@ -260,7 +260,7 @@ export default function DashboardPage() {
             <h3 className="text-lg font-bold text-slate-900 dark:text-white">
               Recent Alerts
             </h3>
-            <Link to="/dashboard" className="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline">
+            <Link to="/dashboard/notifications" className="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline">
               All alerts
             </Link>
           </div>

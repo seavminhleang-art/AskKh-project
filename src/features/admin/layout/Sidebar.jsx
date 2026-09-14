@@ -4,7 +4,7 @@ import {
   LayoutDashboard, Users, FileText, MessageSquare, Tags, Search,
   ShieldAlert, Store, Bell, Settings, LogOut, PanelLeftClose, PanelLeftOpen, X,
 } from 'lucide-react'
-import Avatar from '../common/Avatar'
+import Avatar from '@/Components/Admin/common/Avatar'
 import { toggleSidebar, setSidebarMobileOpen } from '@/redux/slices/uiSlice'
 import { logout } from '@/redux/slices/authSlice'
 

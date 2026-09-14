@@ -6,7 +6,7 @@ import {
 import {
   Link,
   useNavigate,
-} from "react-router";
+} from "react-router-dom";
 
 import {
   ArrowLeft,
@@ -48,7 +48,7 @@ import GithubComponent from "../oauth/GithubComponent.jsx";
 import {
   AnimatedToastStack,
   useAnimatedToastStack,
-} from "@/components/motion/animated-toast-stack";
+} from "@/Components/motion/animated-toast-stack";
 
 import registerIllustration from "../../assets/Website/register-illustration.png";
 

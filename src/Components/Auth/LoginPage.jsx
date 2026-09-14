@@ -4,9 +4,13 @@ import {
 } from "react";
 
 import {
+  useDispatch,
+} from "react-redux";
+
+import {
   Link,
   useNavigate,
-} from "react-router";
+} from "react-router-dom";
 
 import {
   ArrowLeft,
@@ -44,13 +48,17 @@ import {
   useLanguage,
 } from "../Language/LanguageContext.jsx";
 
+import {
+  loginSuccess,
+} from "../../features/auth/authSlice.js";
+
 import GoogleComponent from "../oauth/GoogleComponent.jsx";
 import GithubComponent from "../oauth/GithubComponent.jsx";
 
 import {
   AnimatedToastStack,
   useAnimatedToastStack,
-} from "@/components/motion/animated-toast-stack";
+} from "@/Components/motion/animated-toast-stack";
 
 import loginIllustration from "../../assets/Website/login-illustration.png";
 
@@ -468,6 +476,9 @@ const createLoginSchema = (
   });
 
 export default function LoginPage() {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const {
     language,
     isKhmer,
@@ -544,9 +555,25 @@ export default function LoginPage() {
     });
   };
 
-  const showLoginSuccess = (
+  const showLoginSuccess = async (
     user,
   ) => {
+    const accessToken = await user.getIdToken();
+
+    dispatch(
+      loginSuccess({
+        accessToken,
+        user: {
+          id: user.uid,
+          name: user.displayName || user.email?.split("@")[0] || "Scholar",
+          displayName: user.displayName || user.email?.split("@")[0] || "Scholar",
+          email: user.email,
+          avatar: user.photoURL || null,
+          role: "student",
+        },
+      }),
+    );
+
     showToast({
       status:
         "success",
@@ -561,6 +588,8 @@ export default function LoginPage() {
             : ""
         }!`,
     });
+
+    navigate("/dashboard", { replace: true });
   };
 
   const getFirebaseErrorMessage =
@@ -610,7 +639,7 @@ export default function LoginPage() {
             data.password,
           );
 
-        showLoginSuccess(
+        await showLoginSuccess(
           result.user,
         );
       } catch (error) {

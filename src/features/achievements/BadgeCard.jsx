@@ -10,8 +10,8 @@ import {
   Star,
   Lock,
 } from 'lucide-react';
-import Card from '../../components/ui/Card';
-import Badge from '../../components/ui/Badge';
+import Card from '../../Components/ui/Card';
+import Badge from '../../Components/ui/badge';
 import { BADGE_TIERS } from '../../constants';
 
 export default function BadgeCard({ achievement }) {

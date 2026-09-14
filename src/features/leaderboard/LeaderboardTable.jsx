@@ -1,13 +1,13 @@
 import React from 'react';
 import { Trophy, ShieldCheck } from 'lucide-react';
-import Avatar from '../../components/ui/Avatar';
+import Avatar from '../../Components/ui/Avatar';
 import Table, {
   TableHeader,
   TableBody,
   TableRow,
   TableHead,
   TableCell,
-} from '../../components/ui/Table';
+} from '../../Components/ui/Table';
 
 export default function LeaderboardTable({ users = [] }) {
   const getRankBadge = (rank) => {

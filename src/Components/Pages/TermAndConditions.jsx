@@ -1,6 +1,4 @@
 import React from "react";
-import Navbar from "../Nav/NavBarComponent.jsx";
-import FooterComponent from "../Footer/FooterComponet.jsx";
 
 // ---------- Data ----------
 // Each section is either a list of plain paragraphs, a bullet list, or both.
@@ -231,9 +229,7 @@ function SectionBlock({ num, title, paragraphs = [], list, outro = [] }) {
 // ---------- Page ----------
 export default function TermsAndConditions() {
   return (
-    <div className="bg-white text-slate-800 antialiased">
-      <Navbar />
-
+    <div className="shared-page bg-white text-slate-800 antialiased">
       {/* HERO */}
       <section className="bg-brand-primary-light">
         <div className="max-w-4xl mx-auto px-6 py-16 text-center">
@@ -266,7 +262,6 @@ export default function TermsAndConditions() {
         </div>
       </section>
 
-      <FooterComponent />
     </div>
   );
 }

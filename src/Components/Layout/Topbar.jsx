@@ -16,8 +16,8 @@ import Avatar from "../common/Avatar";
 import {
   openMobileSidebar,
   toggleSidebar,
-} from "../../feature/ui/uiSlice";
-import { logout, selectCurrentUser } from "../../feature/auth/authSlice";
+} from "../../features/ui/uiSlice";
+import { logout, selectCurrentUser } from "../../features/auth/authSlice";
 
 // ---- i18n --------------------------------------------------------------
 // Swap this for your real i18n solution (react-i18next, etc.) if you have

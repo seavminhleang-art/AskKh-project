@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { MapPin, Calendar, Sparkles, ShieldCheck, ArrowRight } from 'lucide-react';
-import Card from '../../components/ui/Card';
-import StatusBadge from '../../components/ui/StatusBadge';
-import Badge from '../../components/ui/Badge';
-import Button from '../../components/ui/Button';
-import Avatar from '../../components/ui/Avatar';
-import ClaimModal from '../../components/modals/ClaimModal';
+import Card from '../../Components/Admin/common/Card';
+import StatusBadge from '../../Components/ui/StatusBadge';
+import Badge from '../../Components/ui/badge';
+import Button from '../../Components/Admin/common/Button';
+import Avatar from '../../Components/ui/Avatar';
+import ClaimModal from '../../Components/modals/ClaimModal';
 
 export default function LostFoundCard({ item, onSelectDetails }) {
   const [isClaimModalOpen, setIsClaimModalOpen] = useState(false);

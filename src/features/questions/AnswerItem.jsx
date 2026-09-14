@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { ThumbsUp, CheckCircle, MessageCircle, Clock, ShieldCheck, Send } from 'lucide-react';
-import Avatar from '../../components/ui/Avatar';
-import Button from '../../components/ui/Button';
-import Textarea from '../../components/ui/Textarea';
+import Avatar from '../../Components/ui/Avatar';
+import Button from '../../Components/Admin/common/Button';
+import Textarea from '../../Components/ui/Textarea';
 import {
   useVoteAnswerMutation,
   useAcceptAnswerMutation,

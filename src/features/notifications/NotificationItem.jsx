@@ -8,7 +8,7 @@ import {
   Trash2,
   Clock,
 } from 'lucide-react';
-import Card from '../../components/ui/Card';
+import Card from '../../Components/Admin/common/Card';
 import {
   useMarkNotificationReadMutation,
   useDeleteNotificationMutation,

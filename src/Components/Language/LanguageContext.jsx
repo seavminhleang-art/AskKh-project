@@ -5,6 +5,7 @@ import {
   useMemo,
   useState,
 } from "react";
+import i18n from "../../i18n";
 
 const LanguageContext = createContext(null);
 
@@ -17,8 +18,9 @@ export const LanguageProvider = ({ children }) => {
 
   useEffect(() => {
     localStorage.setItem("askkh-language", language);
-
     document.documentElement.lang = language === "km" ? "km" : "en";
+    // Keep the app-wide translation engine in sync with the navbar control.
+    i18n.changeLanguage(language);
   }, [language]);
 
   const toggleLanguage = () => {

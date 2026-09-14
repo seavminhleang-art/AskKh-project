@@ -7,14 +7,14 @@ import NotificationButton from './NotificationButton';
 import LanguageSwitcher from './LanguageSwitcher';
 import { useAppSelector } from '../../hooks/useAppStore';
 
-export default function Navbar() {
+export default function Navbar({ dashboardPath = '/dashboard' }) {
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { isAuthenticated } = useAppSelector((state) => state.auth);
 
   const handleGetStarted = () => {
     setMobileMenuOpen(false);
-    navigate('/dashboard');
+    navigate(dashboardPath);
   };
 
   const navLinkClasses = ({ isActive }) =>
@@ -35,7 +35,7 @@ export default function Navbar() {
 
         {/* ================= CENTER: MAIN NAVIGATION ================= */}
         <nav className="hidden lg:flex items-center justify-center gap-2 xl:gap-4 flex-1 max-w-xl mx-auto">
-          <NavLink to="/dashboard" className={navLinkClasses}>
+          <NavLink to={dashboardPath} className={navLinkClasses}>
             Dashboard
           </NavLink>
         </nav>
@@ -83,7 +83,7 @@ export default function Navbar() {
         <div className="lg:hidden border-t border-[#E5E7EB] dark:border-slate-800 bg-white dark:bg-slate-950 px-6 py-5 space-y-4 shadow-xl animate-in fade-in slide-in-from-top-2 duration-200">
           <nav className="flex flex-col space-y-1">
             <NavLink
-              to="/dashboard"
+              to={dashboardPath}
               onClick={() => setMobileMenuOpen(false)}
               className={({ isActive }) =>
                 `px-4 py-3 rounded-xl text-[15px] font-medium transition-colors ${

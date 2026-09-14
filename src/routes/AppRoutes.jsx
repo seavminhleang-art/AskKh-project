@@ -1,7 +1,7 @@
 import React, { Suspense, lazy } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import UserLayout from '../layouts/UserLayout';
-import Skeleton from '../components/ui/Skeleton';
+import Skeleton from '../Components/ui/Skeleton';
 
 // Lazy-loaded User Dashboard Page
 const DashboardPage = lazy(() => import('../pages/user/DashboardPage'));
@@ -34,4 +34,3 @@ export default function AppRoutes() {
     </Suspense>
   );
 }
-

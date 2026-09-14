@@ -1,11 +1,7 @@
 import React from "react";
-import { Link } from "react-router";
-
-import FooterComponent from "../Footer/FooterComponet.jsx";
-import missionImg from "../../assets/Website/mission.png";
+import { motion, useReducedMotion } from "framer-motion";
+import { Link } from "react-router-dom";
 import communityImg from "../../assets/Website/community.jpg";
-import visionImg from "../../assets/Website/vision.png";
-import Navbar from "../Nav/NavBarComponent.jsx";
 // ---------- Icons ----------
 function CheckIcon() {
   return (
@@ -25,14 +21,6 @@ function PersonIcon({ className = "w-12 h-12 text-slate-300" }) {
   return (
     <svg className={className} fill="currentColor" viewBox="0 0 24 24">
       <path d="M12 12c2.7 0 4.9-2.2 4.9-4.9S14.7 2.2 12 2.2 7.1 4.4 7.1 7.1 9.3 12 12 12zm0 2.2c-3.3 0-9.8 1.6-9.8 4.9v2.7h19.6v-2.7c0-3.3-6.5-4.9-9.8-4.9z" />
-    </svg>
-  );
-}
-
-function StarIcon() {
-  return (
-    <svg className="w-4 h-4 text-brand-primary" fill="currentColor" viewBox="0 0 20 20">
-      <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
     </svg>
   );
 }
@@ -83,8 +71,6 @@ function IllustrationImage({ src, alt, className = "w-full max-w-sm" }) {
 }
 
 const NETWORK_IMAGE_SRC = communityImg;
-const MISSION_IMAGE_SRC = missionImg;
-const VISION_IMAGE_SRC = visionImg;
 
 // ---------- Data ----------
 const features = [
@@ -177,8 +163,16 @@ const teamMembers = [
 
 // ---------- Reusable card ----------
 function MemberCard({ num, name, roleLabel, role, photo, github, telegram }) {
+  const reducedMotion = useReducedMotion();
   return (
-    <div className="bg-white rounded-3xl border border-slate-200 shadow-md overflow-hidden text-center pt-6 hover:shadow-lg transition">
+    <motion.div
+      initial={reducedMotion ? false : { opacity: 0, y: 28 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.15 }}
+      whileHover={reducedMotion ? undefined : { y: -10, scale: 1.02 }}
+      transition={{ duration: 0.35 }}
+      className="bg-white rounded-3xl border border-slate-200 shadow-md overflow-hidden text-center pt-8 hover:shadow-xl transition-shadow h-full"
+    >
       <div className="flex justify-between items-start px-5">
         <span className="bg-brand-primary text-white text-xs font-bold px-3 py-1.5 rounded-lg">{num}</span>
         <div className="grid grid-cols-3 gap-1 mt-1">
@@ -188,7 +182,7 @@ function MemberCard({ num, name, roleLabel, role, photo, github, telegram }) {
         </div>
       </div>
 
-      <div className="relative w-28 h-28 mx-auto my-6">
+      <div className="relative w-40 h-40 sm:w-44 sm:h-44 mx-auto my-8">
         {/* dashed outer ring */}
         <div className="absolute inset-0 rounded-full border-2 border-dashed border-brand-primary/30" />
         {/* side dots */}
@@ -212,7 +206,7 @@ function MemberCard({ num, name, roleLabel, role, photo, github, telegram }) {
         </span>
       </div>
 
-      <h3 className="text-brand-primary font-bold text-lg">{name}</h3>
+      <h3 className="text-brand-primary font-bold text-xl px-4">{name}</h3>
 
       <div className="flex items-center justify-center gap-2 mt-2">
         <span className="w-4 h-px bg-brand-secondary/40" />
@@ -227,13 +221,13 @@ function MemberCard({ num, name, roleLabel, role, photo, github, telegram }) {
         </span>
       </div>
 
-      <div className="flex justify-center items-center gap-3 my-5">
+      <div className="flex justify-center items-center gap-4 my-7">
         <a
           href={github || "#"}
           target={github ? "_blank" : undefined}
           rel={github ? "noopener noreferrer" : undefined}
           aria-label="GitHub"
-          className="w-9 h-9 rounded-full bg-slate-900 text-white flex items-center justify-center hover:bg-slate-700 transition"
+          className="w-11 h-11 rounded-full bg-slate-900 text-white flex items-center justify-center hover:bg-slate-700 transition"
         >
           <GithubIcon />
         </a>
@@ -243,24 +237,30 @@ function MemberCard({ num, name, roleLabel, role, photo, github, telegram }) {
           target={telegram ? "_blank" : undefined}
           rel={telegram ? "noopener noreferrer" : undefined}
           aria-label="Telegram"
-          className="w-9 h-9 rounded-full bg-sky-500 text-white flex items-center justify-center hover:bg-sky-600 transition"
+          className="w-11 h-11 rounded-full bg-sky-500 text-white flex items-center justify-center hover:bg-sky-600 transition"
         >
           <TelegramIcon />
         </a>
       </div>
 
       <div className="h-3 bg-brand-primary" />
-    </div>
+    </motion.div>
   );
 }
 
 // ---------- Page ----------
 export default function AboutAskKh() {
+  const reducedMotion = useReducedMotion();
+  const reveal = {
+    initial: reducedMotion ? false : { opacity: 0, y: 24 },
+    whileInView: { opacity: 1, y: 0 },
+    viewport: { once: true, amount: 0.08 },
+    transition: { duration: 0.5 },
+  };
   return (
-    <div className="bg-white text-slate-800 antialiased">
-      <Navbar/>
+    <div className="shared-page about-page bg-white text-slate-800 antialiased">
       {/* ABOUT */}
-      <section className="max-w-6xl mx-auto px-6 py-20 grid md:grid-cols-2 gap-12 items-center">
+      <motion.section {...reveal} className="max-w-7xl mx-auto px-6 py-20 grid md:grid-cols-2 gap-12 items-center">
         <div>
           <h1 className="text-4xl font-bold text-slate-900">
             About <span className="text-brand-primary">AskKh</span>
@@ -280,10 +280,10 @@ export default function AboutAskKh() {
         <div className="flex justify-center">
           <IllustrationImage src={NETWORK_IMAGE_SRC} alt="About AskKh" className="w-full max-w-m" />
         </div>
-      </section>
+      </motion.section>
 
       {/* WHY CHOOSE */}
-      <section className="bg-slate-50 py-20">
+      <motion.section {...reveal} className="bg-slate-50 py-20">
         <div className="max-w-4xl mx-auto text-center px-6">
           <h2 className="text-3xl font-bold text-slate-900">
             Why Choose <span className="text-brand-primary">AskKh?</span>
@@ -294,14 +294,14 @@ export default function AboutAskKh() {
           </p>
         </div>
 
-        <div className="max-w-6xl mx-auto px-6 mt-14 grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="max-w-7xl mx-auto px-6 mt-14 grid sm:grid-cols-2 gap-8">
           {features.map((f) => (
             <div
               key={f.title}
-              className="bg-white rounded-2xl shadow-sm p-6 text-center hover:shadow-md transition"
+              className="bg-white rounded-3xl shadow-sm p-8 sm:p-10 text-center hover:shadow-xl transition duration-300 motion-safe:hover:-translate-y-2"
             >
               <div
-                className={`w-14 h-14 mx-auto rounded-full border-2 flex items-center justify-center mb-4 bg-white ${
+                className={`w-18 h-18 mx-auto rounded-full border-2 flex items-center justify-center mb-4 bg-white ${
                   f.color === "red" ? "border-brand-secondary/40 text-brand-secondary" : "border-brand-primary/50 text-brand-primary"
                 }`}
               >
@@ -309,18 +309,15 @@ export default function AboutAskKh() {
                   {f.icon}
                 </svg>
               </div>
-              <h3 className="font-semibold text-slate-900">{f.title}</h3>
-              <p className="text-sm text-slate-500 mt-2">{f.desc}</p>
+              <h3 className="text-xl font-semibold text-slate-900">{f.title}</h3>
+              <p className="text-base leading-relaxed text-slate-500 mt-3">{f.desc}</p>
             </div>
           ))}
         </div>
-      </section>
+      </motion.section>
 
       {/* MISSION */}
-      <section className="max-w-6xl mx-auto px-6 py-20 grid md:grid-cols-2 gap-12 items-center">
-        <div className="flex justify-center order-2 md:order-1">
-          <IllustrationImage src={MISSION_IMAGE_SRC} alt="Our Mission" className="w-full max-w-md" />
-        </div>
+      <motion.section {...reveal} className="max-w-4xl mx-auto px-6 py-16">
         <div className="order-1 md:order-2">
           <span className="text-brand-primary text-sm font-semibold">MISSION</span>
           <h2 className="text-3xl font-bold text-slate-900 mt-2 mb-4">Our Mission</h2>
@@ -337,11 +334,11 @@ export default function AboutAskKh() {
             ))}
           </ul>
         </div>
-      </section>
+      </motion.section>
 
       {/* VISION */}
-      <section className="bg-slate-50">
-        <div className="max-w-6xl mx-auto px-6 py-20 grid md:grid-cols-2 gap-12 items-center">
+      <motion.section {...reveal} className="bg-slate-50">
+        <div className="max-w-4xl mx-auto px-6 py-16">
           <div>
             <span className="text-brand-primary text-sm font-semibold">VISION</span>
             <h2 className="text-3xl font-bold text-slate-900 mt-2 mb-4">Our Vision</h2>
@@ -358,31 +355,28 @@ export default function AboutAskKh() {
               ))}
             </ul>
           </div>
-          <div className="flex justify-center">
-            <IllustrationImage src={VISION_IMAGE_SRC} alt="Our Vision" className="w-full max-w-md" />
-          </div>
         </div>
-      </section>
+      </motion.section>
 
       {/* MENTORS */}
-      <section className="max-w-6xl mx-auto px-6 py-20">
+      <motion.section {...reveal} className="max-w-7xl mx-auto px-6 py-20">
         <h2 className="text-center text-2xl font-bold text-slate-900 mb-14">
           OUR <span className="text-brand-primary">MENTORS</span>
         </h2>
-        <div className="grid sm:grid-cols-2 gap-8 max-w-2xl mx-auto">
+        <div className="grid sm:grid-cols-2 gap-8 max-w-4xl mx-auto">
           {mentors.map((m) => (
             <MemberCard key={m.num} {...m} />
           ))}
         </div>
-      </section>
+      </motion.section>
 
       {/* TEAM */}
-      <section className="bg-slate-50">
-        <div className="max-w-6xl mx-auto px-6 py-20">
+      <motion.section {...reveal} className="bg-slate-50">
+        <div className="max-w-7xl mx-auto px-6 py-20">
           <h2 className="text-center text-2xl font-bold text-slate-900 mb-14">
             OUR <span className="text-brand-primary">TEAM</span>
           </h2>
-          <div className="grid sm:grid-cols-2 gap-8 max-w-2xl mx-auto mb-8">
+          <div className="grid sm:grid-cols-2 gap-8 max-w-4xl mx-auto mb-8">
             {teamLeads.map((m) => (
               <MemberCard key={m.num} {...m} />
             ))}
@@ -393,9 +387,8 @@ export default function AboutAskKh() {
             ))}
           </div>
         </div>
-      </section>
+      </motion.section>
 
-      <FooterComponent/>
     </div>
   );
 }

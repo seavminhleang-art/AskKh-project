@@ -4,14 +4,18 @@ import LanguageDetector from "i18next-browser-languagedetector";
 
 import enTranslations from "./locales/en.json";
 import khTranslations from "./locales/kh.json";
+import enCommunityTranslations from "./Components/locales/en.json";
+import kmCommunityTranslations from "./Components/locales/km.json";
 
 i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
     resources: {
-      en: { translation: enTranslations },
-      kh: { translation: khTranslations }
+      // The home pages use root-level keys while the Q&A pages use `nav.*`,
+      // `sidebar.*`, and other nested keys. Expose both in one namespace.
+      en: { translation: { ...enTranslations, ...enCommunityTranslations } },
+      km: { translation: { ...khTranslations, ...kmCommunityTranslations } }
     },
     fallbackLng: "en",
     debug: false,

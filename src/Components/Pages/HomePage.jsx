@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 import { useOutletContext } from "react-router-dom";
-import LiveBackground from "../PagesComponent/HomeComponent/LiveBackground";
 import HeroSection from "../PagesComponent/HomeComponent/HeroSection";
 import HowSecureRecoveryWorks from "../PagesComponent/HomeComponent/HowSecureRecoveryWorks";
 import PlatformShowcase from "../PagesComponent/HomeComponent/PlatformShowcase";
@@ -10,13 +9,6 @@ import TrendingDiscussions from "../PagesComponent/HomeComponent/TrendingDiscuss
 import RecentRecoveries from "../PagesComponent/HomeComponent/RecentRecoveries";
 import CommunityVoice from "../PagesComponent/HomeComponent/CommunityVoice";
 import FAQAndCTA from "../PagesComponent/HomeComponent/FAQAndCTA";
-import ShootingStars from "../PagesComponent/HomeComponent/ShootingStars";
-import SpaceBackground from "../PagesComponent/HomeComponent/SpaceBackground";
-import LightRibbons from "../PagesComponent/HomeComponent/LightRibbons";
-import ParticleNetwork from "../PagesComponent/HomeComponent/ParticleNetwork";
-import StarfieldCanvas from "../PagesComponent/HomeComponent/StarfieldCanvas";
-import FireWarpCanvas from "../PagesComponent/HomeComponent/FireWarpCanvas";
-import SpaceWarpCanvas from "../PagesComponent/HomeComponent/SpaceWarpCanvas";
 import HowCommunityQAWorks from "../PagesComponent/HomeComponent/HowCommunityQAWorks"; // New Q&A Component
 
 
@@ -42,17 +34,10 @@ export default function HomePage() {
   return (
     <div
       onMouseMove={handleMouseMove}
-      className={`relative px-6 sm:px-12 md:px-20 lg:px-28 py-10 overflow-hidden font-sans cursor-default transition-colors duration-300 ${
+      className={`shared-page relative px-6 sm:px-12 md:px-20 lg:px-28 py-10 overflow-hidden font-sans cursor-default transition-colors duration-300 ${
         darkMode ? "bg-[#121212] text-gray-100" : "bg-[#f5f5f5] text-gray-800"
       }`}
     >
-      <ShootingStars darkMode={darkMode} count={14} />
-      <SpaceBackground darkMode={darkMode} />
-      <LightRibbons darkMode={darkMode} count={5} />
-      {/* <ParticleNetwork darkMode={darkMode} particleCount={90} /> */}
-      {/* <StarfieldCanvas darkMode={darkMode} starCount={500} /> */}
-      {/* <FireWarpCanvas darkMode={darkMode} particleCount={400} /> */}
-      {/* <SpaceWarpCanvas darkMode={darkMode} particleCount={400} /> */}
       
 
       {/* Custom Mouse Follower Tooltip */}
@@ -74,7 +59,6 @@ export default function HomePage() {
         {cursorText || "Explore"}
       </motion.div>
 
-      <LiveBackground darkMode={darkMode} />
       <HeroSection setCursorText={setCursorText} setIsHovered={setIsHovered} darkMode={darkMode} />
       
       {/* Integrated Component */}

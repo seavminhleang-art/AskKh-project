@@ -1,8 +1,8 @@
 import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { LayoutDashboard, Trophy, X, LogOut } from "lucide-react";
-import { closeMobileSidebar } from "../../feature/ui/uiSlice";
-import { logout, selectCurrentUser } from "../../feature/auth/authSlice";
+import { closeMobileSidebar } from "../../features/ui/uiSlice";
+import { logout, selectCurrentUser } from "../../features/auth/authSlice";
 import Avatar from "../common/Avatar";
 
 const NAV_ITEMS = [

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Sparkles, MapPin, Calendar, Check, X, ArrowRight, ShieldCheck } from 'lucide-react';
-import Card from '../../components/ui/Card';
-import Button from '../../components/ui/Button';
-import StatusBadge from '../../components/ui/StatusBadge';
-import MatchDetailsModal from '../../components/modals/MatchDetailsModal';
+import Card from '../../Components/Admin/common/Card';
+import Button from '../../Components/Admin/common/Button';
+import StatusBadge from '../../Components/ui/StatusBadge';
+import MatchDetailsModal from '../../Components/modals/MatchDetailsModal';
 import { useUpdateMatchStatusMutation } from '../../store/api/apiSlice';
 import { toast } from 'sonner';
 
