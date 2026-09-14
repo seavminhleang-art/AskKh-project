@@ -1,19 +1,11 @@
 import React from 'react';
-import {
-  LayoutDashboard,
-  Activity,
-  HelpCircle,
-  Package,
-  Sparkles,
-  BookmarkCheck,
-  Bell,
-  Settings,
-  X,
-} from 'lucide-react';
+import { X } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
 import Logo from './Logo';
 import NavigationSection from './NavigationSection';
 import UserProfile from './UserProfile';
 import HelpCard from './HelpCard';
+import { navigationSections } from '../../../constants/navigation';
 
 export default function Sidebar({
   activeItem = 'Dashboard',
@@ -21,40 +13,7 @@ export default function Sidebar({
   mobileOpen = false,
   onCloseMobile,
 }) {
-  const sections = [
-    {
-      title: 'OVERVIEW',
-      items: [
-        { id: 'Dashboard', label: 'Dashboard', icon: LayoutDashboard },
-        { id: 'My Activity', label: 'My Activity', icon: Activity },
-      ],
-    },
-    {
-      title: 'ASK & HELP',
-      items: [{ id: 'Q & A', label: 'Q & A', icon: HelpCircle }],
-    },
-    {
-      title: 'LOST & FOUND',
-      items: [
-        { id: 'My Lost & Found', label: 'My Lost & Found', icon: Package },
-        { id: 'Match Center', label: 'Match Center', icon: Sparkles },
-        { id: 'My Claims', label: 'My Claims', icon: BookmarkCheck },
-      ],
-    },
-    {
-      title: 'WORKSPACE',
-      items: [
-        {
-          id: 'Notifications',
-          label: 'Notifications',
-          icon: Bell,
-          badge: '5',
-          badgeColor: 'rose',
-        },
-        { id: 'Setting', label: 'Setting', icon: Settings },
-      ],
-    },
-  ];
+  const location = useLocation();
 
   const sidebarContent = (
     <div className="h-full flex flex-col justify-between py-3 px-2.5 overflow-y-auto">
@@ -74,12 +33,14 @@ export default function Sidebar({
         </div>
 
         <nav className="space-y-0.5">
-          {sections.map((sec) => (
+          {navigationSections.map((sec) => (
             <NavigationSection
               key={sec.title}
               title={sec.title}
+              sectionKey={sec.sectionKey}
               items={sec.items}
               activeItem={activeItem}
+              location={location}
               onSelect={(id) => {
                 if (onSelectItem) onSelectItem(id);
                 if (onCloseMobile) onCloseMobile();

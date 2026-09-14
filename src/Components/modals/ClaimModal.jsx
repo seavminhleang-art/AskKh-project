@@ -55,16 +55,16 @@ export default function ClaimModal({ isOpen, onClose, item }) {
             <ShieldCheck className="w-6 h-6" />
           </div>
           <div>
-            <h3 className="text-xl font-bold text-slate-900 dark:text-white">
+            <h3 className="text-[28px] font-bold text-slate-900 dark:text-white">
               Claim Ownership
             </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
+            <p className="text-lg text-slate-500 dark:text-slate-400">
               Item: <span className="font-semibold text-slate-800 dark:text-slate-200">{itemTitle}</span>
             </p>
           </div>
         </div>
 
-        <div className="p-3.5 rounded-2xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200/60 dark:border-blue-900/40 text-xs text-blue-800 dark:text-blue-300 leading-relaxed flex items-start gap-2.5">
+        <div className="p-3.5 rounded-2xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200/60 dark:border-blue-900/40 text-lg text-blue-800 dark:text-blue-300 leading-relaxed flex items-start gap-2.5">
           <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
           <span>
             To ensure secure return, describe the hidden detail only the authentic owner knows (e.g. serial numbers, passcode wallpaper, contents inside, purchase receipt).
@@ -73,7 +73,7 @@ export default function ClaimModal({ isOpen, onClose, item }) {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+            <label className="block text-lg font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
               Proof of Ownership / Hidden Detail *
             </label>
             <Textarea
@@ -86,11 +86,11 @@ export default function ClaimModal({ isOpen, onClose, item }) {
               placeholder="Describe unique marks, serial number, screen lock photo, specific contents, or invoice number..."
               error={error}
             />
-            {error && <p className="text-xs text-rose-500 mt-1">{error}</p>}
+            {error && <p className="text-lg text-rose-500 mt-1">{error}</p>}
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+            <label className="block text-lg font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
               Supporting Photo / ID Card URL (Optional)
             </label>
             <Input

@@ -1,21 +1,91 @@
 @import "tailwindcss";
 
-@custom-variant dark (&:where(.dark, .dark *));
-
-@layer base {
-  * {
-    box-sizing: border-box;
-  }
-  
-  body {
-    font-family: 'Google Sans', 'Product Sans', 'Noto Sans Khmer', 'Kantumruy Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-  }
+/* Self-hosted Google Sans */
+@font-face {
+  font-family: "Google Sans";
+  src: url("/fonts/GoogleSans-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Google Sans";
+  src: url("/fonts/GoogleSans-Italic.ttf") format("truetype");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Google Sans";
+  src: url("/fonts/GoogleSans-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Google Sans";
+  src: url("/fonts/GoogleSans-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Google Sans";
+  src: url("/fonts/GoogleSans-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
 }
 
-/* Custom scrollbar */
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-brand-primary: #102A56;
+  --color-brand-primary-light: #EBF1FA;
+  --color-brand-primary-dark: #0A1C3B;
+  --color-brand-primary-hover: #1A3E7B;
+
+  --color-brand-secondary: #ED2B2A;
+  --color-brand-secondary-light: #FDECEC;
+  --color-brand-secondary-dark: #B91C1C;
+
+  --color-brand-accent: #16A34A;
+  --color-brand-accent-light: #DCFCE7;
+  --color-brand-accent-dark: #15803D;
+
+  --color-brand-canvas: #F5F7F9;
+  --color-brand-card: #FFFFFF;
+
+  /* Override Tailwind's default font-sans with Google Sans */
+  --font-sans: "Google Sans", sans-serif;
+}
+
+html,
+body {
+  font-family: "Google Sans", sans-serif;
+  background-color: #F5F7F9;
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+.dark body,
+html.dark body {
+  background-color: #020617;
+}
+
+/* When Khmer language is active */
+html[lang="km"] body,
+.font-khmer {
+  font-family: "Google Sans", sans-serif;
+}
+
+
+
+/* Custom minimal scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
@@ -23,10 +93,10 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(156, 163, 175, 0.4);
+  background: rgba(148, 163, 184, 0.4);
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(107, 114, 128, 0.6);
+  background: rgba(100, 116, 139, 0.6);
 }

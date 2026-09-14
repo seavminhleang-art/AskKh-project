@@ -1,11 +1,19 @@
-import React, { useState } from 'react';
-import { Sparkles, MapPin, Calendar, Check, X, ArrowRight, ShieldCheck } from 'lucide-react';
-import Card from '../../components/ui/Card';
-import Button from '../../components/ui/Button';
-import StatusBadge from '../../components/ui/StatusBadge';
-import MatchDetailsModal from '../../components/modals/MatchDetailsModal';
-import { useUpdateMatchStatusMutation } from '../../store/api/apiSlice';
-import { toast } from 'sonner';
+import React, { useState } from "react";
+import {
+  Sparkles,
+  MapPin,
+  Calendar,
+  Check,
+  X,
+  ArrowRight,
+  ShieldCheck,
+} from "lucide-react";
+import Card from "../../components/ui/Card";
+import Button from "../../components/ui/Button";
+import StatusBadge from "../../components/ui/StatusBadge";
+import MatchDetailsModal from "../../components/modals/MatchDetailsModal";
+import { useUpdateMatchStatusMutation } from "../../store/api/apiSlice";
+import { toast } from "sonner";
 
 export default function MatchCard({ match }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -13,25 +21,28 @@ export default function MatchCard({ match }) {
 
   const handleConfirm = async () => {
     try {
-      await updateStatus({ id: match.id, status: 'CONFIRMED' }).unwrap();
-      toast.success('Match confirmed! Both parties notified.');
+      await updateStatus({ id: match.id, status: "CONFIRMED" }).unwrap();
+      toast.success("Match confirmed! Both parties notified.");
     } catch (e) {
-      toast.error('Failed to confirm match.');
+      toast.error("Failed to confirm match.");
     }
   };
 
   const handleReject = async () => {
     try {
-      await updateStatus({ id: match.id, status: 'REJECTED' }).unwrap();
-      toast.info('Match dismissed.');
+      await updateStatus({ id: match.id, status: "REJECTED" }).unwrap();
+      toast.info("Match dismissed.");
     } catch (e) {
-      toast.error('Failed to reject match.');
+      toast.error("Failed to reject match.");
     }
   };
 
   return (
     <>
-      <Card className="p-6 transition-all border-slate-200 dark:border-slate-800" hover>
+      <Card
+        className="p-6 transition-all border-slate-200 dark:border-slate-800"
+        hover
+      >
         {/* Match Header */}
         <div className="flex flex-wrap items-center justify-between gap-3 mb-4 pb-3 border-b border-slate-100 dark:border-slate-800">
           <div className="flex items-center gap-2">
@@ -43,7 +54,7 @@ export default function MatchCard({ match }) {
                 <span>Algorithmic Item Pair</span>
                 <Sparkles className="w-3.5 h-3.5 text-amber-500" />
               </h4>
-              <p className="text-[11px] text-slate-500 dark:text-slate-400">
+              <p className="text-[16px] text-slate-500 dark:text-slate-400">
                 Matched on {new Date(match.createdAt).toLocaleDateString()}
               </p>
             </div>
@@ -68,7 +79,7 @@ export default function MatchCard({ match }) {
               <h5 className="text-sm font-bold text-slate-900 dark:text-white truncate">
                 {match.lostItem?.name}
               </h5>
-              <div className="text-[11px] text-slate-500 dark:text-slate-400 flex items-center gap-1 mt-0.5 truncate">
+              <div className="text-[16px] text-slate-500 dark:text-slate-400 flex items-center gap-1 mt-0.5 truncate">
                 <MapPin className="w-3 h-3 text-rose-500 shrink-0" />
                 <span className="truncate">{match.lostItem?.location}</span>
               </div>
@@ -89,7 +100,7 @@ export default function MatchCard({ match }) {
               <h5 className="text-sm font-bold text-slate-900 dark:text-white truncate">
                 {match.foundItem?.name}
               </h5>
-              <div className="text-[11px] text-slate-500 dark:text-slate-400 flex items-center gap-1 mt-0.5 truncate">
+              <div className="text-[16px] text-slate-500 dark:text-slate-400 flex items-center gap-1 mt-0.5 truncate">
                 <MapPin className="w-3 h-3 text-emerald-500 shrink-0" />
                 <span className="truncate">{match.foundItem?.location}</span>
               </div>
@@ -102,9 +113,12 @@ export default function MatchCard({ match }) {
           {match.matchingAttributes?.map((attr, idx) => (
             <span
               key={idx}
-              className="px-2.5 py-1 rounded-lg text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200/60 dark:border-slate-700"
+              className="px-2.5 py-1 rounded-lg text-lg font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200/60 dark:border-slate-700"
             >
-              {attr.label}: <strong className="text-blue-600 dark:text-blue-400">{attr.score}</strong>
+              {attr.label}:{" "}
+              <strong className="text-blue-600 dark:text-blue-400">
+                {attr.score}
+              </strong>
             </span>
           ))}
         </div>
@@ -115,19 +129,19 @@ export default function MatchCard({ match }) {
             variant="outline"
             size="sm"
             onClick={() => setIsModalOpen(true)}
-            className="text-xs rounded-xl"
+            className="text-lg rounded-xl"
           >
             View Full Analysis
           </Button>
 
-          {match.status !== 'CONFIRMED' && match.status !== 'REJECTED' && (
+          {match.status !== "CONFIRMED" && match.status !== "REJECTED" && (
             <div className="flex items-center gap-2">
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={handleReject}
                 disabled={isLoading}
-                className="text-xs text-rose-600 hover:bg-rose-50 dark:text-rose-400"
+                className="text-lg text-rose-600 hover:bg-rose-50 dark:text-rose-400"
               >
                 <X className="w-3.5 h-3.5 mr-1" />
                 Dismiss
@@ -137,7 +151,7 @@ export default function MatchCard({ match }) {
                 size="sm"
                 onClick={handleConfirm}
                 disabled={isLoading}
-                className="text-xs rounded-xl"
+                className="text-lg rounded-xl"
               >
                 <Check className="w-3.5 h-3.5 mr-1" />
                 Confirm Match

@@ -11,7 +11,7 @@ export default function Logo() {
         <span className="text-sm font-bold text-slate-900 dark:text-white leading-tight tracking-tight">
           AskKH
         </span>
-        <span className="text-[10px] text-slate-400 dark:text-slate-500 font-medium truncate">
+        <span className="text-[16px] text-slate-400 dark:text-slate-500 font-medium truncate">
           Lost & Found Platform
         </span>
       </div>

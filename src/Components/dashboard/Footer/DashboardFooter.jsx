@@ -1,10 +1,10 @@
-import React from 'react';
+import React from "react";
 
 export default function DashboardFooter() {
   return (
-    <footer className="pt-6 pb-4 border-t border-slate-200/80 dark:border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-slate-400 dark:text-slate-500">
+    <footer className="pt-6 pb-4 border-t border-slate-200/80 dark:border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-3 text-[16px] text-slate-400 dark:text-slate-500">
       <div>
-        <p>© 2024 ISTAD Lost & Found Platform. All rights reserved.</p>
+        <p>© 2026 NEXA Lost & Found Platform. All rights reserved.</p>
       </div>
       <div className="flex items-center gap-4">
         <a

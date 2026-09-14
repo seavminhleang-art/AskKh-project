@@ -1,13 +1,13 @@
-import React from 'react';
-import { Trophy, ShieldCheck } from 'lucide-react';
-import Avatar from '../../components/ui/Avatar';
+import React from "react";
+import { Trophy, ShieldCheck } from "lucide-react";
+import Avatar from "../../components/ui/Avatar";
 import Table, {
   TableHeader,
   TableBody,
   TableRow,
   TableHead,
   TableCell,
-} from '../../components/ui/Table';
+} from "../../components/ui/Table";
 
 export default function LeaderboardTable({ users = [] }) {
   const getRankBadge = (rank) => {
@@ -32,7 +32,7 @@ export default function LeaderboardTable({ users = [] }) {
         );
       default:
         return (
-          <div className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs text-slate-500">
+          <div className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-lg text-slate-500">
             {rank}
           </div>
         );
@@ -55,7 +55,9 @@ export default function LeaderboardTable({ users = [] }) {
         {users.map((user, index) => (
           <TableRow key={user.id}>
             <TableCell className="text-center font-bold">
-              <div className="flex justify-center">{getRankBadge(index + 1)}</div>
+              <div className="flex justify-center">
+                {getRankBadge(index + 1)}
+              </div>
             </TableCell>
             <TableCell>
               <div className="flex items-center gap-3">
@@ -63,16 +65,18 @@ export default function LeaderboardTable({ users = [] }) {
                 <div>
                   <div className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
                     <span>{user.name}</span>
-                    {user.role === 'ADMIN' && (
+                    {user.role === "ADMIN" && (
                       <ShieldCheck className="w-3.5 h-3.5 text-blue-500" />
                     )}
                   </div>
-                  <div className="text-xs text-slate-400 truncate max-w-xs">{user.title}</div>
+                  <div className="text-lg text-slate-400 truncate max-w-xs">
+                    {user.title}
+                  </div>
                 </div>
               </div>
             </TableCell>
             <TableCell>
-              <span className="px-2 py-0.5 rounded text-[11px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+              <span className="px-2 py-0.5 rounded text-[16px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
                 {user.role}
               </span>
             </TableCell>

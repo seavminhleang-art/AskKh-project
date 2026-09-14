@@ -1,9 +1,17 @@
-import React from 'react';
-import { X, Sparkles, MapPin, Calendar, Clock, CheckCircle2, ArrowRight } from 'lucide-react';
-import Button from '../ui/Button';
-import StatusBadge from '../ui/StatusBadge';
-import { useUpdateMatchStatusMutation } from '../../store/api/apiSlice';
-import { toast } from 'sonner';
+import React from "react";
+import {
+  X,
+  Sparkles,
+  MapPin,
+  Calendar,
+  Clock,
+  CheckCircle2,
+  ArrowRight,
+} from "lucide-react";
+import Button from "../ui/Button";
+import StatusBadge from "../ui/StatusBadge";
+import { useUpdateMatchStatusMutation } from "../../store/api/apiSlice";
+import { toast } from "sonner";
 
 export default function MatchDetailsModal({ isOpen, onClose, match }) {
   const [updateMatchStatus, { isLoading }] = useUpdateMatchStatusMutation();
@@ -12,21 +20,21 @@ export default function MatchDetailsModal({ isOpen, onClose, match }) {
 
   const handleConfirm = async () => {
     try {
-      await updateMatchStatus({ id: match.id, status: 'CONFIRMED' }).unwrap();
-      toast.success('Match confirmed! Both parties have been notified.');
+      await updateMatchStatus({ id: match.id, status: "CONFIRMED" }).unwrap();
+      toast.success("Match confirmed! Both parties have been notified.");
       onClose();
     } catch (e) {
-      toast.error('Failed to confirm match.');
+      toast.error("Failed to confirm match.");
     }
   };
 
   const handleReject = async () => {
     try {
-      await updateMatchStatus({ id: match.id, status: 'REJECTED' }).unwrap();
-      toast.info('Match dismissed.');
+      await updateMatchStatus({ id: match.id, status: "REJECTED" }).unwrap();
+      toast.info("Match dismissed.");
       onClose();
     } catch (e) {
-      toast.error('Failed to update match status.');
+      toast.error("Failed to update match status.");
     }
   };
 
@@ -42,11 +50,11 @@ export default function MatchDetailsModal({ isOpen, onClose, match }) {
 
         <div className="flex items-center justify-between pr-8">
           <div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-400 text-xs font-bold mb-2">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-400 text-lg font-bold mb-2">
               <Sparkles className="w-3.5 h-3.5" />
               <span>Smart Match Engine Analysis</span>
             </div>
-            <h2 className="text-2xl font-black text-slate-900 dark:text-white">
+            <h2 className="text-[28px] font-black text-slate-900 dark:text-white">
               {match.matchScore}% Match Confidence
             </h2>
           </div>
@@ -58,10 +66,10 @@ export default function MatchDetailsModal({ isOpen, onClose, match }) {
           {/* Lost Item */}
           <div className="p-4 rounded-2xl bg-rose-50/50 dark:bg-rose-950/20 border border-rose-200/80 dark:border-rose-900/40 space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase tracking-wider text-rose-600 dark:text-rose-400">
+              <span className="text-lg font-bold uppercase tracking-wider text-rose-600 dark:text-rose-400">
                 Lost Item Report
               </span>
-              <span className="text-[11px] text-slate-500 dark:text-slate-400">
+              <span className="text-[16px] text-slate-500 dark:text-slate-400">
                 {match.lostItem.date}
               </span>
             </div>
@@ -73,10 +81,10 @@ export default function MatchDetailsModal({ isOpen, onClose, match }) {
             <h4 className="font-bold text-sm text-slate-900 dark:text-white">
               {match.lostItem.name}
             </h4>
-            <p className="text-xs text-slate-600 dark:text-slate-300 line-clamp-2">
+            <p className="text-lg text-slate-600 dark:text-slate-300 line-clamp-2">
               {match.lostItem.description}
             </p>
-            <div className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1">
+            <div className="text-lg text-slate-500 dark:text-slate-400 flex items-center gap-1">
               <MapPin className="w-3.5 h-3.5 text-rose-500 shrink-0" />
               <span className="truncate">{match.lostItem.location}</span>
             </div>
@@ -85,10 +93,10 @@ export default function MatchDetailsModal({ isOpen, onClose, match }) {
           {/* Found Item */}
           <div className="p-4 rounded-2xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200/80 dark:border-emerald-900/40 space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+              <span className="text-lg font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
                 Found Item Turned In
               </span>
-              <span className="text-[11px] text-slate-500 dark:text-slate-400">
+              <span className="text-[16px] text-slate-500 dark:text-slate-400">
                 {match.foundItem.date}
               </span>
             </div>
@@ -100,10 +108,10 @@ export default function MatchDetailsModal({ isOpen, onClose, match }) {
             <h4 className="font-bold text-sm text-slate-900 dark:text-white">
               {match.foundItem.name}
             </h4>
-            <p className="text-xs text-slate-600 dark:text-slate-300 line-clamp-2">
+            <p className="text-lg text-slate-600 dark:text-slate-300 line-clamp-2">
               {match.foundItem.description}
             </p>
-            <div className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-1">
+            <div className="text-lg text-slate-500 dark:text-slate-400 flex items-center gap-1">
               <MapPin className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
               <span className="truncate">{match.foundItem.location}</span>
             </div>
@@ -112,7 +120,7 @@ export default function MatchDetailsModal({ isOpen, onClose, match }) {
 
         {/* Attribute Breakdown */}
         <div className="space-y-2.5">
-          <h4 className="text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
+          <h4 className="text-lg font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
             Matching Factor Breakdown
           </h4>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
@@ -122,14 +130,14 @@ export default function MatchDetailsModal({ isOpen, onClose, match }) {
                 className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-800 flex items-center justify-between"
               >
                 <div>
-                  <div className="text-xs font-bold text-slate-900 dark:text-white">
+                  <div className="text-lg font-bold text-slate-900 dark:text-white">
                     {attr.label}
                   </div>
-                  <div className="text-[11px] text-slate-500 dark:text-slate-400">
+                  <div className="text-[16px] text-slate-500 dark:text-slate-400">
                     {attr.detail}
                   </div>
                 </div>
-                <span className="text-xs font-extrabold text-blue-600 dark:text-blue-400 ml-2">
+                <span className="text-lg font-extrabold text-blue-600 dark:text-blue-400 ml-2">
                   {attr.score}
                 </span>
               </div>
@@ -142,7 +150,7 @@ export default function MatchDetailsModal({ isOpen, onClose, match }) {
           <Button
             variant="outline"
             onClick={handleReject}
-            disabled={isLoading || match.status === 'REJECTED'}
+            disabled={isLoading || match.status === "REJECTED"}
           >
             Reject Match
           </Button>
@@ -150,7 +158,7 @@ export default function MatchDetailsModal({ isOpen, onClose, match }) {
             variant="success"
             onClick={handleConfirm}
             isLoading={isLoading}
-            disabled={match.status === 'CONFIRMED'}
+            disabled={match.status === "CONFIRMED"}
           >
             Confirm This Match
           </Button>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   ChevronLeft,
   ChevronRight,
@@ -7,69 +7,74 @@ import {
   CupSoda,
   Umbrella,
   BookOpen,
-} from 'lucide-react';
+} from "lucide-react";
 
 const reportsData = [
   {
     id: 1,
-    name: 'Black Backpack',
+    name: "Black Backpack",
     icon: Briefcase,
-    iconColor: 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300',
-    type: 'Lost',
-    location: 'Sports Center',
-    date: 'May 21, 2024',
-    status: 'Active',
+    iconColor:
+      "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300",
+    type: "Lost",
+    location: "Sports Center",
+    date: "May 21, 2024",
+    status: "Active",
   },
   {
     id: 2,
-    name: 'Silver Laptop (MacBook Air)',
+    name: "Silver Laptop (MacBook Air)",
     icon: Laptop,
-    iconColor: 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300',
-    type: 'Found',
-    location: 'Library - 3rd Floor',
-    date: 'May 20, 2024',
-    status: 'Matched',
+    iconColor:
+      "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300",
+    type: "Found",
+    location: "Library - 3rd Floor",
+    date: "May 20, 2024",
+    status: "Matched",
   },
   {
     id: 3,
-    name: 'Water Bottle (Blue)',
+    name: "Water Bottle (Blue)",
     icon: CupSoda,
-    iconColor: 'bg-blue-50 text-blue-600 dark:bg-blue-950/50 dark:text-blue-400',
-    type: 'Lost',
-    location: 'Building A - Room A101',
-    date: 'May 19, 2024',
-    status: 'Active',
+    iconColor:
+      "bg-blue-50 text-blue-600 dark:bg-blue-950/50 dark:text-blue-400",
+    type: "Lost",
+    location: "Building A - Room A101",
+    date: "May 19, 2024",
+    status: "Active",
   },
   {
     id: 4,
-    name: 'Umbrella (Black)',
+    name: "Umbrella (Black)",
     icon: Umbrella,
-    iconColor: 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300',
-    type: 'Found',
-    location: 'Parking Area',
-    date: 'May 18, 2024',
-    status: 'Closed',
+    iconColor:
+      "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300",
+    type: "Found",
+    location: "Parking Area",
+    date: "May 18, 2024",
+    status: "Closed",
   },
   {
     id: 5,
-    name: 'Textbook (Calculus)',
+    name: "Textbook (Calculus)",
     icon: BookOpen,
-    iconColor: 'bg-amber-50 text-amber-600 dark:bg-amber-950/50 dark:text-amber-400',
-    type: 'Lost',
-    location: 'Cafeteria',
-    date: 'May 17, 2024',
-    status: 'Active',
+    iconColor:
+      "bg-amber-50 text-amber-600 dark:bg-amber-950/50 dark:text-amber-400",
+    type: "Lost",
+    location: "Cafeteria",
+    date: "May 17, 2024",
+    status: "Active",
   },
 ];
 
 function TypeBadge({ type }) {
-  const isLost = type.toLowerCase() === 'lost';
+  const isLost = type.toLowerCase() === "lost";
   return (
     <span
-      className={`inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-semibold border ${
+      className={`inline-flex items-center px-2 py-0.5 rounded-md text-[16px] font-semibold border ${
         isLost
-          ? 'bg-rose-50 text-rose-600 border-rose-200/70 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-900/60'
-          : 'bg-blue-50 text-blue-600 border-blue-200/70 dark:bg-blue-950/40 dark:text-blue-300 dark:border-blue-900/60'
+          ? "bg-rose-50 text-rose-600 border-rose-200/70 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-900/60"
+          : "bg-blue-50 text-blue-600 border-blue-200/70 dark:bg-blue-950/40 dark:text-blue-300 dark:border-blue-900/60"
       }`}
     >
       {type}
@@ -80,16 +85,16 @@ function TypeBadge({ type }) {
 function StatusBadge({ status }) {
   const lower = status.toLowerCase();
   let colorStyle =
-    'bg-slate-100 text-slate-600 border-slate-200 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-700';
+    "bg-slate-100 text-slate-600 border-slate-200 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-700";
 
-  if (lower === 'active' || lower === 'matched') {
+  if (lower === "active" || lower === "matched") {
     colorStyle =
-      'bg-emerald-50 text-emerald-600 border-emerald-200/70 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-900/60';
+      "bg-emerald-50 text-emerald-600 border-emerald-200/70 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-900/60";
   }
 
   return (
     <span
-      className={`inline-flex items-center px-2 py-0.5 rounded-md text-[11px] font-semibold border ${colorStyle}`}
+      className={`inline-flex items-center px-2 py-0.5 rounded-md text-[16px] font-semibold border ${colorStyle}`}
     >
       {status}
     </span>
@@ -108,7 +113,7 @@ export default function RecentReports({ reports = reportsData }) {
         </h3>
         <button
           type="button"
-          className="text-xs font-semibold text-blue-600 dark:text-blue-400 hover:underline cursor-pointer"
+          className="text-lg font-semibold text-blue-600 dark:text-blue-400 hover:underline cursor-pointer"
         >
           View all
         </button>
@@ -116,9 +121,9 @@ export default function RecentReports({ reports = reportsData }) {
 
       {/* Table Container */}
       <div className="overflow-x-auto -mx-4 sm:mx-0">
-        <table className="w-full text-left text-xs">
+        <table className="w-full text-left text-lg">
           <thead>
-            <tr className="border-b border-slate-100 dark:border-slate-800 text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
+            <tr className="border-b border-slate-100 dark:border-slate-800 text-[16px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
               <th className="pb-2.5 pl-4 sm:pl-0 font-medium">Item</th>
               <th className="pb-2.5 px-3 font-medium">Type</th>
               <th className="pb-2.5 px-3 font-medium">Location</th>
@@ -166,15 +171,15 @@ export default function RecentReports({ reports = reportsData }) {
       </div>
 
       {/* Pagination Footer */}
-      <div className="pt-2 border-t border-slate-100 dark:border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-500 dark:text-slate-400">
-        <span className="text-[11px]">Showing 1 to 5 of 9 reports</span>
+      <div className="pt-2 border-t border-slate-100 dark:border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-2 text-lg text-slate-500 dark:text-slate-400">
+        <span className="text-[16px]">Showing 1 to 5 of 9 reports</span>
 
         <div className="flex items-center gap-1 select-none">
           <button
             type="button"
             disabled={currentPage === 1}
             onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-            className="flex items-center gap-0.5 px-2 py-1 rounded-md text-[11px] font-medium border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+            className="flex items-center gap-0.5 px-2 py-1 rounded-md text-[16px] font-medium border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
           >
             <ChevronLeft className="w-3 h-3" />
             <span>Previous</span>
@@ -182,10 +187,10 @@ export default function RecentReports({ reports = reportsData }) {
           <button
             type="button"
             onClick={() => setCurrentPage(1)}
-            className={`w-6 h-6 rounded-md text-[11px] font-bold flex items-center justify-center cursor-pointer ${
+            className={`w-6 h-6 rounded-md text-[16px] font-bold flex items-center justify-center cursor-pointer ${
               currentPage === 1
-                ? 'bg-blue-600 text-white shadow-2xs'
-                : 'border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800'
+                ? "bg-blue-600 text-white shadow-2xs"
+                : "border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800"
             }`}
           >
             1
@@ -193,10 +198,10 @@ export default function RecentReports({ reports = reportsData }) {
           <button
             type="button"
             onClick={() => setCurrentPage(2)}
-            className={`w-6 h-6 rounded-md text-[11px] font-bold flex items-center justify-center cursor-pointer ${
+            className={`w-6 h-6 rounded-md text-[16px] font-bold flex items-center justify-center cursor-pointer ${
               currentPage === 2
-                ? 'bg-blue-600 text-white shadow-2xs'
-                : 'border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800'
+                ? "bg-blue-600 text-white shadow-2xs"
+                : "border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800"
             }`}
           >
             2
@@ -205,7 +210,7 @@ export default function RecentReports({ reports = reportsData }) {
             type="button"
             disabled={currentPage === 2}
             onClick={() => setCurrentPage((p) => Math.min(2, p + 1))}
-            className="flex items-center gap-0.5 px-2 py-1 rounded-md text-[11px] font-medium border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+            className="flex items-center gap-0.5 px-2 py-1 rounded-md text-[16px] font-medium border border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
           >
             <span>Next</span>
             <ChevronRight className="w-3 h-3" />

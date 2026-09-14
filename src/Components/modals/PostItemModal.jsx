@@ -1,30 +1,44 @@
-import React, { useState } from 'react';
-import { X, Upload, MapPin, Calendar, Tag, AlertCircle, Sparkles, Image as ImageIcon, Loader2 } from 'lucide-react';
-import Button from '../ui/Button';
-import Input from '../ui/Input';
-import Textarea from '../ui/Textarea';
-import Select from '../ui/Select';
-import { ITEM_CATEGORIES, CAMPUS_LOCATIONS } from '../../constants';
+import React, { useState } from "react";
+import {
+  X,
+  Upload,
+  MapPin,
+  Calendar,
+  Tag,
+  AlertCircle,
+  Sparkles,
+  Image as ImageIcon,
+  Loader2,
+} from "lucide-react";
+import Button from "../ui/Button";
+import Input from "../ui/Input";
+import Textarea from "../ui/Textarea";
+import Select from "../ui/Select";
+import { ITEM_CATEGORIES, CAMPUS_LOCATIONS } from "../../constants";
 import {
   useCreateReportMutation,
   useGetCategoriesQuery,
   useGetLocationsQuery,
   useUploadSingleMutation,
-} from '../../store/api/apiSlice';
-import { toast } from 'sonner';
+} from "../../store/api/apiSlice";
+import { toast } from "sonner";
 
-export default function PostItemModal({ isOpen, onClose, initialType = 'LOST' }) {
+export default function PostItemModal({
+  isOpen,
+  onClose,
+  initialType = "LOST",
+}) {
   const [type, setType] = useState(initialType.toUpperCase());
-  const [name, setName] = useState('');
+  const [name, setName] = useState("");
   const [categoryId, setCategoryId] = useState(1);
   const [locationId, setLocationId] = useState(1);
   const [freeTextLocation, setFreeTextLocation] = useState(CAMPUS_LOCATIONS[0]);
-  const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
-  const [time, setTime] = useState('14:00');
-  const [description, setDescription] = useState('');
-  const [hiddenDetail, setHiddenDetail] = useState('');
-  const [contactInfo, setContactInfo] = useState('');
-  const [photoUrl, setPhotoUrl] = useState('');
+  const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
+  const [time, setTime] = useState("14:00");
+  const [description, setDescription] = useState("");
+  const [hiddenDetail, setHiddenDetail] = useState("");
+  const [contactInfo, setContactInfo] = useState("");
+  const [photoUrl, setPhotoUrl] = useState("");
   const [errors, setErrors] = useState({});
 
   const { data: serverCategories = [] } = useGetCategoriesQuery();
@@ -49,28 +63,29 @@ export default function PostItemModal({ isOpen, onClose, initialType = 'LOST' })
     if (!file) return;
 
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append("file", file);
 
     try {
       const res = await uploadFile(formData).unwrap();
       const uploadedUri = res?.uri || res?.url || URL.createObjectURL(file);
       setPhotoUrl(uploadedUri);
-      toast.success('Image uploaded successfully!');
+      toast.success("Image uploaded successfully!");
     } catch {
       // Offline fallback: use local object url
       const localUrl = URL.createObjectURL(file);
       setPhotoUrl(localUrl);
-      toast.info('Local image preview loaded.');
+      toast.info("Local image preview loaded.");
     }
   };
 
   const validate = () => {
     const errs = {};
-    if (!name.trim()) errs.name = 'Item title is required';
+    if (!name.trim()) errs.name = "Item title is required";
     if (!description.trim() || description.trim().length < 15) {
-      errs.description = 'Please describe the item clearly (min 15 characters)';
+      errs.description = "Please describe the item clearly (min 15 characters)";
     }
-    if (!contactInfo.trim()) errs.contactInfo = 'Contact details (Telegram/Phone) are required';
+    if (!contactInfo.trim())
+      errs.contactInfo = "Contact details (Telegram/Phone) are required";
     setErrors(errs);
     return Object.keys(errs).length === 0;
   };
@@ -86,7 +101,7 @@ export default function PostItemModal({ isOpen, onClose, initialType = 'LOST' })
         categoryId: Number(categoryId),
         description: `${description} | Contact: ${contactInfo}`,
         itemDate: date,
-        scope: 'CAMPUS',
+        scope: "CAMPUS",
         locationId: Number(locationId),
         freeTextLocation: freeTextLocation,
         photoUrl: photoUrl || undefined,
@@ -102,13 +117,13 @@ export default function PostItemModal({ isOpen, onClose, initialType = 'LOST' })
       }).unwrap();
 
       toast.success(
-        type === 'LOST'
-          ? 'Lost item report published! Our Smart Match algorithm will notify you of potential matches.'
-          : 'Found item report published! Thank you for supporting the campus community.'
+        type === "LOST"
+          ? "Lost item report published! Our Smart Match algorithm will notify you of potential matches."
+          : "Found item report published! Thank you for supporting the campus community.",
       );
       onClose();
     } catch {
-      toast.error('Failed to submit report. Please try again.');
+      toast.error("Failed to submit report. Please try again.");
     }
   };
 
@@ -127,7 +142,8 @@ export default function PostItemModal({ isOpen, onClose, initialType = 'LOST' })
             Report Campus Belongings
           </h2>
           <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-            Provide accurate details to facilitate instant verification and smart matching.
+            Provide accurate details to facilitate instant verification and
+            smart matching.
           </p>
         </div>
 
@@ -135,22 +151,22 @@ export default function PostItemModal({ isOpen, onClose, initialType = 'LOST' })
         <div className="grid grid-cols-2 gap-3 p-1.5 bg-slate-100 dark:bg-slate-800 rounded-2xl mb-6">
           <button
             type="button"
-            onClick={() => setType('LOST')}
+            onClick={() => setType("LOST")}
             className={`py-2.5 rounded-xl font-bold text-sm transition-all select-none cursor-pointer ${
-              type === 'LOST'
-                ? 'bg-rose-500 text-white shadow-xs'
-                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+              type === "LOST"
+                ? "bg-rose-500 text-white shadow-xs"
+                : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
             }`}
           >
             I Lost Something
           </button>
           <button
             type="button"
-            onClick={() => setType('FOUND')}
+            onClick={() => setType("FOUND")}
             className={`py-2.5 rounded-xl font-bold text-sm transition-all select-none cursor-pointer ${
-              type === 'FOUND'
-                ? 'bg-emerald-600 text-white shadow-xs'
-                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+              type === "FOUND"
+                ? "bg-emerald-600 text-white shadow-xs"
+                : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
             }`}
           >
             I Found Something
@@ -159,7 +175,7 @@ export default function PostItemModal({ isOpen, onClose, initialType = 'LOST' })
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+            <label className="block text-lg font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
               Item Title *
             </label>
             <Input
@@ -168,12 +184,14 @@ export default function PostItemModal({ isOpen, onClose, initialType = 'LOST' })
               placeholder="e.g. MacBook Air M2 13-inch (Midnight Blue) with stickers"
               error={errors.name}
             />
-            {errors.name && <p className="text-xs text-rose-500 mt-1">{errors.name}</p>}
+            {errors.name && (
+              <p className="text-lg text-rose-500 mt-1">{errors.name}</p>
+            )}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+              <label className="block text-lg font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
                 Category *
               </label>
               <select
@@ -190,15 +208,18 @@ export default function PostItemModal({ isOpen, onClose, initialType = 'LOST' })
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+              <label className="block text-lg font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
                 Campus Location *
               </label>
               <select
                 value={locationId}
                 onChange={(e) => {
                   setLocationId(e.target.value);
-                  const selectedLoc = locations.find((l) => String(l.id) === String(e.target.value));
-                  if (selectedLoc) setFreeTextLocation(selectedLoc.label || selectedLoc.name);
+                  const selectedLoc = locations.find(
+                    (l) => String(l.id) === String(e.target.value),
+                  );
+                  if (selectedLoc)
+                    setFreeTextLocation(selectedLoc.label || selectedLoc.name);
                 }}
                 className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none"
               >
@@ -213,7 +234,7 @@ export default function PostItemModal({ isOpen, onClose, initialType = 'LOST' })
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+              <label className="block text-lg font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
                 Date *
               </label>
               <Input
@@ -223,7 +244,7 @@ export default function PostItemModal({ isOpen, onClose, initialType = 'LOST' })
               />
             </div>
             <div>
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+              <label className="block text-lg font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
                 Approximate Time
               </label>
               <Input
@@ -235,7 +256,7 @@ export default function PostItemModal({ isOpen, onClose, initialType = 'LOST' })
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+            <label className="block text-lg font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
               Detailed Description & Distinguishing Marks *
             </label>
             <Textarea
@@ -246,12 +267,12 @@ export default function PostItemModal({ isOpen, onClose, initialType = 'LOST' })
               error={errors.description}
             />
             {errors.description && (
-              <p className="text-xs text-rose-500 mt-1">{errors.description}</p>
+              <p className="text-lg text-rose-500 mt-1">{errors.description}</p>
             )}
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+            <label className="block text-lg font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
               Confidential Hidden Detail (For Ownership Verification)
             </label>
             <Input
@@ -259,14 +280,15 @@ export default function PostItemModal({ isOpen, onClose, initialType = 'LOST' })
               onChange={(e) => setHiddenDetail(e.target.value)}
               placeholder="e.g. Serial number, desktop wallpaper, student ID number inside..."
             />
-            <p className="text-[11px] text-slate-400 mt-1">
-              Kept hidden. Claimants must describe this detail to verify legitimate ownership.
+            <p className="text-[16px] text-slate-400 mt-1">
+              Kept hidden. Claimants must describe this detail to verify
+              legitimate ownership.
             </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+              <label className="block text-lg font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
                 Contact Info / Desk *
               </label>
               <Input
@@ -276,37 +298,51 @@ export default function PostItemModal({ isOpen, onClose, initialType = 'LOST' })
                 error={errors.contactInfo}
               />
               {errors.contactInfo && (
-                <p className="text-xs text-rose-500 mt-1">{errors.contactInfo}</p>
+                <p className="text-lg text-rose-500 mt-1">
+                  {errors.contactInfo}
+                </p>
               )}
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+              <label className="block text-lg font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
                 Upload Photo (API Upload)
               </label>
-              <label className="flex items-center gap-2 px-3 py-2.5 rounded-xl border border-dashed border-slate-300 dark:border-slate-700 hover:border-blue-500 bg-slate-50 dark:bg-slate-800/60 cursor-pointer text-xs text-slate-600 dark:text-slate-300">
+              <label className="flex items-center gap-2 px-3 py-2.5 rounded-xl border border-dashed border-slate-300 dark:border-slate-700 hover:border-blue-500 bg-slate-50 dark:bg-slate-800/60 cursor-pointer text-lg text-slate-600 dark:text-slate-300">
                 {isUploading ? (
                   <Loader2 className="w-4 h-4 animate-spin text-blue-600" />
                 ) : (
                   <Upload className="w-4 h-4 text-slate-400" />
                 )}
-                <span className="truncate">{photoUrl ? 'Photo Uploaded ✓' : 'Select image file'}</span>
-                <input type="file" accept="image/*" onChange={handleFileUpload} className="hidden" />
+                <span className="truncate">
+                  {photoUrl ? "Photo Uploaded ✓" : "Select image file"}
+                </span>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileUpload}
+                  className="hidden"
+                />
               </label>
             </div>
           </div>
 
           <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100 dark:border-slate-800">
-            <Button type="button" variant="outline" onClick={onClose} disabled={isLoading}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={onClose}
+              disabled={isLoading}
+            >
               Cancel
             </Button>
             <Button
               type="submit"
-              variant={type === 'LOST' ? 'coral' : 'success'}
+              variant={type === "LOST" ? "coral" : "success"}
               isLoading={isLoading}
               className="rounded-xl px-6"
             >
-              Publish {type === 'LOST' ? 'Lost Item' : 'Found Item'} Report
+              Publish {type === "LOST" ? "Lost Item" : "Found Item"} Report
             </Button>
           </div>
         </form>

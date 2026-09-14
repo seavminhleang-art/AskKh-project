@@ -1,15 +1,15 @@
-import React from 'react';
-import { AlertTriangle, X } from 'lucide-react';
-import Button from '../ui/Button';
+import React from "react";
+import { AlertTriangle, X } from "lucide-react";
+import Button from "../ui/Button";
 
 export default function ConfirmDialog({
   isOpen,
   onClose,
   onConfirm,
-  title = 'Are you sure?',
-  description = 'This action cannot be undone. Please confirm to proceed.',
-  confirmText = 'Confirm',
-  cancelText = 'Cancel',
+  title = "Are you sure?",
+  description = "This action cannot be undone. Please confirm to proceed.",
+  confirmText = "Confirm",
+  cancelText = "Cancel",
   isDestructive = true,
   isLoading = false,
 }) {
@@ -29,15 +29,19 @@ export default function ConfirmDialog({
           <div
             className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 ${
               isDestructive
-                ? 'bg-rose-100 text-rose-600 dark:bg-rose-950/50 dark:text-rose-400'
-                : 'bg-blue-100 text-blue-600 dark:bg-blue-950/50 dark:text-blue-400'
+                ? "bg-rose-100 text-rose-600 dark:bg-rose-950/50 dark:text-rose-400"
+                : "bg-blue-100 text-blue-600 dark:bg-blue-950/50 dark:text-blue-400"
             }`}
           >
             <AlertTriangle className="w-6 h-6" />
           </div>
           <div>
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white">{title}</h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Please review before confirming</p>
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+              {title}
+            </h3>
+            <p className="text-lg text-slate-500 dark:text-slate-400 mt-0.5">
+              Please review before confirming
+            </p>
           </div>
         </div>
 
@@ -50,7 +54,7 @@ export default function ConfirmDialog({
             {cancelText}
           </Button>
           <Button
-            variant={isDestructive ? 'destructive' : 'default'}
+            variant={isDestructive ? "destructive" : "default"}
             onClick={onConfirm}
             isLoading={isLoading}
           >
