@@ -47,15 +47,15 @@
   --font-brand: "Google Sans", "Product Sans", "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-khmer: "Noto Sans Khmer", "Khmer OS System", sans-serif;
 
-  /* AskKH brand */
-  --askkh-primary: #0050f3;
-  --askkh-primary-hover: #0047dc;
-  --askkh-primary-dark: #001c55;
+  /* NEXA brand */
+  --nexa-primary: #0050f3;
+  --nexa-primary-hover: #0047dc;
+  --nexa-primary-dark: #001c55;
 
-  --askkh-secondary: #ed2b2a;
-  --askkh-secondary-light: #fdecec;
+  --nexa-secondary: #ed2b2a;
+  --nexa-secondary-light: #fdecec;
 
-  --askkh-accent: #4caf4f;
+  --nexa-accent: #4caf4f;
 
   /* Text */
   --text-primary: #101010;
@@ -589,11 +589,11 @@ label {
   border:
     1.5px
     solid
-    var(--askkh-primary);
+    var(--nexa-primary);
 
   border-radius: 15px;
 
-  color: var(--askkh-primary);
+  color: var(--nexa-primary);
   background: var(--background);
 
   font-size: 15px;
@@ -612,7 +612,7 @@ label {
   color: #ffffff;
 
   background:
-    var(--askkh-primary);
+    var(--nexa-primary);
 
   box-shadow:
     0 5px 15px
@@ -742,7 +742,7 @@ label {
   margin-left: 6px;
 
   color:
-    var(--askkh-primary);
+    var(--nexa-primary);
 
   font-weight: 500;
 
@@ -752,7 +752,7 @@ label {
 
 .register-heading a:hover {
   color:
-    var(--askkh-primary-dark);
+    var(--nexa-primary-dark);
 }
 
 /* =========================================================
@@ -788,7 +788,7 @@ label {
 
 .form-group label span {
   color:
-    var(--askkh-secondary);
+    var(--nexa-secondary);
 }
 
 /* =========================================================
@@ -829,7 +829,7 @@ label {
 
 .input-wrapper:focus-within {
   border-color:
-    var(--askkh-primary);
+    var(--nexa-primary);
 
   box-shadow:
     0 0 0 3px
@@ -934,10 +934,26 @@ label {
 
 .password-toggle:hover {
   color:
-    var(--askkh-primary);
+    var(--nexa-primary);
 
   background:
     rgba(0, 80, 243, 0.08);
+}
+
+.password-toggle:focus-visible,
+.forgot-password:focus-visible,
+.primary-auth-button:focus-visible,
+.social-button:focus-visible,
+.back-button:focus-visible,
+.auth-switch-text a:focus-visible,
+.register-heading a:focus-visible,
+.terms-checkbox a:focus-visible {
+  outline:
+    3px
+    solid
+    rgba(0, 80, 243, 0.35);
+
+  outline-offset: 3px;
 }
 
 /* =========================================================
@@ -1029,10 +1045,10 @@ input:checked
 +
 .custom-checkbox {
   border-color:
-    var(--askkh-primary);
+    var(--nexa-primary);
 
   background:
-    var(--askkh-primary);
+    var(--nexa-primary);
 }
 
 .checkbox-label
@@ -1063,6 +1079,18 @@ input:checked
     rotate(45deg);
 }
 
+.checkbox-label
+input:focus-visible
++
+.custom-checkbox {
+  outline:
+    3px
+    solid
+    rgba(0, 80, 243, 0.25);
+
+  outline-offset: 2px;
+}
+
 .checkbox-text {
   color:
     var(--muted-foreground);
@@ -1075,7 +1103,7 @@ input:checked
   padding: 0;
 
   color:
-    var(--askkh-primary);
+    var(--nexa-primary);
 
   background:
     transparent;
@@ -1091,7 +1119,7 @@ input:checked
 
 .forgot-password:hover {
   color:
-    var(--askkh-primary-dark);
+    var(--nexa-primary-dark);
 
   text-decoration: underline;
 }
@@ -1103,9 +1131,18 @@ input:checked
 }
 
 .terms-checkbox {
+  display: flex;
+
   align-items: flex-start;
 
+  gap: 9px;
+
   margin-bottom: 26px;
+}
+
+.terms-checkbox
+.checkbox-label {
+  flex: 0 0 auto;
 }
 
 .terms-checkbox
@@ -1122,7 +1159,7 @@ input:checked
   margin: 0 4px;
 
   color:
-    var(--askkh-primary);
+    var(--nexa-primary);
 
   font-weight: 500;
 
@@ -1132,7 +1169,7 @@ input:checked
 
 .terms-checkbox a:hover {
   color:
-    var(--askkh-primary-dark);
+    var(--nexa-primary-dark);
 }
 
 /* =========================================================
@@ -1155,7 +1192,7 @@ input:checked
   color: #ffffff;
 
   background:
-    var(--askkh-primary);
+    var(--nexa-primary);
 
   font-size: 15px;
   font-weight: 600;
@@ -1170,7 +1207,7 @@ input:checked
 
 .primary-auth-button:hover {
   background:
-    var(--askkh-primary-hover);
+    var(--nexa-primary-hover);
 
   box-shadow:
     0 8px 22px
@@ -1330,7 +1367,7 @@ input:checked
   margin-left: 7px;
 
   color:
-    var(--askkh-primary);
+    var(--nexa-primary);
 
   font-weight: 600;
 
@@ -1340,7 +1377,7 @@ input:checked
 
 .auth-switch-text a:hover {
   color:
-    var(--askkh-primary-dark);
+    var(--nexa-primary-dark);
 }
 
 /* =========================================================
@@ -1609,7 +1646,7 @@ input:checked
   border-radius: 999px;
 
   background:
-    var(--askkh-secondary);
+    var(--nexa-secondary);
 
   color: #ffffff;
 
@@ -1782,5 +1819,20 @@ input:checked
 
   .auth-illustration-wrapper {
     display: none !important;
+  }
+}
+
+/* =========================================================
+   AUTH VISUAL BALANCE
+   The registration artwork is deliberately wider than the login artwork.
+   Giving it a small desktop-only scale lift lets it carry the same visual
+   weight as the taller registration form, while the section safely clips
+   only its empty outer canvas.
+   ========================================================= */
+
+@media (min-width: 901px) {
+  .register-illustration {
+    width: 114% !important;
+    max-width: none !important;
   }
 }

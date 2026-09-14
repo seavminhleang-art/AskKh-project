@@ -299,7 +299,7 @@ export default function Navbar({
           </span>
 
           <span className="text-xl font-bold tracking-tight text-brand-primary">
-            AskKH
+            NEXA
           </span>
         </a>
 

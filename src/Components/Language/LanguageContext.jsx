@@ -10,13 +10,13 @@ const LanguageContext = createContext(null);
 
 export const LanguageProvider = ({ children }) => {
   const [language, setLanguage] = useState(() => {
-    const savedLanguage = localStorage.getItem("askkh-language");
+    const savedLanguage = localStorage.getItem("nexa-language");
 
     return savedLanguage || "km";
   });
 
   useEffect(() => {
-    localStorage.setItem("askkh-language", language);
+    localStorage.setItem("nexa-language", language);
 
     document.documentElement.lang = language === "km" ? "km" : "en";
   }, [language]);

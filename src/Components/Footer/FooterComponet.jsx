@@ -5,6 +5,10 @@ import {
 } from "lucide-react";
 
 import {
+  Link,
+} from "react-router";
+
+import {
   FaFacebookF,
   FaInstagram,
   FaLinkedinIn,
@@ -21,10 +25,14 @@ const quickLinks = [
 ];
 
 const legalLinks = [
-  "Contact",
-  "Privacy Policy",
-  "Terms of Service",
-  "Legal",
+  {
+    label: "Privacy Policy",
+    to: "/privacy",
+  },
+  {
+    label: "Terms of Service",
+    to: "/terms",
+  },
 ];
 
 export default function FooterComponent() {
@@ -106,13 +114,13 @@ export default function FooterComponent() {
 
             <ul className="space-y-3">
               {legalLinks.map((link) => (
-                <li key={link}>
-                  <a
-                    href="#"
+                <li key={link.to}>
+                  <Link
+                    to={link.to}
                     className="text-sm text-gray-400 transition-colors duration-200 hover:text-brand-secondary"
                   >
-                    {link}
-                  </a>
+                    {link.label}
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -178,7 +186,7 @@ export default function FooterComponent() {
         {/* Bottom */}
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-6 sm:flex-row">
           <p className="order-2 text-xs text-gray-500 sm:order-1">
-            © 2026 AskKH. All rights reserved.
+            © 2026 NEXA. All rights reserved.
           </p>
 
           <div className="order-1 flex items-center gap-3 sm:order-2">

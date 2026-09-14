@@ -13,6 +13,7 @@ import {
 export default function GithubComponent({
   label = "GitHub",
   loadingLabel = "...",
+  onBeforeAuth,
   onSuccess,
   onError,
   disabled = false,
@@ -27,6 +28,13 @@ export default function GithubComponent({
       if (
         loading ||
         disabled
+      ) {
+        return;
+      }
+
+      if (
+        onBeforeAuth?.() ===
+        false
       ) {
         return;
       }
@@ -68,6 +76,9 @@ export default function GithubComponent({
       disabled={
         loading ||
         disabled
+      }
+      aria-busy={
+        loading
       }
     >
       <Icon

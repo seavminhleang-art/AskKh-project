@@ -24,6 +24,8 @@ import LoginPage from "./Components/Auth/LoginPage.jsx";
 
 import RegisterPage from "./Components/Auth/RegisterPage.jsx";
 
+import LegalPage from "./Components/Legal/LegalPage.jsx";
+
 import {
   store,
 } from "./Components/redux/store.js";
@@ -52,6 +54,24 @@ const router =
       path: "/register",
       element: <RegisterPage />,
     },
+
+    {
+      path: "/terms",
+      element: (
+        <LegalPage
+          documentType="terms"
+        />
+      ),
+    },
+
+    {
+      path: "/privacy",
+      element: (
+        <LegalPage
+          documentType="privacy"
+        />
+      ),
+    },
   ]);
 
 createRoot(
@@ -66,7 +86,7 @@ createRoot(
           attribute="class"
           defaultTheme="light"
           enableSystem={true}
-          storageKey="askkh-theme"
+          storageKey="nexa-theme"
           disableTransitionOnChange={
             false
           }
