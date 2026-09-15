@@ -32,20 +32,71 @@ export default function QACommunity({ darkMode: propDarkMode, language: propLang
       title: "How you patch KDE on FreeBSD depends on whether you mean updating to the latest KDE packages or applying a custom different patch file to a specific KDE port component.",
       tags: ["linux", "freebsd", "patching"],
       author: { name: "Mom Lisa", avatar: "../../src/assets/Website/Lisa.jpg", time: "3days ago" },
-      views: "651,324", likes: "36,645", comments: 0,
+      views: 651324, 
+      likes: 36645, 
+      isLiked: false, 
+      comments: [
+        {
+          id: 101,
+          text: "Very helpful guide!",
+          author: { name: "Tong An", avatar: "../../src/assets/Website/Tong An.jpg", time: "2 days ago" },
+          likes: 5,
+          isLiked: false,
+          isOwnComment: false
+        }
+      ],
       image: "https://picsum.photos/300/200?random=1",
       isOwnPost: true
     },
     {
       id: 2,
-      title: "I am building a high-throughput collaborative app where multiple users can upvote, edit items, and change tags simultaneously. When performing optimistic updates with `useMutation` onQueryStarted...",
+      title: "I am building a high-throughput collaborative app where multiple users can upvote, edit items, and change tags simultaneously.",
       tags: ["react", "typescript", "vite"],
       author: { name: "Tong An", avatar: "../../src/assets/Website/Tong An.jpg", time: "3days ago" },
-      views: "244,564", likes: "10,920", comments: 3,
+      views: 244564, 
+      likes: 10920, 
+      isLiked: false, 
+      comments: [],
       image: "https://picsum.photos/300/200?random=2",
       isOwnPost: false
     }
   ]);
+
+  // Handle post selection & auto-increment views (+1)
+  const handleSelectPost = (id) => {
+    setPosts((prevPosts) =>
+      prevPosts.map((post) =>
+        post.id === id ? { ...post, views: post.views + 1 } : post
+      )
+    );
+    setSelectedPostId(id);
+  };
+
+  // Toggle post like (+1 / -1 loop)
+  const handleToggleLike = (id) => {
+    setPosts((prevPosts) =>
+      prevPosts.map((post) => {
+        if (post.id === id) {
+          const isLiked = post.isLiked;
+          return {
+            ...post,
+            isLiked: !isLiked,
+            likes: isLiked ? post.likes - 1 : post.likes + 1
+          };
+        }
+        return post;
+      })
+    );
+  };
+
+  // Handle updating post comments directly from DetailView
+  const handleUpdateComments = (postId, updatedComments) => {
+    setPosts((prevPosts) =>
+      prevPosts.map((post) =>
+        post.id === postId ? { ...post, comments: updatedComments } : post
+      )
+    );
+  };
 
   const toggleBookmark = (id) => {
     setBookmarkedPostIds((prev) =>
@@ -106,11 +157,11 @@ export default function QACommunity({ darkMode: propDarkMode, language: propLang
               darkMode={darkMode}
               language={currentLang}
               post={selectedPost} 
-              onBack={() => setSelectedPostId(null)} 
+              onBack={() => setSelectedPostId(null)}
+              onUpdateComments={(updatedComments) => handleUpdateComments(selectedPost.id, updatedComments)}
             />
           ) : (
             <div className="flex-1 space-y-4">
-              {/* Post Trigger Input */}
               <div className={`rounded-2xl p-2.5 border shadow-sm flex items-center space-x-3 transition-colors ${
                 darkMode ? "bg-zinc-900 border-zinc-800" : "bg-white border-gray-100"
               }`}>
@@ -134,7 +185,6 @@ export default function QACommunity({ darkMode: propDarkMode, language: propLang
                 </button>
               </div>
 
-              {/* Feed Content */}
               {displayedPosts.length === 0 ? (
                 <div className={`rounded-2xl p-8 border text-center text-xs transition-colors ${
                   darkMode ? "bg-zinc-900 border-zinc-800 text-zinc-500" : "bg-white border-gray-100 text-gray-400"
@@ -150,7 +200,8 @@ export default function QACommunity({ darkMode: propDarkMode, language: propLang
                     language={currentLang}
                     isBookmarked={bookmarkedPostIds.includes(post.id)}
                     onToggleBookmark={toggleBookmark}
-                    onSelectPost={setSelectedPostId}
+                    onSelectPost={handleSelectPost}
+                    onToggleLike={handleToggleLike}
                     onDeletePost={handleDeletePost}
                   />
                 ))

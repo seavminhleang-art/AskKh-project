@@ -1,5 +1,5 @@
 import React from 'react';
-import { Bookmark, Trash2 } from 'lucide-react';
+import { Bookmark, Trash2, Eye, Heart, MessageSquare } from 'lucide-react';
 import { useOutletContext } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -15,8 +15,10 @@ const PostCard = ({
   image, 
   isBookmarked, 
   isOwnPost, 
+  isLiked,
   onToggleBookmark, 
   onSelectPost, 
+  onToggleLike,
   onDeletePost,
   darkMode: propDarkMode 
 }) => {
@@ -24,8 +26,10 @@ const PostCard = ({
   const context = useOutletContext();
   const darkMode = propDarkMode ?? context?.darkMode ?? false;
 
+  const commentCount = Array.isArray(comments) ? comments.length : (comments || 0);
+
   return (
-    <div className={`rounded-2xl p-4 border shadow-sm transition-all hover:shadow-md ${
+    <div className={`rounded-2xl p-4 border transition-all ${
       darkMode ? "bg-zinc-900 border-zinc-800 text-slate-100" : "bg-white border-gray-100 text-gray-900"
     }`}>
       <div className="flex gap-4">
@@ -115,10 +119,33 @@ const PostCard = ({
               </div>
             </div>
 
-            <div className={`flex items-center space-x-3 text-[10px] ${darkMode ? "text-zinc-400" : "text-gray-400"}`}>
-              <span>{views} {t('post.views')}</span>
-              <span>{likes} {t('post.likes')}</span>
-              <span>{comments} {t('post.comments')}</span>
+            {/* Interactive Views, Likes, Comments */}
+            <div className={`flex items-center space-x-3 text-[11px] ${darkMode ? "text-zinc-400" : "text-gray-500"}`}>
+              <button 
+                onClick={() => onSelectPost(id)}
+                className="flex items-center gap-1 hover:text-blue-500 transition-colors"
+              >
+                <Eye className="w-3.5 h-3.5" />
+                {Number(views).toLocaleString()}
+              </button>
+
+              <button 
+                onClick={() => onToggleLike(id)}
+                className={`flex items-center gap-1 transition-colors ${
+                  isLiked ? "text-rose-500 font-bold" : "hover:text-rose-500"
+                }`}
+              >
+                <Heart className={`w-3.5 h-3.5 ${isLiked ? "fill-rose-500 text-rose-500" : ""}`} />
+                {Number(likes).toLocaleString()}
+              </button>
+
+              <button 
+                onClick={() => onSelectPost(id)}
+                className="flex items-center gap-1 hover:text-blue-500 transition-colors"
+              >
+                <MessageSquare className="w-3.5 h-3.5" />
+                {commentCount}
+              </button>
             </div>
           </div>
         </div>

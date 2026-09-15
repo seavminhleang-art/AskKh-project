@@ -13,14 +13,14 @@ const SidebarRight = ({ darkMode: propDarkMode, language = 'en' }) => {
   const [followingIds, setFollowingIds] = useState([1, 2, 3, 4, 5]);
 
   const people = [
-    { id: 1, name: 'CheakChing LyHeng', role: 'Java Developer', avatar: '../../src/assets/Website/Ly heng.jpg' },
-    { id: 2, name: 'sroeun sothearith', role: 'Frontend Developer', avatar: '../../src/assets/Website/Rith.jpg' },
+    { id: 1, name: 'Cheakching Lyheng', role: 'Java Developer', avatar: '../../src/assets/Website/Ly heng.jpg' },
+    { id: 2, name: 'Sroeun Sothearith', role: 'Frontend Developer', avatar: '../../src/assets/Website/Rith.jpg' },
     { id: 3, name: 'Venthan Tharath', role: 'Frontend Developer', avatar: '../../src/assets/Website/Tharat.jpg' },
     { id: 4, name: 'Leang Seavminh', role: 'Java Developer', avatar: '../../src/assets/Website/Seav minh.jpg' },
     { id: 5, name: 'Neang Thana', role: 'Frontend Developer', avatar: '../../src/assets/Website/Thana.jpg' },
     { id: 6, name: 'Mom Lisa', role: 'Frontend Developer', avatar: '../../src/assets/Website/Lisa.jpg' },
     { id: 7, name: 'Cheat Chanmoniza', role: 'Frontend Developer', avatar: '../../src/assets/Website/Nisa.jpg' },
-    { id: 8, name: 'Tong An', role: 'Java Developer', avatar: '../../src/assets/Website/Tong An.jpg' }
+    { id: 8, name: 'Hor Tongan', role: 'Java Developer', avatar: '../../src/assets/Website/Tong An.jpg' }
   ];
 
   const toggleFollow = (id) => {

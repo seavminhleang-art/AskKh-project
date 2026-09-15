@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Bold, Italic, Underline, List, ListOrdered, Code, Upload, X } from 'lucide-react';
+import { Upload, X } from 'lucide-react';
 import { useOutletContext } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -75,7 +75,7 @@ const CreatePostView = ({ onAddPost, onCancel, darkMode: propDarkMode }) => {
       <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
           {/* Details Section */}
-          <div className={`rounded-2xl p-6 border shadow-sm space-y-4 transition-colors ${
+          <div className={`rounded-2xl p-6 border space-y-4 transition-colors ${
             darkMode ? "bg-zinc-900 border-zinc-800 text-slate-100" : "bg-white border-gray-100 text-gray-800"
           }`}>
             <h3 className={`font-bold text-sm ${darkMode ? "text-slate-200" : "text-gray-800"}`}>
@@ -105,18 +105,6 @@ const CreatePostView = ({ onAddPost, onCancel, darkMode: propDarkMode }) => {
                 {t('create.contentLabel')}
               </label>
               <div className={`border rounded-xl overflow-hidden ${darkMode ? "border-zinc-700" : "border-gray-200"}`}>
-                <div className={`p-2 border-b flex flex-wrap gap-2 ${
-                  darkMode ? "bg-zinc-800 border-zinc-700 text-slate-300" : "bg-gray-50 border-gray-200 text-gray-600"
-                }`}>
-                  <button type="button" className={`p-1 rounded transition ${darkMode ? "hover:bg-zinc-700" : "hover:bg-gray-200"}`}><Bold className="w-3.5 h-3.5" /></button>
-                  <button type="button" className={`p-1 rounded transition ${darkMode ? "hover:bg-zinc-700" : "hover:bg-gray-200"}`}><Italic className="w-3.5 h-3.5" /></button>
-                  <button type="button" className={`p-1 rounded transition ${darkMode ? "hover:bg-zinc-700" : "hover:bg-gray-200"}`}><Underline className="w-3.5 h-3.5" /></button>
-                  <span className={darkMode ? "text-zinc-600" : "text-gray-300"}>|</span>
-                  <button type="button" className={`p-1 rounded transition ${darkMode ? "hover:bg-zinc-700" : "hover:bg-gray-200"}`}><List className="w-3.5 h-3.5" /></button>
-                  <button type="button" className={`p-1 rounded transition ${darkMode ? "hover:bg-zinc-700" : "hover:bg-gray-200"}`}><ListOrdered className="w-3.5 h-3.5" /></button>
-                  <span className={darkMode ? "text-zinc-600" : "text-gray-300"}>|</span>
-                  <button type="button" className={`p-1 rounded transition ${darkMode ? "hover:bg-zinc-700" : "hover:bg-gray-200"}`}><Code className="w-3.5 h-3.5" /></button>
-                </div>
                 <textarea
                   rows="6"
                   value={content}
@@ -131,7 +119,7 @@ const CreatePostView = ({ onAddPost, onCancel, darkMode: propDarkMode }) => {
           </div>
 
           {/* Cover Image */}
-          <div className={`rounded-2xl p-6 border shadow-sm space-y-4 transition-colors ${
+          <div className={`rounded-2xl p-6 border space-y-4 transition-colors ${
             darkMode ? "bg-zinc-900 border-zinc-800" : "bg-white border-gray-100"
           }`}>
             <h3 className={`font-bold text-sm ${darkMode ? "text-slate-200" : "text-gray-800"}`}>
@@ -141,7 +129,7 @@ const CreatePostView = ({ onAddPost, onCancel, darkMode: propDarkMode }) => {
               darkMode ? "border-zinc-700 hover:bg-zinc-800/50" : "border-gray-200 hover:bg-gray-50"
             }`}>
               {coverImage ? (
-                <img src='../../src/assets/Website/Lisa.jpg' alt="Cover Preview" className="max-h-40 rounded-xl object-cover" />
+                <img src={coverImage} alt="Cover Preview" className="max-h-40 rounded-xl object-cover" />
               ) : (
                 <>
                   <Upload className={`w-8 h-8 mb-2 ${darkMode ? "text-zinc-500" : "text-gray-400"}`} />
@@ -158,7 +146,7 @@ const CreatePostView = ({ onAddPost, onCancel, darkMode: propDarkMode }) => {
           <div className="flex items-center space-x-3">
             <button
               type="submit"
-              className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-2 rounded-xl text-xs transition-colors shadow-xs"
+              className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-2 rounded-xl text-xs transition-colors"
             >
               {t('create.addBlog')}
             </button>
@@ -178,7 +166,7 @@ const CreatePostView = ({ onAddPost, onCancel, darkMode: propDarkMode }) => {
 
         {/* Dynamic Tag Input Sidebar */}
         <div className="space-y-6">
-          <div className={`rounded-2xl p-6 border shadow-sm space-y-4 transition-colors ${
+          <div className={`rounded-2xl p-6 border space-y-4 transition-colors ${
             darkMode ? "bg-zinc-900 border-zinc-800" : "bg-white border-gray-100"
           }`}>
             <h3 className={`font-bold text-sm ${darkMode ? "text-slate-200" : "text-gray-800"}`}>
