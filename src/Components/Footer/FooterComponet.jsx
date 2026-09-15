@@ -1,5 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { useTheme } from "../../context/ThemeContext.jsx";
 import { MapPin, Phone, Mail } from "lucide-react";
 import {
   FaFacebookF,
@@ -9,43 +11,25 @@ import {
 } from "react-icons/fa";
 
 import istadLogo from "../../assets/Website/istad-logo.png";
-import { useTheme } from "../theme-provider.jsx";
 
-const quickLinks = [
-  { label: "Home", to: "/" },
-  { label: "Community Q&A", to: "/community/qa" },
-  { label: "Lost & Found", to: "/community/lost-found" },
-  { label: "About", to: "/about" },
-];
-const Legal = [
-  { label: "Privacy Policy", to: "/privacy-policy" },
-  { label: "Terms & Conditions", to: "/terms" },
-];
 export default function FooterComponent() {
-  const { resolvedTheme } = useTheme();
-  const darkMode = resolvedTheme === "dark";
+  const { t } = useTranslation();
+  const { darkMode } = useTheme();
 
-  const socialLinks = [
-    {
-      label: "Facebook",
-      icon: FaFacebookF,
-    },
-    {
-      label: "Twitter",
-      icon: FaTwitter,
-    },
-    {
-      label: "Instagram",
-      icon: FaInstagram,
-    },
-    {
-      label: "LinkedIn",
-      icon: FaLinkedinIn,
-    },
+  const quickLinks = [
+    { label: t("footer.quickLinks.home"), to: "/" },
+    { label: t("footer.quickLinks.qa"), to: "/community/qa" },
+    { label: t("footer.quickLinks.lostFound"), to: "/community/lost-found" },
+    { label: t("footer.quickLinks.about"), to: "/about" },
+  ];
+
+  const Legal = [
+    { label: t("footer.legal.privacy"), to: "/privacy-policy" },
+    { label: t("footer.legal.terms"), to: "/terms" },
   ];
 
   return (
-    <footer className="site-footer relative overflow-hidden bg-brand-primary-dark text-gray-300 ">
+    <footer className={`relative overflow-hidden transition-colors duration-300 ${darkMode ? "bg-zinc-950 text-gray-300" : "bg-brand-primary-dark text-gray-300"}`}>
       {/* subtle vertical stripe background, matches reference */}
       <div
         className="pointer-events-none absolute inset-0 opacity-10"
@@ -60,34 +44,32 @@ export default function FooterComponent() {
         <div className="grid grid-cols-1 items-start gap-10 sm:grid-cols-2 lg:grid-cols-5">
           {/* Brand */}
           <div className="lg:col-span-1">
-            <div className="flex items-center gap-2 mb-4">
-              <span className="flex items-center justify-center w-9 h-9 rounded-full bg-brand-secondary text-white font-bold text-sm shrink-0">
-                A
-              </span>
-
-              <span className="text-lg font-semibold text-white">
-                Ask &amp; Found
-              </span>
+            <div className="flex items-center gap-2 mb-1">
+              <Link to="/" className="flex items-center group py-0.9 shrink-0">
+                <img
+                  src={darkMode ? "src/assets/Website/download_dark.png" : "src/assets/Website/download.png"}
+                  alt={`${t("brand")} Logo`}
+                  className="h-18 w-50 object-contain group-hover:scale-105 transition-transform duration-300"
+                />
+              </Link>
             </div>
-
-            <p className="max-w-[220px] text-sm leading-relaxed text-gray-400">
-              We are a leading company dedicated to products and services to
-              cater to their needs.
+            <p className="text-sm leading-relaxed text-gray-400 max-w-[220px]">
+              {t("footer.brandDesc")}
             </p>
           </div>
 
-          {/* Quick Links */}
-          <div>
-            <h3 className="mb-4 text-sm font-semibold tracking-wide text-white">
-              QUICK LINK
+          {/* Quick Link */}
+          <div className="no-transition">
+            <h3 className="text-white font-semibold text-sm tracking-wide mb-4">
+              {t("footer.quickLinksTitle")}
             </h3>
 
             <ul className="space-y-3">
-              {quickLinks.map((link, idx) => (
-                <li key={idx}>
+              {quickLinks.map((link) => (
+                <li key={link.label}>
                   <Link
                     to={link.to}
-                    className="text-sm text-gray-400 hover:text-brand-secondary transition-colors duration-200 no-underline"
+                    className="text-sm text-gray-400 hover:text-brand-secondary transition-all duration-200 no-underline hover:translate-x-1 inline-block"
                   >
                     {link.label}
                   </Link>
@@ -96,10 +78,10 @@ export default function FooterComponent() {
             </ul>
           </div>
 
-          {/* Legal / Support Links */}
-          <div>
+          {/* Legal & Policies */}
+          <div className="no-transition">
             <h3 className="text-white font-semibold text-sm tracking-wide mb-4">
-              LEGAL & POLICIES
+              {t("footer.legalTitle")}
             </h3>
 
             <ul className="space-y-3">
@@ -107,7 +89,7 @@ export default function FooterComponent() {
                 <li key={item.label}>
                   <Link
                     to={item.to}
-                    className="text-sm text-gray-400 hover:text-brand-secondary transition-colors duration-200 no-underline"
+                    className="text-sm text-gray-400 hover:text-brand-secondary transition-all duration-200 no-underline hover:translate-x-1 inline-block"
                   >
                     {item.label}
                   </Link>
@@ -117,9 +99,9 @@ export default function FooterComponent() {
           </div>
 
           {/* Address & Contact */}
-          <div>
-            <h3 className="mb-4 text-sm font-semibold tracking-wide text-white">
-              ADDRESS &amp; CONTACT
+          <div className="no-transition">
+            <h3 className="text-white font-semibold text-sm tracking-wide mb-4">
+              {t("footer.contactTitle")}
             </h3>
 
             <ul className="space-y-3">
@@ -145,8 +127,8 @@ export default function FooterComponent() {
 
           {/* Sponsor */}
           <div className="self-start">
-            <h3 className="mb-4 text-sm font-semibold tracking-wide text-white">
-            ORGANIZED AND SPONSORED BY 
+            <h3 className="text-white font-semibold text-sm tracking-wide mb-4">
+              {t("footer.organizedTitle")}
             </h3>
 
             <img
@@ -157,10 +139,10 @@ export default function FooterComponent() {
           </div>
         </div>
 
-        {/* Bottom */}
-        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-6 sm:flex-row">
-          <p className="order-2 text-xs text-gray-500 sm:order-1">
-            © 2026 AskKH. All rights reserved.
+        {/* Bottom bar */}
+        <div className="mt-12 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-xs text-gray-500 order-2 sm:order-1">
+            {t("footer.copyright")}
           </p>
           <div className="flex items-center gap-3 order-1 sm:order-2">
             {[FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn].map((Icon, i) => (
@@ -168,7 +150,7 @@ export default function FooterComponent() {
                 key={i}
                 href="#"
                 aria-label="Social link"
-                className="flex items-center justify-center w-8 h-8 rounded-full bg-white/10 text-gray-300 hover:bg-brand-secondary hover:text-white transition-colors duration-200"
+                className="flex items-center justify-center w-8 h-8 rounded-full bg-white/10 text-gray-300 hover:bg-brand-secondary hover:text-white transition-all duration-300 hover:scale-110"
               >
                 <Icon size={13} />
               </a>

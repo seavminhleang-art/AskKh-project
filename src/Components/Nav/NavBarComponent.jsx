@@ -379,6 +379,14 @@ export default function Navbar({
           </button>
 
           <Link
+            to="/auth"
+            className="hidden sm:flex items-center gap-1.5 bg-[var(--color-brand-primary)] text-white font-medium text-xs px-4 py-2 rounded-full border border-transparent transition-transform hover:scale-105 active:scale-95 shadow-sm hover:bg-blue-600 whitespace-nowrap"
+          >
+            <span>{t("getStarted")}</span>
+            <ArrowUpRightIcon className="w-3.5 h-3.5 text-white shrink-0" />
+          </Link>
+
+          <Link
             to="/register"
             className="h-10 px-5.5 inline-flex items-center rounded-full border border-[rgba(255,255,255,0.35)] bg-brand-primary text-white text-sm font-semibold no-underline transition-all duration-200 hover:bg-brand-secondary hover:border-brand-secondary hover:-translate-y-0.5"
           >

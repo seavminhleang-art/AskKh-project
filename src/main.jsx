@@ -15,7 +15,8 @@ import QACommunity from "./Components/Pages/Q&ACommunity.jsx";
 import LoginPage from "./Components/Auth/LoginPage.jsx";
 import RegisterPage from "./Components/Auth/RegisterPage.jsx";
 import { LanguageProvider } from "./Components/Language/LanguageContext.jsx";
-import { ThemeProvider, useTheme } from "./Components/theme-provider.jsx";
+import { ThemeProvider as LegacyThemeProvider } from "./Components/theme-provider.jsx";
+import { ThemeProvider } from "./context/ThemeContext.jsx";
 import store from "./store/store.js";
 import DashboardPage from "./pages/user/DashboardPage.jsx";
 import WorkspaceListPage from "./pages/user/WorkspaceListPage.jsx";
@@ -25,21 +26,7 @@ import ProtectedRoute from "./routes/ProtectedRoute.jsx";
 import UserLayout from "./layouts/UserLayout.jsx";
 
 function RootLayout() {
-  const { resolvedTheme, setTheme } = useTheme();
-  const darkMode = resolvedTheme === "dark";
-
-  const setDarkMode = (nextValue) => {
-    setTheme((currentTheme) => {
-      const currentIsDark = currentTheme === "dark";
-      const nextIsDark = typeof nextValue === "function"
-        ? nextValue(currentIsDark)
-        : nextValue;
-
-      return nextIsDark ? "dark" : "light";
-    });
-  };
-
-  return <App darkMode={darkMode} setDarkMode={setDarkMode} />;
+  return <App />;
 }
 
 const router = createBrowserRouter([
@@ -92,11 +79,13 @@ const root = document.getElementById("root");
 ReactDOM.createRoot(root).render(
   <React.StrictMode>
     <Provider store={store}>
-      <ThemeProvider defaultTheme="light">
-        <LanguageProvider>
-          <RouterProvider router={router} />
-        </LanguageProvider>
-      </ThemeProvider>
+      <LegacyThemeProvider defaultTheme="light">
+        <ThemeProvider>
+          <LanguageProvider>
+            <RouterProvider router={router} />
+          </LanguageProvider>
+        </ThemeProvider>
+      </LegacyThemeProvider>
     </Provider>
   </React.StrictMode>,
 );
