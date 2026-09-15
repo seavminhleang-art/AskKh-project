@@ -1,16 +1,19 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { Outlet } from "react-router-dom";
+import FooterComponent from "./Components/Footer/FooterComponet.jsx";
+import Navbar from "./Components/Nav/NavBarComponent.jsx";
+import PageBackground from "./Components/common/PageBackground.jsx";
 
-function App() {
-  const [count, setCount] = useState(0)
-
+function App({ darkMode, setDarkMode }) {
   return (
     <>
+      <PageBackground />
+      <Navbar />
+      <main>
+        <Outlet context={{ darkMode, setDarkMode }} />
+      </main>
+      <FooterComponent />
     </>
-  )
+  );
 }
 
-export default App
+export default App;

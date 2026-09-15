@@ -1,5 +1,6 @@
 import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+<<<<<<< HEAD
 import * as Icons from "lucide-react";
 import { ChevronDown, X, ArrowRightFromLine, Circle } from "lucide-react";
 import { NAV_ITEMS } from "../../utils/constants";
@@ -21,6 +22,17 @@ function NavIcon({ name, className }) {
   const Icon = Icons[name] ?? Circle;
   return <Icon className={className} />;
 }
+=======
+import { LayoutDashboard, Trophy, X, LogOut } from "lucide-react";
+import { closeMobileSidebar } from "../../features/ui/uiSlice";
+import { logout, selectCurrentUser } from "../../features/auth/authSlice";
+import Avatar from "../common/Avatar";
+
+const NAV_ITEMS = [
+  { path: "/admin", label: "Dashboard", icon: LayoutDashboard, end: true },
+  { path: "/leaderboard", label: "Leaderboard", icon: Trophy },
+];
+>>>>>>> ac72aeefea31aed4c90c9a526961e221d2a1a316
 
 function SidebarContent({ collapsed, onNavigate }) {
   const dispatch = useDispatch();
@@ -41,7 +53,10 @@ function SidebarContent({ collapsed, onNavigate }) {
             <span className="truncate text-[15px] font-semibold text-gray-900 dark:text-white">
               NEXA
             </span>
+<<<<<<< HEAD
             <ChevronDown className="ml-auto h-4 w-4 shrink-0 text-gray-400" />
+=======
+>>>>>>> ac72aeefea31aed4c90c9a526961e221d2a1a316
           </>
         )}
       </div>
@@ -52,6 +67,10 @@ function SidebarContent({ collapsed, onNavigate }) {
             <li key={item.path}>
               <NavLink
                 to={item.path}
+<<<<<<< HEAD
+=======
+                end={item.end}
+>>>>>>> ac72aeefea31aed4c90c9a526961e221d2a1a316
                 onClick={onNavigate}
                 className={({ isActive }) =>
                   `flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
@@ -61,7 +80,11 @@ function SidebarContent({ collapsed, onNavigate }) {
                   }`
                 }
               >
+<<<<<<< HEAD
                 <NavIcon name={item.icon} className="h-[18px] w-[18px] shrink-0" />
+=======
+                <item.icon className="h-[18px] w-[18px] shrink-0" />
+>>>>>>> ac72aeefea31aed4c90c9a526961e221d2a1a316
                 {!collapsed && <span className="truncate">{item.label}</span>}
               </NavLink>
             </li>
@@ -78,7 +101,11 @@ function SidebarContent({ collapsed, onNavigate }) {
           <Avatar name={user?.displayName ?? user?.email} />
           {!collapsed && <span className="text-sm font-medium">Log out</span>}
           {!collapsed && (
+<<<<<<< HEAD
             <ArrowRightFromLine className="ml-auto h-4 w-4 text-gray-400" />
+=======
+            <LogOut className="ml-auto h-4 w-4 text-gray-400" />
+>>>>>>> ac72aeefea31aed4c90c9a526961e221d2a1a316
           )}
         </button>
       </div>

@@ -16,8 +16,13 @@ import Avatar from "../common/Avatar";
 import {
   openMobileSidebar,
   toggleSidebar,
+<<<<<<< HEAD
 } from "../../feature/ui/uiSlice";
 import { logout, selectCurrentUser } from "../../feature/auth/authSlice";
+=======
+} from "../../features/ui/uiSlice";
+import { logout, selectCurrentUser } from "../../features/auth/authSlice";
+>>>>>>> ac72aeefea31aed4c90c9a526961e221d2a1a316
 
 // ---- i18n --------------------------------------------------------------
 // Swap this for your real i18n solution (react-i18next, etc.) if you have
@@ -155,7 +160,11 @@ export default function Topbar() {
 
   function handleLogout() {
     dispatch(logout());
+<<<<<<< HEAD
     navigate("/login");
+=======
+    navigate("/leaderboard");
+>>>>>>> ac72aeefea31aed4c90c9a526961e221d2a1a316
   }
 
   function toggleTheme() {
