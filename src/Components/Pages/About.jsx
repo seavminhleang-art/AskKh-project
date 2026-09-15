@@ -6,7 +6,7 @@ import ScrollReveal from "../Animations/ScrollReveal.jsx";
 
 import missionImg from "../../assets/Website/mission.png";
 import missionDarkImg from "../../assets/Website/mission_dark.png";
-import communityImg from "../../assets/Website/community.jpg";
+import communityImg from "../../assets/Website/community.png";
 import communityDarkImg from "../../assets/Website/community_dark.png";
 import visionImg from "../../assets/Website/vision.png";
 import visionDarkImg from "../../assets/Website/vision_dark.png";
