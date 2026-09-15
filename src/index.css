@@ -1,202 +1,110 @@
-@import url("https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;500;600;700&family=Roboto:wght@400;500;600;700&display=swap");
 @import "tailwindcss";
 
-/* ThemeProvider applies `.dark` to <html>; tell Tailwind to use that class. */
+/* Self-hosted Google Sans */
+@font-face {
+  font-family: "Google Sans";
+  src: url("/fonts/GoogleSans-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Google Sans";
+  src: url("/fonts/GoogleSans-Italic.ttf") format("truetype");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Google Sans";
+  src: url("/fonts/GoogleSans-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Google Sans";
+  src: url("/fonts/GoogleSans-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Google Sans";
+  src: url("/fonts/GoogleSans-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --color-brand-primary: #0050F3;
-  --color-brand-primary-light: #E6EEFE;
-  --color-brand-primary-dark :#001C55;
+  --color-brand-primary: #102A56;
+  --color-brand-primary-light: #EBF1FA;
+  --color-brand-primary-dark: #0A1C3B;
+  --color-brand-primary-hover: #1A3E7B;
+
   --color-brand-secondary: #ED2B2A;
   --color-brand-secondary-light: #FDECEC;
-  --color-brand-accent: #4CAF4F;
-  --color-whitesmoke: #f5f5f5;
+  --color-brand-secondary-dark: #B91C1C;
 
-  --font-brand: "Google Sans", "Product Sans", "Kantumruy Pro", Roboto, -apple-system,
-    BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --color-brand-accent: #16A34A;
+  --color-brand-accent-light: #DCFCE7;
+  --color-brand-accent-dark: #15803D;
+
+  --color-brand-canvas: #F5F7F9;
+  --color-brand-card: #FFFFFF;
+
+  /* Override Tailwind's default font-sans with Google Sans */
+  --font-sans: "Google Sans", sans-serif;
 }
 
+html,
 body {
-  font-family: var(--font-brand);
-  background-color: #f5f5f5;
-  color: #333333;
-  margin: 0;
-  padding: 0;
+  font-family: "Google Sans", sans-serif;
+  background-color: #F5F7F9;
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
 }
 
-html.dark body {
-  background-color: #121212;
-  color: #f3f4f6;
-}
-
-/* One home-style background shared by every route. */
 #root {
-  position: relative;
-  isolation: isolate;
-  min-height: 100vh;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
 }
 
-.page-background {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  overflow: hidden;
-  pointer-events: none;
-  background: radial-gradient(ellipse at 50% 0%, #e8eaff 0%, #f5f5f7 55%, #fff 100%);
+.dark body,
+html.dark body {
+  background-color: #020617;
 }
 
-html.dark .page-background {
-  background: radial-gradient(ellipse at 50% 0%, #1a0b2e 0%, #0a0a12 55%, #050507 100%);
+/* When Khmer language is active */
+html[lang="km"] body,
+.font-khmer {
+  font-family: "Google Sans", sans-serif;
 }
 
-.shared-page,
-html.dark .shared-page,
-.shared-page.about-page > section,
-html.dark .shared-page.about-page > section {
-  background: transparent !important;
+/* Custom minimal scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
 }
 
-/* Authentication pages */
-.auth-page {
-  min-height: 100vh;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(420px, 0.9fr);
-  background: #f8fafc;
-  color: #172033;
+::-webkit-scrollbar-track {
+  background: transparent;
 }
 
-.auth-visual-section {
-  position: relative;
-  display: flex;
-  min-height: 100vh;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  padding: 5rem;
-  background: linear-gradient(135deg, #e6eefe 0%, #f4f7ff 58%, #fff 100%);
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.4);
+  border-radius: 9999px;
 }
 
-.auth-illustration-wrapper { width: min(100%, 650px); }
-.auth-illustration { display: block; width: 100%; height: auto; object-fit: contain; }
-
-.back-button {
-  position: absolute;
-  top: 2rem;
-  left: 2rem;
-  display: inline-flex;
-  align-items: center;
-  gap: .5rem;
-  color: #0050f3;
-  font-size: .9rem;
-  font-weight: 600;
-  text-decoration: none;
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 0.6);
 }
 
-.auth-form-section {
-  display: flex;
-  min-height: 100vh;
-  align-items: center;
-  justify-content: center;
-  padding: 3rem 2rem;
-  background: #fff;
-}
+@import "./styles/auth.css";
 
-.login-form-container, .register-form-container { width: min(100%, 430px); }
-.register-form-container { width: min(100%, 500px); }
-.auth-heading { margin-bottom: 2rem; }
-.auth-heading h1 { margin: 0; color: #14213d; font-size: clamp(1.8rem, 3vw, 2.35rem); font-weight: 700; line-height: 1.2; }
-.auth-heading p, .auth-switch-text { color: #64748b; font-size: .9rem; }
-.auth-heading a, .auth-switch-text a, .checkbox-text a { color: #0050f3; font-weight: 600; text-decoration: none; }
-
-.auth-form { display: grid; gap: 1.15rem; }
-.register-form { gap: .95rem; }
-.form-group { display: grid; gap: .45rem; }
-.form-group label { color: #334155; font-size: .88rem; font-weight: 600; }
-.form-group label > span { color: #ed2b2a; }
-.name-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
-.input-wrapper { position: relative; display: flex; align-items: center; border: 1px solid #cbd5e1; border-radius: .65rem; background: #fff; transition: border-color .2s, box-shadow .2s; }
-.input-wrapper:focus-within { border-color: #0050f3; box-shadow: 0 0 0 3px rgb(0 80 243 / .12); }
-.input-wrapper input { width: 100%; border: 0; outline: 0; padding: .82rem 2.7rem; background: transparent; color: #172033; font: inherit; }
-.input-wrapper.no-icon input { padding-inline: .9rem; }
-.input-icon { position: absolute; left: .85rem; color: #64748b; pointer-events: none; }
-.password-toggle { position: absolute; right: .7rem; display: inline-flex; border: 0; padding: .3rem; background: transparent; color: #64748b; cursor: pointer; }
-.login-options { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
-.checkbox-label { display: inline-flex; align-items: center; gap: .5rem; color: #64748b; font-size: .85rem; cursor: pointer; }
-.checkbox-label input { position: absolute; opacity: 0; }
-.custom-checkbox { width: 1rem; height: 1rem; border: 1px solid #94a3b8; border-radius: .25rem; background: #fff; }
-.checkbox-label input:checked + .custom-checkbox { border-color: #0050f3; background: #0050f3; box-shadow: inset 0 0 0 3px #fff; }
-.forgot-password { border: 0; padding: 0; background: transparent; color: #0050f3; font: inherit; font-size: .85rem; font-weight: 600; cursor: pointer; }
-.primary-auth-button { min-height: 2.8rem; border: 0; border-radius: .65rem; background: #0050f3; color: #fff; font: inherit; font-weight: 700; cursor: pointer; transition: background .2s, transform .2s; }
-.primary-auth-button:hover:not(:disabled) { background: #003ec0; transform: translateY(-1px); }
-.primary-auth-button:disabled { cursor: not-allowed; opacity: .65; }
-.auth-divider { display: flex; align-items: center; gap: .75rem; color: #94a3b8; font-size: .78rem; }
-.auth-divider span { height: 1px; flex: 1; background: #e2e8f0; }
-.auth-divider p { margin: 0; white-space: nowrap; }
-.social-buttons { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; }
-.auth-switch-text { margin: .3rem 0 0; text-align: center; }
-
-html.dark .auth-page, html.dark .auth-form-section { background: #121212; }
-html.dark .auth-visual-section { background: linear-gradient(135deg, #101b35, #121212); }
-html.dark .auth-heading h1, html.dark .input-wrapper input { color: #f8fafc; }
-html.dark .form-group label, html.dark .checkbox-label { color: #cbd5e1; }
-html.dark .input-wrapper, html.dark .custom-checkbox { border-color: #334155; background: #1e293b; }
-
-/* Shared navigation and footer theme */
-html.dark .site-navbar {
-  border-color: #273449;
-  background: #111827;
-}
-
-html.dark .site-navbar a:not(.bg-brand-primary),
-html.dark .site-navbar button {
-  color: #dbeafe;
-}
-
-html.dark .site-navbar button:not(.bg-brand-primary) {
-  border-color: #334155;
-  background-color: #1e293b;
-}
-
-html.dark .site-navbar [role="menu"] {
-  border-color: #334155;
-  background: #1e293b;
-  box-shadow: 0 8px 20px rgb(0 0 0 / .3);
-}
-
-html.dark .site-navbar [role="menu"] a { color: #e2e8f0; }
-html.dark .site-navbar .bg-background { background: #111827; }
-
-html.dark .site-footer {
-  background-color: #070d1a;
-  border-top: 1px solid #273449;
-}
-
-html.dark .site-footer .text-gray-400 { color: #94a3b8; }
-
-/* About page */
-html.dark .about-page { background: #121212; color: #e2e8f0; }
-html.dark .about-page .bg-slate-50 { background-color: #172033; }
-html.dark .about-page .bg-white { background-color: #1e293b; }
-html.dark .about-page .text-slate-900 { color: #f8fafc; }
-html.dark .about-page .text-slate-800 { color: #e2e8f0; }
-html.dark .about-page .text-slate-600,
-html.dark .about-page .text-slate-500 { color: #cbd5e1; }
-html.dark .about-page .text-slate-400 { color: #94a3b8; }
-html.dark .about-page .border-slate-200,
-html.dark .about-page .border-slate-100 { border-color: #334155; }
-html.dark .about-page .shadow-sm,
-html.dark .about-page .shadow-md { box-shadow: 0 4px 16px rgb(0 0 0 / .3); }
-
-@media (max-width: 900px) {
-  .auth-page { grid-template-columns: 1fr; }
-  .auth-visual-section { display: none; }
-  .auth-form-section { min-height: 100vh; padding: 4.5rem 1.5rem 2rem; }
-  .back-button { position: fixed; z-index: 1; }
-}
-
-@media (max-width: 480px) {
-  .auth-form-section { padding-inline: 1rem; }
-  .name-grid, .social-buttons { grid-template-columns: 1fr; }
-  .login-options { align-items: flex-start; flex-direction: column; }
-}

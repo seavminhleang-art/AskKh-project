@@ -23,6 +23,7 @@ import UserPostPage from "./pages/user/UserPostPage.jsx";
 import AdminDashboardPage from "./Components/Pages/admin/dashboard/Dashboard.jsx";
 import ProtectedRoute from "./routes/ProtectedRoute.jsx";
 import UserLayout from "./layouts/UserLayout.jsx";
+import AuthInitializer from "./Components/Auth/AuthInitializer.jsx";
 
 function RootLayout() {
   const { resolvedTheme, setTheme } = useTheme();
@@ -94,7 +95,9 @@ ReactDOM.createRoot(root).render(
     <Provider store={store}>
       <ThemeProvider defaultTheme="light">
         <LanguageProvider>
-          <RouterProvider router={router} />
+          <AuthInitializer>
+            <RouterProvider router={router} />
+          </AuthInitializer>
         </LanguageProvider>
       </ThemeProvider>
     </Provider>

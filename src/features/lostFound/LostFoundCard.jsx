@@ -1,21 +1,28 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { MapPin, Calendar, Sparkles, ShieldCheck, ArrowRight } from 'lucide-react';
-import Card from '../../Components/Admin/common/Card';
+import Card from '../../Components/ui/card';
 import StatusBadge from '../../Components/ui/StatusBadge';
 import Badge from '../../Components/ui/badge';
-import Button from '../../Components/Admin/common/Button';
+import Button from '../../Components/ui/button';
 import Avatar from '../../Components/ui/Avatar';
 import ClaimModal from '../../Components/modals/ClaimModal';
 
-export default function LostFoundCard({ item, onSelectDetails }) {
+export default function LostFoundCard({ item, onSelectDetails: _onSelectDetails }) {
   const [isClaimModalOpen, setIsClaimModalOpen] = useState(false);
 
   const title = item.title || item.name || 'Campus Item';
   const itemType = item.itemType || item.type || 'LOST';
   const categoryName = item.categoryName || item.category || 'General';
-  const locationText = item.locationLabel || item.freeTextLocation || item.location || 'ISTAD Main Campus';
-  const dateText = item.itemDate || item.date || (item.createdAt ? new Date(item.createdAt).toLocaleDateString() : 'Recent');
+  const locationText =
+    item.locationLabel ||
+    item.freeTextLocation ||
+    item.location ||
+    'ISTAD Main Campus';
+  const dateText =
+    item.itemDate ||
+    item.date ||
+    (item.createdAt ? new Date(item.createdAt).toLocaleDateString() : 'Recent');
   const mainImage =
     item.photoUrl ||
     (item.images && item.images.length > 0 ? item.images[0] : null) ||
@@ -23,12 +30,18 @@ export default function LostFoundCard({ item, onSelectDetails }) {
       ? 'https://images.unsplash.com/photo-1584438784894-089d6a62b8fa?w=800&auto=format&fit=crop&q=80'
       : 'https://images.unsplash.com/photo-1544816155-12df9643f363?w=800&auto=format&fit=crop&q=80');
 
-  const reporterName = item.reporter?.name || item.userDisplayName || 'Campus Member';
-  const reporterAvatar = item.reporter?.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(reporterName)}`;
+  const reporterName =
+    item.reporter?.name || item.userDisplayName || 'Campus Member';
+  const reporterAvatar =
+    item.reporter?.avatar ||
+    `https://api.dicebear.com/7.x/avataaars/svg?seed=${encodeURIComponent(reporterName)}`;
 
   return (
     <>
-      <Card className="overflow-hidden flex flex-col h-full transition-all group" hover>
+      <Card
+        className="overflow-hidden flex flex-col h-full transition-all group"
+        hover
+      >
         {/* Card Image Header */}
         <div className="relative h-48 w-full overflow-hidden bg-slate-100 dark:bg-slate-800">
           <img
@@ -95,29 +108,39 @@ export default function LostFoundCard({ item, onSelectDetails }) {
           {/* Action Row */}
           <div className="pt-3 flex items-center gap-2">
             <Link to={`/community/lost-found/${item.id}`} className="flex-1">
-              <Button variant="outline" size="sm" className="w-full text-xs rounded-xl">
+              <Button
+                variant="outline"
+                size="sm"
+                className="w-full text-xs rounded-xl"
+              >
                 View Details
               </Button>
             </Link>
 
-            {itemType === 'FOUND' && item.status !== 'RECOVERED' && item.status !== 'CLAIMED' && (
-              <Button
-                variant="default"
-                size="sm"
-                onClick={() => setIsClaimModalOpen(true)}
-                className="text-xs rounded-xl gap-1"
-              >
-                Claim Item
-                <ArrowRight className="w-3 h-3" />
-              </Button>
-            )}
+            {itemType === 'FOUND' &&
+              item.status !== 'RECOVERED' &&
+              item.status !== 'CLAIMED' && (
+                <Button
+                  variant="default"
+                  size="sm"
+                  onClick={() => setIsClaimModalOpen(true)}
+                  className="text-xs rounded-xl gap-1"
+                >
+                  Claim Item
+                  <ArrowRight className="w-3 h-3" />
+                </Button>
+              )}
           </div>
         </div>
       </Card>
 
       {/* Claim Modal */}
       {isClaimModalOpen && (
-        <ClaimModal item={item} isOpen={isClaimModalOpen} onClose={() => setIsClaimModalOpen(false)} />
+        <ClaimModal
+          item={item}
+          isOpen={isClaimModalOpen}
+          onClose={() => setIsClaimModalOpen(false)}
+        />
       )}
     </>
   );

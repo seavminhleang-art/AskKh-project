@@ -1,119 +1,101 @@
-import { NavLink } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { LayoutDashboard, Trophy, X, LogOut } from "lucide-react";
-import { closeMobileSidebar } from "../../features/ui/uiSlice";
-import { logout, selectCurrentUser } from "../../features/auth/authSlice";
-import Avatar from "../common/Avatar";
+import React from 'react';
+import { useLocation } from 'react-router-dom';
+import { X, Search } from 'lucide-react';
+import SidebarItem from './SidebarItem';
+import UserAccount from './UserAccount';
+import HelpCenterCard from './HelpCenterCard';
+import { navigationSections, isNavItemActive } from '../../constants/navigation';
+import { useLanguage } from '../../hooks/useLanguage';
 
-const NAV_ITEMS = [
-  { path: "/admin", label: "Dashboard", icon: LayoutDashboard, end: true },
-  { path: "/leaderboard", label: "Leaderboard", icon: Trophy },
-];
+export default function Sidebar({ mobileOpen = false, onCloseMobile }) {
+  const location = useLocation();
+  const { t } = useLanguage();
 
-function SidebarContent({ collapsed, onNavigate }) {
-  const dispatch = useDispatch();
-  const user = useSelector(selectCurrentUser);
+  const sidebarContent = (
+    <div className="h-full flex flex-col justify-between py-3 px-2.5 overflow-y-auto">
+      <div className="space-y-2">
+        {/* Branding */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2.5 px-3 py-2">
+            <div className="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white shadow-xs shrink-0">
+              <Search className="w-4 h-4 stroke-[2.5]" />
+            </div>
+            <div className="flex flex-col min-w-0">
+              <span className="text-lg font-bold text-slate-900 dark:text-white leading-tight tracking-tight">
+                AskKH
+              </span>
+              <span className="text-xs text-slate-400 dark:text-slate-500 font-medium truncate">
+                {t('navigation.lostFoundCommunity')}
+              </span>
+            </div>
+          </div>
 
-  function handleLogout() {
-    dispatch(logout());
-  }
-
-  return (
-    <>
-      <div className="flex h-16 shrink-0 items-center gap-2 border-b border-gray-100 px-4 dark:border-gray-700">
-        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gray-900 text-sm font-semibold text-white dark:bg-white dark:text-gray-900">
-          N
-        </div>
-        {!collapsed && (
-          <>
-            <span className="truncate text-[15px] font-semibold text-gray-900 dark:text-white">
-              NEXA
-            </span>
-          </>
-        )}
-      </div>
-
-      <nav className="flex-1 overflow-y-auto px-3 py-4">
-        <ul className="flex flex-col gap-0.5">
-          {NAV_ITEMS.map((item) => (
-            <li key={item.path}>
-              <NavLink
-                to={item.path}
-                end={item.end}
-                onClick={onNavigate}
-                className={({ isActive }) =>
-                  `flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
-                    isActive
-                      ? "bg-blue-50 text-blue-600 dark:bg-gray-800 dark:text-blue-400"
-                      : "text-gray-500 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-800"
-                  }`
-                }
-              >
-                <item.icon className="h-[18px] w-[18px] shrink-0" />
-                {!collapsed && <span className="truncate">{item.label}</span>}
-              </NavLink>
-            </li>
-          ))}
-        </ul>
-      </nav>
-
-      <div className="border-t border-gray-100 p-3 dark:border-gray-700">
-        <button
-          type="button"
-          onClick={handleLogout}
-          className="flex w-full items-center gap-2.5 rounded-full bg-gray-50 px-2.5 py-2 text-gray-600 hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
-        >
-          <Avatar name={user?.displayName ?? user?.email} />
-          {!collapsed && <span className="text-sm font-medium">Log out</span>}
-          {!collapsed && (
-            <LogOut className="ml-auto h-4 w-4 text-gray-400" />
+          {mobileOpen && (
+            <button
+              type="button"
+              onClick={onCloseMobile}
+              className="md:hidden p-1.5 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800"
+              aria-label="Close navigation sidebar"
+            >
+              <X className="w-4 h-4" />
+            </button>
           )}
-        </button>
-      </div>
-    </>
-  );
-}
+        </div>
 
-export default function Sidebar() {
-  const collapsed = useSelector((state) => state.ui.sidebarCollapsed);
-  const mobileOpen = useSelector((state) => state.ui.mobileSidebarOpen);
-  const dispatch = useDispatch();
+        {/* Navigation Sections */}
+        <nav aria-label="Main Navigation" className="space-y-3">
+          {navigationSections.map((section) => (
+            <div key={section.title} className="space-y-0.5">
+              <div className="px-3 py-1 text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
+                {section.sectionKey ? t(section.sectionKey) : section.title}
+              </div>
+              {section.items.map((item) => (
+                <SidebarItem
+                  key={item.id}
+                  item={item}
+                  isActive={isNavItemActive(location.pathname, item)}
+                  onClick={() => {
+                    if (onCloseMobile) onCloseMobile();
+                  }}
+                />
+              ))}
+            </div>
+          ))}
+        </nav>
+      </div>
+
+      {/* Bottom User Account & Help Center Card */}
+      <div className="space-y-2.5 pt-4 border-t border-slate-100 dark:border-slate-800/80 mt-4">
+        <UserAccount />
+        <HelpCenterCard />
+      </div>
+    </div>
+  );
 
   return (
     <>
+      {/* Desktop Fixed / Sticky Sidebar (approx 185px wide) */}
       <aside
-        className={`hidden shrink-0 flex-col border-r border-gray-100 bg-white dark:border-gray-700 dark:bg-gray-900 md:flex ${
-          collapsed ? "w-16" : "w-60"
-        } transition-all duration-150`}
+        aria-label="Sidebar Navigation"
+        className="hidden md:block w-[185px] shrink-0 border-r border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 min-h-screen sticky top-0 z-30"
       >
-        <SidebarContent collapsed={collapsed} />
+        {sidebarContent}
       </aside>
 
-
+      {/* Mobile Backdrop & Drawer */}
       {mobileOpen && (
-        <div className="fixed inset-0 z-40 flex md:hidden">
-          <div className="flex w-64 flex-col bg-white dark:bg-gray-900">
-            <div className="flex justify-end px-2 pt-2">
-              <button
-                type="button"
-                onClick={() => dispatch(closeMobileSidebar())}
-                aria-label="Close menu"
-                className="rounded-md p-2 text-gray-500 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
-            <SidebarContent
-              collapsed={false}
-              onNavigate={() => dispatch(closeMobileSidebar())}
-            />
-          </div>
-          <button
-            type="button"
-            aria-label="Close menu overlay"
-            className="flex-1 bg-black/30"
-            onClick={() => dispatch(closeMobileSidebar())}
+        <div className="fixed inset-0 z-50 md:hidden flex">
+          <div
+            className="fixed inset-0 bg-slate-900/40 backdrop-blur-xs transition-opacity"
+            onClick={onCloseMobile}
+            aria-hidden="true"
           />
+          <aside
+            aria-label="Mobile Navigation Drawer"
+            className="relative w-[210px] max-w-[80vw] bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 h-full shadow-2xl z-50"
+          >
+            {sidebarContent}
+          </aside>
         </div>
       )}
     </>

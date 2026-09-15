@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import {
   HelpCircle,
   ThumbsUp,
@@ -33,8 +33,8 @@ export default function BadgeCard({ achievement }) {
     <Card
       className={`p-5 relative overflow-hidden transition-all ${
         achievement.unlocked
-          ? 'border-slate-200/80 dark:border-slate-800'
-          : 'opacity-70 bg-slate-50/50 dark:bg-slate-900/40 border-dashed'
+          ? "border-slate-200/80 dark:border-slate-800"
+          : "opacity-70 bg-slate-50/50 dark:bg-slate-900/40 border-dashed"
       }`}
       hover={achievement.unlocked}
     >
@@ -42,8 +42,8 @@ export default function BadgeCard({ achievement }) {
         <div
           className={`w-12 h-12 rounded-2xl flex items-center justify-center shadow-xs ${
             achievement.unlocked
-              ? 'bg-blue-600 text-white dark:bg-blue-500'
-              : 'bg-slate-200 dark:bg-slate-800 text-slate-400'
+              ? "bg-blue-600 text-white dark:bg-blue-500"
+              : "bg-slate-200 dark:bg-slate-800 text-slate-400"
           }`}
         >
           {achievement.unlocked ? (
@@ -64,13 +64,13 @@ export default function BadgeCard({ achievement }) {
         <h4 className="font-bold text-sm text-slate-900 dark:text-white">
           {achievement.title}
         </h4>
-        <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed min-h-[36px]">
+        <p className="text-lg text-slate-500 dark:text-slate-400 leading-relaxed min-h-[36px]">
           {achievement.description}
         </p>
       </div>
 
       {achievement.unlocked ? (
-        <div className="flex items-center justify-between pt-3 mt-3 border-t border-slate-100 dark:border-slate-800 text-xs">
+        <div className="flex items-center justify-between pt-3 mt-3 border-t border-slate-100 dark:border-slate-800 text-lg">
           <span className="font-bold text-emerald-600 dark:text-emerald-400">
             +{achievement.points} Points Earned
           </span>
@@ -78,7 +78,7 @@ export default function BadgeCard({ achievement }) {
         </div>
       ) : (
         <div className="space-y-1.5 pt-3 mt-3 border-t border-slate-100 dark:border-slate-800">
-          <div className="flex items-center justify-between text-[11px] text-slate-500">
+          <div className="flex items-center justify-between text-[16px] text-slate-500">
             <span>Progress</span>
             <span className="font-bold">
               {achievement.progress} / {achievement.totalRequired}
@@ -89,7 +89,7 @@ export default function BadgeCard({ achievement }) {
               className="h-full bg-blue-600 rounded-full"
               style={{
                 width: `${Math.round(
-                  (achievement.progress / achievement.totalRequired) * 100
+                  (achievement.progress / achievement.totalRequired) * 100,
                 )}%`,
               }}
             />

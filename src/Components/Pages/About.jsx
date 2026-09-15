@@ -1,7 +1,23 @@
 import React from "react";
-import { motion, useReducedMotion } from "framer-motion";
 import { Link } from "react-router-dom";
 import communityImg from "../../assets/Website/community.jpg";
+
+// Mentors
+import sokcheatImg from "../../assets/Mentor/srorng_sokcheat.jpg";
+import rattanakmonyImg from "../../assets/Mentor/pech_rattanakmony.jpg";
+
+// Team Leads
+import momLisaImg from "../../assets/Team/mom_lisa.jpg";
+import seavminhImg from "../../assets/Team/leang_seavminh.JPG";
+
+// Team Members
+import lyhengImg from "../../assets/Team/cheakching_lyheng.jpg";
+import chanmonizaImg from "../../assets/Team/cheat_chanmoniza.jpg";
+import tonganImg from "../../assets/Team/hor_tongan.jpg";
+import sothearithImg from "../../assets/Team/sroeun_sothearith.JPG";
+import thanaImg from "../../assets/Team/neang_thana.jpg";
+import tharathImg from "../../assets/Team/venthan_tharath.jpg";
+
 // ---------- Icons ----------
 function CheckIcon() {
   return (
@@ -54,10 +70,8 @@ function TelegramIcon() {
   );
 }
 
-// ---------- Illustrations (now real images) ----------
-// Fill in the `src` values below (or pass a photo prop) once you have images.
-// Until then, this shows a plain placeholder box instead of an SVG icon.
-function IllustrationImage({ src, alt, className = "w-full max-w-sm" }) {
+// ---------- Illustrations ----------
+function IllustrationImage({ src, alt, className = "w-full max-w-md" }) {
   if (!src) {
     return (
       <div
@@ -67,10 +81,8 @@ function IllustrationImage({ src, alt, className = "w-full max-w-sm" }) {
       </div>
     );
   }
-  return <img src={src} alt={alt} className={`${className} object-contain`} />;
+  return <img src={src} alt={alt} className={`${className} object-contain rounded-2xl shadow-sm`} />;
 }
-
-const NETWORK_IMAGE_SRC = communityImg;
 
 // ---------- Data ----------
 const features = [
@@ -143,152 +155,217 @@ const visionPoints = [
 ];
 
 const mentors = [
-  { num: "01", name: "Srorng Sokcheat", roleLabel: "Senior IT Instructor", role: "Mentor", photo:"./src/assets/Mentor/srorng_sokcheat.jpg", github: "https://github.com/Sokcheatsrorng", telegram: "https://t.me/Sokcheat_srorng" },
-  { num: "02", name: "Pech Rattanakmony", roleLabel: "Senior IT Instructor", role: "Mentor", photo: "./src/assets/Mentor/pech_rattanakmony.jpg", github: "https://github.com/aintantony", telegram: "https://t.me/rattanakmony" },
+  {
+    num: "01",
+    name: "Srorng Sokcheat",
+    roleLabel: "Senior IT Instructor",
+    role: "Mentor",
+    photo: sokcheatImg,
+    github: "https://github.com/Sokcheatsrorng",
+    telegram: "https://t.me/Sokcheat_srorng",
+  },
+  {
+    num: "02",
+    name: "Pech Rattanakmony",
+    roleLabel: "Senior IT Instructor",
+    role: "Mentor",
+    photo: rattanakmonyImg,
+    github: "https://github.com/aintantony",
+    telegram: "https://t.me/rattanakmony",
+  },
 ];
 
 const teamLeads = [
-  { num: "03", name: "Mom Lisa", roleLabel: "Frontend Developer", role: "Leader", photo: "./src/assets/Team/mom_lisa.jpg", github: "https://github.com/LisaMom", telegram: "https://t.me/lisamom369" },
-  { num: "04", name: "Leang Seavminh", roleLabel: "Java Developer", role: "Sub-Lead", photo: "./src/assets/Team/leang_seavminh.jpg", github: "https://github.com/seavminhleang-art", telegram: "https://t.me/puthea_reach" },
+  {
+    num: "03",
+    name: "Mom Lisa",
+    roleLabel: "Frontend Developer",
+    role: "Leader",
+    photo: momLisaImg,
+    github: "https://github.com/LisaMom",
+    telegram: "https://t.me/lisamom369",
+  },
+  {
+    num: "04",
+    name: "Leang Seavminh",
+    roleLabel: "Java Developer",
+    role: "Sub-Lead",
+    photo: seavminhImg,
+    github: "https://github.com/seavminhleang-art",
+    telegram: "https://t.me/puthea_reach",
+  },
 ];
 
 const teamMembers = [
-  { num: "05", name: "Cheakching Lyheng", roleLabel: "Java Developer", role: "Member", photo: "./src/assets/Team/cheakching_lyheng.jpg", github: "https://github.com/lyheng142", telegram: "https://t.me/cclh142" },
-  { num: "06", name: "Cheat Chanmoniza", roleLabel: "Frontend Developer", role: "Member", photo: "./src/assets/Team/cheat_chanmoniza.jpg", github: "https://github.com/moniza-Dev", telegram: "https://t.me/chanmoniza_cheat" },
-  { num: "07", name: "Hor Tongan", roleLabel: "Java Developer", role: "Member", photo: "./src/assets/Team/hor_tongan.jpg", github: "https://github.com/TongAnWasHere", telegram: "https://t.me/TongAnWasHere" },
-  { num: "08", name: "Sroeun Sothearith", roleLabel: "Frontend Developer", role: "Member", photo: "./src/assets/Team/sroeun_sothearith.jpg", github: "https://github.com/Rith857", telegram: "https://t.me/sothearithsroeun" },
-  { num: "09", name: "Neang Thana", roleLabel: "Frontend Developer", role: "Member", photo: "./src/assets/Team/neang_thana.jpg", github: "https://github.com/mrrhello894-byte", telegram: "https://t.me/neangthana" },
-  { num: "10", name: "Venthan Tharath", roleLabel: "Frontend Developer", role: "Member", photo: "./src/assets/Team/venthan_tharath.jpg", github: "https://github.com/tharath780-commits", telegram: "https://t.me/helterqt" },
+  {
+    num: "05",
+    name: "Cheakching Lyheng",
+    roleLabel: "Java Developer",
+    role: "Member",
+    photo: lyhengImg,
+    github: "https://github.com/lyheng142",
+    telegram: "https://t.me/cclh142",
+  },
+  {
+    num: "06",
+    name: "Cheat Chanmoniza",
+    roleLabel: "Frontend Developer",
+    role: "Member",
+    photo: chanmonizaImg,
+    github: "https://github.com/moniza-Dev",
+    telegram: "https://t.me/chanmoniza_cheat",
+  },
+  {
+    num: "07",
+    name: "Hor Tongan",
+    roleLabel: "Java Developer",
+    role: "Member",
+    photo: tonganImg,
+    github: "https://github.com/TongAnWasHere",
+    telegram: "https://t.me/TongAnWasHere",
+  },
+  {
+    num: "08",
+    name: "Sroeun Sothearith",
+    roleLabel: "Frontend Developer",
+    role: "Member",
+    photo: sothearithImg,
+    github: "https://github.com/Rith857",
+    telegram: "https://t.me/sothearithsroeun",
+  },
+  {
+    num: "09",
+    name: "Neang Thana",
+    roleLabel: "Frontend Developer",
+    role: "Member",
+    photo: thanaImg,
+    github: "https://github.com/mrrhello894-byte",
+    telegram: "https://t.me/neangthana",
+  },
+  {
+    num: "10",
+    name: "Venthan Tharath",
+    roleLabel: "Frontend Developer",
+    role: "Member",
+    photo: tharathImg,
+    github: "https://github.com/tharath780-commits",
+    telegram: "https://t.me/helterqt",
+  },
 ];
 
 // ---------- Reusable card ----------
 function MemberCard({ num, name, roleLabel, role, photo, github, telegram }) {
-  const reducedMotion = useReducedMotion();
   return (
-    <motion.div
-      initial={reducedMotion ? false : { opacity: 0, y: 28 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.15 }}
-      whileHover={reducedMotion ? undefined : { y: -10, scale: 1.02 }}
-      transition={{ duration: 0.35 }}
-      className="bg-white rounded-3xl border border-slate-200 shadow-md overflow-hidden text-center pt-8 hover:shadow-xl transition-shadow h-full"
-    >
-      <div className="flex justify-between items-start px-5">
-        <span className="bg-brand-primary text-white text-xs font-bold px-3 py-1.5 rounded-lg">{num}</span>
-        <div className="grid grid-cols-3 gap-1 mt-1">
-          {Array.from({ length: 6 }).map((_, i) => (
-            <span key={i} className="w-1 h-1 bg-brand-primary/40 rounded-full" />
-          ))}
+    <div className="bg-white rounded-3xl border border-slate-200 shadow-md overflow-hidden text-center pt-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 h-full flex flex-col justify-between">
+      <div>
+        <div className="flex justify-between items-start px-5">
+          <span className="bg-brand-primary text-white text-xs font-bold px-3 py-1.5 rounded-lg">{num}</span>
+          <div className="grid grid-cols-3 gap-1 mt-1">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <span key={i} className="w-1 h-1 bg-brand-primary/40 rounded-full" />
+            ))}
+          </div>
+        </div>
+
+        <div className="relative w-40 h-40 sm:w-44 sm:h-44 mx-auto my-8">
+          {/* dashed outer ring */}
+          <div className="absolute inset-0 rounded-full border-2 border-dashed border-brand-primary/30" />
+          {/* side dots */}
+          <span className="absolute top-1/2 -left-1.5 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-brand-primary" />
+          <span className="absolute top-1/2 -right-1.5 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-brand-primary" />
+
+          {photo ? (
+            <img
+              src={photo}
+              alt={name}
+              className="absolute inset-1.5 w-[calc(100%-0.75rem)] h-[calc(100%-0.75rem)] rounded-full object-cover border-4 border-white shadow"
+            />
+          ) : (
+            <div className="absolute inset-1.5 rounded-full bg-slate-200 border-4 border-white shadow flex items-center justify-center">
+              <PersonIcon />
+            </div>
+          )}
+        </div>
+
+        <h3 className="text-brand-primary font-bold text-xl px-4">{name}</h3>
+
+        <div className="flex items-center justify-center gap-2 mt-2">
+          <span className="w-4 h-px bg-brand-secondary/40" />
+          <p className="text-brand-secondary text-xs font-bold uppercase tracking-wide">{roleLabel}</p>
+          <span className="w-4 h-px bg-brand-secondary/40" />
+        </div>
+
+        <div className="mt-4">
+          <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-brand-primary border border-brand-primary/50 rounded-full px-4 py-1.5">
+            <PeopleIcon />
+            {role.toUpperCase()}
+          </span>
         </div>
       </div>
 
-      <div className="relative w-40 h-40 sm:w-44 sm:h-44 mx-auto my-8">
-        {/* dashed outer ring */}
-        <div className="absolute inset-0 rounded-full border-2 border-dashed border-brand-primary/30" />
-        {/* side dots */}
-        <span className="absolute top-1/2 -left-1.5 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-brand-primary" />
-        <span className="absolute top-1/2 -right-1.5 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-brand-primary" />
+      <div>
+        <div className="flex justify-center items-center gap-4 my-7">
+          <a
+            href={github || "#"}
+            target={github ? "_blank" : undefined}
+            rel={github ? "noopener noreferrer" : undefined}
+            aria-label="GitHub"
+            className="w-11 h-11 rounded-full bg-slate-900 text-white flex items-center justify-center hover:bg-slate-700 transition"
+          >
+            <GithubIcon />
+          </a>
+          <span className="w-px h-5 bg-slate-200" />
+          <a
+            href={telegram || "#"}
+            target={telegram ? "_blank" : undefined}
+            rel={telegram ? "noopener noreferrer" : undefined}
+            aria-label="Telegram"
+            className="w-11 h-11 rounded-full bg-sky-500 text-white flex items-center justify-center hover:bg-sky-600 transition"
+          >
+            <TelegramIcon />
+          </a>
+        </div>
 
-        {photo ? (
-          <img
-            src={photo}
-            alt={name}
-            className="absolute inset-1.5 w-[calc(100%-0.75rem)] h-[calc(100%-0.75rem)] rounded-full object-cover border-4 border-white shadow"
-          />
-        ) : (
-          <div className="absolute inset-1.5 rounded-full bg-slate-200 border-4 border-white shadow flex items-center justify-center">
-            <PersonIcon />
-          </div>
-        )}
-
-        <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 bg-white rounded-full p-1.5 shadow border border-slate-100">
-          
-        </span>
+        <div className="h-3 bg-brand-primary" />
       </div>
-
-      <h3 className="text-brand-primary font-bold text-xl px-4">{name}</h3>
-
-      <div className="flex items-center justify-center gap-2 mt-2">
-        <span className="w-4 h-px bg-brand-secondary/40" />
-        <p className="text-brand-secondary text-xs font-bold uppercase tracking-wide">{roleLabel}</p>
-        <span className="w-4 h-px bg-brand-secondary/40" />
-      </div>
-
-      <div className="mt-4">
-        <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-brand-primary border border-brand-primary/50 rounded-full px-4 py-1.5">
-          <PeopleIcon />
-          {role.toUpperCase()}
-        </span>
-      </div>
-
-      <div className="flex justify-center items-center gap-4 my-7">
-        <a
-          href={github || "#"}
-          target={github ? "_blank" : undefined}
-          rel={github ? "noopener noreferrer" : undefined}
-          aria-label="GitHub"
-          className="w-11 h-11 rounded-full bg-slate-900 text-white flex items-center justify-center hover:bg-slate-700 transition"
-        >
-          <GithubIcon />
-        </a>
-        <span className="w-px h-5 bg-slate-200" />
-        <a
-          href={telegram || "#"}
-          target={telegram ? "_blank" : undefined}
-          rel={telegram ? "noopener noreferrer" : undefined}
-          aria-label="Telegram"
-          className="w-11 h-11 rounded-full bg-sky-500 text-white flex items-center justify-center hover:bg-sky-600 transition"
-        >
-          <TelegramIcon />
-        </a>
-      </div>
-
-      <div className="h-3 bg-brand-primary" />
-    </motion.div>
+    </div>
   );
 }
 
 // ---------- Page ----------
 export default function AboutAskKh() {
-  const reducedMotion = useReducedMotion();
-  const reveal = {
-    initial: reducedMotion ? false : { opacity: 0, y: 24 },
-    whileInView: { opacity: 1, y: 0 },
-    viewport: { once: true, amount: 0.08 },
-    transition: { duration: 0.5 },
-  };
   return (
-    <div className="shared-page about-page bg-white text-slate-800 antialiased">
+    <div className="shared-page about-page bg-white text-slate-800 antialiased w-full overflow-x-hidden">
       {/* ABOUT */}
-      <motion.section {...reveal} className="max-w-7xl mx-auto px-6 py-20 grid md:grid-cols-2 gap-12 items-center">
+      <section className="max-w-7xl mx-auto px-6 py-20 grid md:grid-cols-2 gap-12 items-center">
         <div>
           <h1 className="text-4xl font-bold text-slate-900">
             About <span className="text-brand-primary">AskKh</span>
           </h1>
           <div className="w-14 h-1 bg-brand-primary rounded-full mt-4 mb-6" />
-          <p className="text-slate-500 leading-relaxed max-w-md">
+          <p className="text-slate-600 leading-relaxed max-w-md">
             AskKh is a knowledge-sharing platform built for the ISTAD community and beyond. We
             connect people through questions, answers, and real-time discussions.
           </p>
           <Link
             to="/#qa"
-            className="mt-8 inline-flex items-center gap-2 bg-brand-primary hover:bg-brand-primary/90 transition text-white font-medium px-6 py-3 rounded-full"
+            className="mt-8 inline-flex items-center gap-2 bg-brand-primary hover:bg-brand-primary-hover transition text-white font-medium px-6 py-3 rounded-full shadow-sm hover:shadow"
           >
             Be Part of Our Community <span>→</span>
           </Link>
         </div>
         <div className="flex justify-center">
-          <IllustrationImage src={NETWORK_IMAGE_SRC} alt="About AskKh" className="w-full max-w-m" />
+          <IllustrationImage src={communityImg} alt="About AskKh" className="w-full max-w-md" />
         </div>
-      </motion.section>
+      </section>
 
       {/* WHY CHOOSE */}
-      <motion.section {...reveal} className="bg-slate-50 py-20">
+      <section className="bg-slate-50 py-20">
         <div className="max-w-4xl mx-auto text-center px-6">
           <h2 className="text-3xl font-bold text-slate-900">
             Why Choose <span className="text-brand-primary">AskKh?</span>
           </h2>
-          <p className="text-slate-500 mt-4 leading-relaxed">
+          <p className="text-slate-600 mt-4 leading-relaxed">
             We believe knowledge grows when people share. AskKh was created to solve real
             problems faced by students and the ISTAD community.
           </p>
@@ -298,7 +375,7 @@ export default function AboutAskKh() {
           {features.map((f) => (
             <div
               key={f.title}
-              className="bg-white rounded-3xl shadow-sm p-8 sm:p-10 text-center hover:shadow-xl transition duration-300 motion-safe:hover:-translate-y-2"
+              className="bg-white rounded-3xl shadow-sm p-8 sm:p-10 text-center hover:shadow-xl transition duration-300 hover:-translate-y-1 border border-slate-100"
             >
               <div
                 className={`w-18 h-18 mx-auto rounded-full border-2 flex items-center justify-center mb-4 bg-white ${
@@ -310,18 +387,18 @@ export default function AboutAskKh() {
                 </svg>
               </div>
               <h3 className="text-xl font-semibold text-slate-900">{f.title}</h3>
-              <p className="text-base leading-relaxed text-slate-500 mt-3">{f.desc}</p>
+              <p className="text-base leading-relaxed text-slate-600 mt-3">{f.desc}</p>
             </div>
           ))}
         </div>
-      </motion.section>
+      </section>
 
       {/* MISSION */}
-      <motion.section {...reveal} className="max-w-4xl mx-auto px-6 py-16">
-        <div className="order-1 md:order-2">
-          <span className="text-brand-primary text-sm font-semibold">MISSION</span>
+      <section className="max-w-4xl mx-auto px-6 py-16">
+        <div>
+          <span className="text-brand-primary text-sm font-semibold tracking-wider">MISSION</span>
           <h2 className="text-3xl font-bold text-slate-900 mt-2 mb-4">Our Mission</h2>
-          <p className="text-slate-500 leading-relaxed mb-6">
+          <p className="text-slate-600 leading-relaxed mb-6">
             To empower the ISTAD community by providing an open, collaborative, and reliable
             platform where everyone can ask, learn, and grow together.
           </p>
@@ -334,15 +411,15 @@ export default function AboutAskKh() {
             ))}
           </ul>
         </div>
-      </motion.section>
+      </section>
 
       {/* VISION */}
-      <motion.section {...reveal} className="bg-slate-50">
+      <section className="bg-slate-50">
         <div className="max-w-4xl mx-auto px-6 py-16">
           <div>
-            <span className="text-brand-primary text-sm font-semibold">VISION</span>
+            <span className="text-brand-primary text-sm font-semibold tracking-wider">VISION</span>
             <h2 className="text-3xl font-bold text-slate-900 mt-2 mb-4">Our Vision</h2>
-            <p className="text-slate-500 leading-relaxed mb-6">
+            <p className="text-slate-600 leading-relaxed mb-6">
               To become the leading knowledge hub for ISTAD and a trusted platform that connects
               people, ideas, and opportunities for a better future.
             </p>
@@ -356,10 +433,10 @@ export default function AboutAskKh() {
             </ul>
           </div>
         </div>
-      </motion.section>
+      </section>
 
       {/* MENTORS */}
-      <motion.section {...reveal} className="max-w-7xl mx-auto px-6 py-20">
+      <section className="max-w-7xl mx-auto px-6 py-20">
         <h2 className="text-center text-2xl font-bold text-slate-900 mb-14">
           OUR <span className="text-brand-primary">MENTORS</span>
         </h2>
@@ -368,10 +445,10 @@ export default function AboutAskKh() {
             <MemberCard key={m.num} {...m} />
           ))}
         </div>
-      </motion.section>
+      </section>
 
       {/* TEAM */}
-      <motion.section {...reveal} className="bg-slate-50">
+      <section className="bg-slate-50">
         <div className="max-w-7xl mx-auto px-6 py-20">
           <h2 className="text-center text-2xl font-bold text-slate-900 mb-14">
             OUR <span className="text-brand-primary">TEAM</span>
@@ -387,8 +464,7 @@ export default function AboutAskKh() {
             ))}
           </div>
         </div>
-      </motion.section>
-
+      </section>
     </div>
   );
 }

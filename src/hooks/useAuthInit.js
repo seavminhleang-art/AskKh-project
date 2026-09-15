@@ -1,74 +1,78 @@
 import { useEffect } from 'react';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from '../Components/Firebase/firebase';
 import { useAppDispatch, useAppSelector } from './useAppStore';
-import { setCredentials, setInitialized, logout } from '../features/auth/authSlice';
-import { BASE_API_URL } from '../store/api/baseQueryWithReauth';
+import { loginSuccess, setInitialized, logout } from '../features/auth/authSlice';
 
 export function useAuthInit() {
   const dispatch = useAppDispatch();
-  const { accessToken, isInitialized } = useAppSelector((state) => state.auth);
+  const { isInitialized } = useAppSelector((state) => state.auth);
 
   useEffect(() => {
-    // Ensure any legacy insecure tokens are removed from localStorage
+    // Ensure any legacy insecure tokens are cleaned up
     localStorage.removeItem('nexa_token');
 
-    const refreshToken = localStorage.getItem('nexa_refresh_token');
+    let isMounted = true;
 
-    // If already has access token in memory or no refresh token available
-    if (accessToken || !refreshToken) {
-      dispatch(setInitialized());
-      return;
-    }
-
-    // Silent session restoration on browser startup/reload
-    let isCancelled = false;
-
-    async function silentRefresh() {
-      try {
-        const response = await fetch(`${BASE_API_URL}/auth/refresh`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ refreshToken }),
-        });
-
-        if (!response.ok) {
-          throw new Error('Refresh failed');
-        }
-
-        const data = await response.json();
-        if (!isCancelled && data.accessToken) {
-          dispatch(
-            setCredentials({
-              accessToken: data.accessToken,
-              refreshToken: data.refreshToken || refreshToken,
-              user: {
-                id: data.userId,
-                displayName: data.displayName,
-                email: data.email,
-              },
-            })
-          );
-        } else if (!isCancelled) {
-          dispatch(logout());
-        }
-      } catch {
-        if (!isCancelled) {
-          dispatch(logout());
-        }
-      } finally {
-        if (!isCancelled) {
-          dispatch(setInitialized());
-        }
+    try {
+      if (!auth || typeof onAuthStateChanged !== 'function') {
+        dispatch(setInitialized());
+        return;
       }
+
+      const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+        if (!isMounted) return;
+
+        if (firebaseUser) {
+          try {
+            const accessToken = await firebaseUser.getIdToken();
+            const userPayload = {
+              id: firebaseUser.uid,
+              name:
+                firebaseUser.displayName ||
+                firebaseUser.email?.split('@')[0] ||
+                'Scholar',
+              displayName:
+                firebaseUser.displayName ||
+                firebaseUser.email?.split('@')[0] ||
+                'Scholar',
+              email: firebaseUser.email,
+              avatar: firebaseUser.photoURL || null,
+              role: 'student',
+            };
+
+            dispatch(
+              loginSuccess({
+                accessToken,
+                user: userPayload,
+              })
+            );
+          } catch (error) {
+            console.error('Failed to get user ID token:', error);
+            dispatch(setInitialized());
+          }
+        } else {
+          // No authenticated Firebase user
+          const storedUser = localStorage.getItem('nexa_user');
+          if (!storedUser) {
+            dispatch(logout());
+          } else {
+            dispatch(setInitialized());
+          }
+        }
+      });
+
+      return () => {
+        isMounted = false;
+        if (typeof unsubscribe === 'function') {
+          unsubscribe();
+        }
+      };
+    } catch (err) {
+      console.warn('Auth initialization skipped:', err);
+      dispatch(setInitialized());
     }
-
-    silentRefresh();
-
-    return () => {
-      isCancelled = true;
-    };
-  }, [accessToken, dispatch]);
+  }, [dispatch]);
 
   return isInitialized;
 }

@@ -61,10 +61,10 @@ export default function ReportModal({
             <Flag className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+            <h3 className="text-[28px] font-bold text-slate-900 dark:text-white">
               Report Content
             </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400 truncate max-w-[240px]">
+            <p className="text-lg text-slate-500 dark:text-slate-400 truncate max-w-[240px]">
               {targetTitle}
             </p>
           </div>
@@ -72,7 +72,7 @@ export default function ReportModal({
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+            <label className="block text-lg font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
               Reason for Report *
             </label>
             <Select value={reason} onChange={(e) => setReason(e.target.value)}>
@@ -85,7 +85,7 @@ export default function ReportModal({
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+            <label className="block text-lg font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
               Additional Details (Optional)
             </label>
             <Textarea

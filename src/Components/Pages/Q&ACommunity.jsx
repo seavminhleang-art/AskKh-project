@@ -9,8 +9,11 @@ import { useLanguage } from '../Language/LanguageContext.jsx';
 import enTranslations from '../locales/en.json';
 import kmTranslations from '../locales/km.json';
 
+import lisaAvatar from '../../assets/Website/Lisa.jpg';
+import tonganAvatar from '../../assets/Website/Tong An.jpg';
+
 const googleSansStyle = {
-  fontFamily: '"Google Sans",sans-serif'
+  fontFamily: '"Google Sans", sans-serif'
 };
 
 export default function QACommunity({ darkMode: propDarkMode, language: propLanguage }) {
@@ -20,8 +23,13 @@ export default function QACommunity({ darkMode: propDarkMode, language: propLang
   const currentLang = propLanguage ?? language ?? 'en';
 
   const t = currentLang === 'km' ? kmTranslations : enTranslations;
+  const postT = t?.post || {
+    placeholderInput: currentLang === 'km' ? 'តើអ្នកកំពុងគិតអ្វី?' : "What's on your mind?",
+    createPostBtn: currentLang === 'km' ? 'បង្កើតអត្ថបទ' : 'Create Post',
+    noPosts: currentLang === 'km' ? 'មិនរកឃើញអត្ថបទទេ' : 'No posts found.'
+  };
 
-  const [activeTab, setActiveTab] = useState('following');
+  const [activeTab, setActiveTab] = useState('newest');
   const [bookmarkedPostIds, setBookmarkedPostIds] = useState([]);
   const [selectedPostId, setSelectedPostId] = useState(null);
   const [isCreatingPost, setIsCreatingPost] = useState(false);
@@ -31,7 +39,7 @@ export default function QACommunity({ darkMode: propDarkMode, language: propLang
       id: 1,
       title: "How you patch KDE on FreeBSD depends on whether you mean updating to the latest KDE packages or applying a custom different patch file to a specific KDE port component.",
       tags: ["linux", "freebsd", "patching"],
-      author: { name: "Mom Lisa", avatar: "../../src/assets/Website/Lisa.jpg", time: "3days ago" },
+      author: { name: "Mom Lisa", avatar: lisaAvatar, time: "3days ago" },
       views: "651,324", likes: "36,645", comments: 0,
       image: "https://picsum.photos/300/200?random=1",
       isOwnPost: true
@@ -40,7 +48,7 @@ export default function QACommunity({ darkMode: propDarkMode, language: propLang
       id: 2,
       title: "I am building a high-throughput collaborative app where multiple users can upvote, edit items, and change tags simultaneously. When performing optimistic updates with `useMutation` onQueryStarted...",
       tags: ["react", "typescript", "vite"],
-      author: { name: "Tong An", avatar: "../../src/assets/Website/Tong An.jpg", time: "3days ago" },
+      author: { name: "Tong An", avatar: tonganAvatar, time: "3days ago" },
       views: "244,564", likes: "10,920", comments: 3,
       image: "https://picsum.photos/300/200?random=2",
       isOwnPost: false
@@ -62,7 +70,7 @@ export default function QACommunity({ darkMode: propDarkMode, language: propLang
   const handleAddPost = (newPost) => {
     setPosts([newPost, ...posts]);
     setIsCreatingPost(false);
-    setActiveTab('following');
+    setActiveTab('newest');
   };
 
   const displayedPosts = activeTab === 'bookmarks' 
@@ -114,10 +122,10 @@ export default function QACommunity({ darkMode: propDarkMode, language: propLang
               <div className={`rounded-2xl p-2.5 border shadow-sm flex items-center space-x-3 transition-colors ${
                 darkMode ? "bg-zinc-900 border-zinc-800" : "bg-white border-gray-100"
               }`}>
-                <img src="../../src/assets/Website/Lisa.jpg" alt="User Avatar" className="w-8 h-8 rounded-full object-cover" />
+                <img src={lisaAvatar} alt="User Avatar" className="w-8 h-8 rounded-full object-cover border border-slate-200" />
                 <input 
                   type="text" 
-                  placeholder={t.post.placeholderInput}
+                  placeholder={postT.placeholderInput}
                   onClick={() => setIsCreatingPost(true)}
                   readOnly
                   className={`flex-1 rounded-xl px-4 py-2 text-xs focus:outline-none cursor-pointer transition-colors ${
@@ -127,10 +135,11 @@ export default function QACommunity({ darkMode: propDarkMode, language: propLang
                   }`}
                 />
                 <button 
+                  type="button"
                   onClick={() => setIsCreatingPost(true)}
                   className="bg-blue-600 text-white font-medium px-4 py-2 rounded-xl text-xs hover:bg-blue-700 transition-colors shadow-xs"
                 >
-                  {t.post.createPostBtn}
+                  {postT.createPostBtn}
                 </button>
               </div>
 
@@ -139,7 +148,7 @@ export default function QACommunity({ darkMode: propDarkMode, language: propLang
                 <div className={`rounded-2xl p-8 border text-center text-xs transition-colors ${
                   darkMode ? "bg-zinc-900 border-zinc-800 text-zinc-500" : "bg-white border-gray-100 text-gray-400"
                 }`}>
-                  {t.post.noPosts}
+                  {postT.noPosts}
                 </div>
               ) : (
                 displayedPosts.map((post) => (

@@ -1,0 +1,105 @@
+/**
+ * Realistic Static Sample Data for Achievements and Profile Pages
+ */
+
+export const sampleAchievementsSummary = {
+  earnedCount: 6,
+  totalCount: 12,
+  progressPercentage: 50,
+  level: 'Level 3 Contributor',
+  points: 480,
+  pointsToNextLevel: 520,
+};
+
+export const sampleAchievements = [
+  {
+    id: 'ach-1',
+    name: 'First Question',
+    description: 'Asked your first community question on AskKH forum.',
+    category: 'Q&A',
+    isEarned: true,
+    earnedDate: 'August 15, 2026',
+    progress: '1/1',
+    iconName: 'HelpCircle',
+    tier: 'Bronze',
+  },
+  {
+    id: 'ach-2',
+    name: 'Helpful Hand',
+    description: 'Provided an accepted solution to another scholar.',
+    category: 'Q&A',
+    isEarned: true,
+    earnedDate: 'August 28, 2026',
+    progress: '1/1',
+    iconName: 'CheckCircle2',
+    tier: 'Silver',
+  },
+  {
+    id: 'ach-3',
+    name: 'Good Samaritan',
+    description: 'Reported a found item and successfully returned it to its owner.',
+    category: 'Lost & Found',
+    isEarned: true,
+    earnedDate: 'September 6, 2026',
+    progress: '1/1',
+    iconName: 'PackageCheck',
+    tier: 'Gold',
+  },
+  {
+    id: 'ach-4',
+    name: 'Top Contributor',
+    description: 'Reach 10 accepted answers in the Q&A community.',
+    category: 'Q&A',
+    isEarned: false,
+    earnedDate: null,
+    progress: '4/10',
+    iconName: 'Award',
+    tier: 'Gold',
+  },
+  {
+    id: 'ach-5',
+    name: 'Campus Sleuth',
+    description: 'Successfully verify 3 matched items in Match Center.',
+    category: 'Lost & Found',
+    isEarned: false,
+    earnedDate: null,
+    progress: '1/3',
+    iconName: 'Sparkles',
+    tier: 'Silver',
+  },
+  {
+    id: 'ach-6',
+    name: 'Centurion Scholar',
+    description: 'Accumulate 100 upvotes across all questions and answers.',
+    category: 'Community',
+    isEarned: false,
+    earnedDate: null,
+    progress: '64/100',
+    iconName: 'ThumbsUp',
+    tier: 'Diamond',
+  },
+];
+
+export const sampleUserProfile = {
+  name: 'Vicheka San',
+  username: 'vicheka',
+  email: 'vicheka.san@istad.edu.kh',
+  role: 'ISTAD Scholar',
+  department: 'Software Engineering (Year 3)',
+  joinDate: 'January 2026',
+  avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=300&auto=format&fit=crop&q=80',
+  bio: 'Fullstack developer enthusiast, passionate about React, Spring Boot, and cloud architecture. Active campus contributor at ISTAD.',
+  location: 'Phnom Penh, Cambodia',
+  stats: {
+    questionsAsked: 12,
+    answersGiven: 24,
+    lostReports: 1,
+    foundReports: 2,
+    reputationPoints: 480,
+  },
+  socialLinks: {
+    github: 'https://github.com/vichekasan',
+    linkedin: 'https://linkedin.com/in/vichekasan',
+    website: 'https://vicheka.dev',
+  },
+};

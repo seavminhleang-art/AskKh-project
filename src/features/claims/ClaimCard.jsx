@@ -13,7 +13,7 @@ export default function ClaimCard({ claim }) {
             Claim ID: #{claim.id}
           </span>
           <h4 className="text-base font-bold text-slate-900 dark:text-white mt-0.5">
-            {claim.item?.name || 'Claimed Belonging'}
+            {claim.item?.name || "Claimed Belonging"}
           </h4>
         </div>
         <StatusBadge status={claim.status} />
@@ -28,7 +28,7 @@ export default function ClaimCard({ claim }) {
           />
         )}
         <div className="md:col-span-2 space-y-2">
-          <div className="text-xs font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
+          <div className="text-lg font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
             <FileText className="w-3.5 h-3.5 text-blue-500" />
             <span>Ownership Verification Details:</span>
           </div>
@@ -37,21 +37,32 @@ export default function ClaimCard({ claim }) {
           </p>
 
           {claim.adminNotes && (
-            <div className="text-xs text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/30 p-2.5 rounded-xl border border-amber-200 dark:border-amber-900/40">
+            <div className="text-lg text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/30 p-2.5 rounded-xl border border-amber-200 dark:border-amber-900/40">
               <strong>Admin Note:</strong> {claim.adminNotes}
             </div>
           )}
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs text-slate-500 dark:text-slate-400">
+      <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-100 dark:border-slate-800 text-lg text-slate-500 dark:text-slate-400">
         <div className="flex items-center gap-2">
-          <Avatar src={claim.claimant?.avatar} name={claim.claimant?.name} size="xs" />
-          <span>Claimant: <strong className="text-slate-700 dark:text-slate-300">{claim.claimant?.name}</strong></span>
+          <Avatar
+            src={claim.claimant?.avatar}
+            name={claim.claimant?.name}
+            size="xs"
+          />
+          <span>
+            Claimant:{" "}
+            <strong className="text-slate-700 dark:text-slate-300">
+              {claim.claimant?.name}
+            </strong>
+          </span>
         </div>
         <div className="flex items-center gap-1.5">
           <Calendar className="w-3.5 h-3.5" />
-          <span>Submitted on {new Date(claim.createdAt).toLocaleDateString()}</span>
+          <span>
+            Submitted on {new Date(claim.createdAt).toLocaleDateString()}
+          </span>
         </div>
       </div>
     </Card>
