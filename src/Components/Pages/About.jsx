@@ -56,7 +56,7 @@ function TelegramIcon() {
 }
 
 // ---------- Illustrations ----------
-function IllustrationImage({ src, alt, className = "w-full max-w-sm" }) {
+function IllustrationImage({ src, alt, className = "w-full max-w-sm", glow = false }) {
   if (!src) {
     return (
       <div
@@ -66,7 +66,23 @@ function IllustrationImage({ src, alt, className = "w-full max-w-sm" }) {
       </div>
     );
   }
-  return <img src={src} alt={alt} className={`${className} object-contain`} />;
+  return (
+    <div className={`relative group ${className}`}>
+      {glow && (
+        <>
+          {/* Primary Breathing Glow */}
+          <div className="absolute -inset-8 bg-brand-primary/20 blur-3xl rounded-full animate-pulse transition-all duration-1000 group-hover:bg-brand-primary/30 group-hover:blur-2xl" />
+          {/* Secondary Atmospheric Aura */}
+          <div className="absolute -inset-12 bg-brand-secondary/10 blur-3xl rounded-full animate-pulse [animation-duration:4s] opacity-50 group-hover:opacity-100 transition-opacity duration-700" />
+        </>
+      )}
+      <img
+        src={src}
+        alt={alt}
+        className={`relative z-10 w-full h-full object-contain transition-all duration-500 group-hover:scale-105 group-hover:brightness-110 ${className.replace('w-full max-w-sm', '')}`}
+      />
+    </div>
+  );
 }
 
 // ---------- Data Keys ----------
@@ -187,7 +203,12 @@ export default function AboutAskKh() {
         </ScrollReveal>
         <div className="flex justify-center">
           <ScrollReveal animation="scaleIn" delay={200}>
-            <IllustrationImage src={darkMode ? communityDarkImg : communityImg} alt="About AskKh" className="w-full max-w-m animate-float" />
+            <IllustrationImage
+              src={darkMode ? communityDarkImg : communityImg}
+              alt="About AskKh"
+              className="w-full max-w-m animate-float"
+              glow={darkMode}
+            />
           </ScrollReveal>
         </div>
       </section>
@@ -225,7 +246,12 @@ export default function AboutAskKh() {
       <section className="max-w-6xl mx-auto px-6 py-20 grid md:grid-cols-2 gap-12 items-center">
         <div className="flex justify-center order-2 md:order-1">
           <ScrollReveal animation="scaleIn">
-            <IllustrationImage src={darkMode ? missionDarkImg : missionImg} alt="Our Mission" className="w-full max-w-md animate-float" />
+            <IllustrationImage
+              src={darkMode ? missionDarkImg : missionImg}
+              alt="Our Mission"
+              className="w-full max-w-md animate-float"
+              glow={darkMode}
+            />
           </ScrollReveal>
         </div>
         <div className="order-1 md:order-2">
@@ -275,7 +301,12 @@ export default function AboutAskKh() {
           </div>
           <div className="flex justify-center">
             <ScrollReveal animation="scaleIn" delay={200}>
-              <IllustrationImage src={darkMode ? visionDarkImg : visionImg} alt="Our Vision" className="w-full max-w-md animate-float" />
+              <IllustrationImage
+                src={darkMode ? visionDarkImg : visionImg}
+                alt="Our Vision"
+                className="w-full max-w-md animate-float"
+                glow={darkMode}
+              />
             </ScrollReveal>
           </div>
         </div>
