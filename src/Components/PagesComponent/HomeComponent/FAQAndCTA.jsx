@@ -37,16 +37,16 @@ export default function FAQAndCTA({ darkMode }) {
       {/* FAQ Section */}
       <section className="mb-28 max-w-4xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-12">
-          <div 
+          <div
             className={`inline-block text-xs font-bold uppercase tracking-wider px-4 py-1.5 rounded-full mb-3 shadow-sm ${
-              darkMode 
-                ? "bg-zinc-800 text-[var(--color-brand-primary)]" 
-                : "bg-[var(--color-brand-primary-light)] text-[var(--color-brand-primary)]"
+              darkMode
+                ? "bg-zinc-800 text-[var(--home-primary-text)]"
+                : "bg-[var(--color-brand-primary-light)] text-[var(--home-primary-text)]"
             }`}
           >
             {t("faqBadge")}
           </div>
-          <h2 className="text-3xl md:text-4xl font-bold text-[var(--color-brand-primary)] mb-3">
+          <h2 className="text-3xl md:text-4xl font-bold text-[var(--home-primary-text)] mb-3">
             {t("faqTitle")}
           </h2>
         </div>
@@ -61,8 +61,8 @@ export default function FAQAndCTA({ darkMode }) {
                 whileHover={{ scale: 1.01 }}
                 transition={{ duration: 0.2 }}
                 className={`backdrop-blur-md rounded-3xl shadow-sm p-6 sm:p-8 cursor-pointer overflow-hidden transition-colors duration-300 ${
-                  darkMode 
-                    ? "bg-zinc-900/90 text-slate-100" 
+                  darkMode
+                    ? "bg-zinc-900/90 text-slate-100"
                     : "bg-white/95 text-gray-800"
                 }`}
               >
@@ -75,7 +75,7 @@ export default function FAQAndCTA({ darkMode }) {
                   <motion.div
                     animate={{ rotate: isOpen ? 180 : 0 }}
                     transition={{ duration: 0.3 }}
-                    className={`flex-shrink-0 text-[var(--color-brand-primary)] p-2 rounded-full ${
+                    className={`flex-shrink-0 text-[var(--home-primary-text)] p-2 rounded-full ${
                       darkMode ? "bg-zinc-800" : "bg-[var(--color-brand-primary-light)]"
                     }`}
                   >
@@ -152,7 +152,7 @@ export default function FAQAndCTA({ darkMode }) {
             </div>
 
             {status && (
-              <motion.p 
+              <motion.p
                 initial={{ opacity: 0, y: -5 }}
                 animate={{ opacity: 1, y: 0 }}
                 className={`text-xs font-medium mt-2 ${status === "success" ? "text-emerald-400" : "text-red-400"}`}

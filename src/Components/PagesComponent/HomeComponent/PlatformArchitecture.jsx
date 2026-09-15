@@ -25,21 +25,21 @@ export default function PlatformArchitecture({ darkMode }) {
 
   return (
     <section className="text-center mt-24 mb-16 relative z-10 font-[family-name:var(--font-brand)]">
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 10 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         whileHover={{ scale: 1.05 }}
         className={`inline-block text-xs font-semibold uppercase tracking-wider px-4 py-1.5 rounded-full mb-4 shadow-sm cursor-pointer ${
-          darkMode 
-            ? "bg-zinc-800 text-[var(--color-brand-primary)]" 
-            : "bg-[var(--color-brand-primary-light)] text-[var(--color-brand-primary)]"
+          darkMode
+            ? "bg-zinc-800 text-[var(--home-primary-text)]"
+            : "bg-[var(--color-brand-primary-light)] text-[var(--home-primary-text)]"
         }`}
       >
         {t("archBadge")}
       </motion.div>
 
-      <h2 className="text-3xl md:text-4xl font-bold text-[var(--color-brand-primary)] mb-3">
+      <h2 className="text-3xl md:text-4xl font-bold text-[var(--home-primary-text)] mb-3">
         {t("archTitle")}
       </h2>
 
@@ -51,13 +51,13 @@ export default function PlatformArchitecture({ darkMode }) {
 
       <div className="grid md:grid-cols-3 gap-8 text-left">
         {cards.map((item, idx) => (
-          <motion.div 
+          <motion.div
             key={idx}
             whileHover={{ y: -8 }}
             transition={{ duration: 0.3 }}
             className={`backdrop-blur-md rounded-3xl p-6 flex flex-col justify-between cursor-pointer transition-colors duration-300 ${
-              darkMode 
-                ? "bg-zinc-900/90 text-slate-100" 
+              darkMode
+                ? "bg-zinc-900/90 text-slate-100"
                 : "bg-white/95 text-gray-800"
             }`}
           >

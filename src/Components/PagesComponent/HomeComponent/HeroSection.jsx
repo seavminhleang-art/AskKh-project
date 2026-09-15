@@ -15,23 +15,23 @@ export default function HeroSection({ darkMode }) {
       setSubscribeMessage(t("emailError"));
       return;
     }
-    
+
     setSubscribeStatus("success");
     setSubscribeMessage(t("emailSuccess", { email: emailInput }));
     setEmailInput("");
   };
 
   return (
-    <motion.section 
+    <motion.section
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
       className="mb-16 relative z-10 font-[family-name:var(--font-brand)] text-center py-12 md:py-16"
     >
-      <h1 className="relative text-3xl md:text-5xl font-bold text-[var(--color-brand-primary)] mb-2">
+      <h1 className="relative text-3xl md:text-5xl font-bold text-[var(--home-primary-text)] mb-2">
         {t("heroTitle1")}
       </h1>
-      <h2 className="relative text-2xl md:text-3xl font-semibold text-[var(--color-brand-secondary)] mb-4">
+      <h2 className="relative text-2xl md:text-3xl font-semibold text-[var(--home-secondary-text)] mb-4">
         {t("heroTitle2")}
       </h2>
 
@@ -50,12 +50,12 @@ export default function HeroSection({ darkMode }) {
             onChange={(e) => setEmailInput(e.target.value)}
             placeholder={t("emailPlaceholder")}
             className={`rounded-full px-5 py-2.5 w-full sm:w-72 focus:outline-none focus:ring-2 focus:ring-[var(--color-brand-secondary)] backdrop-blur-sm shadow-sm transition-all text-sm ${
-              darkMode 
-                ? "bg-zinc-900/90 text-white placeholder-slate-400" 
+              darkMode
+                ? "bg-zinc-900/90 text-white placeholder-slate-400"
                 : "bg-white/80 border border-gray-200 text-gray-900 placeholder-gray-400"
             }`}
           />
-          <motion.button 
+          <motion.button
             type="submit"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -66,10 +66,10 @@ export default function HeroSection({ darkMode }) {
         </div>
 
         {subscribeStatus && (
-          <motion.p 
+          <motion.p
             initial={{ opacity: 0, y: -5 }}
             animate={{ opacity: 1, y: 0 }}
-            className={`text-xs font-medium mt-1 ${subscribeStatus === "success" ? "text-[var(--color-brand-accent)]" : "text-[var(--color-brand-secondary)]"}`}
+            className={`text-xs font-medium mt-1 ${subscribeStatus === "success" ? "text-[var(--color-brand-accent)]" : "text-[var(--home-secondary-text)]"}`}
           >
             {subscribeMessage}
           </motion.p>

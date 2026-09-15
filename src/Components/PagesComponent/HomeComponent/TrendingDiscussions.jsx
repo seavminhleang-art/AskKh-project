@@ -10,11 +10,11 @@ export default function TrendingDiscussions({ darkMode }) {
     {
       tags: ["#React", "#ISTAD"],
       tagColors: [
-        darkMode 
-          ? "bg-blue-950/80 text-blue-400" 
+        darkMode
+          ? "bg-blue-950/80 text-blue-400"
           : "bg-blue-50 text-blue-600",
-        darkMode 
-          ? "bg-zinc-800 text-slate-300" 
+        darkMode
+          ? "bg-zinc-800 text-slate-300"
           : "bg-gray-100 text-gray-600"
       ],
       title: t("disc1Title"),
@@ -27,11 +27,11 @@ export default function TrendingDiscussions({ darkMode }) {
     {
       tags: ["#Database", "#SQL"],
       tagColors: [
-        darkMode 
-          ? "bg-emerald-950/80 text-emerald-400" 
+        darkMode
+          ? "bg-emerald-950/80 text-emerald-400"
           : "bg-emerald-50 text-emerald-600",
-        darkMode 
-          ? "bg-zinc-800 text-slate-300" 
+        darkMode
+          ? "bg-zinc-800 text-slate-300"
           : "bg-gray-100 text-gray-600"
       ],
       title: t("disc2Title"),
@@ -44,11 +44,11 @@ export default function TrendingDiscussions({ darkMode }) {
     {
       tags: ["#Career", "#Internship"],
       tagColors: [
-        darkMode 
-          ? "bg-amber-950/80 text-amber-400" 
+        darkMode
+          ? "bg-amber-950/80 text-amber-400"
           : "bg-amber-50 text-amber-600",
-        darkMode 
-          ? "bg-zinc-800 text-slate-300" 
+        darkMode
+          ? "bg-zinc-800 text-slate-300"
           : "bg-gray-100 text-gray-600"
       ],
       title: t("disc3Title"),
@@ -63,28 +63,28 @@ export default function TrendingDiscussions({ darkMode }) {
   return (
     <section className="mt-28 mb-16 relative z-10 font-[family-name:var(--font-brand)]">
       <div className="text-center mb-12">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           whileHover={{ scale: 1.05 }}
           className={`inline-block text-xs font-bold uppercase tracking-wider px-4 py-1.5 rounded-full mb-3 shadow-sm cursor-pointer ${
-            darkMode 
-              ? "bg-red-950/80 text-red-400" 
-              : "bg-[#fde0e0]/90 text-[#f44336]"
+            darkMode
+              ? "bg-red-950/80 text-red-400"
+              : "bg-[#fde0e0]/90 text-[var(--home-secondary-text)]"
           }`}
         >
           {t("discBadge")}
         </motion.div>
 
         <h2 className={`text-3xl md:text-4xl font-bold mb-4 ${
-          darkMode ? "text-red-400" : "text-[#f44336]"
+          darkMode ? "text-red-400" : "text-[var(--home-secondary-text)]"
         }`}>
           {t("discTitle")}
         </h2>
 
         <div className="flex justify-end max-w-7xl mx-auto px-2">
-          <motion.a whileHover={{ x: 4 }} href="#" className="text-[#0056ff] font-semibold text-sm flex items-center gap-1 hover:underline cursor-pointer">
+          <motion.a whileHover={{ x: 4 }} href="#" className="text-[var(--home-link-text)] font-semibold text-sm flex items-center gap-1 hover:underline cursor-pointer">
             {t("discViewAll")} →
           </motion.a>
         </div>
@@ -97,8 +97,8 @@ export default function TrendingDiscussions({ darkMode }) {
             whileHover={{ y: -6 }}
             transition={{ duration: 0.3 }}
             className={`backdrop-blur-md rounded-3xl shadow-sm p-6 flex flex-col justify-between cursor-pointer transition-colors duration-300 ${
-              darkMode 
-                ? "bg-zinc-900/90 text-slate-100" 
+              darkMode
+                ? "bg-zinc-900/90 text-slate-100"
                 : "bg-white/95 text-gray-800"
             }`}
           >
@@ -134,7 +134,7 @@ export default function TrendingDiscussions({ darkMode }) {
                   {discussion.author}
                 </span>
               </div>
-              
+
               <div className="flex items-center gap-4">
                 <span className={`flex items-center gap-1.5 ${darkMode ? "text-slate-400" : "text-gray-500"}`}>
                   <ChatBubbleLeftIcon className={`w-4 h-4 ${darkMode ? "text-slate-500" : "text-gray-400"}`} />

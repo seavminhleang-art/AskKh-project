@@ -29,7 +29,7 @@ export default function CommunityVoice({ darkMode }) {
   return (
     <section className="mt-28 mb-16 relative z-10 font-[family-name:var(--font-brand)]">
       <div className="text-center mb-12">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -37,15 +37,15 @@ export default function CommunityVoice({ darkMode }) {
           whileTap={{ scale: 0.95 }}
           transition={{ duration: 0.2 }}
           className={`inline-block text-xs font-bold uppercase tracking-wider px-4 py-1.5 rounded-full mb-3 shadow-sm cursor-pointer ${
-            darkMode 
-              ? "bg-zinc-800 text-[var(--color-brand-primary)]" 
-              : "bg-[var(--color-brand-primary-light)] text-[var(--color-brand-primary)]"
+            darkMode
+              ? "bg-zinc-800 text-[var(--home-primary-text)]"
+              : "bg-[var(--color-brand-primary-light)] text-[var(--home-primary-text)]"
           }`}
         >
           {t("testBadge")}
         </motion.div>
 
-        <h2 className="text-3xl md:text-4xl font-bold text-[var(--color-brand-primary)] mb-3">
+        <h2 className="text-3xl md:text-4xl font-bold text-[var(--home-primary-text)] mb-3">
           {t("testTitle")}
         </h2>
 
@@ -63,8 +63,8 @@ export default function CommunityVoice({ darkMode }) {
             whileHover={{ y: -6 }}
             transition={{ duration: 0.3 }}
             className={`backdrop-blur-md rounded-3xl shadow-sm p-6 flex flex-col justify-between cursor-pointer transition-colors duration-300 ${
-              darkMode 
-                ? "bg-zinc-900/90 text-slate-100" 
+              darkMode
+                ? "bg-zinc-900/90 text-slate-100"
                 : "bg-white/95 text-gray-800"
             }`}
           >
@@ -77,12 +77,12 @@ export default function CommunityVoice({ darkMode }) {
             <div className={`flex items-center gap-3 pt-4 border-t ${
               darkMode ? "border-zinc-800" : "border-gray-100"
             }`}>
-              <img 
-                src={testimonial.avatar} 
-                alt={testimonial.author} 
+              <img
+                src={testimonial.avatar}
+                alt={testimonial.author}
                 className={`w-10 h-10 rounded-full object-cover ${
                   darkMode ? "border-zinc-700" : "border-gray-200"
-                }`} 
+                }`}
               />
               <div>
                 <h4 className={`font-bold text-sm ${darkMode ? "text-slate-100" : "text-gray-900"}`}>

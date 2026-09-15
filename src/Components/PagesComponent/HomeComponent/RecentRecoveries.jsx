@@ -45,7 +45,7 @@ export default function RecentRecoveries({ darkMode }) {
   return (
     <section className="mt-28 mb-16 relative z-10 font-[family-name:var(--font-brand)]">
       <div className="text-center mb-12">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -53,15 +53,15 @@ export default function RecentRecoveries({ darkMode }) {
           whileTap={{ scale: 0.95 }}
           transition={{ duration: 0.2 }}
           className={`inline-block text-xs font-bold uppercase tracking-wider px-4 py-1.5 rounded-full mb-3 shadow-sm cursor-pointer ${
-            darkMode 
-              ? "bg-zinc-800 text-[var(--color-brand-secondary)]" 
-              : "bg-[var(--color-brand-secondary-light)] text-[var(--color-brand-secondary)]"
+            darkMode
+              ? "bg-zinc-800 text-[var(--home-secondary-text)]"
+              : "bg-[var(--color-brand-secondary-light)] text-[var(--home-secondary-text)]"
           }`}
         >
           {t("recBadge")}
         </motion.div>
 
-        <h2 className="text-3xl md:text-4xl font-bold text-[var(--color-brand-secondary)] mb-3">
+        <h2 className="text-3xl md:text-4xl font-bold text-[var(--home-secondary-text)] mb-3">
           {t("recTitle")}
         </h2>
 
@@ -79,8 +79,8 @@ export default function RecentRecoveries({ darkMode }) {
             whileHover={{ y: -6 }}
             transition={{ duration: 0.3 }}
             className={`backdrop-blur-md rounded-3xl shadow-sm p-5 flex flex-col justify-between cursor-pointer transition-colors duration-300 ${
-              darkMode 
-                ? "bg-zinc-900/90 text-slate-100" 
+              darkMode
+                ? "bg-zinc-900/90 text-slate-100"
                 : "bg-white/95 text-gray-800"
             }`}
           >
@@ -100,7 +100,7 @@ export default function RecentRecoveries({ darkMode }) {
                 <span className={`flex items-center gap-1 font-medium truncate max-w-[180px] ${
                   darkMode ? "text-slate-300" : "text-gray-500"
                 }`}>
-                  <MapPinIcon className="w-3.5 h-3.5 text-[var(--color-brand-secondary)] flex-shrink-0" />
+                  <MapPinIcon className="w-3.5 h-3.5 text-[var(--home-secondary-text)] flex-shrink-0" />
                   {item.location}
                 </span>
                 <span className="flex-shrink-0">{item.date}</span>
@@ -134,8 +134,8 @@ export default function RecentRecoveries({ darkMode }) {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className={`text-xs font-semibold px-3.5 py-1.5 rounded-full transition shadow-sm ${
-                  darkMode 
-                    ? "bg-emerald-950/80 text-emerald-400 hover:bg-emerald-900/80" 
+                  darkMode
+                    ? "bg-emerald-950/80 text-emerald-400 hover:bg-emerald-900/80"
                     : "bg-emerald-50 text-[var(--color-brand-accent)] hover:bg-emerald-100"
                 }`}
               >

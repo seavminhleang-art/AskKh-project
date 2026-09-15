@@ -28,13 +28,13 @@ export default function HowCommunityQAWorks({ darkMode }) {
             </div>
             <div className="flex gap-1.5">
               <div className="bg-white/90 dark:bg-zinc-800/90 backdrop-blur-sm px-2.5 py-1 rounded-full shadow-sm flex items-center gap-1.5">
-                <Tag className="w-3.5 h-3.5 text-[var(--color-brand-secondary)]" />
+                <Tag className="w-3.5 h-3.5 text-[var(--home-secondary-text)]" />
                 <span className="text-[10px] font-semibold text-slate-700 dark:text-slate-200">
                   {t("tagTopic", { defaultValue: "Topic: React" })}
                 </span>
               </div>
               <div className="bg-white/90 dark:bg-zinc-800/90 backdrop-blur-sm px-2.5 py-1 rounded-full shadow-sm flex items-center gap-1.5">
-                <ShieldCheck className="w-3.5 h-3.5 text-[var(--color-brand-secondary)]" />
+                <ShieldCheck className="w-3.5 h-3.5 text-[var(--home-secondary-text)]" />
                 <span className="text-[10px] font-semibold text-slate-700 dark:text-slate-200">
                   {t("tagScope", { defaultValue: "Scope: ISTAD" })}
                 </span>
@@ -56,7 +56,7 @@ export default function HowCommunityQAWorks({ darkMode }) {
           <div className="absolute inset-0 opacity-15 bg-[radial-gradient(var(--color-brand-primary)_1px,transparent_1px)] [background-size:16px_16px]" />
           <div className="relative z-10 w-full max-w-[200px] flex flex-col gap-2.5">
             <div className="bg-white dark:bg-zinc-800 rounded-lg p-2.5 shadow flex items-center gap-2">
-              <Search className="w-4 h-4 text-[var(--color-brand-secondary)]" />
+              <Search className="w-4 h-4 text-[var(--home-secondary-text)]" />
               <div className="flex-1 space-y-1">
                 <div className="h-2.5 bg-slate-200 dark:bg-zinc-700 rounded w-3/4" />
                 <div className="h-2 bg-slate-100 dark:bg-zinc-600 rounded w-1/2" />
@@ -65,7 +65,7 @@ export default function HowCommunityQAWorks({ darkMode }) {
             </div>
             <div className="bg-white/90 dark:bg-zinc-800/90 backdrop-blur-sm rounded-xl p-3 shadow-md">
               <div className="flex items-center gap-2.5 mb-2">
-                <div className="w-8 h-8 rounded-full bg-[var(--color-brand-secondary-light)] flex items-center justify-center text-[var(--color-brand-secondary)] font-bold text-xs">
+                <div className="w-8 h-8 rounded-full bg-[var(--color-brand-secondary-light)] dark:bg-red-950 flex items-center justify-center text-[var(--home-secondary-text)] font-bold text-xs">
                   U1
                 </div>
                 <div className="flex-1 space-y-1">
@@ -125,21 +125,21 @@ export default function HowCommunityQAWorks({ darkMode }) {
 
   return (
     <section className="text-center mt-24 mb-16 relative z-10 font-[family-name:var(--font-brand)]">
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 10 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         whileHover={{ scale: 1.05 }}
         className={`inline-block text-xs font-semibold uppercase tracking-wider px-4 py-1.5 rounded-full mb-4 shadow-sm cursor-pointer ${
-          darkMode 
-            ? "bg-zinc-800 text-[var(--color-brand-primary)]" 
-            : "bg-[var(--color-brand-primary-light)] text-[var(--color-brand-primary)]"
+          darkMode
+            ? "bg-zinc-800 text-[var(--home-primary-text)]"
+            : "bg-[var(--color-brand-primary-light)] text-[var(--home-primary-text)]"
         }`}
       >
         {t("qaBadge", { defaultValue: "Community Architecture" })}
       </motion.div>
 
-      <h2 className="text-3xl md:text-4xl font-bold text-[var(--color-brand-primary)] mb-3">
+      <h2 className="text-3xl md:text-4xl font-bold text-[var(--home-primary-text)] mb-3">
         {t("qaSectionTitle", { defaultValue: "How Community Q&A Works" })}
       </h2>
 
@@ -153,13 +153,13 @@ export default function HowCommunityQAWorks({ darkMode }) {
 
       <div className="grid md:grid-cols-3 gap-8 text-left">
         {steps.map((item) => (
-          <motion.div 
+          <motion.div
             key={item.id}
             whileHover={{ y: -8 }}
             transition={{ duration: 0.3 }}
             className={`backdrop-blur-md rounded-3xl p-6 flex flex-col justify-between cursor-pointer transition-colors duration-300 ${
-              darkMode 
-                ? "bg-zinc-900/90 text-slate-100" 
+              darkMode
+                ? "bg-zinc-900/90 text-slate-100"
                 : "bg-white/95 text-gray-800"
             }`}
           >

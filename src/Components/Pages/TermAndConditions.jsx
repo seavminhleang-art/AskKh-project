@@ -51,7 +51,7 @@ export default function TermsAndConditions() {
   }));
 
   return (
-    <div className="bg-[var(--bg-main)] text-[var(--text-main)] antialiased transition-colors duration-300">
+    <div className="site-content bg-[var(--bg-main)] text-[var(--text-main)] antialiased transition-colors duration-300">
       <section className={`${darkMode ? "bg-zinc-900" : "bg-brand-primary-light"} transition-colors duration-300`}>
         <div className="max-w-4xl mx-auto px-6 py-16 text-center">
           <ScrollReveal animation="fadeInUp">

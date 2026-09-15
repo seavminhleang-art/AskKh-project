@@ -22,7 +22,7 @@ export default function HowSecureRecoveryWorks({ darkMode }) {
               <div className="w-20 h-20 bg-[var(--color-brand-primary)] rounded-3xl flex items-center justify-center shadow-lg shadow-[var(--color-brand-primary)]/30 transform -rotate-6">
                 <MapPin className="w-10 h-10 text-white" />
               </div>
-              <div className="absolute -top-2 -right-4 bg-white dark:bg-zinc-800 px-2.5 py-1 rounded-full text-xs font-bold text-[var(--color-brand-secondary)] shadow-md">
+              <div className="absolute -top-2 -right-4 bg-white dark:bg-zinc-800 px-2.5 py-1 rounded-full text-xs font-bold text-[var(--home-secondary-text)] shadow-md">
                 {t("tagScope", { defaultValue: "ISTAD" })}
               </div>
             </div>
@@ -109,21 +109,21 @@ export default function HowSecureRecoveryWorks({ darkMode }) {
 
   return (
     <section className="text-center mt-24 mb-16 relative z-10 font-[family-name:var(--font-brand)]">
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 10 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         whileHover={{ scale: 1.05 }}
         className={`inline-block text-xs font-semibold uppercase tracking-wider px-4 py-1.5 rounded-full mb-4 shadow-sm cursor-pointer ${
-          darkMode 
-            ? "bg-zinc-800 text-[var(--color-brand-primary)]" 
-            : "bg-[var(--color-brand-primary-light)] text-[var(--color-brand-primary)]"
+          darkMode
+            ? "bg-zinc-800 text-[var(--home-primary-text)]"
+            : "bg-[var(--color-brand-primary-light)] text-[var(--home-primary-text)]"
         }`}
       >
         {t("recoveryBadge", { defaultValue: "Lost&Found ARCHITECTURE" })}
       </motion.div>
 
-      <h2 className="text-3xl md:text-4xl font-bold text-[var(--color-brand-primary)] mb-3">
+      <h2 className="text-3xl md:text-4xl font-bold text-[var(--home-primary-text)] mb-3">
         {t("recoverySectionTitle", { defaultValue: "How Secure Recovery Works" })}
       </h2>
 
@@ -137,13 +137,13 @@ export default function HowSecureRecoveryWorks({ darkMode }) {
 
       <div className="grid md:grid-cols-3 gap-8 text-left">
         {steps.map((item) => (
-          <motion.div 
+          <motion.div
             key={item.id}
             whileHover={{ y: -8 }}
             transition={{ duration: 0.3 }}
             className={`backdrop-blur-md rounded-3xl p-6 flex flex-col justify-between cursor-pointer transition-colors duration-300 ${
-              darkMode 
-                ? "bg-zinc-900/90 text-slate-100" 
+              darkMode
+                ? "bg-zinc-900/90 text-slate-100"
                 : "bg-white/95 text-gray-800"
             }`}
           >

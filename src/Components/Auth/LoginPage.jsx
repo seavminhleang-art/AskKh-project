@@ -61,6 +61,7 @@ import {
 } from "@/Components/motion/animated-toast-stack";
 
 import loginIllustration from "../../assets/Website/login-illustration.png";
+import LoadingSpinner from "../common/LoadingSpinner.jsx";
 
 const translations = {
   km: {
@@ -544,6 +545,8 @@ export default function LoginPage() {
     setResetLoading,
   ] = useState(false);
 
+  const [oauthLoading, setOauthLoading] = useState(false);
+
   const notifyError = (
     description,
   ) => {
@@ -590,6 +593,15 @@ export default function LoginPage() {
     });
 
     navigate("/dashboard", { replace: true });
+  };
+
+  const showOauthLoginSuccess = async (user) => {
+    setOauthLoading(true);
+    try {
+      await showLoginSuccess(user);
+    } finally {
+      setOauthLoading(false);
+    }
   };
 
   const getFirebaseErrorMessage =
@@ -813,6 +825,7 @@ export default function LoginPage() {
 
   return (
     <>
+      {(isSubmitting || oauthLoading) && <LoadingSpinner title="Signing in to NEXA" />}
       <AnimatedToastStack
         toasts={
           toasts
@@ -1086,7 +1099,7 @@ export default function LoginPage() {
                     t.google
                   }
                   onSuccess={
-                    showLoginSuccess
+                    showOauthLoginSuccess
                   }
                   onError={(
                     error,
@@ -1103,7 +1116,7 @@ export default function LoginPage() {
                     t.github
                   }
                   onSuccess={
-                    showLoginSuccess
+                    showOauthLoginSuccess
                   }
                   onError={(
                     error,

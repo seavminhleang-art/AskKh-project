@@ -4,8 +4,13 @@ import Navbar from './Components/Nav/NavBarComponent.jsx'
 import PageTransition from './Components/Animations/PageTransition.jsx'
 import ScrollProgress from './Components/Animations/ScrollProgress.jsx'
 import Preloader from './Components/Animations/Preloader.jsx'
+import { useTheme } from './context/ThemeContext.jsx'
+import { useLanguage } from './Components/Language/LanguageContext.jsx'
 
 function App() {
+  const { darkMode } = useTheme()
+  const { language } = useLanguage()
+
   return (
     <Preloader>
       <div className="min-h-screen flex flex-col">
@@ -13,7 +18,7 @@ function App() {
         <Navbar />
         <main className="flex-grow">
           <PageTransition>
-            <Outlet />
+            <Outlet context={{ darkMode, language }} />
           </PageTransition>
         </main>
         <FooterComponent />

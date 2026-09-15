@@ -51,14 +51,24 @@ export default function Sidebar({ mode = 'user' }) {
   };
 
   return (
-    <aside className="w-64 shrink-0 hidden md:flex flex-col border-r border-slate-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-900/60 backdrop-blur-md min-h-[calc(100vh-4rem)] p-4 justify-between transition-colors">
+    <aside className={cn("w-64 shrink-0 hidden md:flex flex-col min-h-screen p-4 justify-between transition-colors", mode === 'admin' ? "admin-sidebar" : "border-r border-slate-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-900/60 backdrop-blur-md")}>
       <div className="space-y-6">
+        {mode === 'admin' && (
+          <div className="flex items-center gap-3 px-2 pt-2">
+            <span className="admin-brand-mark">N</span>
+            <div>
+              <p className="text-sm font-black tracking-wide text-white">NEXA</p>
+              <p className="text-[10px] font-bold uppercase tracking-[.18em] text-indigo-400">Administration</p>
+            </div>
+          </div>
+        )}
+
         {/* User / Admin Mini Profile Badge */}
         {user && (
-          <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/60 dark:border-slate-800 flex items-center gap-3">
+          <div className={cn("p-3.5 rounded-2xl border flex items-center gap-3", mode === 'admin' ? "admin-profile" : "bg-slate-50 dark:bg-slate-800/60 border-slate-200/60 dark:border-slate-800")}>
             <Avatar src={user.avatar} name={user.name} size="md" />
             <div className="min-w-0 flex-1">
-              <p className="text-sm font-bold text-slate-900 dark:text-white truncate">
+              <p className={cn("text-sm font-bold truncate", mode === 'admin' ? "text-white" : "text-slate-900 dark:text-white")}>
                 {user.name}
               </p>
               <div className="flex items-center gap-1.5 mt-0.5">
@@ -82,7 +92,7 @@ export default function Sidebar({ mode = 'user' }) {
 
         {/* Section Label */}
         <div>
-          <p className="px-3 text-[11px] font-extrabold uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-2">
+          <p className={cn("px-3 text-[11px] font-extrabold uppercase tracking-wider mb-2", mode === 'admin' ? "text-slate-400" : "text-slate-400 dark:text-slate-500")}>
             {mode === 'admin' ? 'Campus Administration' : 'Member Workspace'}
           </p>
 
@@ -99,9 +109,11 @@ export default function Sidebar({ mode = 'user' }) {
                       'flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all select-none',
                       isActive
                         ? mode === 'admin'
-                          ? 'bg-rose-500/10 text-rose-600 dark:bg-rose-950/40 dark:text-rose-400 font-bold'
+                          ? 'admin-nav-active font-bold'
                           : 'bg-blue-50 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400 font-bold'
-                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-800/60'
+                        : mode === 'admin'
+                          ? 'admin-nav-idle'
+                          : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-800/60'
                     )
                   }
                 >

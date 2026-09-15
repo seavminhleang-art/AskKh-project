@@ -10,6 +10,16 @@ import communityImg from "../../assets/Website/community.jpg";
 import communityDarkImg from "../../assets/Website/community_dark.png";
 import visionImg from "../../assets/Website/vision.png";
 import visionDarkImg from "../../assets/Website/vision_dark.png";
+import sokcheatPhoto from "../../assets/Mentor/srorng_sokcheat.jpg";
+import rattanakmonyPhoto from "../../assets/Mentor/pech_rattanakmony.jpg";
+import lisaPhoto from "../../assets/Team/mom_lisa.jpg";
+import seavminhPhoto from "../../assets/Team/leang_seavminh.JPG";
+import lyhengPhoto from "../../assets/Team/cheakching_lyheng.jpg";
+import monizaPhoto from "../../assets/Team/cheat_chanmoniza.jpg";
+import tonganPhoto from "../../assets/Team/hor_tongan.jpg";
+import sothearithPhoto from "../../assets/Team/sroeun_sothearith.JPG";
+import thanaPhoto from "../../assets/Team/neang_thana.jpg";
+import tharathPhoto from "../../assets/Team/venthan_tharath.jpg";
 
 // ---------- Icons ----------
 function CheckIcon() {
@@ -81,22 +91,22 @@ const missionPointsKey = "aboutPage.missionPoints";
 const visionPointsKey = "aboutPage.visionPoints";
 
 const mentors = [
-  { num: "01", name: "aboutPage.members.names.sokcheat", roleLabel: "Senior IT Instructor", role: "aboutPage.members.roles.mentor", photo:"./src/assets/Mentor/srorng_sokcheat.jpg", github: "https://github.com/Sokcheatsrorng", telegram: "https://t.me/Sokcheat_srorng" },
-  { num: "02", name: "aboutPage.members.names.rattanakmony", roleLabel: "Senior IT Instructor", role: "aboutPage.members.roles.mentor", photo: "./src/assets/Mentor/pech_rattanakmony.jpg", github: "https://github.com/aintantony", telegram: "https://t.me/rattanakmony" },
+  { num: "01", name: "aboutPage.members.names.sokcheat", roleLabel: "Senior IT Instructor", role: "aboutPage.members.roles.mentor", photo: sokcheatPhoto, github: "https://github.com/Sokcheatsrorng", telegram: "https://t.me/Sokcheat_srorng" },
+  { num: "02", name: "aboutPage.members.names.rattanakmony", roleLabel: "Senior IT Instructor", role: "aboutPage.members.roles.mentor", photo: rattanakmonyPhoto, github: "https://github.com/aintantony", telegram: "https://t.me/rattanakmony" },
 ];
 
 const teamLeads = [
-  { num: "03", name: "aboutPage.members.names.lisa", roleLabel: "Frontend Developer", role: "aboutPage.members.roles.leader", photo: "./src/assets/Team/mom_lisa.jpg", github: "https://github.com/LisaMom", telegram: "https://t.me/lisamom369" },
-  { num: "04", name: "aboutPage.members.names.seavminh", roleLabel: "Java Developer", role: "aboutPage.members.roles.subLead", photo: "./src/assets/Team/leang_seavminh.jpg", github: "https://github.com/seavminhleang-art", telegram: "https://t.me/puthea_reach" },
+  { num: "03", name: "aboutPage.members.names.lisa", roleLabel: "Frontend Developer", role: "aboutPage.members.roles.leader", photo: lisaPhoto, github: "https://github.com/LisaMom", telegram: "https://t.me/lisamom369" },
+  { num: "04", name: "aboutPage.members.names.seavminh", roleLabel: "Java Developer", role: "aboutPage.members.roles.subLead", photo: seavminhPhoto, github: "https://github.com/seavminhleang-art", telegram: "https://t.me/puthea_reach" },
 ];
 
 const teamMembers = [
-  { num: "05", name: "aboutPage.members.names.lyheng", roleLabel: "Java Developer", role: "aboutPage.members.roles.member", photo: "./src/assets/Team/cheakching_lyheng.jpg", github: "https://github.com/lyheng142", telegram: "https://t.me/cclh142" },
-  { num: "06", name: "aboutPage.members.names.moniza", roleLabel: "Frontend Developer", role: "aboutPage.members.roles.member", photo: "./src/assets/Team/cheat_chanmoniza.jpg", github: "https://github.com/moniza-Dev", telegram: "https://t.me/chanmoniza_cheat" },
-  { num: "07", name: "aboutPage.members.names.tongan", roleLabel: "Java Developer", role: "aboutPage.members.roles.member", photo: "./src/assets/Team/hor_tongan.jpg", github: "https://github.com/TongAnWasHere", telegram: "https://t.me/TongAnWasHere" },
-  { num: "08", name: "aboutPage.members.names.sothearith", roleLabel: "Frontend Developer", role: "aboutPage.members.roles.member", photo: "./src/assets/Team/sroeun_sothearith.jpg", github: "https://github.com/Rith857", telegram: "https://t.me/sothearithsroeun" },
-  { num: "09", name: "aboutPage.members.names.thana", roleLabel: "Frontend Developer", role: "aboutPage.members.roles.member", photo: "./src/assets/Team/neang_thana.jpg", github: "https://github.com/mrrhello894-byte", telegram: "https://t.me/neangthana" },
-  { num: "10", name: "aboutPage.members.names.tharath", roleLabel: "Frontend Developer", role: "aboutPage.members.roles.member", photo: "./src/assets/Team/venthan_tharath.jpg", github: "https://github.com/tharath780-commits", telegram: "https://t.me/helterqt" },
+  { num: "05", name: "aboutPage.members.names.lyheng", roleLabel: "Java Developer", role: "aboutPage.members.roles.member", photo: lyhengPhoto, github: "https://github.com/lyheng142", telegram: "https://t.me/cclh142" },
+  { num: "06", name: "aboutPage.members.names.moniza", roleLabel: "Frontend Developer", role: "aboutPage.members.roles.member", photo: monizaPhoto, github: "https://github.com/moniza-Dev", telegram: "https://t.me/chanmoniza_cheat" },
+  { num: "07", name: "aboutPage.members.names.tongan", roleLabel: "Java Developer", role: "aboutPage.members.roles.member", photo: tonganPhoto, github: "https://github.com/TongAnWasHere", telegram: "https://t.me/TongAnWasHere" },
+  { num: "08", name: "aboutPage.members.names.sothearith", roleLabel: "Frontend Developer", role: "aboutPage.members.roles.member", photo: sothearithPhoto, github: "https://github.com/Rith857", telegram: "https://t.me/sothearithsroeun" },
+  { num: "09", name: "aboutPage.members.names.thana", roleLabel: "Frontend Developer", role: "aboutPage.members.roles.member", photo: thanaPhoto, github: "https://github.com/mrrhello894-byte", telegram: "https://t.me/neangthana" },
+  { num: "10", name: "aboutPage.members.names.tharath", roleLabel: "Frontend Developer", role: "aboutPage.members.roles.member", photo: tharathPhoto, github: "https://github.com/tharath780-commits", telegram: "https://t.me/helterqt" },
 ];
 
 function MemberCard({ num, name, roleLabel, role, photo, github, telegram, darkMode }) {
@@ -111,17 +121,18 @@ function MemberCard({ num, name, roleLabel, role, photo, github, telegram, darkM
           ))}
         </div>
       </div>
-      <div className="relative w-28 h-28 mx-auto my-6">
-        <div className="absolute inset-0 rounded-full border-2 border-dashed border-brand-primary/30" />
-        <span className="absolute top-1/2 -left-1.5 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-brand-primary" />
-        <span className="absolute top-1/2 -right-1.5 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-brand-primary" />
+      <div className="relative w-40 h-40 mx-auto my-5">
+        <div className="about-photo-orbit absolute inset-1 rounded-full border-2 border-dashed border-brand-primary/30" aria-hidden="true">
+          <span className="absolute top-1/2 -left-1.5 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-brand-primary" />
+          <span className="absolute top-1/2 -right-1.5 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-brand-primary" />
+          <span className={`absolute -bottom-1 left-1/2 -translate-x-1/2 w-3 h-3 rounded-full shadow border ${darkMode ? "bg-zinc-900 border-zinc-800" : "bg-white border-slate-100"}`} />
+        </div>
         {photo ? (
-          <img src={photo} alt={name} className={`absolute inset-1.5 w-[calc(100%-0.75rem)] h-[calc(100%-0.75rem)] rounded-full object-cover border-4 shadow ${darkMode ? "border-zinc-800 ring-4 ring-brand-primary/20" : "border-white"}`} />
+          <img src={photo} alt={t(name)} className={`absolute inset-2 w-[calc(100%-1rem)] h-[calc(100%-1rem)] rounded-full object-cover object-center border-4 shadow ${darkMode ? "border-zinc-800" : "border-white"}`} />
         ) : (
-          <div className={`absolute inset-1.5 rounded-full border-4 shadow flex items-center justify-center ${darkMode ? "bg-zinc-800 border-zinc-900" : "bg-slate-200 border-white"}`}>
+          <div className={`absolute inset-2 rounded-full border-4 shadow flex items-center justify-center ${darkMode ? "bg-zinc-800 border-zinc-900" : "bg-slate-200 border-white"}`}>
           </div>
         )}
-        <span className={`absolute -bottom-1 left-1/2 -translate-x-1/2 rounded-full p-1.5 shadow border ${darkMode ? "bg-zinc-900 border-zinc-800" : "bg-white border-slate-100"}`}></span>
       </div>
       <h3 className="text-brand-primary font-bold text-lg">{t(name)}</h3>
       <div className="flex items-center justify-center gap-2 mt-2">
@@ -153,7 +164,7 @@ export default function AboutAskKh() {
   const { t } = useTranslation();
   const { darkMode } = useTheme();
   return (
-    <div className="bg-[var(--bg-main)] text-[var(--text-main)] antialiased transition-colors duration-300">
+    <div className="site-content bg-[var(--bg-main)] text-[var(--text-main)] antialiased transition-colors duration-300">
       <section className="max-w-6xl mx-auto px-6 py-20 grid md:grid-cols-2 gap-12 items-center">
         <ScrollReveal animation="fadeInUp">
           <div className="no-transition">

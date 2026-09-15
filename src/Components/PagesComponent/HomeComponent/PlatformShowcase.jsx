@@ -8,25 +8,25 @@ export default function PlatformShowcase({ darkMode }) {
   const cards = [
     {
       label: t("showcaseCard1Label"),
-      labelColor: darkMode 
-        ? "bg-zinc-800 text-[var(--color-brand-primary)]" 
-        : "bg-[var(--color-brand-primary-light)] text-[var(--color-brand-primary)]",
+      labelColor: darkMode
+        ? "bg-zinc-800 text-[var(--home-primary-text)]"
+        : "bg-[var(--color-brand-primary-light)] text-[var(--home-primary-text)]",
       text: t("showcaseCard1Text"),
       img: "https://i.pinimg.com/1200x/ed/7a/c1/ed7ac18f0a66acd81f8a54a9846aa975.jpg",
     },
     {
       label: t("showcaseCard2Label"),
-      labelColor: darkMode 
-        ? "bg-emerald-950/80 text-emerald-400" 
+      labelColor: darkMode
+        ? "bg-emerald-950/80 text-emerald-400"
         : "bg-emerald-50 text-[var(--color-brand-accent)]",
       text: t("showcaseCard2Text"),
       img: "https://i.pinimg.com/736x/4d/ba/61/4dba6191ebd18650c52de2ed5fb47f7d.jpg",
     },
     {
       label: t("showcaseCard3Label"),
-      labelColor: darkMode 
-        ? "bg-zinc-800 text-[var(--color-brand-secondary)]" 
-        : "bg-[var(--color-brand-secondary-light)] text-[var(--color-brand-secondary)]",
+      labelColor: darkMode
+        ? "bg-zinc-800 text-[var(--home-secondary-text)]"
+        : "bg-[var(--color-brand-secondary-light)] text-[var(--home-secondary-text)]",
       text: t("showcaseCard3Text"),
       img: "https://i.pinimg.com/1200x/05/34/f7/0534f7df0b08edc70592d10d4bd908c0.jpg",
     },
@@ -34,12 +34,12 @@ export default function PlatformShowcase({ darkMode }) {
 
   return (
     <section className="grid md:grid-cols-3 gap-8 mb-20 relative z-10 font-[family-name:var(--font-brand)]">
-      <motion.div 
+      <motion.div
         whileHover={{ y: -5 }}
         transition={{ duration: 0.3 }}
         className={`md:col-span-2 backdrop-blur-md rounded-3xl overflow-hidden flex flex-col justify-between transition-colors duration-300 ${
-          darkMode 
-            ? "bg-zinc-900/90 text-slate-100" 
+          darkMode
+            ? "bg-zinc-900/90 text-slate-100"
             : "bg-white/95 text-gray-800"
         }`}
       >
@@ -68,9 +68,9 @@ export default function PlatformShowcase({ darkMode }) {
 
         <div className="p-8">
           <span className={`inline-block text-xs font-semibold px-3 py-1 rounded-full mb-3 ${
-            darkMode 
-              ? "bg-zinc-800 text-[var(--color-brand-primary)]" 
-              : "bg-[var(--color-brand-primary-light)] text-[var(--color-brand-primary)]"
+            darkMode
+              ? "bg-zinc-800 text-[var(--home-primary-text)]"
+              : "bg-[var(--color-brand-primary-light)] text-[var(--home-primary-text)]"
           }`}>
             {t("showcaseCoreFeatureTag")}
           </span>
@@ -91,12 +91,12 @@ export default function PlatformShowcase({ darkMode }) {
                 <p className={`font-medium ${darkMode ? "text-slate-100" : "text-gray-900"}`}>
                   {t("showcaseTeamName")}
                 </p>
-                <p className={`text-xs ${darkMode ? "text-slate-500" : "text-gray-500"}`}>
+                <p className={`text-xs ${darkMode ? "text-slate-300" : "text-gray-600"}`}>
                   {t("brand")}
                 </p>
               </div>
             </div>
-            <motion.a whileHover={{ x: 5 }} href="#" className="text-[var(--color-brand-primary)] font-semibold flex items-center gap-1">
+            <motion.a whileHover={{ x: 5 }} href="#" className="text-[var(--home-primary-text)] font-semibold flex items-center gap-1">
               {t("showcaseExploreMore")} →
             </motion.a>
           </div>
@@ -110,8 +110,8 @@ export default function PlatformShowcase({ darkMode }) {
             whileHover={{ scale: 1.02, x: 4 }}
             transition={{ duration: 0.2 }}
             className={`backdrop-blur-md rounded-3xl p-5 flex items-center justify-between cursor-pointer transition-colors duration-300 ${
-              darkMode 
-                ? "bg-zinc-900/90 text-slate-100" 
+              darkMode
+                ? "bg-zinc-900/90 text-slate-100"
                 : "bg-white/95 text-gray-800"
             }`}
           >
