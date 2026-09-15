@@ -102,7 +102,7 @@ const teamMembers = [
 function MemberCard({ num, name, roleLabel, role, photo, github, telegram, darkMode }) {
   const { t } = useTranslation();
   return (
-    <div className={`rounded-3xl border shadow-md overflow-hidden text-center pt-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-2 hover:border-brand-primary/50 ${darkMode ? "bg-zinc-900 border-zinc-800 hover:shadow-brand-primary/10" : "bg-white border-slate-200 hover:shadow-brand-primary/20"}`}>
+    <div className={`group rounded-3xl border shadow-md overflow-hidden text-center pt-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-2 hover:border-brand-primary/50 ${darkMode ? "bg-zinc-900 border-zinc-800 hover:shadow-brand-primary/10" : "bg-white border-slate-200 hover:shadow-brand-primary/20"}`}>
       <div className="flex justify-between items-start px-5">
         <span className="bg-brand-primary text-white text-xs font-bold px-3 py-1.5 rounded-lg">{num}</span>
         <div className="grid grid-cols-3 gap-1 mt-1">
@@ -112,13 +112,25 @@ function MemberCard({ num, name, roleLabel, role, photo, github, telegram, darkM
         </div>
       </div>
       <div className="relative w-28 h-28 mx-auto my-6">
-        <div className="absolute inset-0 rounded-full border-2 border-dashed border-brand-primary/30" />
+        {/* Static background ring */}
+        <div className="absolute inset-0 rounded-full border-2 border-dashed border-brand-primary/20" />
+
+        {/* Continuous Rotating Gradient Ring */}
+        <div
+          className="absolute inset-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500 motion-safe:group-hover:animate-spin"
+          style={{
+            background: `conic-gradient(from 0deg, transparent 0%, var(--color-brand-primary) 25%, transparent 50%)`,
+            WebkitMaskImage: 'radial-gradient(circle, transparent 65%, black 68%)',
+            maskImage: 'radial-gradient(circle, transparent 65%, black 68%)',
+          }}
+        />
+
         <span className="absolute top-1/2 -left-1.5 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-brand-primary" />
         <span className="absolute top-1/2 -right-1.5 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-brand-primary" />
         {photo ? (
-          <img src={photo} alt={name} className={`absolute inset-1.5 w-[calc(100%-0.75rem)] h-[calc(100%-0.75rem)] rounded-full object-cover border-4 shadow ${darkMode ? "border-zinc-800 ring-4 ring-brand-primary/20" : "border-white"}`} />
+          <img src={photo} alt={name} className={`relative z-10 absolute inset-1.5 w-[calc(100%-0.75rem)] h-[calc(100%-0.75rem)] rounded-full object-cover border-4 shadow ${darkMode ? "border-zinc-800 ring-4 ring-brand-primary/20" : "border-white"}`} />
         ) : (
-          <div className={`absolute inset-1.5 rounded-full border-4 shadow flex items-center justify-center ${darkMode ? "bg-zinc-800 border-zinc-900" : "bg-slate-200 border-white"}`}>
+          <div className={`relative z-10 absolute inset-1.5 rounded-full border-4 shadow flex items-center justify-center ${darkMode ? "bg-zinc-800 border-zinc-900" : "bg-slate-200 border-white"}`}>
           </div>
         )}
         <span className={`absolute -bottom-1 left-1/2 -translate-x-1/2 rounded-full p-1.5 shadow border ${darkMode ? "bg-zinc-900 border-zinc-800" : "bg-white border-slate-100"}`}></span>
