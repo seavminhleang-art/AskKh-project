@@ -20,7 +20,7 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#F7F8FA] px-4">
-      <form onSubmit={handleSubmit} className="w-full max-w-sm bg-white rounded-xl border border-gray-100 shadow-sm p-6 animate-fade-slide">
+      <form onSubmit={handleSubmit} className="w-full max-w-sm bg-white rounded-xl border border-gray-100  p-6 animate-fade-slide">
         <div className="w-10 h-10 rounded-lg bg-brand-primary text-white flex items-center justify-center font-bold mb-4">A</div>
         <h1 className="text-lg font-semibold text-gray-900">Sign in to Ask-Kh Admin</h1>
         <p className="text-sm text-gray-500 mt-1 mb-5">Manage users, posts, and moderation.</p>

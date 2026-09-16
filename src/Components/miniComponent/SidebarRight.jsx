@@ -31,8 +31,8 @@ const SidebarRight = ({ darkMode: propDarkMode, language = 'en' }) => {
 
   return (
     <aside className="w-full min-w-0 lg:col-start-2 xl:col-start-auto">
-      <div className={`rounded-2xl p-4 border transition-colors duration-300 ${
-        darkMode ? "bg-zinc-900 border-zinc-800" : "bg-white border-gray-100"
+      <div className={`rounded-2xl p-4 transition-colors duration-300 ${
+        darkMode ? "bg-zinc-900" : "bg-white"
       }`}>
         <div className="flex items-center justify-between mb-4">
           <h3 className={`font-bold text-xs ${darkMode ? "text-slate-200" : "text-gray-800"}`}>

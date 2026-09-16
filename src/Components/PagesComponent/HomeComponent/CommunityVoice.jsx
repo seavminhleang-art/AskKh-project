@@ -36,7 +36,7 @@ export default function CommunityVoice({ darkMode }) {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           transition={{ duration: 0.2 }}
-          className={`inline-block text-xs font-bold uppercase tracking-wider px-4 py-1.5 rounded-full mb-3 shadow-sm cursor-pointer ${
+          className={`inline-block text-xs font-bold uppercase tracking-wider px-4 py-1.5 rounded-full mb-3  cursor-pointer ${
             darkMode
               ? "bg-zinc-800 text-[var(--home-primary-text)]"
               : "bg-[var(--color-brand-primary-light)] text-[var(--home-primary-text)]"
@@ -62,7 +62,7 @@ export default function CommunityVoice({ darkMode }) {
             key={idx}
             whileHover={{ y: -6 }}
             transition={{ duration: 0.3 }}
-            className={`backdrop-blur-md rounded-3xl shadow-sm p-6 flex flex-col justify-between cursor-pointer transition-colors duration-300 ${
+            className={`backdrop-blur-md rounded-3xl  p-6 flex flex-col justify-between cursor-pointer transition-colors duration-300 ${
               darkMode
                 ? "bg-zinc-900/90 text-slate-100"
                 : "bg-white/95 text-gray-800"

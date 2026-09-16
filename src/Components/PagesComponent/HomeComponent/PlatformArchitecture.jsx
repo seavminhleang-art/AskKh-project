@@ -30,7 +30,7 @@ export default function PlatformArchitecture({ darkMode }) {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         whileHover={{ scale: 1.05 }}
-        className={`inline-block text-xs font-semibold uppercase tracking-wider px-4 py-1.5 rounded-full mb-4 shadow-sm cursor-pointer ${
+        className={`inline-block text-xs font-semibold uppercase tracking-wider px-4 py-1.5 rounded-full mb-4 cursor-pointer ${
           darkMode
             ? "bg-zinc-800 text-[var(--home-primary-text)]"
             : "bg-[var(--color-brand-primary-light)] text-[var(--home-primary-text)]"

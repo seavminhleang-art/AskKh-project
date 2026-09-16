@@ -9,9 +9,9 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          'bg-blue-600 text-white shadow-sm hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-500',
+          'bg-blue-600 text-white hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-500',
         destructive:
-          'bg-rose-500 text-white shadow-sm hover:bg-rose-600 dark:bg-rose-600 dark:hover:bg-rose-500',
+          'bg-rose-500 text-white hover:bg-rose-600 dark:bg-rose-600 dark:hover:bg-rose-500',
         outline:
           'border border-slate-200 bg-white text-slate-800 shadow-xs hover:bg-slate-50 hover:text-slate-900 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-800',
         secondary:
@@ -22,7 +22,7 @@ const buttonVariants = cva(
         coral:
           'bg-rose-500 text-white shadow-md shadow-rose-500/25 hover:bg-rose-600 dark:bg-rose-600 dark:hover:bg-rose-500',
         success:
-          'bg-emerald-600 text-white shadow-sm hover:bg-emerald-700 dark:bg-emerald-600 dark:hover:bg-emerald-500',
+          'bg-emerald-600 text-white hover:bg-emerald-700 dark:bg-emerald-600 dark:hover:bg-emerald-500',
       },
       size: {
         default: 'h-10 px-4 py-2',

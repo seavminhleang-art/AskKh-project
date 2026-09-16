@@ -27,13 +27,13 @@ export default function HowCommunityQAWorks({ darkMode }) {
               </div>
             </div>
             <div className="flex gap-1.5">
-              <div className="bg-white/90 dark:bg-zinc-800/90 backdrop-blur-sm px-2.5 py-1 rounded-full shadow-sm flex items-center gap-1.5">
+              <div className="bg-white/90 dark:bg-zinc-800/90 backdrop-blur-sm px-2.5 py-1 rounded-full flex items-center gap-1.5">
                 <Tag className="w-3.5 h-3.5 text-[var(--home-secondary-text)]" />
                 <span className="text-[10px] font-semibold text-slate-700 dark:text-slate-200">
                   {t("tagTopic", { defaultValue: "Topic: React" })}
                 </span>
               </div>
-              <div className="bg-white/90 dark:bg-zinc-800/90 backdrop-blur-sm px-2.5 py-1 rounded-full shadow-sm flex items-center gap-1.5">
+              <div className="bg-white/90 dark:bg-zinc-800/90 backdrop-blur-sm px-2.5 py-1 rounded-full flex items-center gap-1.5">
                 <ShieldCheck className="w-3.5 h-3.5 text-[var(--home-secondary-text)]" />
                 <span className="text-[10px] font-semibold text-slate-700 dark:text-slate-200">
                   {t("tagScope", { defaultValue: "Scope: ISTAD" })}
@@ -130,7 +130,7 @@ export default function HowCommunityQAWorks({ darkMode }) {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         whileHover={{ scale: 1.05 }}
-        className={`inline-block text-xs font-semibold uppercase tracking-wider px-4 py-1.5 rounded-full mb-4 shadow-sm cursor-pointer ${
+        className={`inline-block text-xs font-semibold uppercase tracking-wider px-4 py-1.5 rounded-full mb-4 cursor-pointer ${
           darkMode
             ? "bg-zinc-800 text-[var(--home-primary-text)]"
             : "bg-[var(--color-brand-primary-light)] text-[var(--home-primary-text)]"

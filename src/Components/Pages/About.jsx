@@ -112,7 +112,7 @@ const teamMembers = [
 function MemberCard({ num, name, roleLabel, role, photo, github, telegram, darkMode }) {
   const { t } = useTranslation();
   return (
-    <div className={`rounded-3xl border shadow-md overflow-hidden text-center pt-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-2 hover:border-brand-primary/50 ${darkMode ? "bg-zinc-900 border-zinc-800 hover:shadow-brand-primary/10" : "bg-white border-slate-200 hover:shadow-brand-primary/20"}`}>
+    <div className={`rounded-3xl shadow-md overflow-hidden text-center pt-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-2 ${darkMode ? "bg-zinc-900 hover:shadow-brand-primary/10" : "bg-white hover:shadow-brand-primary/20"}`}>
       <div className="flex justify-between items-start px-5">
         <span className="bg-brand-primary text-white text-xs font-bold px-3 py-1.5 rounded-lg">{num}</span>
         <div className="grid grid-cols-3 gap-1 mt-1">
@@ -208,7 +208,7 @@ export default function AboutAskKh() {
         <div className="max-w-6xl mx-auto px-6 mt-14 grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {featuresKeys.map((f, index) => (
             <ScrollReveal key={f.key} animation="fadeInUp" delay={index * 100}>
-              <div className="bg-[var(--bg-card)] rounded-2xl shadow-sm p-6 text-center hover:shadow-md transition-all duration-300 hover:-translate-y-1 border border-[var(--border-color)]">
+              <div className="bg-[var(--bg-card)] rounded-2xl p-6 text-center hover:shadow-md transition-all duration-300 hover:-translate-y-1">
                 <div className={`w-14 h-14 mx-auto rounded-full border-2 flex items-center justify-center mb-4 bg-[var(--bg-card)] ${f.color === "red" ? "border-brand-secondary/40 text-brand-secondary" : "border-brand-primary/50 text-brand-primary"}`}>
                   <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     {f.icon}

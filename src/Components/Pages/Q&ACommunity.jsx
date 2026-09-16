@@ -403,8 +403,8 @@ export default function QACommunity({ darkMode: propDarkMode, language: propLang
           ) : (
             <div className="min-w-0 space-y-4">
               {/* Post Trigger Input */}
-              <div className={`rounded-2xl p-2.5 border flex items-center space-x-3 transition-colors ${
-                darkMode ? "bg-zinc-900 border-zinc-800" : "bg-white border-gray-100"
+              <div className={`rounded-2xl p-2.5 flex items-center space-x-3 transition-colors ${
+                darkMode ? "bg-zinc-900" : "bg-white"
               }`}>
                 <img src="../../src/assets/Website/Lisa.jpg" alt="User Avatar" className="w-8 h-8 shrink-0 rounded-full object-cover" />
                 <input 
@@ -428,8 +428,8 @@ export default function QACommunity({ darkMode: propDarkMode, language: propLang
 
               {/* Feed Content */}
               {displayedPosts.length === 0 ? (
-                <div className={`rounded-2xl p-8 border text-center text-xs transition-colors ${
-                  darkMode ? "bg-zinc-900 border-zinc-800 text-zinc-500" : "bg-white border-gray-100 text-gray-400"
+                <div className={`rounded-2xl p-8 text-center text-xs transition-colors ${
+                  darkMode ? "bg-zinc-900 text-zinc-500" : "bg-white text-gray-400"
                 }`}>
                   {t.post.noPosts}
                 </div>

@@ -38,7 +38,7 @@ export default function FAQAndCTA({ darkMode }) {
       <section className="mb-28 max-w-4xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-12">
           <div
-            className={`inline-block text-xs font-bold uppercase tracking-wider px-4 py-1.5 rounded-full mb-3 shadow-sm ${
+            className={`inline-block text-xs font-bold uppercase tracking-wider px-4 py-1.5 rounded-full mb-3 ${
               darkMode
                 ? "bg-zinc-800 text-[var(--home-primary-text)]"
                 : "bg-[var(--color-brand-primary-light)] text-[var(--home-primary-text)]"
@@ -60,7 +60,7 @@ export default function FAQAndCTA({ darkMode }) {
                 onClick={() => toggleFAQ(idx)}
                 whileHover={{ scale: 1.01 }}
                 transition={{ duration: 0.2 }}
-                className={`backdrop-blur-md rounded-3xl shadow-sm p-6 sm:p-8 cursor-pointer overflow-hidden transition-colors duration-300 ${
+                className={`backdrop-blur-md rounded-3xl p-6 sm:p-8 cursor-pointer overflow-hidden transition-colors duration-300 ${
                   darkMode
                     ? "bg-zinc-900/90 text-slate-100"
                     : "bg-white/95 text-gray-800"

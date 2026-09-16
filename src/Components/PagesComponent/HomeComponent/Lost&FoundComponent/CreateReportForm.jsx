@@ -49,8 +49,8 @@ export default function CreateReportForm({ onCancel, darkMode }) {
 
   const cardClass = `backdrop-blur-md rounded-3xl transition-colors duration-300 ${
     darkMode
-      ? 'bg-zinc-900/90 border border-zinc-800 text-slate-100'
-      : 'bg-white/95 border border-gray-100 text-gray-800'
+      ? 'bg-zinc-900/90 text-slate-100'
+      : 'bg-white/95 text-gray-800'
   }`;
 
   const inputClass = `w-full rounded-2xl px-3.5 py-2.5 text-xs transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--color-brand-primary,#3b82f6)]/40 ${
@@ -69,7 +69,7 @@ export default function CreateReportForm({ onCancel, darkMode }) {
       {/* TOGGLE REPORT TYPE */}
       <div className="mb-6 flex justify-center">
         <div className={`backdrop-blur-md p-1 rounded-2xl inline-flex gap-1 transition-colors duration-300 ${
-          darkMode ? 'bg-zinc-900/90 border border-zinc-800' : 'bg-white/95 border border-gray-100'
+          darkMode ? 'bg-zinc-900/90' : 'bg-white/95'
         }`}>
           <button
             type="button"

@@ -68,7 +68,7 @@ export default function TrendingDiscussions({ darkMode }) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           whileHover={{ scale: 1.05 }}
-          className={`inline-block text-xs font-bold uppercase tracking-wider px-4 py-1.5 rounded-full mb-3 shadow-sm cursor-pointer ${
+          className={`inline-block text-xs font-bold uppercase tracking-wider px-4 py-1.5 rounded-full mb-3 cursor-pointer ${
             darkMode
               ? "bg-red-950/80 text-red-400"
               : "bg-[#fde0e0]/90 text-[var(--home-secondary-text)]"
@@ -96,7 +96,7 @@ export default function TrendingDiscussions({ darkMode }) {
             key={idx}
             whileHover={{ y: -6 }}
             transition={{ duration: 0.3 }}
-            className={`backdrop-blur-md rounded-3xl shadow-sm p-6 flex flex-col justify-between cursor-pointer transition-colors duration-300 ${
+            className={`backdrop-blur-md rounded-3xl p-6 flex flex-col justify-between cursor-pointer transition-colors duration-300 ${
               darkMode
                 ? "bg-zinc-900/90 text-slate-100"
                 : "bg-white/95 text-gray-800"

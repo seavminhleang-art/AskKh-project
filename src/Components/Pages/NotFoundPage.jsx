@@ -254,7 +254,7 @@ export default function NotFoundPage({ setCursorText, setIsHovered, darkMode: pr
       className="mb-16 relative z-10 font-[family-name:var(--font-brand)] min-h-[70vh] flex items-center"
     >
       <div
-        className={`relative overflow-hidden text-center backdrop-blur-md rounded-3xl shadow-sm px-6 py-20 md:py-28 w-full transition-colors duration-300 ${
+        className={`relative overflow-hidden text-center backdrop-blur-md rounded-3xl px-6 py-20 md:py-28 w-full transition-colors duration-300 ${
           darkMode
             ? "bg-zinc-900/90 border border-zinc-800"
             : "bg-white/95 border border-gray-100"
@@ -282,7 +282,7 @@ export default function NotFoundPage({ setCursorText, setIsHovered, darkMode: pr
             onMouseLeave={() => setIsHovered && setIsHovered(false)}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="relative bg-[var(--color-brand-primary)] text-white font-semibold px-6 py-2.5 rounded-full hover:bg-[var(--color-brand-primary-dark)] transition shadow-sm cursor-pointer text-sm whitespace-nowrap"
+            className="relative bg-[var(--color-brand-primary)] text-white font-semibold px-6 py-2.5 rounded-full hover:bg-[var(--color-brand-primary-dark)] transition cursor-pointer text-sm whitespace-nowrap"
           >
             {t("goBackHomeButton", "Go back home")}
           </motion.button>

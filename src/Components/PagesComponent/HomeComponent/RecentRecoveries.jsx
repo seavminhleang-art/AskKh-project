@@ -52,7 +52,7 @@ export default function RecentRecoveries({ darkMode }) {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           transition={{ duration: 0.2 }}
-          className={`inline-block text-xs font-bold uppercase tracking-wider px-4 py-1.5 rounded-full mb-3 shadow-sm cursor-pointer ${
+          className={`inline-block text-xs font-bold uppercase tracking-wider px-4 py-1.5 rounded-full mb-3 cursor-pointer ${
             darkMode
               ? "bg-zinc-800 text-[var(--home-secondary-text)]"
               : "bg-[var(--color-brand-secondary-light)] text-[var(--home-secondary-text)]"
@@ -78,7 +78,7 @@ export default function RecentRecoveries({ darkMode }) {
             key={idx}
             whileHover={{ y: -6 }}
             transition={{ duration: 0.3 }}
-            className={`backdrop-blur-md rounded-3xl shadow-sm p-5 flex flex-col justify-between cursor-pointer transition-colors duration-300 ${
+            className={`backdrop-blur-md rounded-3xl p-5 flex flex-col justify-between cursor-pointer transition-colors duration-300 ${
               darkMode
                 ? "bg-zinc-900/90 text-slate-100"
                 : "bg-white/95 text-gray-800"
@@ -133,7 +133,7 @@ export default function RecentRecoveries({ darkMode }) {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className={`text-xs font-semibold px-3.5 py-1.5 rounded-full transition shadow-sm ${
+                className={`text-xs font-semibold px-3.5 py-1.5 rounded-full transition ${
                   darkMode
                     ? "bg-emerald-950/80 text-emerald-400 hover:bg-emerald-900/80"
                     : "bg-emerald-50 text-[var(--color-brand-accent)] hover:bg-emerald-100"

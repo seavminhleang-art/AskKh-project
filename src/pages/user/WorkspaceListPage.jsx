@@ -43,7 +43,7 @@ export default function WorkspaceListPage({ page }) {
 
       <div className="space-y-3">
         {items.map((item) => (
-          <article key={item.id} className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:border-blue-300 dark:border-slate-800 dark:bg-slate-900">
+          <article key={item.id} className="rounded-2xl bg-white p-5 transition dark:bg-slate-900">
             {page === 'lost-found' && item.images?.[0] && <img src={item.images[0]} alt={item.name} className="mb-4 h-44 w-full rounded-xl object-cover sm:w-64" />}
             {page === 'matches' && (item.lostItem.images?.[0] || item.foundItem.images?.[0]) && <div className="mb-4 flex gap-3"><img src={item.lostItem.images?.[0] || item.foundItem.images?.[0]} alt="Matched item" className="h-24 w-24 rounded-xl object-cover" /><img src={item.foundItem.images?.[0] || item.lostItem.images?.[0]} alt="Matched item" className="h-24 w-24 rounded-xl object-cover" /></div>}
             <ItemSummary page={page} item={item} />

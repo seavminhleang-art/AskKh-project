@@ -31,7 +31,7 @@ export default function MatchCard({ match }) {
 
   return (
     <>
-      <Card className="p-6 transition-all border-slate-200 dark:border-slate-800" hover>
+      <Card className="p-6 transition-all" hover>
         {/* Match Header */}
         <div className="flex flex-wrap items-center justify-between gap-3 mb-4 pb-3 border-b border-slate-100 dark:border-slate-800">
           <div className="flex items-center gap-2">

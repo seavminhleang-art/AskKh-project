@@ -21,8 +21,8 @@ const SidebarLeft = ({ activeTab, setActiveTab, savedCount, darkMode: propDarkMo
   return (
     <aside className="w-full min-w-0 space-y-6">
       {/* Navigation Card */}
-      <div className={`rounded-2xl p-2.5 border space-y-1.5 transition-colors ${
-        darkMode ? "bg-zinc-900 border-zinc-800" : "bg-white border-gray-100"
+      <div className={`rounded-2xl p-2.5 space-y-1.5 transition-colors ${
+        darkMode ? "bg-zinc-900" : "bg-white"
       }`}>
         {/* Newest Button */}
         <button 
@@ -141,8 +141,8 @@ const SidebarLeft = ({ activeTab, setActiveTab, savedCount, darkMode: propDarkMo
       </div>
 
       {/* Popular Tags Card */}
-      <div className={`rounded-2xl p-4 border transition-colors ${
-        darkMode ? "bg-zinc-900 border-zinc-800" : "bg-white border-gray-100"
+      <div className={`rounded-2xl p-4 transition-colors ${
+        darkMode ? "bg-zinc-900" : "bg-white"
       }`}>
         <h3 className={`font-bold text-xs mb-3 ${darkMode ? "text-slate-200" : "text-gray-800"}`}>
           {t('sidebar.popularTags')}

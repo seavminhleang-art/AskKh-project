@@ -74,7 +74,7 @@ export default function UserPostPage({ kind }) {
         <Icon className="mb-3 h-7 w-7" /><h1 className="text-2xl font-black">{title}</h1>
         <p className="mt-1 text-sm text-blue-100">This is saved locally in your browser for the current mock workspace.</p>
       </div>
-      <form onSubmit={submit} className="mt-6 space-y-5 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+      <form onSubmit={submit} className="mt-6 space-y-5 rounded-3xl bg-white p-6 dark:bg-slate-900">
         {!isQuestion && <label className="block text-sm font-semibold">Report type<select name="type" value={form.type} onChange={update} className="mt-2 w-full rounded-xl border border-slate-200 bg-white p-3 dark:border-slate-700 dark:bg-slate-800"><option value="LOST">I lost an item</option><option value="FOUND">I found an item</option></select></label>}
         <label className="block text-sm font-semibold">{isQuestion ? 'Question title' : 'Item name'}<input required name="title" value={form.title} onChange={update} placeholder={isQuestion ? 'e.g. How do I ...?' : 'e.g. Blue student ID card'} className="mt-2 w-full rounded-xl border border-slate-200 bg-white p-3 dark:border-slate-700 dark:bg-slate-800" /></label>
         {!isQuestion && <label className="block text-sm font-semibold">Where was it lost or found?<input required name="location" value={form.location} onChange={update} placeholder="e.g. Lab 302, third floor" className="mt-2 w-full rounded-xl border border-slate-200 bg-white p-3 dark:border-slate-700 dark:bg-slate-800" /></label>}

@@ -60,8 +60,8 @@ const DetailView = ({ post, onBack, onUpdateComments, darkMode: propDarkMode }) 
   const sortedComments = [...commentsList].sort((a, b) => b.likes - a.likes);
 
   return (
-    <div className={`min-w-0 flex-1 rounded-2xl p-6 border space-y-6 transition-colors duration-300 ${
-      darkMode ? "bg-zinc-900 border-zinc-800 text-slate-100" : "bg-white border-gray-100 text-gray-900"
+    <div className={`min-w-0 flex-1 rounded-2xl p-6 space-y-6 transition-colors duration-300 ${
+      darkMode ? "bg-zinc-900 text-slate-100" : "bg-white text-gray-900"
     }`}>
       {/* Back Button */}
       <button 

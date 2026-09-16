@@ -29,8 +29,8 @@ const PostCard = ({
   const commentCount = Array.isArray(comments) ? comments.length : (comments || 0);
 
   return (
-    <div className={`rounded-2xl p-4 border transition-all ${
-      darkMode ? "bg-zinc-900 border-zinc-800 text-slate-100" : "bg-white border-gray-100 text-gray-900"
+    <div className={`rounded-2xl p-4 transition-all ${
+      darkMode ? "bg-zinc-900 text-slate-100" : "bg-white text-gray-900"
     }`}>
       <div className="flex flex-col sm:flex-row gap-4">
         <img 

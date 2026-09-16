@@ -190,7 +190,7 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
           <div className="lg:col-span-3 space-y-4">
             {filteredItems.length === 0 ? (
               <div className={`backdrop-blur-md rounded-3xl p-12 text-center text-sm font-medium ${
-                darkMode ? 'bg-zinc-900/90 border border-zinc-800 text-slate-400' : 'bg-white/95 border border-gray-100 text-gray-500'
+                darkMode ? 'bg-zinc-900/90 text-slate-400' : 'bg-white/95 text-gray-500'
               }`}>
                 {t('feedNoItemsFound')}
               </div>
@@ -202,8 +202,8 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
                   transition={{ duration: 0.2, ease: "easeOut" }}
                   className={`backdrop-blur-md rounded-3xl p-5 transition-all duration-300 flex flex-col md:flex-row gap-6 relative group ${
                     darkMode
-                      ? 'bg-zinc-900/90 border border-zinc-800 hover:border-zinc-700 text-slate-100'
-                      : 'bg-white/95 border border-gray-100 hover:border-blue-200 text-gray-800'
+                      ? 'bg-zinc-900/90 text-slate-100'
+                      : 'bg-white/95 text-gray-800'
                   }`}
                 >
                   <div className="absolute top-4 left-4 z-10">
@@ -223,7 +223,7 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
                   </div>
 
                   <div className={`w-full md:w-56 h-48 rounded-2xl overflow-hidden flex-shrink-0 flex items-center justify-center p-2 ${
-                    darkMode ? 'bg-zinc-950/60 border border-zinc-800' : 'bg-gray-50 border border-gray-100'
+                    darkMode ? 'bg-zinc-950/60' : 'bg-gray-50'
                   }`}>
                     <img src={item.image} alt={item.title} className="w-full h-full object-contain transform group-hover:scale-110 transition duration-500 ease-out" />
                   </div>
@@ -275,7 +275,7 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
 
           <div className="space-y-4">
             <div className={`backdrop-blur-md rounded-3xl p-5 transition-all duration-300 ${
-              darkMode ? 'bg-zinc-900/90 border border-zinc-800 text-slate-100' : 'bg-white/95 border border-gray-100 text-gray-800'
+              darkMode ? 'bg-zinc-900/90 text-slate-100' : 'bg-white/95 text-gray-800'
             }`}>
               <span className={`inline-block text-xs font-semibold px-3 py-1 rounded-full mb-4 transition-transform duration-200 hover:scale-105 ${
                 darkMode
@@ -307,7 +307,7 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
             </div>
 
             <div className={`backdrop-blur-md rounded-3xl p-5 transition-all duration-300 ${
-              darkMode ? 'bg-zinc-900/90 border border-zinc-800 text-slate-100' : 'bg-white/95 border border-gray-100 text-gray-800'
+              darkMode ? 'bg-zinc-900/90 text-slate-100' : 'bg-white/95 text-gray-800'
             }`}>
               <span className={`inline-block text-xs font-semibold px-3 py-1 rounded-full mb-4 transition-transform duration-200 hover:scale-105 ${
                 darkMode

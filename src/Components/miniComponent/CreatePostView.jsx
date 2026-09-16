@@ -75,8 +75,8 @@ const CreatePostView = ({ onAddPost, onCancel, darkMode: propDarkMode }) => {
       <form onSubmit={handleSubmit} className="grid grid-cols-1 xl:grid-cols-3 gap-6">
         <div className="xl:col-span-2 space-y-6">
           {/* Details Section */}
-          <div className={`rounded-2xl p-6 border space-y-4 transition-colors ${
-            darkMode ? "bg-zinc-900 border-zinc-800 text-slate-100" : "bg-white border-gray-100 text-gray-800"
+          <div className={`rounded-2xl p-6 space-y-4 transition-colors ${
+            darkMode ? "bg-zinc-900 text-slate-100" : "bg-white text-gray-800"
           }`}>
             <h3 className={`font-bold text-sm ${darkMode ? "text-slate-200" : "text-gray-800"}`}>
               {t('create.blogDetails')}
@@ -119,8 +119,8 @@ const CreatePostView = ({ onAddPost, onCancel, darkMode: propDarkMode }) => {
           </div>
 
           {/* Cover Image */}
-          <div className={`rounded-2xl p-6 border space-y-4 transition-colors ${
-            darkMode ? "bg-zinc-900 border-zinc-800" : "bg-white border-gray-100"
+          <div className={`rounded-2xl p-6 space-y-4 transition-colors ${
+            darkMode ? "bg-zinc-900" : "bg-white"
           }`}>
             <h3 className={`font-bold text-sm ${darkMode ? "text-slate-200" : "text-gray-800"}`}>
               {t('create.coverImage')}
@@ -166,8 +166,8 @@ const CreatePostView = ({ onAddPost, onCancel, darkMode: propDarkMode }) => {
 
         {/* Dynamic Tag Input Sidebar */}
         <div className="space-y-6">
-          <div className={`rounded-2xl p-6 border space-y-4 transition-colors ${
-            darkMode ? "bg-zinc-900 border-zinc-800" : "bg-white border-gray-100"
+          <div className={`rounded-2xl p-6 space-y-4 transition-colors ${
+            darkMode ? "bg-zinc-900" : "bg-white"
           }`}>
             <h3 className={`font-bold text-sm ${darkMode ? "text-slate-200" : "text-gray-800"}`}>
               {t('create.tags')}
