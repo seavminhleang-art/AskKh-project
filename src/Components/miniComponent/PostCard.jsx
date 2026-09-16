@@ -32,15 +32,15 @@ const PostCard = ({
     <div className={`rounded-2xl p-4 border transition-all ${
       darkMode ? "bg-zinc-900 border-zinc-800 text-slate-100" : "bg-white border-gray-100 text-gray-900"
     }`}>
-      <div className="flex gap-4">
+      <div className="flex flex-col sm:flex-row gap-4">
         <img 
           src={image} 
           alt="Thumbnail" 
-          className="w-36 h-28 object-cover rounded-xl flex-shrink-0 cursor-pointer" 
+          className="w-full h-48 sm:w-28 sm:h-28 2xl:w-36 object-cover rounded-xl flex-shrink-0 cursor-pointer"
           onClick={() => onSelectPost(id)} 
         />
 
-        <div className="flex-1 flex flex-col justify-between">
+        <div className="min-w-0 flex-1 break-words flex flex-col justify-between">
           <div className="flex justify-between items-start gap-2">
             <div>
               <h2 
@@ -106,7 +106,7 @@ const PostCard = ({
             ))}
           </div>
 
-          <div className="flex items-center justify-between pt-1">
+          <div className="flex flex-wrap gap-3 items-center justify-between pt-1">
             <div className="flex items-center space-x-2">
               <img src={author.avatar} alt={author.name} className="w-6 h-6 rounded-full object-cover" />
               <div>

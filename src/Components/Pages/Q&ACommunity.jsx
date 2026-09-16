@@ -371,8 +371,8 @@ export default function QACommunity({ darkMode: propDarkMode, language: propLang
         darkMode ? "bg-zinc-950 text-slate-100" : "bg-gray-50 text-gray-900"
       }`}
     >
-      <main className="max-w-7xl w-full mx-auto px-4 py-6">
-        <div className="flex flex-col lg:flex-row gap-6">
+      <main className="max-w-[1600px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div className={`grid grid-cols-1 items-start gap-4 lg:gap-6 lg:grid-cols-[224px_minmax(0,1fr)] ${isCreatingPost ? "" : "xl:grid-cols-[224px_minmax(0,1fr)_288px] 2xl:grid-cols-[256px_minmax(0,1fr)_288px]"}`}>
           <SidebarLeft
             darkMode={darkMode}
             language={currentLang}
@@ -401,18 +401,18 @@ export default function QACommunity({ darkMode: propDarkMode, language: propLang
               onUpdateComments={(updatedComments) => handleUpdateComments(selectedPost.id, updatedComments)}
             />
           ) : (
-            <div className="flex-1 space-y-4">
+            <div className="min-w-0 space-y-4">
               {/* Post Trigger Input */}
-              <div className={`rounded-2xl p-2.5 border shadow-sm flex items-center space-x-3 transition-colors ${
+              <div className={`rounded-2xl p-2.5 border flex items-center space-x-3 transition-colors ${
                 darkMode ? "bg-zinc-900 border-zinc-800" : "bg-white border-gray-100"
               }`}>
-                <img src="../../src/assets/Website/Lisa.jpg" alt="User Avatar" className="w-8 h-8 rounded-full object-cover" />
+                <img src="../../src/assets/Website/Lisa.jpg" alt="User Avatar" className="w-8 h-8 shrink-0 rounded-full object-cover" />
                 <input 
                   type="text" 
                   placeholder={t.post.placeholderInput}
                   onClick={() => setIsCreatingPost(true)}
                   readOnly
-                  className={`flex-1 rounded-xl px-4 py-2 text-xs focus:outline-none cursor-pointer transition-colors ${
+                  className={`min-w-0 flex-1 rounded-xl px-4 py-2 text-xs focus:outline-none cursor-pointer transition-colors ${
                     darkMode 
                       ? "bg-zinc-800/80 border border-zinc-700 text-slate-200 placeholder-zinc-400 hover:bg-zinc-800" 
                       : "bg-gray-50 border border-gray-100 text-gray-700 placeholder-gray-400 hover:bg-gray-100"
@@ -420,7 +420,7 @@ export default function QACommunity({ darkMode: propDarkMode, language: propLang
                 />
                 <button 
                   onClick={() => setIsCreatingPost(true)}
-                  className="bg-blue-600 text-white font-medium px-4 py-2 rounded-xl text-xs hover:bg-blue-700 transition-colors shadow-xs"
+                  className="shrink-0 bg-blue-600 text-white font-medium px-4 py-2 rounded-xl text-xs hover:bg-blue-700 transition-colors"
                 >
                   {t.post.createPostBtn}
                 </button>

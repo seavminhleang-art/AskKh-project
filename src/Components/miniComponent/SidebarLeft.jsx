@@ -19,9 +19,9 @@ const SidebarLeft = ({ activeTab, setActiveTab, savedCount, darkMode: propDarkMo
   ];
 
   return (
-    <aside className="w-full lg:w-64 space-y-6 flex-shrink-0">
+    <aside className="w-full min-w-0 space-y-6">
       {/* Navigation Card */}
-      <div className={`rounded-2xl p-2.5 border shadow-sm space-y-1.5 transition-colors ${
+      <div className={`rounded-2xl p-2.5 border space-y-1.5 transition-colors ${
         darkMode ? "bg-zinc-900 border-zinc-800" : "bg-white border-gray-100"
       }`}>
         {/* Newest Button */}
@@ -29,7 +29,7 @@ const SidebarLeft = ({ activeTab, setActiveTab, savedCount, darkMode: propDarkMo
           onClick={() => setActiveTab('newest')}
           className={`w-full flex items-center space-x-3 p-2.5 rounded-xl transition-all ${
             activeTab === 'newest' 
-              ? 'bg-blue-600 text-white shadow-sm' 
+              ? 'bg-blue-600 text-white'
               : darkMode 
                 ? 'text-slate-300 hover:bg-zinc-800' 
                 : 'text-gray-700 hover:bg-gray-50'
@@ -63,7 +63,7 @@ const SidebarLeft = ({ activeTab, setActiveTab, savedCount, darkMode: propDarkMo
           onClick={() => setActiveTab('bookmarks')}
           className={`w-full flex items-center justify-between p-2.5 rounded-xl transition-all ${
             activeTab === 'bookmarks' 
-              ? 'bg-blue-600 text-white shadow-sm' 
+              ? 'bg-blue-600 text-white'
               : darkMode 
                 ? 'text-slate-300 hover:bg-zinc-800' 
                 : 'text-gray-700 hover:bg-gray-50'
@@ -110,7 +110,7 @@ const SidebarLeft = ({ activeTab, setActiveTab, savedCount, darkMode: propDarkMo
           onClick={() => setActiveTab('following')}
           className={`w-full flex items-center space-x-3 p-2.5 rounded-xl transition-all ${
             activeTab === 'following' 
-              ? 'bg-blue-600 text-white shadow-sm' 
+              ? 'bg-blue-600 text-white'
               : darkMode 
                 ? 'text-slate-300 hover:bg-zinc-800' 
                 : 'text-gray-700 hover:bg-gray-50'
@@ -141,7 +141,7 @@ const SidebarLeft = ({ activeTab, setActiveTab, savedCount, darkMode: propDarkMo
       </div>
 
       {/* Popular Tags Card */}
-      <div className={`rounded-2xl p-4 border shadow-sm transition-colors ${
+      <div className={`rounded-2xl p-4 border transition-colors ${
         darkMode ? "bg-zinc-900 border-zinc-800" : "bg-white border-gray-100"
       }`}>
         <h3 className={`font-bold text-xs mb-3 ${darkMode ? "text-slate-200" : "text-gray-800"}`}>

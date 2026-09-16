@@ -65,15 +65,15 @@ const CreatePostView = ({ onAddPost, onCancel, darkMode: propDarkMode }) => {
   };
 
   return (
-    <div className={`flex-1 min-h-screen transition-colors duration-300 p-4 sm:p-6 space-y-6 ${
+    <div className={`min-w-0 flex-1 min-h-screen transition-colors duration-300 p-4 sm:p-6 space-y-6 ${
       darkMode ? "bg-zinc-950 text-slate-100" : "bg-gray-50 text-gray-900"
     }`}>
       <h1 className={`text-2xl font-bold ${darkMode ? "text-white" : "text-gray-900"}`}>
         {t('create.title')}
       </h1>
 
-      <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 space-y-6">
+      <form onSubmit={handleSubmit} className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        <div className="xl:col-span-2 space-y-6">
           {/* Details Section */}
           <div className={`rounded-2xl p-6 border space-y-4 transition-colors ${
             darkMode ? "bg-zinc-900 border-zinc-800 text-slate-100" : "bg-white border-gray-100 text-gray-800"
@@ -180,7 +180,7 @@ const CreatePostView = ({ onAddPost, onCancel, darkMode: propDarkMode }) => {
                 onChange={(e) => setTagInput(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder={t('create.tagsPlaceholder')}
-                className={`flex-1 rounded-xl px-3 py-2 text-xs border focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors ${
+                className={`min-w-0 flex-1 rounded-xl px-3 py-2 text-xs border focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors ${
                   darkMode 
                     ? "bg-zinc-800/80 border-zinc-700 text-slate-100 placeholder-zinc-500" 
                     : "bg-white border-gray-200 text-gray-900 placeholder-gray-400"

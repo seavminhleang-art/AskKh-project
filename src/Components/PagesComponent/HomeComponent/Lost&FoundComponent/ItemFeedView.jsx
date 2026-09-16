@@ -148,7 +148,7 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
               className={`w-full rounded-2xl pl-9 pr-4 py-2.5 text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--color-brand-primary,#3b82f6)]/40 hover:border-[var(--color-brand-primary,#3b82f6)]/50 ${
                 darkMode
                   ? 'bg-zinc-900/90 border border-zinc-800 text-slate-100 placeholder-zinc-500'
-                  : 'bg-white/95 border border-gray-100 text-gray-800 placeholder-gray-400 shadow-sm'
+                  : 'bg-white/95 border border-gray-100 text-gray-800 placeholder-gray-400'
               }`}
             />
             <Search size={16} className={`absolute left-3 top-3.5 ${darkMode ? 'text-zinc-500' : 'text-gray-400'}`} />
@@ -161,7 +161,7 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
               className={`rounded-2xl px-3.5 py-2.5 text-xs outline-none cursor-pointer font-medium transition-all duration-200 hover:border-[var(--color-brand-primary,#3b82f6)]/50 ${
                 darkMode
                   ? 'bg-zinc-900/90 border border-zinc-800 text-slate-200'
-                  : 'bg-white/95 border border-gray-100 text-gray-800 shadow-sm'
+                  : 'bg-white/95 border border-gray-100 text-gray-800'
               }`}
             >
               {categories.map((cat, i) => (
@@ -177,7 +177,7 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
               className={`rounded-2xl px-3.5 py-2.5 text-xs outline-none cursor-pointer font-medium transition-all duration-200 hover:border-[var(--color-brand-primary,#3b82f6)]/50 ${
                 darkMode
                   ? 'bg-zinc-900/90 border border-zinc-800 text-slate-200'
-                  : 'bg-white/95 border border-gray-100 text-gray-800 shadow-sm'
+                  : 'bg-white/95 border border-gray-100 text-gray-800'
               }`}
             >
               <option value="Newest" className={darkMode ? 'bg-zinc-900 text-slate-100' : 'bg-white text-gray-800'}>{t('feedSortNewest')}</option>
@@ -200,7 +200,7 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
                   key={item.id}
                   whileHover={{ scale: 1.01, y: -4 }}
                   transition={{ duration: 0.2, ease: "easeOut" }}
-                  className={`backdrop-blur-md rounded-3xl p-5 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col md:flex-row gap-6 relative group ${
+                  className={`backdrop-blur-md rounded-3xl p-5 transition-all duration-300 flex flex-col md:flex-row gap-6 relative group ${
                     darkMode
                       ? 'bg-zinc-900/90 border border-zinc-800 hover:border-zinc-700 text-slate-100'
                       : 'bg-white/95 border border-gray-100 hover:border-blue-200 text-gray-800'
@@ -258,10 +258,10 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
                       <motion.button
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
-                        className={`text-xs font-semibold px-4 py-2 rounded-xl transition-all duration-200 cursor-pointer shadow-sm ${
+                        className={`text-xs font-semibold px-4 py-2 rounded-xl transition-all duration-200 cursor-pointer ${
                           darkMode
                             ? 'bg-emerald-950/80 text-emerald-400 border border-emerald-800 hover:bg-emerald-900 hover:border-emerald-600'
-                            : 'bg-emerald-50 text-[var(--color-brand-accent,#10b981)] hover:bg-emerald-100 hover:shadow'
+                            : 'bg-emerald-50 text-[var(--color-brand-accent,#10b981)] hover:bg-emerald-100'
                         }`}
                       >
                         {t('recVerifyBtn')}
@@ -274,7 +274,7 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
           </div>
 
           <div className="space-y-4">
-            <div className={`backdrop-blur-md rounded-3xl p-5 shadow-sm transition-all duration-300 hover:shadow-md ${
+            <div className={`backdrop-blur-md rounded-3xl p-5 transition-all duration-300 ${
               darkMode ? 'bg-zinc-900/90 border border-zinc-800 text-slate-100' : 'bg-white/95 border border-gray-100 text-gray-800'
             }`}>
               <span className={`inline-block text-xs font-semibold px-3 py-1 rounded-full mb-4 transition-transform duration-200 hover:scale-105 ${
@@ -306,7 +306,7 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
               </ul>
             </div>
 
-            <div className={`backdrop-blur-md rounded-3xl p-5 shadow-sm transition-all duration-300 hover:shadow-md ${
+            <div className={`backdrop-blur-md rounded-3xl p-5 transition-all duration-300 ${
               darkMode ? 'bg-zinc-900/90 border border-zinc-800 text-slate-100' : 'bg-white/95 border border-gray-100 text-gray-800'
             }`}>
               <span className={`inline-block text-xs font-semibold px-3 py-1 rounded-full mb-4 transition-transform duration-200 hover:scale-105 ${
@@ -337,7 +337,7 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
               onClick={onOpenReport}
               whileHover={{ scale: 1.03, y: -2 }}
               whileTap={{ scale: 0.97 }}
-              className="w-full bg-[var(--color-brand-primary,#3b82f6)] hover:bg-blue-600 text-white font-semibold py-3.5 px-4 rounded-2xl text-sm shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full bg-[var(--color-brand-primary,#3b82f6)] hover:bg-blue-600 text-white font-semibold py-3.5 px-4 rounded-2xl text-sm transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer"
             >
               <PlusCircle size={16} /> {t('feedReportBtn')}
             </motion.button>

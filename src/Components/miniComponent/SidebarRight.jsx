@@ -30,8 +30,8 @@ const SidebarRight = ({ darkMode: propDarkMode, language = 'en' }) => {
   };
 
   return (
-    <aside className="w-full lg:w-72 flex-shrink-0">
-      <div className={`rounded-2xl p-4 border shadow-sm transition-colors duration-300 ${
+    <aside className="w-full min-w-0 lg:col-start-2 xl:col-start-auto">
+      <div className={`rounded-2xl p-4 border transition-colors duration-300 ${
         darkMode ? "bg-zinc-900 border-zinc-800" : "bg-white border-gray-100"
       }`}>
         <div className="flex items-center justify-between mb-4">

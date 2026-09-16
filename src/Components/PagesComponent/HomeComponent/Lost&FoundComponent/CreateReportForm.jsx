@@ -47,7 +47,7 @@ export default function CreateReportForm({ onCancel, darkMode }) {
     visibility: 'Public (Everyone can see)'
   });
 
-  const cardClass = `backdrop-blur-md rounded-3xl shadow-sm transition-colors duration-300 ${
+  const cardClass = `backdrop-blur-md rounded-3xl transition-colors duration-300 ${
     darkMode
       ? 'bg-zinc-900/90 border border-zinc-800 text-slate-100'
       : 'bg-white/95 border border-gray-100 text-gray-800'
@@ -68,7 +68,7 @@ export default function CreateReportForm({ onCancel, darkMode }) {
     }`}>
       {/* TOGGLE REPORT TYPE */}
       <div className="mb-6 flex justify-center">
-        <div className={`backdrop-blur-md p-1 rounded-2xl inline-flex gap-1 shadow-sm transition-colors duration-300 ${
+        <div className={`backdrop-blur-md p-1 rounded-2xl inline-flex gap-1 transition-colors duration-300 ${
           darkMode ? 'bg-zinc-900/90 border border-zinc-800' : 'bg-white/95 border border-gray-100'
         }`}>
           <button
@@ -76,7 +76,7 @@ export default function CreateReportForm({ onCancel, darkMode }) {
             onClick={() => setReportType('LOST')}
             className={`px-6 py-2 rounded-xl text-xs font-extrabold transition-all duration-200 ${
               isLost
-                ? 'bg-red-500 text-white shadow-sm'
+                ? 'bg-red-500 text-white'
                 : darkMode
                 ? 'text-slate-400 hover:text-slate-100'
                 : 'text-gray-600 hover:text-gray-900'
@@ -89,7 +89,7 @@ export default function CreateReportForm({ onCancel, darkMode }) {
             onClick={() => setReportType('FOUND')}
             className={`px-6 py-2 rounded-xl text-xs font-extrabold transition-all duration-200 ${
               !isLost
-                ? 'bg-amber-500 text-white shadow-sm'
+                ? 'bg-amber-500 text-white'
                 : darkMode
                 ? 'text-slate-400 hover:text-slate-100'
                 : 'text-gray-600 hover:text-gray-900'
@@ -352,7 +352,7 @@ export default function CreateReportForm({ onCancel, darkMode }) {
           <div className="flex items-center gap-3 pt-2">
             <button
               onClick={onCancel}
-              className={`text-white font-semibold text-xs px-6 py-3 rounded-2xl shadow-sm transition-all duration-200 flex items-center gap-2 cursor-pointer ${
+              className={`text-white font-semibold text-xs px-6 py-3 rounded-2xl transition-all duration-200 flex items-center gap-2 cursor-pointer ${
                 isLost
                   ? 'bg-[var(--color-brand-primary,#3b82f6)] hover:opacity-90'
                   : 'bg-amber-500 hover:bg-amber-600'
