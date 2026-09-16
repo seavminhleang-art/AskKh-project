@@ -47,13 +47,13 @@ export default function CreateReportForm({ onCancel, darkMode }) {
     visibility: 'Public (Everyone can see)'
   });
 
-  const cardClass = `backdrop-blur-md rounded-3xl shadow-sm transition-colors duration-300 ${
+  const cardClass = `backdrop-blur-md rounded-3xl transition-all duration-300 hover:-translate-y-1 ${
     darkMode
-      ? 'bg-zinc-900/90 border border-zinc-800 text-slate-100'
-      : 'bg-white/95 border border-gray-100 text-gray-800'
+      ? 'bg-zinc-900/90 border border-zinc-800 hover:border-zinc-700 text-slate-100'
+      : 'bg-white/95 border border-gray-100 hover:border-blue-200 text-gray-800'
   }`;
 
-  const inputClass = `w-full rounded-2xl px-3.5 py-2.5 text-xs transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--color-brand-primary,#3b82f6)]/40 ${
+  const inputClass = `w-full rounded-2xl px-3.5 py-2.5 text-xs transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--color-brand-primary,#3b82f6)]/40 hover:border-[var(--color-brand-primary,#3b82f6)]/50 ${
     darkMode
       ? 'bg-zinc-950/60 border border-zinc-800 text-slate-100 placeholder-zinc-500'
       : 'bg-gray-50 border border-gray-100 text-gray-800 placeholder-gray-400'
@@ -68,18 +68,18 @@ export default function CreateReportForm({ onCancel, darkMode }) {
     }`}>
       {/* TOGGLE REPORT TYPE */}
       <div className="mb-6 flex justify-center">
-        <div className={`backdrop-blur-md p-1 rounded-2xl inline-flex gap-1 shadow-sm transition-colors duration-300 ${
+        <div className={`backdrop-blur-md p-1 rounded-2xl inline-flex gap-1 transition-colors duration-300 ${
           darkMode ? 'bg-zinc-900/90 border border-zinc-800' : 'bg-white/95 border border-gray-100'
         }`}>
           <button
             type="button"
             onClick={() => setReportType('LOST')}
-            className={`px-6 py-2 rounded-xl text-xs font-extrabold transition-all duration-200 ${
+            className={`px-6 py-2 rounded-xl text-xs font-extrabold transition-all duration-200 cursor-pointer ${
               isLost
-                ? 'bg-red-500 text-white shadow-sm'
+                ? 'bg-red-500 text-white hover:bg-red-600'
                 : darkMode
-                ? 'text-slate-400 hover:text-slate-100'
-                : 'text-gray-600 hover:text-gray-900'
+                ? 'text-slate-400 hover:text-slate-100 hover:bg-zinc-800/50'
+                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100/80'
             }`}
           >
             {t('reportFormToggleLost')}
@@ -87,12 +87,12 @@ export default function CreateReportForm({ onCancel, darkMode }) {
           <button
             type="button"
             onClick={() => setReportType('FOUND')}
-            className={`px-6 py-2 rounded-xl text-xs font-extrabold transition-all duration-200 ${
+            className={`px-6 py-2 rounded-xl text-xs font-extrabold transition-all duration-200 cursor-pointer ${
               !isLost
-                ? 'bg-amber-500 text-white shadow-sm'
+                ? 'bg-amber-500 text-white hover:bg-amber-600'
                 : darkMode
-                ? 'text-slate-400 hover:text-slate-100'
-                : 'text-gray-600 hover:text-gray-900'
+                ? 'text-slate-400 hover:text-slate-100 hover:bg-zinc-800/50'
+                : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100/80'
             }`}
           >
             {t('reportFormToggleFound')}
@@ -115,7 +115,7 @@ export default function CreateReportForm({ onCancel, darkMode }) {
           <button
             type="button"
             onClick={onCancel}
-            className={`transition-colors ${darkMode ? 'hover:text-blue-400' : 'hover:text-[var(--color-brand-primary,#3b82f6)]'}`}
+            className={`transition-colors cursor-pointer ${darkMode ? 'hover:text-blue-400' : 'hover:text-[var(--color-brand-primary,#3b82f6)]'}`}
           >
             {t('home')}
           </button>
@@ -123,7 +123,7 @@ export default function CreateReportForm({ onCancel, darkMode }) {
           <button
             type="button"
             onClick={onCancel}
-            className={`transition-colors ${darkMode ? 'hover:text-blue-400' : 'hover:text-[var(--color-brand-primary,#3b82f6)]'}`}
+            className={`transition-colors cursor-pointer ${darkMode ? 'hover:text-blue-400' : 'hover:text-[var(--color-brand-primary,#3b82f6)]'}`}
           >
             {t('reportFormBreadcrumbLostFound')}
           </button>
@@ -198,31 +198,31 @@ export default function CreateReportForm({ onCancel, darkMode }) {
                 {t('reportDescriptionLabel')} <span className="text-red-500">*</span>
               </label>
               
-              <div className={`rounded-2xl overflow-hidden transition-colors focus-within:ring-2 focus-within:ring-[var(--color-brand-primary,#3b82f6)]/40 ${
+              <div className={`rounded-2xl overflow-hidden transition-all duration-200 hover:border-[var(--color-brand-primary,#3b82f6)]/50 focus-within:ring-2 focus-within:ring-[var(--color-brand-primary,#3b82f6)]/40 ${
                 darkMode ? 'bg-zinc-950/60 border border-zinc-800' : 'bg-gray-50 border border-gray-100'
               }`}>
                 {/* Rich Text Toolbar */}
                 <div className={`flex flex-wrap items-center gap-1 p-2 border-b transition-colors ${
                   darkMode ? 'bg-zinc-900/80 border-zinc-800 text-slate-300' : 'bg-gray-100 border-gray-200 text-gray-600'
                 }`}>
-                  <button type="button" className={`p-1.5 rounded transition ${darkMode ? 'hover:bg-zinc-800' : 'hover:bg-gray-200'}`} title={t('reportFormToolbarBold')}><Bold size={14} /></button>
-                  <button type="button" className={`p-1.5 rounded transition ${darkMode ? 'hover:bg-zinc-800' : 'hover:bg-gray-200'}`} title={t('reportFormToolbarItalic')}><Italic size={14} /></button>
-                  <button type="button" className={`p-1.5 rounded transition ${darkMode ? 'hover:bg-zinc-800' : 'hover:bg-gray-200'}`} title={t('reportFormToolbarUnderline')}><Underline size={14} /></button>
+                  <button type="button" className={`p-1.5 rounded transition cursor-pointer ${darkMode ? 'hover:bg-zinc-800 hover:text-white' : 'hover:bg-gray-200 hover:text-gray-900'}`} title={t('reportFormToolbarBold')}><Bold size={14} /></button>
+                  <button type="button" className={`p-1.5 rounded transition cursor-pointer ${darkMode ? 'hover:bg-zinc-800 hover:text-white' : 'hover:bg-gray-200 hover:text-gray-900'}`} title={t('reportFormToolbarItalic')}><Italic size={14} /></button>
+                  <button type="button" className={`p-1.5 rounded transition cursor-pointer ${darkMode ? 'hover:bg-zinc-800 hover:text-white' : 'hover:bg-gray-200 hover:text-gray-900'}`} title={t('reportFormToolbarUnderline')}><Underline size={14} /></button>
                   <span className={`w-px h-4 mx-1 ${darkMode ? 'bg-zinc-800' : 'bg-gray-300'}`}></span>
-                  <button type="button" className={`p-1.5 rounded transition ${darkMode ? 'hover:bg-zinc-800' : 'hover:bg-gray-200'}`} title={t('reportFormToolbarH1')}><Heading1 size={14} /></button>
-                  <button type="button" className={`p-1.5 rounded transition ${darkMode ? 'hover:bg-zinc-800' : 'hover:bg-gray-200'}`} title={t('reportFormToolbarH2')}><Heading2 size={14} /></button>
-                  <button type="button" className={`p-1.5 rounded transition ${darkMode ? 'hover:bg-zinc-800' : 'hover:bg-gray-200'}`} title={t('reportFormToolbarH3')}><Heading3 size={14} /></button>
+                  <button type="button" className={`p-1.5 rounded transition cursor-pointer ${darkMode ? 'hover:bg-zinc-800 hover:text-white' : 'hover:bg-gray-200 hover:text-gray-900'}`} title={t('reportFormToolbarH1')}><Heading1 size={14} /></button>
+                  <button type="button" className={`p-1.5 rounded transition cursor-pointer ${darkMode ? 'hover:bg-zinc-800 hover:text-white' : 'hover:bg-gray-200 hover:text-gray-900'}`} title={t('reportFormToolbarH2')}><Heading2 size={14} /></button>
+                  <button type="button" className={`p-1.5 rounded transition cursor-pointer ${darkMode ? 'hover:bg-zinc-800 hover:text-white' : 'hover:bg-gray-200 hover:text-gray-900'}`} title={t('reportFormToolbarH3')}><Heading3 size={14} /></button>
                   <span className={`w-px h-4 mx-1 ${darkMode ? 'bg-zinc-800' : 'bg-gray-300'}`}></span>
-                  <button type="button" className={`p-1.5 rounded transition ${darkMode ? 'hover:bg-zinc-800' : 'hover:bg-gray-200'}`} title={t('reportFormToolbarBulletList')}><List size={14} /></button>
-                  <button type="button" className={`p-1.5 rounded transition ${darkMode ? 'hover:bg-zinc-800' : 'hover:bg-gray-200'}`} title={t('reportFormToolbarNumberedList')}><ListOrdered size={14} /></button>
+                  <button type="button" className={`p-1.5 rounded transition cursor-pointer ${darkMode ? 'hover:bg-zinc-800 hover:text-white' : 'hover:bg-gray-200 hover:text-gray-900'}`} title={t('reportFormToolbarBulletList')}><List size={14} /></button>
+                  <button type="button" className={`p-1.5 rounded transition cursor-pointer ${darkMode ? 'hover:bg-zinc-800 hover:text-white' : 'hover:bg-gray-200 hover:text-gray-900'}`} title={t('reportFormToolbarNumberedList')}><ListOrdered size={14} /></button>
                   <span className={`w-px h-4 mx-1 ${darkMode ? 'bg-zinc-800' : 'bg-gray-300'}`}></span>
-                  <button type="button" className={`p-1.5 rounded transition ${darkMode ? 'hover:bg-zinc-800' : 'hover:bg-gray-200'}`} title={t('reportFormToolbarLink')}><Link2 size={14} /></button>
-                  <button type="button" className={`p-1.5 rounded transition ${darkMode ? 'hover:bg-zinc-800' : 'hover:bg-gray-200'}`} title={t('reportFormToolbarImage')}><ImageIcon size={14} /></button>
-                  <button type="button" className={`p-1.5 rounded transition ${darkMode ? 'hover:bg-zinc-800' : 'hover:bg-gray-200'}`} title={t('reportFormToolbarCode')}><Code size={14} /></button>
-                  <button type="button" className={`p-1.5 rounded transition ${darkMode ? 'hover:bg-zinc-800' : 'hover:bg-gray-200'}`} title={t('reportFormToolbarAudio')}><Music size={14} /></button>
+                  <button type="button" className={`p-1.5 rounded transition cursor-pointer ${darkMode ? 'hover:bg-zinc-800 hover:text-white' : 'hover:bg-gray-200 hover:text-gray-900'}`} title={t('reportFormToolbarLink')}><Link2 size={14} /></button>
+                  <button type="button" className={`p-1.5 rounded transition cursor-pointer ${darkMode ? 'hover:bg-zinc-800 hover:text-white' : 'hover:bg-gray-200 hover:text-gray-900'}`} title={t('reportFormToolbarImage')}><ImageIcon size={14} /></button>
+                  <button type="button" className={`p-1.5 rounded transition cursor-pointer ${darkMode ? 'hover:bg-zinc-800 hover:text-white' : 'hover:bg-gray-200 hover:text-gray-900'}`} title={t('reportFormToolbarCode')}><Code size={14} /></button>
+                  <button type="button" className={`p-1.5 rounded transition cursor-pointer ${darkMode ? 'hover:bg-zinc-800 hover:text-white' : 'hover:bg-gray-200 hover:text-gray-900'}`} title={t('reportFormToolbarAudio')}><Music size={14} /></button>
                   <span className={`w-px h-4 mx-1 ${darkMode ? 'bg-zinc-800' : 'bg-gray-300'}`}></span>
-                  <button type="button" className={`p-1.5 rounded transition ${darkMode ? 'hover:bg-zinc-800' : 'hover:bg-gray-200'}`} title={t('reportFormToolbarUndo')}><RotateCcw size={14} /></button>
-                  <button type="button" className={`p-1.5 rounded transition ${darkMode ? 'hover:bg-zinc-800' : 'hover:bg-gray-200'}`} title={t('reportFormToolbarRedo')}><RotateCw size={14} /></button>
+                  <button type="button" className={`p-1.5 rounded transition cursor-pointer ${darkMode ? 'hover:bg-zinc-800 hover:text-white' : 'hover:bg-gray-200 hover:text-gray-900'}`} title={t('reportFormToolbarUndo')}><RotateCcw size={14} /></button>
+                  <button type="button" className={`p-1.5 rounded transition cursor-pointer ${darkMode ? 'hover:bg-zinc-800 hover:text-white' : 'hover:bg-gray-200 hover:text-gray-900'}`} title={t('reportFormToolbarRedo')}><RotateCw size={14} /></button>
                 </div>
 
                 <textarea
@@ -352,9 +352,9 @@ export default function CreateReportForm({ onCancel, darkMode }) {
           <div className="flex items-center gap-3 pt-2">
             <button
               onClick={onCancel}
-              className={`text-white font-semibold text-xs px-6 py-3 rounded-2xl shadow-sm transition-all duration-200 flex items-center gap-2 cursor-pointer ${
+              className={`text-white font-semibold text-xs px-6 py-3 rounded-2xl transition-all duration-200 flex items-center gap-2 cursor-pointer hover:scale-[1.02] active:scale-[0.98] ${
                 isLost
-                  ? 'bg-[var(--color-brand-primary,#3b82f6)] hover:opacity-90'
+                  ? 'bg-[var(--color-brand-primary,#3b82f6)] hover:bg-blue-600'
                   : 'bg-amber-500 hover:bg-amber-600'
               }`}
             >
@@ -362,10 +362,10 @@ export default function CreateReportForm({ onCancel, darkMode }) {
             </button>
             <button
               onClick={onCancel}
-              className={`font-semibold text-xs px-6 py-3 rounded-2xl transition cursor-pointer backdrop-blur-md ${
+              className={`font-semibold text-xs px-6 py-3 rounded-2xl transition-all duration-200 cursor-pointer backdrop-blur-md hover:scale-[1.02] active:scale-[0.98] ${
                 darkMode
-                  ? 'bg-zinc-900/90 border border-zinc-800 text-slate-300 hover:bg-zinc-800'
-                  : 'bg-white/95 border border-gray-100 text-gray-700 hover:bg-gray-100'
+                  ? 'bg-zinc-900/90 border border-zinc-800 text-slate-300 hover:bg-zinc-800 hover:border-zinc-700 hover:text-white'
+                  : 'bg-white/95 border border-gray-100 text-gray-700 hover:bg-gray-100 hover:border-gray-200'
               }`}
             >
               {t('reportCancelBtn')}
@@ -380,13 +380,13 @@ export default function CreateReportForm({ onCancel, darkMode }) {
           {/* IMAGE UPLOAD SECTION */}
           <div className={`${cardClass} p-5`}>
             <h3 className={`text-sm font-bold mb-3 ${darkMode ? 'text-white' : 'text-gray-900'}`}>{t('reportFormUploadTitle')}</h3>
-            <div className={`border-2 border-dashed rounded-2xl p-6 text-center transition cursor-pointer ${
+            <div className={`border-2 border-dashed rounded-2xl p-6 text-center transition-all duration-200 cursor-pointer group ${
               darkMode
-                ? 'border-zinc-800 hover:border-blue-500 bg-zinc-950/60'
-                : 'border-gray-200 hover:border-[var(--color-brand-primary,#3b82f6)] bg-gray-50'
+                ? 'border-zinc-800 hover:border-blue-500 bg-zinc-950/60 hover:bg-zinc-900/60'
+                : 'border-gray-200 hover:border-[var(--color-brand-primary,#3b82f6)] bg-gray-50 hover:bg-blue-50/30'
             }`}>
-              <UploadCloud size={32} className={`mx-auto mb-2 ${darkMode ? 'text-blue-400' : 'text-[var(--color-brand-primary,#3b82f6)]'}`} />
-              <p className={`text-xs font-semibold ${darkMode ? 'text-slate-300' : 'text-gray-700'}`}>{t('reportFormUploadHint')}</p>
+              <UploadCloud size={32} className={`mx-auto mb-2 transition-transform duration-300 group-hover:scale-110 ${darkMode ? 'text-blue-400' : 'text-[var(--color-brand-primary,#3b82f6)]'}`} />
+              <p className={`text-xs font-semibold ${darkMode ? 'text-slate-300 group-hover:text-white' : 'text-gray-700 group-hover:text-gray-900'}`}>{t('reportFormUploadHint')}</p>
               <p className={`text-[10px] mt-1 ${darkMode ? 'text-slate-500' : 'text-gray-400'}`}>{t('reportFormUploadFormats')}</p>
             </div>
           </div>
@@ -398,13 +398,15 @@ export default function CreateReportForm({ onCancel, darkMode }) {
             </h3>
             
             <div className="space-y-3">
-              <label className={`flex items-start gap-2.5 text-xs cursor-pointer ${darkMode ? 'text-slate-300' : 'text-gray-600'}`}>
+              <label className={`flex items-start gap-2.5 text-xs cursor-pointer p-2 rounded-xl transition-colors ${
+                darkMode ? 'hover:bg-zinc-800/50 text-slate-300' : 'hover:bg-gray-50 text-gray-600'
+              }`}>
                 <input
                   type="radio"
                   name="visibility"
                   checked={formData.visibility.includes('Public')}
                   onChange={() => setFormData({...formData, visibility: 'Public (Everyone can see)'})}
-                  className={`mt-0.5 text-[var(--color-brand-primary,#3b82f6)] focus:ring-[var(--color-brand-primary,#3b82f6)] ${
+                  className={`mt-0.5 text-[var(--color-brand-primary,#3b82f6)] focus:ring-[var(--color-brand-primary,#3b82f6)] cursor-pointer ${
                     darkMode ? 'bg-zinc-950 border-zinc-800' : ''
                   }`}
                 />
@@ -414,13 +416,15 @@ export default function CreateReportForm({ onCancel, darkMode }) {
                 </div>
               </label>
 
-              <label className={`flex items-start gap-2.5 text-xs cursor-pointer ${darkMode ? 'text-slate-300' : 'text-gray-600'}`}>
+              <label className={`flex items-start gap-2.5 text-xs cursor-pointer p-2 rounded-xl transition-colors ${
+                darkMode ? 'hover:bg-zinc-800/50 text-slate-300' : 'hover:bg-gray-50 text-gray-600'
+              }`}>
                 <input
                   type="radio"
                   name="visibility"
                   checked={formData.visibility.includes('Security Only')}
                   onChange={() => setFormData({...formData, visibility: 'Campus Security Only'})}
-                  className={`mt-0.5 text-[var(--color-brand-primary,#3b82f6)] focus:ring-[var(--color-brand-primary,#3b82f6)] ${
+                  className={`mt-0.5 text-[var(--color-brand-primary,#3b82f6)] focus:ring-[var(--color-brand-primary,#3b82f6)] cursor-pointer ${
                     darkMode ? 'bg-zinc-950 border-zinc-800' : ''
                   }`}
                 />
