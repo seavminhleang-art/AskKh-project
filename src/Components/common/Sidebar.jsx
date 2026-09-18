@@ -25,7 +25,7 @@ import { logout } from '../../store/slices/authSlice';
 import { ROLES } from '../../constants';
 import { cn } from '@/lib/utils';
 
-export default function Sidebar({ mode = 'user' }) {
+export default function Sidebar({ mode = 'user', mobile = false }) {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { user, role } = useAppSelector((state) => state.auth);
@@ -51,7 +51,7 @@ export default function Sidebar({ mode = 'user' }) {
   };
 
   return (
-    <aside className={cn("w-64 shrink-0 hidden md:flex flex-col min-h-screen p-4 justify-between transition-colors", mode === 'admin' ? "admin-sidebar" : "border-r border-slate-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-900/60 backdrop-blur-md")}>
+    <aside className={cn(mobile ? "w-full flex flex-col gap-6 p-4" : "w-56 lg:w-64 shrink-0 hidden md:flex flex-col min-h-screen p-4 justify-between transition-colors", mode === 'admin' ? "admin-sidebar" : "border-r border-slate-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-900/60 backdrop-blur-md")}>
       <div className="space-y-6">
         {mode === 'admin' && (
           <div className="flex items-center gap-3 px-2 pt-2">

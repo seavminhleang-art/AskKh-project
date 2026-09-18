@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { ArrowLeft, Send, Heart, Trash2 } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { ArrowLeft, Send, Heart, Trash2, ImagePlus, X } from 'lucide-react';
 import { useOutletContext } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -10,15 +10,53 @@ const DetailView = ({ post, onBack, onUpdateComments, darkMode: propDarkMode }) 
 
   const [commentText, setCommentText] = useState("");
 
+  const [commentImage, setCommentImage] = useState(null);
+  const [imageError, setImageError] = useState("");
+  const [isReadingImage, setIsReadingImage] = useState(false);
+  const imageReader = useRef(null);
+
+  useEffect(() => () => imageReader.current?.abort(), []);
+
+  const handleSelectImage = (event) => {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if (!file) return;
+    imageReader.current?.abort();
+    setIsReadingImage(false);
+    setImageError("");
+    setCommentImage(null);
+    if (!["image/jpeg", "image/png", "image/webp", "image/gif"].includes(file.type)) {
+      setImageError(t('detail.imageTypeError'));
+      return;
+    }
+    if (file.size === 0 || file.size > 5 * 1024 * 1024) {
+      setImageError(t('detail.imageSizeError'));
+      return;
+    }
+    const reader = new FileReader();
+    imageReader.current = reader;
+    setIsReadingImage(true);
+    reader.onload = () => {
+      setCommentImage({ src: reader.result, name: file.name });
+      setIsReadingImage(false);
+    };
+    reader.onerror = () => {
+      setImageError(t('detail.imageReadError'));
+      setIsReadingImage(false);
+    };
+    reader.readAsDataURL(file);
+  };
+
   const commentsList = Array.isArray(post.comments) ? post.comments : [];
 
   // Add a new comment
   const handleSendComment = () => {
-    if (commentText.trim() === "") return;
+    if (isReadingImage || (!commentText.trim() && !commentImage)) return;
 
     const newComment = {
       id: Date.now(),
       text: commentText.trim(),
+      image: commentImage,
       author: {
         name: "Mom Lisa",
         avatar: '../../src/assets/Website/Lisa.jpg',
@@ -32,6 +70,8 @@ const DetailView = ({ post, onBack, onUpdateComments, darkMode: propDarkMode }) 
     const updated = [...commentsList, newComment];
     onUpdateComments(updated);
     setCommentText("");
+    setCommentImage(null);
+    setImageError("");
   };
 
   // Delete a comment
@@ -115,7 +155,7 @@ const DetailView = ({ post, onBack, onUpdateComments, darkMode: propDarkMode }) 
             value={commentText}
             onChange={(e) => setCommentText(e.target.value)}
             placeholder={t('detail.addCommentPlaceholder')}
-            className={`w-full rounded-xl p-3 text-xs border focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors ${
+            className={`w-full rounded-xl p-3 pb-14 text-xs border focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors ${
               darkMode 
                 ? "bg-zinc-800/80 border-zinc-700 text-slate-100 placeholder-zinc-500" 
                 : "bg-gray-50 border-gray-100 text-gray-900 placeholder-gray-400"
@@ -123,11 +163,28 @@ const DetailView = ({ post, onBack, onUpdateComments, darkMode: propDarkMode }) 
           ></textarea>
           <button 
             onClick={handleSendComment}
-            className="absolute bottom-3 right-3 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1 transition-colors"
+            disabled={isReadingImage || (!commentText.trim() && !commentImage)}
+            className="disabled:opacity-50 disabled:cursor-not-allowed absolute bottom-3 right-3 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1 transition-colors"
           >
             <Send className="w-3 h-3" /> {t('detail.commentBtn')}
           </button>
         </div>
+        <label className="inline-flex cursor-pointer items-center gap-2 rounded-lg text-xs font-medium text-blue-500 focus-within:ring-2 focus-within:ring-blue-500">
+          <ImagePlus className="h-4 w-4" />
+          {t('detail.uploadImage')}
+          <input type="file" accept="image/jpeg,image/png,image/webp,image/gif" onChange={handleSelectImage} className="sr-only" />
+        </label>
+        <p className="text-xs text-zinc-500">{t('detail.imageHint')}</p>
+        {isReadingImage && <p role="status" className="text-xs">{t('detail.imageLoading')}</p>}
+        {imageError && <p role="alert" className="text-xs text-rose-500">{imageError}</p>}
+        {commentImage && (
+          <div className="relative w-fit">
+            <img src={commentImage.src} alt={commentImage.name} className="max-h-48 max-w-full rounded-xl object-contain" />
+            <button type="button" onClick={() => setCommentImage(null)} aria-label={t('detail.removeImage')} className="absolute right-2 top-2 rounded-full bg-zinc-900/80 p-1 text-white">
+              <X className="h-4 w-4" />
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Comment List (Sorted by Most Likes) */}
@@ -166,6 +223,8 @@ const DetailView = ({ post, onBack, onUpdateComments, darkMode: propDarkMode }) 
               <p className={`text-xs leading-relaxed ${darkMode ? "text-slate-300" : "text-gray-600"}`}>
                 {comment.text}
               </p>
+
+              {comment.image && <img src={comment.image.src} alt={comment.image.name} className="max-h-80 max-w-full rounded-xl object-contain" />}
 
               {/* Comment Like Button */}
               <div className="flex items-center space-x-2 pt-1">

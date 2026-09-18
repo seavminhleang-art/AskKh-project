@@ -1,3 +1,4 @@
+import { toast, ToastContainer } from "react-toastify";
 import {
   useMemo,
   useState,
@@ -513,7 +514,7 @@ export default function LoginPage() {
         loginSchema,
       ),
 
-    mode: "onBlur",
+    mode: "onSubmit",
 
     reValidateMode:
       "onChange",
@@ -550,12 +551,7 @@ export default function LoginPage() {
   const notifyError = (
     description,
   ) => {
-    showToast({
-      status: "error",
-      title:
-        t.errorTitle,
-      description,
-    });
+    toast.error(description, { toastId: "login-error" });
   };
 
   const showLoginSuccess = async (
@@ -655,11 +651,6 @@ export default function LoginPage() {
           result.user,
         );
       } catch (error) {
-        console.error(
-          "Login error:",
-          error,
-        );
-
         notifyError(
           getFirebaseErrorMessage(
             error,
@@ -825,6 +816,7 @@ export default function LoginPage() {
 
   return (
     <>
+      <ToastContainer position="top-right" autoClose={4200} limit={1} />
       {(isSubmitting || oauthLoading) && <LoadingSpinner title="Signing in to NEXA" />}
       <AnimatedToastStack
         toasts={
@@ -888,6 +880,9 @@ export default function LoginPage() {
               className="auth-form"
               onSubmit={handleSubmit(
                 onSubmit,
+                (validationErrors) => notifyError(
+                  validationErrors.email?.message || validationErrors.password?.message || t.wrongCredentials,
+                ),
               )}
               noValidate
             >
@@ -934,15 +929,6 @@ export default function LoginPage() {
                   />
                 </div>
 
-                {errors.email && (
-                  <p className="mt-1.5 text-xs font-medium text-red-500">
-                    {
-                      errors
-                        .email
-                        .message
-                    }
-                  </p>
-                )}
               </div>
 
               <div className="form-group">
@@ -1024,15 +1010,6 @@ export default function LoginPage() {
                   </button>
                 </div>
 
-                {errors.password && (
-                  <p className="mt-1.5 text-xs font-medium text-red-500">
-                    {
-                      errors
-                        .password
-                        .message
-                    }
-                  </p>
-                )}
               </div>
 
               <div className="login-options">

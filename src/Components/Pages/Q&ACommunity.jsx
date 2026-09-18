@@ -127,7 +127,7 @@
 //   return (
 //     <div 
 //       style={googleSansStyle} 
-//       className={`shared-page min-h-screen flex flex-col justify-between transition-colors duration-300 ${
+//       className={`shared-theme shared-page min-h-screen flex flex-col justify-between transition-colors duration-300 ${
 //         darkMode ? "bg-zinc-950 text-slate-100" : "bg-gray-50 text-gray-900"
 //       }`}
 //     >
@@ -316,7 +316,7 @@ export default function QACommunity({ darkMode: propDarkMode, language: propLang
           return {
             ...post,
             isLiked: !isLiked,
-            likes: isLiked ? currentLikes - 1 : currentLikes + 1
+            likes: isLiked ? Math.max(0, currentLikes - 1) : currentLikes + 1
           };
         }
         return post;
@@ -333,15 +333,10 @@ export default function QACommunity({ darkMode: propDarkMode, language: propLang
   };
 
   const toggleBookmark = (id) => {
+    if (!posts.some((post) => post.id === id)) return;
     setBookmarkedPostIds((prev) =>
       prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
     );
-  };
-
-  const handleDeletePost = (id) => {
-    setPosts((prevPosts) => prevPosts.filter((post) => post.id !== id));
-    setBookmarkedPostIds((prev) => prev.filter((itemId) => itemId !== id));
-    if (selectedPostId === id) setSelectedPostId(null);
   };
 
   const handleAddPost = (newPost) => {
@@ -367,7 +362,7 @@ export default function QACommunity({ darkMode: propDarkMode, language: propLang
   return (
     <div 
       style={googleSansStyle} 
-      className={`shared-page min-h-screen flex flex-col justify-between transition-colors duration-300 ${
+      className={`shared-theme shared-page min-h-screen flex flex-col justify-between transition-colors duration-300 ${
         darkMode ? "bg-zinc-950 text-slate-100" : "bg-gray-50 text-gray-900"
       }`}
     >
@@ -444,7 +439,6 @@ export default function QACommunity({ darkMode: propDarkMode, language: propLang
                     onToggleBookmark={toggleBookmark}
                     onSelectPost={handleSelectPost}
                     onToggleLike={handleToggleLike}
-                    onDeletePost={handleDeletePost}
                   />
                 ))
               )}

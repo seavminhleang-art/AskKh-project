@@ -50,6 +50,9 @@
   --color-brand-accent: #16A34A;
   --color-brand-accent-light: #DCFCE7;
   --color-brand-accent-dark: #15803D;
+  --color-brand-primary-dark-text: #93C5FD;
+  --color-brand-secondary-dark-text: #FCA5A5;
+  --color-brand-accent-dark-text: #86EFAC;
   --color-brand-canvas: #FFFFFF;
   --color-brand-card: #FFFFFF;
   --color-whitesmoke: #F5F7F9;
@@ -64,10 +67,11 @@
   --border-color: #d9e2ef;
   --text-main: #172033;
   --text-muted: #475569;
-  --text-accent: #102a56;
-  --home-primary-text: #102a56;
-  --home-secondary-text: #b91c1c;
-  --home-link-text: #1d4ed8;
+  --text-accent: var(--color-brand-primary);
+  --home-primary-text: var(--text-accent);
+  --home-secondary-text: var(--color-brand-secondary-dark);
+  --home-link-text: var(--text-accent);
+  --brand-accent-text: var(--color-brand-accent-dark);
 }
 
 html.dark {
@@ -77,10 +81,11 @@ html.dark {
   --border-color: #334155;
   --text-main: #f8fafc;
   --text-muted: #cbd5e1;
-  --text-accent: #93c5fd;
-  --home-primary-text: #93c5fd;
-  --home-secondary-text: #fca5a5;
-  --home-link-text: #93c5fd;
+  --text-accent: var(--color-brand-primary-dark-text);
+  --home-primary-text: var(--text-accent);
+  --home-secondary-text: var(--color-brand-secondary-dark-text);
+  --home-link-text: var(--text-accent);
+  --brand-accent-text: var(--color-brand-accent-dark-text);
 }
 
 html, body {
@@ -135,8 +140,8 @@ html.dark #root::before {
 
 .site-content { background: transparent !important; }
 .site-content .text-brand-primary { color: var(--text-accent); }
-.site-content .text-brand-secondary { color: #b91c1c; }
-html.dark .site-content .text-brand-secondary { color: #fca5a5; }
+.site-content .text-brand-secondary { color: var(--home-secondary-text); }
+html.dark .site-content .text-brand-secondary { color: var(--home-secondary-text); }
 html.dark .site-content .bg-brand-primary.text-white { color: #ffffff; }
 html.dark .site-content .bg-brand-secondary.text-white { color: #ffffff; }
 
@@ -163,6 +168,62 @@ html.dark .shared-page,
 html.dark .shared-page.about-page > section {
   background: transparent !important;
 }
+
+/* Leaderboard colors come only from the primary, secondary, and accent theme. */
+.leaderboard-page {
+  --leaderboard-upvotes: var(--brand-accent-text);
+  --leaderboard-answers: var(--text-accent);
+  --leaderboard-solutions: var(--brand-accent-text);
+  --leaderboard-helpful: var(--home-secondary-text);
+  --leaderboard-gold: var(--text-accent);
+  --leaderboard-bronze: var(--home-secondary-text);
+}
+
+/* Public pages use the same dark surfaces and readable foreground tokens. */
+html.dark .shared-theme { color: var(--text-main); }
+html.dark .shared-theme [class~="bg-zinc-900/90"],
+html.dark .shared-theme [class~="bg-zinc-800/90"],
+html.dark .shared-theme [class~="bg-zinc-900"],
+html.dark .shared-theme [class~="bg-zinc-900/80"],
+html.dark .shared-theme [class~="bg-zinc-900/60"],
+html.dark .shared-theme [class~="bg-zinc-900/50"],
+html.dark .shared-theme [class~="bg-zinc-800"],
+html.dark .shared-theme [class~="bg-zinc-800/80"],
+html.dark .shared-theme [class~="bg-zinc-800/50"],
+html.dark .shared-theme [class~="bg-zinc-800/40"] { background-color: var(--bg-card); }
+
+html.dark .shared-theme [class~="bg-zinc-950"],
+html.dark .shared-theme [class~="bg-zinc-950/50"] { background-color: var(--bg-secondary); }
+
+html.dark .shared-theme [class~="border-zinc-700"],
+html.dark .shared-theme [class~="border-zinc-800"],
+html.dark .shared-theme [class~="border-zinc-900"] { border-color: var(--border-color); }
+
+html.dark .shared-theme [class~="text-slate-100"],
+html.dark .shared-theme [class~="text-slate-200"],
+html.dark .shared-theme [class~="text-gray-100"],
+html.dark .shared-theme [class~="text-gray-200"] { color: var(--text-main); }
+
+html.dark .shared-theme [class~="text-slate-300"],
+html.dark .shared-theme [class~="text-slate-400"],
+html.dark .shared-theme [class~="text-slate-500"],
+html.dark .shared-theme [class~="text-zinc-300"],
+html.dark .shared-theme [class~="text-zinc-400"],
+html.dark .shared-theme [class~="text-zinc-500"],
+html.dark .shared-theme [class~="text-gray-400"],
+html.dark .shared-theme [class~="text-gray-500"] { color: var(--text-muted); }
+
+html.dark .shared-theme [class~="text-brand-primary"],
+html.dark .shared-theme [class~="text-[var(--color-brand-primary)]"],
+html.dark .shared-theme [class~="text-blue-500"],
+html.dark .shared-theme [class~="text-blue-600"] { color: var(--text-accent); }
+
+html.dark .shared-theme [class~="text-brand-secondary"],
+html.dark .shared-theme [class~="text-[var(--color-brand-secondary)]"] { color: var(--home-secondary-text); }
+
+html.dark .shared-theme [class~="text-[var(--color-brand-accent)]"] { color: var(--brand-accent-text); }
+
+html.dark .shared-theme .placeholder-zinc-500::placeholder { color: var(--text-muted); }
 
 /* Authentication pages */
 .auth-page {

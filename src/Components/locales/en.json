@@ -27,7 +27,11 @@
     "delete": "Delete Post",
     "placeholderInput": "What's on your mind?",
     "createPostBtn": "Create Post",
-    "noPosts": "No posts found."
+    "noPosts": "No posts found.",
+    "addBookmark": "Save bookmark",
+    "removeBookmark": "Remove bookmark",
+    "like": "Like post",
+    "unlike": "Unlike post"
   },
   "create": {
     "title": "Create New Post",
@@ -48,7 +52,14 @@
     "noDescription": "No description provided.",
     "commentsTitle": "Comments",
     "addCommentPlaceholder": "Write a comment...",
-    "commentBtn": "Comment"
+    "commentBtn": "Comment",
+    "uploadImage": "Add image",
+    "imageHint": "JPG, PNG, WebP or GIF · Maximum 5 MB",
+    "imageTypeError": "Choose a JPG, PNG, WebP or GIF image.",
+    "imageSizeError": "Choose a non-empty image up to 5 MB.",
+    "imageReadError": "Unable to read this image. Please try again.",
+    "imageLoading": "Loading image…",
+    "removeImage": "Remove image"
   },
   "sidebarRight": {
     "peopleYouKnow": "People You Know",

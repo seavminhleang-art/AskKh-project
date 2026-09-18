@@ -112,6 +112,7 @@ export default function Navbar({
     setActiveItem(current?.label ?? null);
     setHoveredItem(null);
     setCommunityOpen(false);
+    setMobileOpen(false);
   }, [language, pathname, navItems]);
 
   useEffect(() => {
@@ -247,7 +248,7 @@ export default function Navbar({
       className="site-navbar font-brand sticky top-0 z-[1000] w-full rounded-b-2xl border border-gray-200 bg-white transition-colors duration-300 dark:border-gray-700 dark:bg-gray-900"
       aria-label="Main navigation"
     >
-      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-6 px-6">
+      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between gap-3 px-4 sm:gap-6 sm:px-6">
         {/* Logo */}
         <Link
           to="/"
@@ -260,7 +261,7 @@ export default function Navbar({
         {/* Desktop Navigation */}
         <LayoutGroup id="main-navigation">
         <ul
-          className="m-0 hidden list-none items-center justify-center gap-1 rounded-full border border-gray-200 bg-gray-50/80 p-1.5 dark:border-gray-700 dark:bg-slate-900 lg:flex"
+          className="m-0 hidden list-none items-center justify-center gap-1 rounded-full border border-gray-200 bg-gray-50/80 p-1.5 dark:border-gray-700 dark:bg-slate-900 xl:flex"
           onMouseLeave={() => setHoveredItem(null)}
           onBlur={(event) => {
             if (!event.currentTarget.contains(event.relatedTarget)) setHoveredItem(null);
@@ -365,7 +366,7 @@ export default function Navbar({
         </LayoutGroup>
 
         {/* Right side actions (desktop) */}
-        <div className="hidden lg:flex items-center gap-2.5 shrink-0">
+        <div className="hidden xl:flex items-center gap-2.5 shrink-0">
           <ThemeToggle
             variant="circle"
             start="top-right"
@@ -405,8 +406,10 @@ export default function Navbar({
         {/* Mobile Menu Button */}
         <button
           type="button"
-          className="lg:hidden inline-flex items-center justify-center w-10 h-10 rounded-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-brand-primary shrink-0"
+          className="xl:hidden inline-flex items-center justify-center w-10 h-10 rounded-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-brand-primary shrink-0"
           aria-label="Toggle menu"
+          aria-expanded={mobileOpen}
+          aria-controls="mobile-navigation"
           onClick={() =>
             setMobileOpen(
               (
@@ -428,9 +431,11 @@ export default function Navbar({
 
       {/* Mobile Menu */}
       <div
-        className={`flex flex-col gap-4 overflow-hidden bg-white dark:bg-gray-900 text-foreground transition-all duration-300 lg:hidden ${
+        id="mobile-navigation"
+        inert={!mobileOpen}
+        className={`flex flex-col gap-4 overflow-hidden bg-white dark:bg-gray-900 text-foreground transition-all duration-300 xl:hidden ${
           mobileOpen
-            ? "max-h-[750px] px-5 py-5 border-t border-gray-200 dark:border-gray-700 rounded-b-2xl"
+            ? "max-h-[calc(100dvh-5rem)] overflow-y-auto px-5 py-5 border-t border-gray-200 dark:border-gray-700 rounded-b-2xl"
             : "max-h-0 px-5 py-0 border-t border-transparent"
         }`}
       >

@@ -77,7 +77,7 @@ export default function DashboardPage() {
       </div>
 
       {/* 6 Key Statistics Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+      <div className="grid grid-cols-1 min-[380px]:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-6 gap-4">
         <StatCard
           title="Questions"
           value={myQuestions.length}

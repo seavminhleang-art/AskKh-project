@@ -139,7 +139,7 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
         </div>
 
         <div className="flex flex-wrap items-center justify-between gap-3 mb-8">
-          <div className="relative flex-1 min-w-[240px]">
+          <div className="relative w-full min-w-0 sm:flex-1 sm:min-w-[240px]">
             <input
               type="text"
               placeholder={t('feedSearchPlaceholder')}
@@ -246,7 +246,7 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
                       </p>
                     </div>
 
-                    <div className={`flex items-center justify-between pt-4 mt-2 border-t ${
+                    <div className={`flex flex-wrap gap-3 items-center justify-between pt-4 mt-2 border-t ${
                       darkMode ? 'border-zinc-800 text-slate-400' : 'border-gray-100 text-gray-600'
                     }`}>
                       <div className="flex items-center gap-2.5">

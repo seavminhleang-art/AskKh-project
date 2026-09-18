@@ -1,5 +1,5 @@
 import React from 'react';
-import { Bookmark, Trash2, Eye, Heart, MessageSquare } from 'lucide-react';
+import { Bookmark, Eye, Heart, MessageSquare } from 'lucide-react';
 import { useOutletContext } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -14,12 +14,10 @@ const PostCard = ({
   comments, 
   image, 
   isBookmarked, 
-  isOwnPost, 
   isLiked,
   onToggleBookmark, 
   onSelectPost, 
   onToggleLike,
-  onDeletePost,
   darkMode: propDarkMode 
 }) => {
   const { t } = useTranslation();
@@ -59,23 +57,12 @@ const PostCard = ({
             </div>
 
             <div className="flex items-center space-x-1 flex-shrink-0">
-              {isOwnPost && (
-                <button
-                  type="button"
-                  onClick={(e) => { e.stopPropagation(); onDeletePost(id); }}
-                  className={`p-2 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 border ${
-                    darkMode 
-                      ? "bg-rose-950/40 text-rose-400 border-rose-900/30 hover:bg-rose-900/50" 
-                      : "bg-rose-50 text-rose-500 border-transparent hover:bg-rose-100"
-                  }`}
-                  title={t('post.delete')}
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
-              )}
               <button 
                 type="button"
-                onClick={(e) => { e.stopPropagation(); onToggleBookmark(id); }} 
+                onClick={(e) => { e.stopPropagation(); onToggleBookmark(id); }}
+                aria-pressed={Boolean(isBookmarked)}
+                aria-label={t(isBookmarked ? "post.removeBookmark" : "post.addBookmark")}
+                title={t(isBookmarked ? "post.removeBookmark" : "post.addBookmark")}
                 className={`p-2 rounded-xl transition-all duration-200 hover:scale-105 active:scale-95 border ${
                   isBookmarked 
                     ? darkMode 
@@ -131,6 +118,8 @@ const PostCard = ({
 
               <button 
                 onClick={() => onToggleLike(id)}
+                aria-pressed={Boolean(isLiked)}
+                aria-label={t(isLiked ? "post.unlike" : "post.like")}
                 className={`flex items-center gap-1 transition-colors ${
                   isLiked ? "text-rose-500 font-bold" : "hover:text-rose-500"
                 }`}

@@ -34,7 +34,7 @@ export default function HomePage() {
   return (
     <div
       onMouseMove={handleMouseMove}
-      className={`shared-page relative px-6 sm:px-12 md:px-20 lg:px-28 py-10 overflow-hidden font-sans cursor-default transition-colors duration-300 ${
+      className={`shared-theme shared-page relative px-4 sm:px-6 lg:px-10 xl:px-16 py-10 overflow-hidden font-sans cursor-default transition-colors duration-300 ${
         darkMode ? "bg-[#121212] text-gray-100" : "bg-[#f5f5f5] text-gray-800"
       }`}
     >
@@ -42,7 +42,7 @@ export default function HomePage() {
 
       {/* Custom Mouse Follower Tooltip */}
       <motion.div
-        className={`fixed top-0 left-0 pointer-events-none z-50 flex items-center justify-center px-3 py-1.5 rounded-full backdrop-blur-md text-xs font-medium shadow-xl ${
+        className={`hidden lg:flex fixed top-0 left-0 pointer-events-none z-50 flex items-center justify-center px-3 py-1.5 rounded-full backdrop-blur-md text-xs font-medium shadow-xl ${
           darkMode ? "bg-gray-100/90 text-gray-900" : "bg-gray-900/90 text-white"
         }`}
         style={{

@@ -1,52 +1,34 @@
 import React, { useState, useEffect, useMemo } from "react";
+import { ArrowUp, MessageCircle, Award, Search } from "lucide-react";
+import lisaPhoto from "../../../assets/Team/mom_lisa.jpg";
+import thanaPhoto from "../../../assets/Team/neang_thana.jpg";
+import tonganPhoto from "../../../assets/Team/hor_tongan.jpg";
+import lyhengPhoto from "../../../assets/Team/cheakching_lyheng.jpg";
+import monizaPhoto from "../../../assets/Team/cheat_chanmoniza.jpg";
 
 /* ---------------------------------------------------------------------- */
 /* Theme tokens (light / dark)                                            */
 /* ---------------------------------------------------------------------- */
 
-const THEMES = {
-  light: {
-    primary: "#0050F3",
-    primaryLight: "#E6EEFE",
-    darkBlue: "#001C55",
-    secondary: "#ED2B2A",
-    secondaryLight: "#FDECEC",
-    green: "#4CAF4F",
-    greenLight: "#EAF7EA",
-    navLight: "#E9ECF5",
-    bg: "#FFFFFF",
-    surface: "#FFFFFF",
-    surfaceAlt: "#FAFBFF",
-    controlBg: "#F3F6FD",
-    muted: "#5b6b8c",
-    mutedLight: "#7386ad",
-    body: "#44547a",
-    border: "#E4E9F5",
-    rowBorder: "#EEF1F9",
-    rowHover: "#F7F9FE",
-    heading: "#001C55",
-  },
-  dark: {
-    primary: "#5B8DFF",
-    primaryLight: "#16233F",
-    darkBlue: "#EAF0FF",
-    secondary: "#FF6B6A",
-    secondaryLight: "#2E1B1E",
-    green: "#6FCB72",
-    greenLight: "#16261A",
-    navLight: "#1B2338",
-    bg: "#0A0E1A",
-    surface: "#111729",
-    surfaceAlt: "#0E1424",
-    controlBg: "#161D30",
-    muted: "#93A2C2",
-    mutedLight: "#7688AE",
-    body: "#B7C2DE",
-    border: "#212B44",
-    rowBorder: "#1B2438",
-    rowHover: "#141C30",
-    heading: "#F2F5FF",
-  },
+// Surfaces and text follow the shared site wrapper in index.css.
+const THEME = {
+  primary: "var(--text-accent)",
+  primaryLight: "var(--bg-secondary)",
+  darkBlue: "var(--text-main)",
+  secondary: "var(--home-secondary-text)",
+  secondaryLight: "var(--bg-secondary)",
+  green: "var(--leaderboard-upvotes)",
+  greenLight: "var(--bg-secondary)",
+  navLight: "var(--bg-secondary)",
+  surface: "var(--bg-card)",
+  surfaceAlt: "var(--bg-secondary)",
+  muted: "var(--text-muted)",
+  mutedLight: "var(--text-muted)",
+  body: "var(--text-main)",
+  border: "var(--border-color)",
+  rowBorder: "var(--border-color)",
+  rowHover: "var(--bg-secondary)",
+  heading: "var(--text-main)",
 };
 
 const FONT_STACK =
@@ -92,7 +74,7 @@ const COPY = {
     categories: {
       "Web Development": "Web Development",
       JavaScript: "JavaScript",
-      "Next.js": "Next.js",
+      "React": "React",
       "Bug Report": "Bug Report",
       "Data Science": "Data Science",
     },
@@ -134,7 +116,7 @@ const COPY = {
     categories: {
       "Web Development": "អភិវឌ្ឍន៍វេបសាយ",
       JavaScript: "ចាវ៉ាស្គ្រីប",
-      "Next.js": "Next.js",
+      "React": "React",
       "Bug Report": "រាយការណ៍បញ្ហា",
       "Data Science": "វិទ្យាសាស្ត្រទិន្នន័យ",
     },
@@ -165,6 +147,7 @@ const CHAMPIONS = [
     rank: "2ND",
     name: "DevSphere",
     handle: "@devsphere",
+    avatar: thanaPhoto,
     points: "2,450 pts",
     stats: { upvotes: 328, answers: 79, solutions: 25, helpful: 142 },
   },
@@ -172,6 +155,7 @@ const CHAMPIONS = [
     rank: "1ST",
     name: "CodeMaster",
     handle: "@codemaster",
+    avatar: lisaPhoto,
     points: "4,125 pts",
     stats: { upvotes: 567, answers: 156, solutions: 58, helpful: 298 },
     elevated: true,
@@ -180,6 +164,7 @@ const CHAMPIONS = [
     rank: "3RD",
     name: "TechExplorer",
     handle: "@techexplorer",
+    avatar: tonganPhoto,
     points: "1,890 pts",
     stats: { upvotes: 241, answers: 63, solutions: 19, helpful: 116 },
   },
@@ -190,7 +175,7 @@ const USERS = [
     rank: 1,
     name: "CodeMaster",
     handle: "@codemaster",
-    avatar: "C",
+    avatar: lisaPhoto,
     upvotes: 567,
     answers: 156,
     solutions: 58,
@@ -201,7 +186,7 @@ const USERS = [
     rank: 2,
     name: "DevSphere",
     handle: "@devsphere",
-    avatar: "D",
+    avatar: thanaPhoto,
     upvotes: 328,
     answers: 79,
     solutions: 25,
@@ -212,18 +197,18 @@ const USERS = [
     rank: 3,
     name: "TechExplorer",
     handle: "@techexplorer",
-    avatar: "T",
+    avatar: tonganPhoto,
     upvotes: 241,
     answers: 63,
     solutions: 19,
     helpful: 116,
-    category: "Next.js",
+    category: "React",
   },
   {
     rank: 4,
     name: "BugHunter",
     handle: "@bughunter",
-    avatar: "B",
+    avatar: lyhengPhoto,
     upvotes: 198,
     answers: 42,
     solutions: 14,
@@ -234,7 +219,7 @@ const USERS = [
     rank: 5,
     name: "DataWizard",
     handle: "@datawizard",
-    avatar: "D",
+    avatar: monizaPhoto,
     upvotes: 178,
     answers: 38,
     solutions: 12,
@@ -246,55 +231,34 @@ const USERS = [
 function categoryStyle(t, category) {
   const map = {
     "Web Development": { bg: t.primaryLight, text: t.primary },
-    JavaScript: { bg: t.greenLight, text: t.green },
-    "Next.js": { bg: t.navLight, text: t.darkBlue },
+    JavaScript: { bg: t.primaryLight, text: "var(--leaderboard-gold)" },
+    "React": { bg: t.navLight, text: t.darkBlue },
     "Bug Report": { bg: t.secondaryLight, text: t.secondary },
-    "Data Science": { bg: t.primaryLight, text: t.primary },
+    "Data Science": { bg: t.greenLight, text: t.green },
   };
   return map[category] || { bg: t.primaryLight, text: t.primary };
 }
 
-/* ---------------------------------------------------------------------- */
-/* Khmer lotus motifs                                                     */
-/* ---------------------------------------------------------------------- */
+const METRICS = [
+  { key: "upvotes", color: "var(--leaderboard-upvotes)", Icon: ArrowUp },
+  { key: "answers", color: "var(--leaderboard-answers)", Icon: MessageCircle },
+  { key: "solutions", color: "var(--leaderboard-solutions)", Icon: Award },
+  { key: "helpful", color: "var(--leaderboard-helpful)", Icon: MessageCircle },
+];
 
-function LotusBud({ size = 14, color }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M12 2c-3 4-3 9 0 13 3-4 3-9 0-13Z" fill={color} opacity="0.95" />
-      <path d="M5.5 8.5c0 4 2.7 6.7 6.5 6.5-3-3-4-5-6.5-6.5Z" fill={color} opacity="0.55" />
-      <path d="M18.5 8.5c0 4-2.7 6.7-6.5 6.5 3-3 4-5 6.5-6.5Z" fill={color} opacity="0.55" />
-    </svg>
-  );
+function MetricValue({ metric, value }) {
+  const { Icon, color } = metric;
+  return <span className="inline-flex items-center justify-center gap-1 whitespace-nowrap" style={{ color }}>
+    <Icon size={12} aria-hidden="true" fill={metric.key === "answers" || metric.key === "helpful" ? "currentColor" : "none"} />
+    {value}
+  </span>;
 }
-
-function LotusBloom({ size = 96, color, opacity = 0.1 }) {
-  const petals = Array.from({ length: 8 });
-  return (
-    <svg width={size} height={size} viewBox="0 0 100 100" style={{ opacity }} aria-hidden="true">
-      <g fill="none" stroke={color} strokeWidth="1.1">
-        {petals.map((_, i) => (
-          <path
-            key={i}
-            d="M50 50 C45 34 45 14 50 4 C55 14 55 34 50 50 Z"
-            transform={`rotate(${(360 / petals.length) * i} 50 50)`}
-          />
-        ))}
-        <circle cx="50" cy="50" r="5" />
-      </g>
-    </svg>
-  );
-}
-
-/* ---------------------------------------------------------------------- */
-/* Header + toggles + points legend                                       */
-/* ---------------------------------------------------------------------- */
 
 function EyebrowLabel({ children, t }) {
   return (
-    <div className="flex items-center gap-2 mb-3">
+    <div className="flex items-center gap-2 mb-2">
       <span style={{ width: 20, height: 2, backgroundColor: t.primary }} />
-      <span className="text-xs font-semibold tracking-wide" style={{ color: t.primary }}>
+      <span className="text-[11px] font-medium tracking-[0.16em]" style={{ color: t.primary }}>
         {children}
       </span>
     </div>
@@ -305,151 +269,68 @@ function ForumHeader({ t, c, lang }) {
   return (
     <div className="max-w-xl" style={{ fontFamily: lang === "km" ? KHMER_FONT_STACK : FONT_STACK }}>
       <EyebrowLabel t={t}>{c.eyebrow}</EyebrowLabel>
-      <h1 className="text-4xl sm:text-5xl font-bold flex items-center gap-2" style={{ color: t.heading }}>
+      <h1 className="text-3xl font-normal flex items-center gap-2" style={{ color: t.heading }}>
         {c.title}
-        <LotusBud size={18} color={t.primary} />
+        <span style={{ color: t.primary }}>.</span>
       </h1>
-      <p className="mt-4 text-base leading-relaxed" style={{ color: t.muted }}>
+      <p className="mt-3 text-lg leading-relaxed" style={{ color: t.muted }}>
         {c.subtitle}
       </p>
     </div>
   );
 }
 
-function PointsLegend({ t, c, lang }) {
+function PointsLegend({ t, c }) {
   return (
-    <div
-      className="relative overflow-hidden rounded-2xl border p-5 w-full sm:w-72"
-      style={{ borderColor: t.border, backgroundColor: t.surfaceAlt, fontFamily: lang === "km" ? KHMER_FONT_STACK : FONT_STACK }}
-    >
-      <div className="pointer-events-none absolute -top-8 -right-8" style={{ transform: "rotate(12deg)" }}>
-        <LotusBloom size={90} color={t.primary} opacity={0.06} />
-      </div>
-      <p className="relative text-sm font-semibold mb-3" style={{ color: t.heading }}>
-        {c.pointsHeading}
-      </p>
-      <ul className="relative space-y-2.5">
+    <aside className="rounded-xl border px-4 py-4 w-full sm:w-[410px]" style={{ borderColor: t.border, backgroundColor: t.surface }}>
+      <p className="text-sm mb-3" style={{ color: t.heading }}>{c.pointsHeading}</p>
+      <ul className="flex flex-wrap gap-x-5 gap-y-3">
         {c.points.map((item, i) => (
-          <li key={item.label} className="flex items-center justify-between text-sm">
-            <span className="flex items-center gap-2" style={{ color: t.body }}>
-              <span
-                style={{
-                  width: 8,
-                  height: 8,
-                  borderRadius: 9999,
-                  backgroundColor: [t.primary, t.green, t.darkBlue, t.primary, t.secondary][i],
-                  display: "inline-block",
-                  flexShrink: 0,
-                }}
-              />
-              {item.label}
-            </span>
-            <span className="font-semibold" style={{ color: t.heading }}>
-              {item.value}
-            </span>
+          <li key={item.label} className="flex items-center gap-2 text-[11px] whitespace-nowrap" style={{ color: t.muted }}>
+            <span className="w-2 h-2 rounded-full" style={{ backgroundColor: [...METRICS.map(m => m.color), t.muted][i] }} />
+            {item.label}<span style={{ color: t.heading }}>{item.value}</span>
           </li>
         ))}
       </ul>
-    </div>
+    </aside>
   );
 }
 
-/* ---------------------------------------------------------------------- */
-/* Champions                                                               */
-/* ---------------------------------------------------------------------- */
-
-function ChampionCard({ t, c, lang, rank, name, handle, points, stats, elevated }) {
+function ChampionCard({ t, c, rank, name, handle, avatar, points, stats }) {
+  const accent = rank === "1ST" ? "var(--leaderboard-gold)" : rank === "2ND" ? "var(--leaderboard-solutions)" : "var(--leaderboard-bronze)";
   return (
-    <div
-      className={
-        "group relative overflow-hidden rounded-2xl border p-6 transition-shadow duration-200 hover:shadow-md" +
-        (elevated ? " sm:-translate-y-3" : "")
-      }
-      style={{
-        borderColor: t.border,
-        backgroundColor: elevated ? t.surface : t.primaryLight,
-        boxShadow: elevated ? "0 8px 24px rgba(0,0,0,0.18)" : "none",
-      }}
-    >
-      <div
-        className="pointer-events-none absolute -bottom-12 -right-12 opacity-0 transition-all duration-500 group-hover:opacity-100"
-        style={{ transform: "rotate(-8deg) scale(0.9)" }}
-      >
-        <LotusBloom size={130} color={elevated ? t.darkBlue : t.primary} opacity={0.13} />
+    <article className={`relative rounded-xl border pt-7 text-center ${rank === "1ST" ? "sm:-translate-y-6" : ""}`} style={{ borderColor: `color-mix(in srgb, ${accent} 33%, transparent)`, backgroundColor: "var(--bg-card)" }}>
+      <span className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 rounded-full px-4 py-1 text-[11px] font-medium" style={{ color: accent, backgroundColor: t.surface, border: `1px solid color-mix(in srgb, ${accent} 33%, transparent)` }}>{rank}</span>
+      <img src={avatar} alt={`${name} profile`} className="mx-auto h-16 w-16 rounded-full object-cover object-top p-1" style={{ border: `2px solid ${accent}` }} />
+      <p className="mt-2 text-sm font-medium" style={{ color: t.heading }}>{name}</p>
+      <p className="text-[11px]" style={{ color: t.mutedLight }}>{handle}</p>
+      <p className="mt-2 mb-3 text-[28px] leading-tight" style={{ color: accent }}>{points.split(" ")[0]} <span className="text-[10px]">pts</span></p>
+      <div className="grid grid-cols-4 border-t py-2" style={{ borderColor: "var(--border-color)" }}>
+        {METRICS.map(metric => <div key={metric.key} className="text-[11px]">
+          <MetricValue metric={metric} value={stats[metric.key]} />
+          <p className="mt-1 text-[10px]" style={{ color: t.mutedLight }}>{c.stats[metric.key]}</p>
+        </div>)}
       </div>
-
-      <div className="relative flex items-center justify-between mb-4">
-        <span
-          className="text-xs font-bold px-2.5 py-1 rounded-full"
-          style={{ backgroundColor: t.primaryLight, color: t.primary }}
-        >
-          {rank}
-        </span>
-        <span className="text-sm font-semibold" style={{ color: t.heading }}>
-          {points}
-        </span>
-      </div>
-      <div
-        className="w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg mb-3"
-        style={{ backgroundColor: t.surface, color: t.primary, border: `1px solid ${t.border}` }}
-      >
-        {name[0]}
-      </div>
-      <p className="font-semibold" style={{ color: t.heading }}>
-        {name}
-      </p>
-      <p className="text-sm mb-4" style={{ color: t.mutedLight }}>
-        {handle}
-      </p>
-      <div
-        className="grid grid-cols-2 gap-3 text-xs pt-4 border-t"
-        style={{ borderColor: t.border, fontFamily: lang === "km" ? KHMER_FONT_STACK : FONT_STACK }}
-      >
-        <div style={{ color: t.mutedLight }}>
-          {c.stats.upvotes}
-          <span className="font-semibold block text-sm mt-0.5" style={{ color: t.heading }}>
-            {stats.upvotes}
-          </span>
-        </div>
-        <div style={{ color: t.mutedLight }}>
-          {c.stats.answers}
-          <span className="font-semibold block text-sm mt-0.5" style={{ color: t.heading }}>
-            {stats.answers}
-          </span>
-        </div>
-        <div style={{ color: t.mutedLight }}>
-          {c.stats.solutions}
-          <span className="font-semibold block text-sm mt-0.5" style={{ color: t.heading }}>
-            {stats.solutions}
-          </span>
-        </div>
-        <div style={{ color: t.mutedLight }}>
-          {c.stats.helpful}
-          <span className="font-semibold block text-sm mt-0.5" style={{ color: t.heading }}>
-            {stats.helpful}
-          </span>
-        </div>
-      </div>
-    </div>
+    </article>
   );
 }
 
 function ChampionsSection({ t, c, lang }) {
   return (
-    <section className="max-w-7xl mx-auto px-6 py-10">
-      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between mb-8 gap-4" style={{ fontFamily: lang === "km" ? KHMER_FONT_STACK : FONT_STACK }}>
+    <section className="max-w-7xl mx-auto px-4 sm:px-6 pt-24 pb-8">
+      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between mb-12 gap-4" style={{ fontFamily: lang === "km" ? KHMER_FONT_STACK : FONT_STACK }}>
         <div>
           <EyebrowLabel t={t}>{c.championsEyebrow}</EyebrowLabel>
-          <h2 className="text-3xl font-bold flex items-center gap-2" style={{ color: t.heading }}>
+          <h2 className="text-3xl font-normal flex items-center gap-2" style={{ color: t.heading }}>
             {c.championsTitle}
-            <LotusBud size={16} color={t.primary} />
+            <span style={{ color: t.primary }}>.</span>
           </h2>
         </div>
-        <p className="max-w-sm text-sm leading-relaxed" style={{ color: t.muted }}>
+        <p className="max-w-[290px] text-xs leading-relaxed" style={{ color: t.muted }}>
           {c.championsSubtitle}
         </p>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 items-end">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 items-stretch">
         {CHAMPIONS.map((champ) => (
           <ChampionCard key={champ.handle} t={t} c={c} lang={lang} {...champ} />
         ))}
@@ -462,14 +343,14 @@ function ChampionsSection({ t, c, lang }) {
 /* Leaderboard table                                                      */
 /* ---------------------------------------------------------------------- */
 
-function UserAvatar({ t, letter }) {
+function UserAvatar({ t, src, name }) {
   return (
-    <div
-      className="w-9 h-9 rounded-full flex items-center justify-center text-sm font-semibold flex-shrink-0"
-      style={{ backgroundColor: t.primaryLight, color: t.primary }}
-    >
-      {letter}
-    </div>
+    <img
+      src={src}
+      alt={`${name} profile`}
+      className="w-8 h-8 rounded-full object-cover object-top flex-shrink-0"
+      style={{ backgroundColor: t.primaryLight }}
+    />
   );
 }
 
@@ -477,7 +358,7 @@ function CategoryBadge({ t, c, category }) {
   const style = categoryStyle(t, category);
   return (
     <span
-      className="text-xs font-medium px-3 py-1 rounded-full whitespace-nowrap"
+      className="text-[11px] font-medium px-2 py-1 rounded-md whitespace-nowrap"
       style={{ backgroundColor: style.bg, color: style.text }}
     >
       {c.categories[category] || category}
@@ -499,7 +380,7 @@ function LeaderboardControls({
 }) {
   return (
     <div
-      className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 p-5 border-b"
+      className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 px-3 py-4 border-b"
       style={{ borderColor: t.border, fontFamily: lang === "km" ? KHMER_FONT_STACK : FONT_STACK }}
     >
       <div className="flex gap-2 flex-wrap">
@@ -510,11 +391,11 @@ function LeaderboardControls({
               key={tab}
               type="button"
               onClick={() => setActiveTab(tab)}
-              className="px-4 py-2 rounded-full text-sm font-medium transition-colors"
+              className="px-3 py-2 rounded-lg text-xs font-medium transition-colors"
               style={
                 isActive
-                  ? { backgroundColor: t.primary, color: "#fff" }
-                  : { backgroundColor: t.controlBg, color: t.muted }
+                  ? { backgroundColor: "var(--color-brand-primary)", color: "#fff" }
+                  : { backgroundColor: "transparent", color: t.muted }
               }
             >
               {tab}
@@ -523,17 +404,22 @@ function LeaderboardControls({
         })}
       </div>
       <div className="flex flex-col sm:flex-row gap-3">
+        <div className="relative">
+          <Search size={14} aria-hidden="true" className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: t.mutedLight }} />
         <input
+          aria-label={c.searchPlaceholder}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder={c.searchPlaceholder}
-          className="search-input px-4 py-2 rounded-full text-sm border outline-none w-full sm:w-60"
+          className="search-input pl-9 pr-3 py-2 rounded-lg text-xs border outline-none w-full sm:w-60"
           style={{ borderColor: t.border, color: t.heading, backgroundColor: t.surface }}
         />
+        </div>
         <select
+          aria-label={c.allCategories}
           value={category}
           onChange={(e) => setCategory(e.target.value)}
-          className="search-input px-4 py-2 rounded-full text-sm border outline-none"
+          className="search-input px-3 py-2 rounded-lg text-xs border outline-none"
           style={{ borderColor: t.border, color: t.muted, backgroundColor: t.surface }}
         >
           <option value="All Categories">{c.allCategories}</option>
@@ -551,9 +437,9 @@ function LeaderboardControls({
 function LeaderboardTable({ t, c, lang, rows }) {
   return (
     <div className="overflow-x-auto" style={{ fontFamily: lang === "km" ? KHMER_FONT_STACK : FONT_STACK }}>
-      <table className="w-full text-sm border-collapse">
+      <table className="w-full min-w-[720px] text-xs border-collapse">
         <thead>
-          <tr className="text-left" style={{ color: t.mutedLight }}>
+          <tr className="text-left text-[11px]" style={{ color: t.mutedLight, backgroundColor: t.surfaceAlt }}>
             <th className="py-3 px-5 font-medium">{c.tableHeaders.rank}</th>
             <th className="py-3 px-5 font-medium">{c.tableHeaders.user}</th>
             <th className="py-3 px-5 font-medium text-right">{c.tableHeaders.upvotes}</th>
@@ -566,13 +452,13 @@ function LeaderboardTable({ t, c, lang, rows }) {
         <tbody>
           {rows.map((r) => (
             <tr key={r.rank} className="tr-hover transition-colors border-t" style={{ borderColor: t.rowBorder }}>
-              <td className="py-4 px-5 font-semibold" style={{ color: t.heading }}>
+              <td className="py-3 px-5 font-semibold" style={{ color: t.heading }}>
                 {r.rank}
               </td>
-              <td className="py-4 px-5">
+              <td className="py-3 px-5">
                 <div className="flex items-center gap-3">
-                  <UserAvatar t={t} letter={r.avatar} />
-                  <div>
+                  <UserAvatar t={t} src={r.avatar} name={r.name} />
+                  <div className="flex flex-wrap items-baseline gap-x-2">
                     <p className="font-medium" style={{ color: t.heading }}>
                       {r.name}
                     </p>
@@ -582,19 +468,12 @@ function LeaderboardTable({ t, c, lang, rows }) {
                   </div>
                 </div>
               </td>
-              <td className="py-4 px-5 text-right" style={{ color: t.body }}>
-                {r.upvotes}
-              </td>
-              <td className="py-4 px-5 text-right" style={{ color: t.body }}>
-                {r.answers}
-              </td>
-              <td className="py-4 px-5 text-right" style={{ color: t.body }}>
-                {r.solutions}
-              </td>
-              <td className="py-4 px-5 text-right" style={{ color: t.body }}>
-                {r.helpful}
-              </td>
-              <td className="py-4 px-5">
+              {METRICS.map(metric => (
+                <td key={metric.key} className="py-3 px-5 text-right">
+                  <MetricValue metric={metric} value={r[metric.key]} />
+                </td>
+              ))}
+              <td className="py-3 px-5">
                 <CategoryBadge t={t} c={c} category={r.category} />
               </td>
             </tr>
@@ -616,9 +495,9 @@ function LeaderboardTable({ t, c, lang, rows }) {
 
 export default function App({ dark: darkProp, lang: langProp } = {}) {
   // Controlled by the app's navbar (dark-mode icon + KH/ENG pill) when props
-  // are passed; falls back to internal state for standalone use/preview.
-  const [darkState, setDarkState] = useState(false);
-  const [langState, setLangState] = useState("en");
+  // are passed; uses default values for standalone use/preview.
+  const darkState = false;
+  const langState = "en";
   const dark = darkProp !== undefined ? darkProp : darkState;
   // FIX: the Navbar sends "KH"/"ENG", this component's COPY table is keyed
   // by "km"/"en" — without normalizing, COPY["KH"] was undefined and the
@@ -630,7 +509,7 @@ export default function App({ dark: darkProp, lang: langProp } = {}) {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All Categories");
 
-  const t = THEMES[dark ? "dark" : "light"];
+  const t = THEME;
   const c = COPY[lang];
 
   // Keep the active tab label in sync when switching languages
@@ -660,20 +539,20 @@ export default function App({ dark: darkProp, lang: langProp } = {}) {
 
   return (
     <div
-      className="shared-page min-h-screen relative transition-colors duration-300"
+      className="leaderboard-page shared-page min-h-screen relative transition-colors duration-300"
       style={{ fontFamily: FONT_STACK }}
     >
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap');
-        .tr-hover:hover { background-color: ${t.rowHover}; }
-        .search-input::placeholder { color: ${t.mutedLight}; }
-        .search-input:focus { box-shadow: 0 0 0 3px ${t.primaryLight}; border-color: ${t.primary}; }
-        ::selection { background-color: ${t.primaryLight}; }
+        .leaderboard-page .tr-hover:hover { background-color: ${t.rowHover}; }
+        .leaderboard-page .search-input::placeholder { color: ${t.mutedLight}; }
+        .leaderboard-page .search-input:focus { box-shadow: 0 0 0 3px ${t.primaryLight}; border-color: ${t.primary}; }
+        .leaderboard-page ::selection { background-color: ${t.primaryLight}; }
       `}</style>
 
 
       <div className="relative" style={{ zIndex: 1 }}>
-        <div className="max-w-7xl mx-auto px-6 pt-8 flex flex-col sm:flex-row sm:justify-between gap-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-8 flex flex-col lg:flex-row lg:justify-between gap-8">
           <ForumHeader t={t} c={c} lang={lang} />
           <div className="sm:pt-1">
             <PointsLegend t={t} c={c} lang={lang} />
@@ -682,9 +561,9 @@ export default function App({ dark: darkProp, lang: langProp } = {}) {
 
         <ChampionsSection t={t} c={c} lang={lang} />
 
-        <section className="max-w-7xl mx-auto px-6 pb-16">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 pb-16">
           <div
-            className="rounded-2xl border overflow-hidden"
+            className="rounded-xl border overflow-hidden"
             style={{
               borderColor: t.border,
               backgroundColor: t.surface,

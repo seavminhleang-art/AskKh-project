@@ -164,7 +164,7 @@ export default function AboutAskKh() {
   const { t } = useTranslation();
   const { darkMode } = useTheme();
   return (
-    <div className="site-content bg-[var(--bg-main)] text-[var(--text-main)] antialiased transition-colors duration-300">
+    <div className="shared-theme shared-page about-page site-content bg-[var(--bg-main)] text-[var(--text-main)] antialiased transition-colors duration-300">
       <section className="max-w-6xl mx-auto px-6 py-20 grid md:grid-cols-2 gap-12 items-center">
         <ScrollReveal animation="fadeInUp">
           <div className="no-transition">

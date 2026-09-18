@@ -27,7 +27,11 @@
     "delete": "លុបអត្ថបទ",
     "placeholderInput": "តើអ្នកកំពុងគិតអ្វី?",
     "createPostBtn": "បង្កើតអត្ថបទ",
-    "noPosts": "មិនរកឃើញអត្ថបទទេ"
+    "noPosts": "មិនរកឃើញអត្ថបទទេ",
+    "addBookmark": "រក្សាទុក",
+    "removeBookmark": "ដកចេញពីការរក្សាទុក",
+    "like": "ចូលចិត្តការបង្ហោះ",
+    "unlike": "ឈប់ចូលចិត្តការបង្ហោះ"
   },
   "create": {
     "title": "បង្កើតអត្ថបទថ្មី",
@@ -48,7 +52,14 @@
     "noDescription": "មិនមានការពិពណ៌នាទេ។",
     "commentsTitle": "មតិយោបល់",
     "addCommentPlaceholder": "សរសេរមតិយោបល់...",
-    "commentBtn": "បញ្ចេញមតិ"
+    "commentBtn": "បញ្ចេញមតិ",
+    "uploadImage": "បន្ថែមរូបភាព",
+    "imageHint": "JPG, PNG, WebP ឬ GIF · ទំហំអតិបរមា 5 MB",
+    "imageTypeError": "សូមជ្រើសរើសរូបភាព JPG, PNG, WebP ឬ GIF។",
+    "imageSizeError": "សូមជ្រើសរើសរូបភាពដែលមិនទទេ និងមានទំហំមិនលើសពី 5 MB។",
+    "imageReadError": "មិនអាចអានរូបភាពនេះបានទេ។ សូមព្យាយាមម្តងទៀត។",
+    "imageLoading": "កំពុងផ្ទុករូបភាព…",
+    "removeImage": "លុបរូបភាព"
   },
   "sidebarRight": {
     "peopleYouKnow": "មនុស្សដែលអ្នកអាចស្គាល់",
