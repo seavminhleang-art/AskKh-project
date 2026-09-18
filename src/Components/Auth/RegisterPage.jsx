@@ -962,6 +962,12 @@ export default function RegisterPage() {
               className="auth-form register-form"
               onSubmit={handleSubmit(
                 onSubmit,
+                (validationErrors) => {
+                  const firstError = Object.values(validationErrors).find(
+                    (error) => error?.message,
+                  );
+                  if (firstError) notifyError(firstError.message);
+                },
               )}
               noValidate
             >
@@ -1158,6 +1164,7 @@ export default function RegisterPage() {
                     }
                     {...register(
                       "password",
+                      { deps: ["confirmPassword"] },
                     )}
                   />
 
