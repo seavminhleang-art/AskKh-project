@@ -4,11 +4,8 @@ import { useTranslation, Trans } from "react-i18next";
 import { useTheme } from "../../context/ThemeContext.jsx";
 import ScrollReveal from "../Animations/ScrollReveal.jsx";
 
-import missionImg from "../../assets/Website/mission.png";
 import missionDarkImg from "../../assets/Website/mission_dark.png";
-import communityImg from "../../assets/Website/community.jpg";
 import communityDarkImg from "../../assets/Website/community_dark.png";
-import visionImg from "../../assets/Website/vision.png";
 import visionDarkImg from "../../assets/Website/vision_dark.png";
 import sokcheatPhoto from "../../assets/Mentor/srorng_sokcheat.jpg";
 import rattanakmonyPhoto from "../../assets/Mentor/pech_rattanakmony.jpg";
@@ -57,10 +54,10 @@ function GithubIcon() {
   );
 }
 
-function TelegramIcon() {
+function LinkedInIcon() {
   return (
     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-      <path d="M21.9 3.5L2.4 11.2c-1.2.5-1.2 1.2-.2 1.5l4.9 1.5 1.9 5.8c.2.6.4.8.8.8.4 0 .6-.2.8-.5l2.3-2.2 4.7 3.5c.9.5 1.5.2 1.7-.8l3.1-14.6c.3-1.3-.4-1.9-1.5-1.7z" />
+      <path d="M5.37 24H.39V7.98h4.98V24zM2.88 5.8a2.9 2.9 0 1 1 0-5.8 2.9 2.9 0 0 1 0 5.8zM24 24h-4.97v-7.8c0-1.86-.04-4.25-2.59-4.25-2.59 0-2.99 2.02-2.99 4.12V24H8.48V7.98h4.77v2.19h.07c.67-1.26 2.29-2.59 4.71-2.59C23.07 7.58 24 10.9 24 15.21V24z" />
     </svg>
   );
 }
@@ -90,26 +87,28 @@ const featuresKeys = [
 const missionPointsKey = "aboutPage.missionPoints";
 const visionPointsKey = "aboutPage.visionPoints";
 
+// Add each person’s full LinkedIn profile URL to linkedin, e.g. https://www.linkedin.com/in/username/.
+// Leave it empty to display an inactive LinkedIn icon.
 const mentors = [
-  { num: "01", name: "aboutPage.members.names.sokcheat", roleLabel: "Senior IT Instructor", role: "aboutPage.members.roles.mentor", photo: sokcheatPhoto, github: "https://github.com/Sokcheatsrorng", telegram: "https://t.me/Sokcheat_srorng" },
-  { num: "02", name: "aboutPage.members.names.rattanakmony", roleLabel: "Senior IT Instructor", role: "aboutPage.members.roles.mentor", photo: rattanakmonyPhoto, github: "https://github.com/aintantony", telegram: "https://t.me/rattanakmony" },
+  { num: "01", name: "aboutPage.members.names.sokcheat", roleLabel: "Senior IT Instructor", role: "aboutPage.members.roles.mentor", photo: sokcheatPhoto, github: "https://github.com/Sokcheatsrorng", linkedin: "" },
+  { num: "02", name: "aboutPage.members.names.rattanakmony", roleLabel: "Senior IT Instructor", role: "aboutPage.members.roles.mentor", photo: rattanakmonyPhoto, github: "https://github.com/aintantony", linkedin: "" },
 ];
 
 const teamLeads = [
-  { num: "03", name: "aboutPage.members.names.lisa", roleLabel: "Frontend Developer", role: "aboutPage.members.roles.leader", photo: lisaPhoto, github: "https://github.com/LisaMom", telegram: "https://t.me/lisamom369" },
-  { num: "04", name: "aboutPage.members.names.seavminh", roleLabel: "Java Developer", role: "aboutPage.members.roles.subLead", photo: seavminhPhoto, github: "https://github.com/seavminhleang-art", telegram: "https://t.me/puthea_reach" },
+  { num: "03", name: "aboutPage.members.names.lisa", roleLabel: "Frontend Developer", role: "aboutPage.members.roles.leader", photo: lisaPhoto, github: "https://github.com/LisaMom", linkedin: "https://www.linkedin.com/in/mom-lisa-70b453417/" },
+  { num: "04", name: "aboutPage.members.names.seavminh", roleLabel: "Java Developer", role: "aboutPage.members.roles.subLead", photo: seavminhPhoto, github: "https://github.com/seavminhleang-art", linkedin: "https://www.linkedin.com/in/leang-seavminh-824106438/" },
 ];
 
 const teamMembers = [
-  { num: "05", name: "aboutPage.members.names.lyheng", roleLabel: "Java Developer", role: "aboutPage.members.roles.member", photo: lyhengPhoto, github: "https://github.com/lyheng142", telegram: "https://t.me/cclh142" },
-  { num: "06", name: "aboutPage.members.names.moniza", roleLabel: "Frontend Developer", role: "aboutPage.members.roles.member", photo: monizaPhoto, github: "https://github.com/moniza-Dev", telegram: "https://t.me/chanmoniza_cheat" },
-  { num: "07", name: "aboutPage.members.names.tongan", roleLabel: "Java Developer", role: "aboutPage.members.roles.member", photo: tonganPhoto, github: "https://github.com/TongAnWasHere", telegram: "https://t.me/TongAnWasHere" },
-  { num: "08", name: "aboutPage.members.names.sothearith", roleLabel: "Frontend Developer", role: "aboutPage.members.roles.member", photo: sothearithPhoto, github: "https://github.com/Rith857", telegram: "https://t.me/sothearithsroeun" },
-  { num: "09", name: "aboutPage.members.names.thana", roleLabel: "Frontend Developer", role: "aboutPage.members.roles.member", photo: thanaPhoto, github: "https://github.com/mrrhello894-byte", telegram: "https://t.me/neangthana" },
-  { num: "10", name: "aboutPage.members.names.tharath", roleLabel: "Frontend Developer", role: "aboutPage.members.roles.member", photo: tharathPhoto, github: "https://github.com/tharath780-commits", telegram: "https://t.me/helterqt" },
+  { num: "05", name: "aboutPage.members.names.lyheng", roleLabel: "Java Developer", role: "aboutPage.members.roles.member", photo: lyhengPhoto, github: "https://github.com/lyheng142", linkedin: "https://www.linkedin.com/in/cheakching-lyheng-983b41431/" },
+  { num: "06", name: "aboutPage.members.names.moniza", roleLabel: "Frontend Developer", role: "aboutPage.members.roles.member", photo: monizaPhoto, github: "https://github.com/moniza-Dev", linkedin: "https://www.linkedin.com/in/mo-nizachan-a400aa438/" },
+  { num: "07", name: "aboutPage.members.names.tongan", roleLabel: "Java Developer", role: "aboutPage.members.roles.member", photo: tonganPhoto, github: "https://github.com/TongAnWasHere", linkedin: "" },
+  { num: "08", name: "aboutPage.members.names.sothearith", roleLabel: "Frontend Developer", role: "aboutPage.members.roles.member", photo: sothearithPhoto, github: "https://github.com/Rith857", linkedin: "https://www.linkedin.com/in/sroeun-sothearith-a63189438/" },
+  { num: "09", name: "aboutPage.members.names.thana", roleLabel: "Frontend Developer", role: "aboutPage.members.roles.member", photo: thanaPhoto, github: "https://github.com/mrrhello894-byte", linkedin: "https://www.linkedin.com/in/neang-thana-803b16437/" },
+  { num: "10", name: "aboutPage.members.names.tharath", roleLabel: "Frontend Developer", role: "aboutPage.members.roles.member", photo: tharathPhoto, github: "https://github.com/tharath780-commits", linkedin: "https://www.linkedin.com/in/វ៉ែនថាន-ថារ័ត្ន-8163063b7/" },
 ];
 
-function MemberCard({ num, name, roleLabel, role, photo, github, telegram, darkMode }) {
+function MemberCard({ num, name, roleLabel, role, photo, github, linkedin, darkMode }) {
   const { t } = useTranslation();
   return (
     <div className={`rounded-3xl shadow-md overflow-hidden text-center pt-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-2 ${darkMode ? "bg-zinc-900 hover:shadow-brand-primary/10" : "bg-white hover:shadow-brand-primary/20"}`}>
@@ -151,9 +150,15 @@ function MemberCard({ num, name, roleLabel, role, photo, github, telegram, darkM
           <GithubIcon />
         </a>
         <span className={`w-px h-5 ${darkMode ? "bg-zinc-700" : "bg-slate-200"}`} />
-        <a href={telegram || "#"} target={telegram ? "_blank" : undefined} rel={telegram ? "noopener noreferrer" : undefined} aria-label="Telegram" className="w-9 h-9 rounded-full bg-sky-500 text-white flex items-center justify-center hover:bg-sky-600 transition-all duration-300 hover:scale-110">
-          <TelegramIcon />
-        </a>
+        {linkedin ? (
+          <a href={linkedin} target="_blank" rel="noopener noreferrer" aria-label={`${t(name)} — LinkedIn`} className="w-9 h-9 rounded-full bg-[#0A66C2] text-white flex items-center justify-center hover:bg-[#004182] transition-all duration-300 hover:scale-110">
+            <LinkedInIcon />
+          </a>
+        ) : (
+          <span role="link" aria-disabled="true" aria-label={`${t(name)} — LinkedIn`} className="w-9 h-9 rounded-full bg-[#0A66C2] text-white flex items-center justify-center opacity-40">
+            <LinkedInIcon />
+          </span>
+        )}
       </div>
       <div className="h-3 bg-brand-primary" />
     </div>
@@ -186,7 +191,7 @@ export default function AboutAskKh() {
         </ScrollReveal>
         <div className="flex justify-center">
           <ScrollReveal animation="scaleIn" delay={200}>
-            <IllustrationImage src={darkMode ? communityDarkImg : communityImg} alt="About AskKh" className="w-full max-w-m animate-float" />
+            <IllustrationImage src={communityDarkImg} alt="About AskKh" className="w-full max-w-m animate-float" />
           </ScrollReveal>
         </div>
       </section>
@@ -224,7 +229,7 @@ export default function AboutAskKh() {
       <section className="max-w-6xl mx-auto px-6 py-20 grid md:grid-cols-2 gap-12 items-center">
         <div className="flex justify-center order-2 md:order-1">
           <ScrollReveal animation="scaleIn">
-            <IllustrationImage src={darkMode ? missionDarkImg : missionImg} alt="Our Mission" className="w-full max-w-md animate-float" />
+            <IllustrationImage src={missionDarkImg} alt="Our Mission" className="w-full max-w-md animate-float" />
           </ScrollReveal>
         </div>
         <div className="order-1 md:order-2">
@@ -274,7 +279,7 @@ export default function AboutAskKh() {
           </div>
           <div className="flex justify-center">
             <ScrollReveal animation="scaleIn" delay={200}>
-              <IllustrationImage src={darkMode ? visionDarkImg : visionImg} alt="Our Vision" className="w-full max-w-md animate-float" />
+              <IllustrationImage src={visionDarkImg} alt="Our Vision" className="w-full max-w-md animate-float" />
             </ScrollReveal>
           </div>
         </div>

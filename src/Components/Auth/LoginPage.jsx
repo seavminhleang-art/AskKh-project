@@ -557,7 +557,9 @@ export default function LoginPage() {
   const showLoginSuccess = async (
     user,
   ) => {
-    const accessToken = await user.getIdToken();
+    const tokenResult = await user.getIdTokenResult(true);
+    const accessToken = tokenResult.token;
+    const role = tokenResult.claims.admin === true ? "admin" : "student";
 
     dispatch(
       loginSuccess({
@@ -568,7 +570,7 @@ export default function LoginPage() {
           displayName: user.displayName || user.email?.split("@")[0] || "Scholar",
           email: user.email,
           avatar: user.photoURL || null,
-          role: "student",
+          role,
         },
       }),
     );
@@ -588,7 +590,7 @@ export default function LoginPage() {
         }!`,
     });
 
-    navigate("/dashboard", { replace: true });
+    navigate(role === "admin" ? "/admin/dashboard" : "/dashboard", { replace: true });
   };
 
   const showOauthLoginSuccess = async (user) => {
