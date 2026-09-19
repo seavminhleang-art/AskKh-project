@@ -1,12 +1,17 @@
+import { toast, ToastContainer } from "react-toastify";
 import {
   useMemo,
   useState,
 } from "react";
 
 import {
+  useDispatch,
+} from "react-redux";
+
+import {
   Link,
   useNavigate,
-} from "react-router";
+} from "react-router-dom";
 
 import {
   ArrowLeft,
@@ -46,15 +51,20 @@ import {
   useLanguage,
 } from "../Language/LanguageContext.jsx";
 
+import {
+  loginSuccess,
+} from "../../features/auth/authSlice.js";
+
 import GoogleComponent from "../oauth/GoogleComponent.jsx";
 import GithubComponent from "../oauth/GithubComponent.jsx";
 
 import {
   AnimatedToastStack,
   useAnimatedToastStack,
-} from "@/components/motion/animated-toast-stack";
+} from "@/Components/motion/animated-toast-stack";
 
 import loginIllustration from "../../assets/Website/login-illustration.png";
+import LoadingSpinner from "../common/LoadingSpinner.jsx";
 
 const translations = {
   km: {
@@ -494,8 +504,8 @@ const createLoginSchema = (
   });
 
 export default function LoginPage() {
-  const navigate =
-    useNavigate();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const {
     language,
@@ -530,7 +540,7 @@ export default function LoginPage() {
         loginSchema,
       ),
 
-    mode: "onBlur",
+    mode: "onSubmit",
 
     reValidateMode:
       "onChange",
@@ -562,20 +572,35 @@ export default function LoginPage() {
     setResetLoading,
   ] = useState(false);
 
+  const [oauthLoading, setOauthLoading] = useState(false);
+
   const notifyError = (
     description,
   ) => {
-    showToast({
-      status: "error",
-      title:
-        t.errorTitle,
-      description,
-    });
+    toast.error(description, { toastId: "login-error" });
   };
 
-  const showLoginSuccess = (
+  const showLoginSuccess = async (
     user,
   ) => {
+    const tokenResult = await user.getIdTokenResult(true);
+    const accessToken = tokenResult.token;
+    const role = tokenResult.claims.admin === true ? "admin" : "student";
+
+    dispatch(
+      loginSuccess({
+        accessToken,
+        user: {
+          id: user.uid,
+          name: user.displayName || user.email?.split("@")[0] || "Scholar",
+          displayName: user.displayName || user.email?.split("@")[0] || "Scholar",
+          email: user.email,
+          avatar: user.photoURL || null,
+          role,
+        },
+      }),
+    );
+
     showToast({
       status:
         "success",
@@ -590,6 +615,17 @@ export default function LoginPage() {
             : ""
         }!`,
     });
+
+    navigate(role === "admin" ? "/admin/dashboard" : "/dashboard", { replace: true });
+  };
+
+  const showOauthLoginSuccess = async (user) => {
+    setOauthLoading(true);
+    try {
+      await showLoginSuccess(user);
+    } finally {
+      setOauthLoading(false);
+    }
   };
 
   const getFirebaseErrorMessage =
@@ -672,7 +708,7 @@ export default function LoginPage() {
           return;
         }
 
-        showLoginSuccess(
+        await showLoginSuccess(
           result.user,
         );
 
@@ -683,11 +719,6 @@ export default function LoginPage() {
           },
         );
       } catch (error) {
-        console.error(
-          "Login error:",
-          error,
-        );
-
         notifyError(
           getFirebaseErrorMessage(
             error,
@@ -853,6 +884,8 @@ export default function LoginPage() {
 
   return (
     <>
+      <ToastContainer position="top-right" autoClose={4200} limit={1} />
+      {(isSubmitting || oauthLoading) && <LoadingSpinner title="Signing in to NEXA" />}
       <AnimatedToastStack
         toasts={
           toasts
@@ -915,6 +948,9 @@ export default function LoginPage() {
               className="auth-form"
               onSubmit={handleSubmit(
                 onSubmit,
+                (validationErrors) => notifyError(
+                  validationErrors.email?.message || validationErrors.password?.message || t.wrongCredentials,
+                ),
               )}
               noValidate
             >
@@ -1144,7 +1180,7 @@ export default function LoginPage() {
                     t.google
                   }
                   onSuccess={
-                    showLoginSuccess
+                    showOauthLoginSuccess
                   }
                   onError={(
                     error,
@@ -1161,7 +1197,7 @@ export default function LoginPage() {
                     t.github
                   }
                   onSuccess={
-                    showLoginSuccess
+                    showOauthLoginSuccess
                   }
                   onError={(
                     error,

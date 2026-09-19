@@ -1,0 +1,349 @@
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
+import { MapPin, Clock, ShieldCheck, Search, PlusCircle, Tag, Building2 } from 'lucide-react';
+
+const sampleItems = [
+  {
+    id: 1,
+    type: 'LOST',
+    title: 'ASUS ROG Strix G15 Gaming Laptop',
+    description: 'Gaming laptop with illuminated ROG logo, RGB keyboard, and angular cooling vents. Left behind after system setup session.',
+    location: 'ISTAD, Mobile Lab, Lower Floor',
+    timeAgo: '3 min read',
+    reporter: 'Jude Bellingham',
+    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80',
+    image: 'https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=500&auto=format&fit=crop&q=80',
+    category: 'Electronics'
+  },
+  {
+    id: 2,
+    type: 'LOST',
+    title: 'SAPPHIRE Silver Wristwatch',
+    description: 'Elegant silver wristwatch with dark navy dial and date display window. Stainless steel band with polished finish. Last seen near hallway seating area after afternoon lecture.',
+    location: 'ISTAD, Mobile Lab, Lower Floor',
+    timeAgo: '1 hours read',
+    reporter: 'Jude Bellingham',
+    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80',
+    image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&auto=format&fit=crop&q=80',
+    category: 'Accessories'
+  },
+  {
+    id: 3,
+    type: 'FOUND',
+    title: 'Casual Navy Jacket',
+    description: 'Elegant dark navy jacket with corduroy collar. Found hanging near the hallway seating area.',
+    location: 'ISTAD, Mobile Lab, Lower Floor',
+    timeAgo: '20 min read',
+    reporter: 'Jude Bellingham',
+    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80',
+    image: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=500&auto=format&fit=crop&q=80',
+    category: 'Clothing'
+  }
+];
+
+const categories = [
+  { name: 'All Categories', count: 48 },
+  { name: 'Electronics', count: 12 },
+  { name: 'Bags', count: 8 },
+  { name: 'Clothing', count: 9 },
+  { name: 'Accessories', count: 6 },
+  { name: 'Keys', count: 5 },
+  { name: 'Books & Documents', count: 4 },
+  { name: 'Others', count: 4 }
+];
+
+const locations = [
+  { name: 'Library Building', count: 14 },
+  { name: 'Cafeteria', count: 9 },
+  { name: 'Student Center', count: 7 },
+  { name: 'Main Entrance', count: 6 },
+  { name: 'Parking Area', count: 5 }
+];
+
+export default function ItemFeedView({ onOpenReport, darkMode }) {
+  const { t } = useTranslation();
+  const [activeTab, setActiveTab] = useState('All Items');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('All Categories');
+  const [sortBy, setSortBy] = useState('Newest');
+
+  const filteredItems = sampleItems.filter((item) => {
+    const matchesTab =
+      activeTab === 'All Items' ||
+      (activeTab === 'Lost Items' && item.type === 'LOST') ||
+      (activeTab === 'Found Items' && item.type === 'FOUND');
+
+    const matchesSearch =
+      item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.location.toLowerCase().includes(searchQuery.toLowerCase());
+
+    const matchesCategory =
+      selectedCategory === 'All Categories' || item.category === selectedCategory;
+
+    return matchesTab && matchesSearch && matchesCategory;
+  });
+
+  return (
+    <section className="mb-20 relative z-10 font-[family-name:var(--font-brand)]">
+      <div className="relative text-center py-12 md:py-16 px-6 mb-8">
+        <span className={`inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full mb-3 border transition-all duration-300 hover:scale-105 ${
+          darkMode 
+            ? 'bg-blue-950/60 text-blue-400 border-blue-900 hover:border-blue-700' 
+            : 'bg-blue-50 text-[var(--color-brand-primary,#3b82f6)] border-blue-100 hover:border-blue-300'
+        }`}>
+          <ShieldCheck size={14} /> {t('feedBadge')}
+        </span>
+        <h1 className={`text-2xl md:text-4xl font-bold mb-2 ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+          {t('feedHeroTitle1')} <span className="text-[var(--color-brand-primary,#3b82f6)]">{t('feedHeroTitle2')}</span>
+        </h1>
+        <p className={`max-w-2xl mx-auto leading-relaxed text-sm md:text-base ${darkMode ? 'text-slate-400' : 'text-gray-600'}`}>
+          {t('feedHeroDescription')}
+        </p>
+
+        <div className="mt-8">
+          <h2 className={`text-xl md:text-2xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+            {t('feedActiveRecoveryTitle')}
+          </h2>
+          <p className={`text-xs mt-1 ${darkMode ? 'text-slate-500' : 'text-gray-500'}`}>
+            {t('feedActiveRecoverySub')}
+          </p>
+        </div>
+      </div>
+
+      <main className="w-full">
+        <div className={`flex border-b mb-6 gap-8 ${darkMode ? 'border-zinc-800' : 'border-gray-200'}`}>
+          {[
+            { key: 'All Items', label: t('feedTabAll') },
+            { key: 'Lost Items', label: t('feedTabLost') },
+            { key: 'Found Items', label: t('feedTabFound') }
+          ].map((tab) => (
+            <button
+              key={tab.key}
+              onClick={() => setActiveTab(tab.key)}
+              className={`pb-3 text-sm font-semibold relative transition-all duration-200 cursor-pointer hover:opacity-100 ${
+                activeTab === tab.key
+                  ? 'text-[var(--color-brand-primary,#3b82f6)] font-bold'
+                  : darkMode
+                  ? 'text-slate-400 hover:text-slate-200'
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              {tab.label}
+              {activeTab === tab.key && (
+                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-[var(--color-brand-primary,#3b82f6)] rounded-t-md"></span>
+              )}
+            </button>
+          ))}
+        </div>
+
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-8">
+          <div className="relative w-full min-w-0 sm:flex-1 sm:min-w-[240px]">
+            <input
+              type="text"
+              placeholder={t('feedSearchPlaceholder')}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className={`w-full rounded-2xl pl-9 pr-4 py-2.5 text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--color-brand-primary,#3b82f6)]/40 hover:border-[var(--color-brand-primary,#3b82f6)]/50 ${
+                darkMode
+                  ? 'bg-zinc-900/90 border border-zinc-800 text-slate-100 placeholder-zinc-500'
+                  : 'bg-white/95 border border-gray-100 text-gray-800 placeholder-gray-400'
+              }`}
+            />
+            <Search size={16} className={`absolute left-3 top-3.5 ${darkMode ? 'text-zinc-500' : 'text-gray-400'}`} />
+          </div>
+
+          <div className="flex items-center gap-2 flex-wrap">
+            <select
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+              className={`rounded-2xl px-3.5 py-2.5 text-xs outline-none cursor-pointer font-medium transition-all duration-200 hover:border-[var(--color-brand-primary,#3b82f6)]/50 ${
+                darkMode
+                  ? 'bg-zinc-900/90 border border-zinc-800 text-slate-200'
+                  : 'bg-white/95 border border-gray-100 text-gray-800'
+              }`}
+            >
+              {categories.map((cat, i) => (
+                <option key={i} value={cat.name} className={darkMode ? 'bg-zinc-900 text-slate-100' : 'bg-white text-gray-800'}>
+                  {cat.name}
+                </option>
+              ))}
+            </select>
+
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className={`rounded-2xl px-3.5 py-2.5 text-xs outline-none cursor-pointer font-medium transition-all duration-200 hover:border-[var(--color-brand-primary,#3b82f6)]/50 ${
+                darkMode
+                  ? 'bg-zinc-900/90 border border-zinc-800 text-slate-200'
+                  : 'bg-white/95 border border-gray-100 text-gray-800'
+              }`}
+            >
+              <option value="Newest" className={darkMode ? 'bg-zinc-900 text-slate-100' : 'bg-white text-gray-800'}>{t('feedSortNewest')}</option>
+              <option value="Oldest" className={darkMode ? 'bg-zinc-900 text-slate-100' : 'bg-white text-gray-800'}>{t('feedSortOldest')}</option>
+            </select>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          <div className="lg:col-span-3 space-y-4">
+            {filteredItems.length === 0 ? (
+              <div className={`backdrop-blur-md rounded-3xl p-12 text-center text-sm font-medium ${
+                darkMode ? 'bg-zinc-900/90 text-slate-400' : 'bg-white/95 text-gray-500'
+              }`}>
+                {t('feedNoItemsFound')}
+              </div>
+            ) : (
+              filteredItems.map((item) => (
+                <motion.div
+                  key={item.id}
+                  whileHover={{ scale: 1.01, y: -4 }}
+                  transition={{ duration: 0.2, ease: "easeOut" }}
+                  className={`backdrop-blur-md rounded-3xl p-5 transition-all duration-300 flex flex-col md:flex-row gap-6 relative group ${
+                    darkMode
+                      ? 'bg-zinc-900/90 text-slate-100'
+                      : 'bg-white/95 text-gray-800'
+                  }`}
+                >
+                  <div className="absolute top-4 left-4 z-10">
+                    <span
+                      className={`inline-block text-[10px] font-semibold px-3 py-1 rounded-full uppercase tracking-wider transition-transform duration-200 group-hover:scale-105 ${
+                        item.type === 'LOST'
+                          ? darkMode
+                            ? 'bg-red-950/80 text-red-400 border border-red-800'
+                            : 'bg-red-50 text-red-600 font-bold'
+                          : darkMode
+                          ? 'bg-amber-950/80 text-amber-400 border border-amber-800'
+                          : 'bg-amber-50 text-amber-600 font-bold'
+                      }`}
+                    >
+                      {item.type === 'LOST' ? t('recStatusLost') : t('recStatusFound')}
+                    </span>
+                  </div>
+
+                  <div className={`w-full md:w-56 h-48 rounded-2xl overflow-hidden flex-shrink-0 flex items-center justify-center p-2 ${
+                    darkMode ? 'bg-zinc-950/60' : 'bg-gray-50'
+                  }`}>
+                    <img src={item.image} alt={item.title} className="w-full h-full object-contain transform group-hover:scale-110 transition duration-500 ease-out" />
+                  </div>
+
+                  <div className="flex-1 flex flex-col justify-between pt-6 md:pt-0">
+                    <div>
+                      <div className="flex items-center gap-4 text-xs text-gray-400 mb-2">
+                        <span className="flex items-center gap-1 text-red-500 font-medium">
+                          <MapPin size={13} /> {item.location}
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <Clock size={13} /> {item.timeAgo}
+                        </span>
+                      </div>
+                      <h3 className={`text-lg font-bold mb-2 transition-colors duration-200 group-hover:text-[var(--color-brand-primary,#3b82f6)] ${darkMode ? 'text-slate-100' : 'text-gray-900'}`}>
+                        {item.title}
+                      </h3>
+                      <p className={`text-xs leading-relaxed line-clamp-3 ${darkMode ? 'text-slate-400' : 'text-gray-600'}`}>
+                        {item.description}
+                      </p>
+                    </div>
+
+                    <div className={`flex flex-wrap gap-3 items-center justify-between pt-4 mt-2 border-t ${
+                      darkMode ? 'border-zinc-800 text-slate-400' : 'border-gray-100 text-gray-600'
+                    }`}>
+                      <div className="flex items-center gap-2.5">
+                        <img src={item.avatar} alt={item.reporter} className="w-7 h-7 rounded-full object-cover ring-2 ring-transparent group-hover:ring-[var(--color-brand-primary,#3b82f6)]/50 transition-all duration-200" />
+                        <span className={`text-xs font-medium ${darkMode ? 'text-slate-300' : 'text-gray-700'}`}>
+                          {item.reporter}
+                        </span>
+                      </div>
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className={`text-xs font-semibold px-4 py-2 rounded-xl transition-all duration-200 cursor-pointer ${
+                          darkMode
+                            ? 'bg-emerald-950/80 text-emerald-400 border border-emerald-800 hover:bg-emerald-900 hover:border-emerald-600'
+                            : 'bg-emerald-50 text-[var(--color-brand-accent,#10b981)] hover:bg-emerald-100'
+                        }`}
+                      >
+                        {t('recVerifyBtn')}
+                      </motion.button>
+                    </div>
+                  </div>
+                </motion.div>
+              ))
+            )}
+          </div>
+
+          <div className="space-y-4">
+            <div className={`backdrop-blur-md rounded-3xl p-5 transition-all duration-300 ${
+              darkMode ? 'bg-zinc-900/90 text-slate-100' : 'bg-white/95 text-gray-800'
+            }`}>
+              <span className={`inline-block text-xs font-semibold px-3 py-1 rounded-full mb-4 transition-transform duration-200 hover:scale-105 ${
+                darkMode
+                  ? 'bg-zinc-800 text-[var(--color-brand-primary,#3b82f6)] border border-zinc-700'
+                  : 'bg-[var(--color-brand-primary-light,#eff6ff)] text-[var(--color-brand-primary,#3b82f6)]'
+              }`}>
+                <Tag size={12} className="inline mr-1" /> {t('feedCategoriesTitle')}
+              </span>
+              <ul className="space-y-2.5">
+                {categories.map((cat, idx) => (
+                  <motion.li
+                    key={idx}
+                    onClick={() => setSelectedCategory(cat.name)}
+                    whileHover={{ x: 4 }}
+                    transition={{ duration: 0.15 }}
+                    className={`flex items-center justify-between text-xs cursor-pointer p-1.5 rounded-xl transition-colors ${
+                      selectedCategory === cat.name 
+                        ? 'font-bold text-[var(--color-brand-primary,#3b82f6)] bg-[var(--color-brand-primary,#3b82f6)]/10' 
+                        : darkMode 
+                        ? 'text-slate-300 hover:bg-zinc-800/60 hover:text-white' 
+                        : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
+                    }`}
+                  >
+                    <span className="pl-1">{cat.name}</span>
+                    <span className={`pr-1 ${darkMode ? 'text-slate-500' : 'text-gray-400'}`}>{cat.count}</span>
+                  </motion.li>
+                ))}
+              </ul>
+            </div>
+
+            <div className={`backdrop-blur-md rounded-3xl p-5 transition-all duration-300 ${
+              darkMode ? 'bg-zinc-900/90 text-slate-100' : 'bg-white/95 text-gray-800'
+            }`}>
+              <span className={`inline-block text-xs font-semibold px-3 py-1 rounded-full mb-4 transition-transform duration-200 hover:scale-105 ${
+                darkMode
+                  ? 'bg-zinc-800 text-[var(--color-brand-secondary,#ec4899)] border border-zinc-700'
+                  : 'bg-[var(--color-brand-secondary-light,#fdf2f8)] text-[var(--color-brand-secondary,#ec4899)]'
+              }`}>
+                <Building2 size={12} className="inline mr-1" /> {t('feedPopularLocationsTitle')}
+              </span>
+              <ul className="space-y-2.5">
+                {locations.map((loc, idx) => (
+                  <motion.li
+                    key={idx}
+                    whileHover={{ x: 4 }}
+                    transition={{ duration: 0.15 }}
+                    className={`flex items-center justify-between text-xs cursor-pointer p-1.5 rounded-xl transition-colors ${
+                      darkMode ? 'text-slate-300 hover:bg-zinc-800/60 hover:text-white' : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
+                    }`}
+                  >
+                    <span className="pl-1">{loc.name}</span>
+                    <span className={`pr-1 ${darkMode ? 'text-slate-500' : 'text-gray-400'}`}>{loc.count}</span>
+                  </motion.li>
+                ))}
+              </ul>
+            </div>
+
+            <motion.button
+              onClick={onOpenReport}
+              whileHover={{ scale: 1.03, y: -2 }}
+              whileTap={{ scale: 0.97 }}
+              className="w-full bg-[var(--color-brand-primary,#3b82f6)] hover:bg-blue-600 text-white font-semibold py-3.5 px-4 rounded-2xl text-sm transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer"
+            >
+              <PlusCircle size={16} /> {t('feedReportBtn')}
+            </motion.button>
+          </div>
+        </div>
+      </main>
+    </section>
+  );
+}

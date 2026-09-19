@@ -18,9 +18,22 @@ const baseApi = createApi({
   reducerPath: "baseApi",
   baseQuery,
 
-  tagTypes: ["Profile", "Auth"],
+  tagTypes: [
+    "Auth",
+    "Bookmark",
+    "LostFoundClaim",
+    "LostFoundMatch",
+    "LostFoundReport",
+    "Notification",
+    "Post",
+    "Profile",
+    "Tag",
+    "User",
+    "Vote",
+  ],
 
   endpoints: () => ({}),
 });
 
 export default baseApi;
+export { baseApi };

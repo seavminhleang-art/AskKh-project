@@ -6,7 +6,7 @@ import {
 import {
   Link,
   useNavigate,
-} from "react-router";
+} from "react-router-dom";
 
 import {
   ArrowLeft,
@@ -50,7 +50,7 @@ import GithubComponent from "../oauth/GithubComponent.jsx";
 import {
   AnimatedToastStack,
   useAnimatedToastStack,
-} from "@/components/motion/animated-toast-stack";
+} from "@/Components/motion/animated-toast-stack";
 
 import registerIllustration from "../../assets/Website/register-illustration.png";
 
@@ -989,13 +989,12 @@ export default function RegisterPage() {
       />
 
       <main
-        className={`auth-page ${
+        className={`auth-page register-page ${
           isKhmer
             ? "font-khmer"
             : "font-brand"
         }`}
       >
-        <section className="auth-visual-section">
           <Link
             to="/"
             className="back-button"
@@ -1013,6 +1012,7 @@ export default function RegisterPage() {
             </span>
           </Link>
 
+        <section className="auth-visual-section">
           <div className="auth-illustration-wrapper">
             <img
               src={
@@ -1036,7 +1036,7 @@ export default function RegisterPage() {
               <p>
                 {
                   t.alreadyAccount
-                }
+                }{" "}
 
                 <Link to="/login">
                   {
@@ -1050,6 +1050,12 @@ export default function RegisterPage() {
               className="auth-form register-form"
               onSubmit={handleSubmit(
                 onSubmit,
+                (validationErrors) => {
+                  const firstError = Object.values(validationErrors).find(
+                    (error) => error?.message,
+                  );
+                  if (firstError) notifyError(firstError.message);
+                },
               )}
               noValidate
             >
@@ -1278,6 +1284,7 @@ export default function RegisterPage() {
                     }
                     {...register(
                       "password",
+                      { deps: ["confirmPassword"] },
                     )}
                   />
 

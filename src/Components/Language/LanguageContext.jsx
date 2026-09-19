@@ -5,20 +5,24 @@ import {
   useMemo,
   useState,
 } from "react";
+import i18n from "../../i18n";
 
 const LanguageContext = createContext(null);
 
 export const LanguageProvider = ({ children }) => {
   const [language, setLanguage] = useState(() => {
-    const savedLanguage = localStorage.getItem("nexa-language");
+    const savedLanguage =
+      localStorage.getItem("nexa-language") ||
+      localStorage.getItem("askkh-language");
 
     return savedLanguage || "km";
   });
 
   useEffect(() => {
     localStorage.setItem("nexa-language", language);
-
     document.documentElement.lang = language === "km" ? "km" : "en";
+    // Keep the app-wide translation engine in sync with the navbar control.
+    i18n.changeLanguage(language);
   }, [language]);
 
   const toggleLanguage = () => {

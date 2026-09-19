@@ -4,13 +4,17 @@ import {
 
 import baseApi from "../API/baseApi.js";
 
-import authReducer from "../../feature/auth/AuthSlice.js";
+import authReducer from "../../features/auth/authSlice.js";
+import uiReducer from "../../redux/slices/uiSlice.js";
 
 export const store =
   configureStore({
     reducer: {
       auth:
         authReducer,
+
+      ui:
+        uiReducer,
 
       [baseApi.reducerPath]:
         baseApi.reducer,
