@@ -1599,3 +1599,74 @@ html.dark .about-page .shadow-md { box-shadow: 0 4px 16px rgb(0 0 0 / .3); }
   .admin-post-grid { grid-template-columns: minmax(0, 2.2fr) minmax(0, 1fr) minmax(0, .85fr) minmax(0, .8fr); gap: 1rem; }
   .admin-post-header { display: grid; }
 }
+
+/* Keep registration comfortably scannable without turning it into a long page. */
+.register-page .auth-form-section {
+  padding: clamp(2rem, 4vh, 3.5rem) clamp(1.5rem, 4vw, 3rem) 2rem;
+}
+
+.register-page .register-form-container {
+  width: min(100%, 460px);
+  padding: 1.75rem 2rem;
+}
+
+.register-page .auth-heading {
+  margin-bottom: 1rem;
+}
+
+.register-page .auth-heading h1 {
+  line-height: 1.25;
+}
+
+.register-page .auth-heading p {
+  margin-top: .25rem;
+  line-height: 1.45;
+}
+
+.register-page .register-form {
+  gap: .75rem;
+}
+
+.register-page .form-group {
+  gap: .35rem;
+  margin-bottom: 0;
+}
+
+.register-page .form-group label {
+  line-height: 1.35;
+}
+
+.register-page .name-grid {
+  gap: .75rem;
+}
+
+.register-page .input-wrapper input {
+  min-height: 2.75rem;
+  padding-top: .6rem;
+  padding-bottom: .6rem;
+}
+
+.register-page .terms-checkbox {
+  gap: .5rem;
+  margin-bottom: 0;
+  line-height: 1.45;
+}
+
+.register-page .primary-auth-button,
+.register-page .auth-page .social-button {
+  min-height: 2.75rem;
+}
+
+.register-page .auth-divider {
+  margin: 0;
+}
+
+@media (max-width: 480px) {
+  .register-page .register-form-container {
+    padding: 1.5rem 1.25rem;
+  }
+
+  .register-page .name-grid {
+    grid-template-columns: 1fr;
+  }
+}
