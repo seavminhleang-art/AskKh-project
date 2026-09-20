@@ -1,9 +1,6 @@
-import {
-  Link,
-} from "react-router";
+import { Link } from "react-router";
 
-const LAST_UPDATED =
-  "September 12, 2026";
+const LAST_UPDATED = "September 12, 2026";
 
 const TERMS_SECTIONS = [
   {
@@ -170,9 +167,7 @@ const PRIVACY_SECTIONS = [
   },
   {
     heading: "How we use information",
-    paragraphs: [
-      "We may use personal information to:",
-    ],
+    paragraphs: ["We may use personal information to:"],
     bullets: [
       "Create and manage accounts",
       "Authenticate users",
@@ -275,37 +270,35 @@ const DOCUMENTS = {
     title: "Terms of Service",
     intro: "Please read these Terms carefully before using NEXA.",
     sections: TERMS_SECTIONS,
-    contact: "Questions regarding these Terms can be sent to NEXA Team at privacy@nexa.com. Organization: Nexa Development Team. Location: Cambodia.",
+    contact:
+      "Questions regarding these Terms can be sent to NEXA Team at privacy@nexa.com. Organization: Nexa Development Team. Location: Cambodia.",
   },
   privacy: {
     eyebrow: "Legal",
     title: "Privacy Policy",
-    intro: "This policy explains how NEXA may collect, use, and protect information.",
+    intro:
+      "This policy explains how NEXA may collect, use, and protect information.",
     sections: PRIVACY_SECTIONS,
-    contact: "For privacy questions or requests, contact NEXA Privacy Team at privacy@nexa.com.",
+    contact:
+      "For privacy questions or requests, contact NEXA Privacy Team at privacy@nexa.com.",
   },
 };
 
-export default function LegalPage({
-  documentType,
-}) {
-  const document =
-    DOCUMENTS[
-      documentType
-    ];
+export default function LegalPage({ documentType }) {
+  const document = DOCUMENTS[documentType];
 
   return (
     <main className="min-h-screen bg-slate-50 px-5 py-8 text-slate-800 sm:px-8 sm:py-12">
       <article className="mx-auto max-w-4xl rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-10 lg:p-14">
         <Link
           to="/"
-          className="inline-flex rounded-lg px-1 text-sm font-semibold text-blue-700 underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-blue-500"
+          className="inline-flex rounded-lg px-1 text-lg font-semibold text-blue-700 underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-3 focus-visible:outline-offset-4 focus-visible:outline-blue-500"
         >
           ← Back to website
         </Link>
 
         <header className="mt-8 border-b border-slate-200 pb-8">
-          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-blue-700">
+          <p className="text-lg font-semibold uppercase tracking-[0.18em] text-blue-700">
             {document.eyebrow}
           </p>
 
@@ -317,7 +310,7 @@ export default function LegalPage({
             {document.intro}
           </p>
 
-          <p className="mt-4 text-sm font-medium text-slate-500">
+          <p className="mt-4 text-lg font-medium text-slate-500">
             Last updated: {LAST_UPDATED}
           </p>
         </header>
@@ -329,25 +322,17 @@ export default function LegalPage({
                 {section.heading}
               </h2>
 
-              <div className="mt-3 space-y-3 text-[15px] leading-7 text-slate-700 sm:text-base">
+              <div className="mt-3 space-y-3 text-[18px] leading-7 text-slate-700 sm:text-base">
                 {section.paragraphs?.map((paragraph) => (
-                  <p key={paragraph}>
-                    {paragraph}
-                  </p>
+                  <p key={paragraph}>{paragraph}</p>
                 ))}
 
-                {section.intro && (
-                  <p>
-                    {section.intro}
-                  </p>
-                )}
+                {section.intro && <p>{section.intro}</p>}
 
                 {section.bullets && (
                   <ul className="list-disc space-y-1 pl-6 marker:text-blue-600">
                     {section.bullets.map((bullet) => (
-                      <li key={bullet}>
-                        {bullet}
-                      </li>
+                      <li key={bullet}>{bullet}</li>
                     ))}
                   </ul>
                 )}
@@ -356,7 +341,7 @@ export default function LegalPage({
           ))}
         </div>
 
-        <aside className="mt-12 rounded-2xl bg-slate-50 p-5 text-sm leading-6 text-slate-600">
+        <aside className="mt-12 rounded-2xl bg-slate-50 p-5 text-lg leading-6 text-slate-600">
           {document.contact}
         </aside>
       </article>

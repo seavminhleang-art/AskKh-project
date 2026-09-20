@@ -1,31 +1,31 @@
-import React, { useState } from 'react';
-import { X, Flag, AlertTriangle } from 'lucide-react';
-import Button from '../ui/Button';
-import Textarea from '../ui/Textarea';
-import Select from '../ui/Select';
-import { useCreateReportMutation } from '../../store/api/apiSlice';
-import { toast } from 'sonner';
+import React, { useState } from "react";
+import { X, Flag, AlertTriangle } from "lucide-react";
+import Button from "../ui/Button";
+import Textarea from "../ui/Textarea";
+import Select from "../ui/Select";
+import { useCreateReportMutation } from "../../store/api/apiSlice";
+import { toast } from "sonner";
 
 export default function ReportModal({
   isOpen,
   onClose,
-  targetType = 'QUESTION',
+  targetType = "QUESTION",
   targetId,
   targetTitle,
 }) {
-  const [reason, setReason] = useState('Spam or Misleading Content');
-  const [details, setDetails] = useState('');
+  const [reason, setReason] = useState("Spam or Misleading Content");
+  const [details, setDetails] = useState("");
   const [createReport, { isLoading }] = useCreateReportMutation();
 
   if (!isOpen) return null;
 
   const reasons = [
-    'Spam or Misleading Content',
-    'Inappropriate Language or Harassment',
-    'Duplicate Post / Question',
-    'False Recovery or Fake Claim',
-    'Violates ISTAD Community Guidelines',
-    'Other Safety Concern',
+    "Spam or Misleading Content",
+    "Inappropriate Language or Harassment",
+    "Duplicate Post / Question",
+    "False Recovery or Fake Claim",
+    "Violates ISTAD Community Guidelines",
+    "Other Safety Concern",
   ];
 
   const handleSubmit = async (e) => {
@@ -39,10 +39,10 @@ export default function ReportModal({
         details,
       }).unwrap();
 
-      toast.success('Report submitted to ISTAD Campus Moderation Team.');
+      toast.success("Report submitted to ISTAD Campus Moderation Team.");
       onClose();
     } catch (err) {
-      toast.error('Failed to submit report. Please try again.');
+      toast.error("Failed to submit report. Please try again.");
     }
   };
 
@@ -64,7 +64,7 @@ export default function ReportModal({
             <h3 className="text-lg font-bold text-slate-900 dark:text-white">
               Report Content
             </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400 truncate max-w-[240px]">
+            <p className="text-base text-slate-500 dark:text-slate-400 truncate max-w-[240px]">
               {targetTitle}
             </p>
           </div>
@@ -72,7 +72,7 @@ export default function ReportModal({
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+            <label className="block text-base font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
               Reason for Report *
             </label>
             <Select value={reason} onChange={(e) => setReason(e.target.value)}>
@@ -85,7 +85,7 @@ export default function ReportModal({
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+            <label className="block text-base font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
               Additional Details (Optional)
             </label>
             <Textarea
@@ -97,7 +97,12 @@ export default function ReportModal({
           </div>
 
           <div className="flex items-center justify-end gap-3 pt-2">
-            <Button type="button" variant="outline" onClick={onClose} disabled={isLoading}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={onClose}
+              disabled={isLoading}
+            >
               Cancel
             </Button>
             <Button type="submit" variant="destructive" isLoading={isLoading}>

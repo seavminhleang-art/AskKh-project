@@ -1,20 +1,8 @@
-import {
-  useMemo,
-  useState,
-} from "react";
+import { useMemo, useState } from "react";
 
-import {
-  Link,
-  useNavigate,
-} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-import {
-  ArrowLeft,
-  Eye,
-  EyeOff,
-  LockKeyhole,
-  Mail,
-} from "lucide-react";
+import { ArrowLeft, Eye, EyeOff, LockKeyhole, Mail } from "lucide-react";
 
 import {
   createUserWithEmailAndPassword,
@@ -24,176 +12,117 @@ import {
   updateProfile,
 } from "firebase/auth";
 
-import {
-  useForm,
-} from "react-hook-form";
+import { useForm } from "react-hook-form";
 
-import {
-  zodResolver,
-} from "@hookform/resolvers/zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-import {
-  z,
-} from "zod";
+import { z } from "zod";
 
-import {
-  auth,
-} from "../Firebase/firebase.js";
+import { auth } from "../Firebase/firebase.js";
 
-import {
-  useLanguage,
-} from "../Language/LanguageContext.jsx";
+import { useLanguage } from "../Language/LanguageContext.jsx";
+import { useTheme } from "../../context/ThemeContext.jsx";
 
-import {
-  useRegisterMutation,
-} from "../../features/auth/authApi.js";
+import { useRegisterMutation } from "../../features/auth/authApi.js";
 
 import GoogleComponent from "../oauth/GoogleComponent.jsx";
 import GithubComponent from "../oauth/GithubComponent.jsx";
-
-import {
-  AnimatedToastStack,
-  useAnimatedToastStack,
-} from "@/Components/motion/animated-toast-stack";
+import { toast, ToastContainer } from "react-toastify";
 
 import registerIllustration from "../../assets/Website/register-illustration.png";
 
 const translations = {
   km: {
-    back:
-      "ត្រឡប់ទៅគេហទំព័រ",
+    back: "ត្រឡប់ទៅគេហទំព័រ",
 
-    title:
-      "បង្កើតគណនីរបស់អ្នក",
+    title: "បង្កើតគណនីរបស់អ្នក",
 
-    alreadyAccount:
-      "មានគណនីរួចហើយ?",
+    alreadyAccount: "មានគណនីរួចហើយ?",
 
-    login:
-      "ចូលគណនី",
+    login: "ចូលគណនី",
 
-    firstname:
-      "នាមខ្លួន",
+    firstname: "នាមខ្លួន",
 
-    firstnamePlaceholder:
-      "បញ្ចូលនាមខ្លួន",
+    firstnamePlaceholder: "បញ្ចូលនាមខ្លួន",
 
-    lastname:
-      "នាមត្រកូល",
+    lastname: "នាមត្រកូល",
 
-    lastnamePlaceholder:
-      "បញ្ចូលនាមត្រកូល",
+    lastnamePlaceholder: "បញ្ចូលនាមត្រកូល",
 
-    email:
-      "អ៊ីមែល",
+    email: "អ៊ីមែល",
 
-    emailPlaceholder:
-      "បញ្ចូលអ៊ីមែលរបស់អ្នក",
+    emailPlaceholder: "បញ្ចូលអ៊ីមែលរបស់អ្នក",
 
-    password:
-      "ពាក្យសម្ងាត់",
+    password: "ពាក្យសម្ងាត់",
 
-    passwordPlaceholder:
-      "បញ្ចូលពាក្យសម្ងាត់",
+    passwordPlaceholder: "បញ្ចូលពាក្យសម្ងាត់",
 
-    showPassword:
-      "បង្ហាញពាក្យសម្ងាត់",
+    showPassword: "បង្ហាញពាក្យសម្ងាត់",
 
-    hidePassword:
-      "លាក់ពាក្យសម្ងាត់",
+    hidePassword: "លាក់ពាក្យសម្ងាត់",
 
-    confirmPassword:
-      "បញ្ជាក់ពាក្យសម្ងាត់",
+    confirmPassword: "បញ្ជាក់ពាក្យសម្ងាត់",
 
-    confirmPlaceholder:
-      "បញ្ចូលពាក្យសម្ងាត់ម្ដងទៀត",
+    confirmPlaceholder: "បញ្ចូលពាក្យសម្ងាត់ម្ដងទៀត",
 
-    agree:
-      "ខ្ញុំយល់ព្រមនឹង",
+    agree: "ខ្ញុំយល់ព្រមនឹង",
 
-    terms:
-      "លក្ខខណ្ឌនៃសេវាកម្ម",
+    terms: "លក្ខខណ្ឌនៃសេវាកម្ម",
 
-    and:
-      "និង",
+    and: "និង",
 
-    privacy:
-      "គោលការណ៍ឯកជនភាព",
+    privacy: "គោលការណ៍ឯកជនភាព",
 
-    register:
-      "ចុះឈ្មោះ",
+    register: "ចុះឈ្មោះ",
 
-    creating:
-      "កំពុងបង្កើតគណនី...",
+    creating: "កំពុងបង្កើតគណនី...",
 
-    signupWith:
-      "ឬចុះឈ្មោះជាមួយ",
+    signupWith: "ឬចុះឈ្មោះជាមួយ",
 
-    google:
-      "Google",
+    google: "Google",
 
-    github:
-      "GitHub",
+    github: "GitHub",
 
-    firstRequired:
-      "សូមបញ្ចូលនាមខ្លួន។",
+    firstRequired: "សូមបញ្ចូលនាមខ្លួន។",
 
-    firstTooShort:
-      "នាមខ្លួនត្រូវមានយ៉ាងហោចណាស់ ២ តួអក្សរ។",
+    firstTooShort: "នាមខ្លួនត្រូវមានយ៉ាងហោចណាស់ ២ តួអក្សរ។",
 
-    firstTooLong:
-      "នាមខ្លួនមិនអាចលើសពី ៥០ តួអក្សរ។",
+    firstTooLong: "នាមខ្លួនមិនអាចលើសពី ៥០ តួអក្សរ។",
 
-    lastRequired:
-      "សូមបញ្ចូលនាមត្រកូល។",
+    lastRequired: "សូមបញ្ចូលនាមត្រកូល។",
 
-    lastTooShort:
-      "នាមត្រកូលត្រូវមានយ៉ាងហោចណាស់ ២ តួអក្សរ។",
+    lastTooShort: "នាមត្រកូលត្រូវមានយ៉ាងហោចណាស់ ២ តួអក្សរ។",
 
-    lastTooLong:
-      "នាមត្រកូលមិនអាចលើសពី ៥០ តួអក្សរ។",
+    lastTooLong: "នាមត្រកូលមិនអាចលើសពី ៥០ តួអក្សរ។",
 
-    emailRequired:
-      "សូមបញ្ចូលអ៊ីមែល។",
+    emailRequired: "សូមបញ្ចូលអ៊ីមែល។",
 
-    invalidEmail:
-      "សូមបញ្ចូលអ៊ីមែលឱ្យបានត្រឹមត្រូវ។",
+    invalidEmail: "សូមបញ្ចូលអ៊ីមែលឱ្យបានត្រឹមត្រូវ។",
 
-    emailMissingAt:
-      "អ៊ីមែលត្រូវមានសញ្ញា @",
+    emailMissingAt: "អ៊ីមែលត្រូវមានសញ្ញា @",
 
-    gmailSuggestion:
-      "តើអ្នកចង់សរសេរ @gmail.com មែនទេ?",
+    gmailSuggestion: "តើអ្នកចង់សរសេរ @gmail.com មែនទេ?",
 
-    invalidEmailFormat:
-      "ទម្រង់អ៊ីមែលមិនត្រឹមត្រូវ (ឧ. name@example.com)",
+    invalidEmailFormat: "ទម្រង់អ៊ីមែលមិនត្រឹមត្រូវ (ឧ. name@example.com)",
 
     emailDomainExtension:
       "Domain របស់អ៊ីមែលត្រូវមានផ្នែកបន្ថែមដូចជា .com (ឧ. gmail.com)",
 
-    passwordRequired:
-      "សូមបញ្ចូលពាក្យសម្ងាត់។",
+    passwordRequired: "សូមបញ្ចូលពាក្យសម្ងាត់។",
 
-    passwordLength:
-      "ពាក្យសម្ងាត់ត្រូវមានយ៉ាងហោចណាស់ ៨ តួអក្សរ។",
+    passwordLength: "ពាក្យសម្ងាត់ត្រូវមានយ៉ាងហោចណាស់ ៨ តួអក្សរ។",
 
-    passwordUppercase:
-      "ពាក្យសម្ងាត់ត្រូវមានអក្សរធំយ៉ាងហោចណាស់ ១។",
+    passwordUppercase: "ពាក្យសម្ងាត់ត្រូវមានអក្សរធំយ៉ាងហោចណាស់ ១។",
 
-    passwordLowercase:
-      "ពាក្យសម្ងាត់ត្រូវមានអក្សរតូចយ៉ាងហោចណាស់ ១។",
+    passwordLowercase: "ពាក្យសម្ងាត់ត្រូវមានអក្សរតូចយ៉ាងហោចណាស់ ១។",
 
-    passwordNumber:
-      "ពាក្យសម្ងាត់ត្រូវមានលេខយ៉ាងហោចណាស់ ១។",
+    passwordNumber: "ពាក្យសម្ងាត់ត្រូវមានលេខយ៉ាងហោចណាស់ ១។",
 
-    confirmRequired:
-      "សូមបញ្ជាក់ពាក្យសម្ងាត់។",
+    confirmRequired: "សូមបញ្ជាក់ពាក្យសម្ងាត់។",
 
-    passwordMismatch:
-      "ពាក្យសម្ងាត់ទាំងពីរមិនត្រូវគ្នា។",
+    passwordMismatch: "ពាក្យសម្ងាត់ទាំងពីរមិនត្រូវគ្នា។",
 
-    termsRequired:
-      "សូមយល់ព្រមនឹងលក្ខខណ្ឌ និងគោលការណ៍ឯកជនភាព។",
+    termsRequired: "សូមយល់ព្រមនឹងលក្ខខណ្ឌ និងគោលការណ៍ឯកជនភាព។",
 
     accountCreated:
       "បង្កើតគណនីបានជោគជ័យ។ សូមពិនិត្យអ៊ីមែលរបស់អ្នក និងផ្ទៀងផ្ទាត់គណនីមុនពេលចូល។",
@@ -201,181 +130,124 @@ const translations = {
     verificationEmailFailed:
       "គណនីត្រូវបានបង្កើត ប៉ុន្តែមិនអាចផ្ញើអ៊ីមែលផ្ទៀងផ្ទាត់បានទេ។ សូមចូលម្ដងទៀតដើម្បីស្នើតំណថ្មី។",
 
-    emailExists:
-      "អ៊ីមែលនេះបានចុះឈ្មោះរួចហើយ។",
+    emailExists: "អ៊ីមែលនេះបានចុះឈ្មោះរួចហើយ។",
 
-    registerFailed:
-      "ការចុះឈ្មោះបរាជ័យ។",
+    registerFailed: "ការចុះឈ្មោះបរាជ័យ។",
 
-    network:
-      "មានបញ្ហាបណ្តាញ។ សូមពិនិត្យអ៊ីនធឺណិតរបស់អ្នក។",
+    network: "មានបញ្ហាបណ្តាញ។ សូមពិនិត្យអ៊ីនធឺណិតរបស់អ្នក។",
 
-    tooMany:
-      "ការព្យាយាមច្រើនពេក។ សូមព្យាយាមម្ដងទៀតនៅពេលក្រោយ។",
+    tooMany: "ការព្យាយាមច្រើនពេក។ សូមព្យាយាមម្ដងទៀតនៅពេលក្រោយ។",
 
-    googleFailed:
-      "ការចុះឈ្មោះតាម Google បរាជ័យ។",
+    googleFailed: "ការចុះឈ្មោះតាម Google បរាជ័យ។",
 
-    githubFailed:
-      "ការចុះឈ្មោះតាម GitHub បរាជ័យ។",
+    githubFailed: "ការចុះឈ្មោះតាម GitHub បរាជ័យ។",
 
-    githubDisabled:
-      "GitHub Authentication មិនទាន់បានបើកក្នុង Firebase។",
+    githubDisabled: "GitHub Authentication មិនទាន់បានបើកក្នុង Firebase។",
 
-    accountExists:
-      "អ៊ីមែលនេះមានគណនីរួចហើយជាមួយវិធីចូលផ្សេង។",
+    accountExists: "អ៊ីមែលនេះមានគណនីរួចហើយជាមួយវិធីចូលផ្សេង។",
 
-    popupBlocked:
-      "Browser បានបិទ authentication popup។",
+    popupBlocked: "Browser បានបិទ authentication popup។",
 
-    successTitle:
-      "បង្កើតគណនីជោគជ័យ",
+    successTitle: "បង្កើតគណនីជោគជ័យ",
 
-    errorTitle:
-      "មានបញ្ហា",
+    errorTitle: "មានបញ្ហា",
 
-    googleSuccess:
-      "ចូលតាម Google បានជោគជ័យ។",
+    googleSuccess: "ចូលតាម Google បានជោគជ័យ។",
 
-    githubSuccess:
-      "ចូលតាម GitHub បានជោគជ័យ។",
+    githubSuccess: "ចូលតាម GitHub បានជោគជ័យ។",
   },
 
   en: {
-    back:
-      "Back to website",
+    back: "Back to website",
 
-    title:
-      "Create your account",
+    title: "Create your account",
 
-    alreadyAccount:
-      "Already have an account?",
+    alreadyAccount: "Already have an account?",
 
-    login:
-      "Login",
+    login: "Login",
 
-    firstname:
-      "Firstname",
+    firstname: "Firstname",
 
-    firstnamePlaceholder:
-      "Enter your firstname",
+    firstnamePlaceholder: "Enter your firstname",
 
-    lastname:
-      "Lastname",
+    lastname: "Lastname",
 
-    lastnamePlaceholder:
-      "Enter your lastname",
+    lastnamePlaceholder: "Enter your lastname",
 
-    email:
-      "Email",
+    email: "Email",
 
-    emailPlaceholder:
-      "Enter your email address",
+    emailPlaceholder: "Enter your email address",
 
-    password:
-      "Password",
+    password: "Password",
 
-    passwordPlaceholder:
-      "Enter your password",
+    passwordPlaceholder: "Enter your password",
 
-    showPassword:
-      "Show password",
+    showPassword: "Show password",
 
-    hidePassword:
-      "Hide password",
+    hidePassword: "Hide password",
 
-    confirmPassword:
-      "Confirm Password",
+    confirmPassword: "Confirm Password",
 
-    confirmPlaceholder:
-      "Confirm your password",
+    confirmPlaceholder: "Confirm your password",
 
-    agree:
-      "I agree to the",
+    agree: "I agree to the",
 
-    terms:
-      "Terms of Service",
+    terms: "Terms of Service",
 
-    and:
-      "and",
+    and: "and",
 
-    privacy:
-      "Privacy Policy",
+    privacy: "Privacy Policy",
 
-    register:
-      "Register",
+    register: "Register",
 
-    creating:
-      "Creating account...",
+    creating: "Creating account...",
 
-    signupWith:
-      "or sign up with",
+    signupWith: "or sign up with",
 
-    google:
-      "Google",
+    google: "Google",
 
-    github:
-      "GitHub",
+    github: "GitHub",
 
-    firstRequired:
-      "Please enter your firstname.",
+    firstRequired: "Please enter your firstname.",
 
-    firstTooShort:
-      "Firstname must contain at least 2 characters.",
+    firstTooShort: "Firstname must contain at least 2 characters.",
 
-    firstTooLong:
-      "Firstname cannot exceed 50 characters.",
+    firstTooLong: "Firstname cannot exceed 50 characters.",
 
-    lastRequired:
-      "Please enter your lastname.",
+    lastRequired: "Please enter your lastname.",
 
-    lastTooShort:
-      "Lastname must contain at least 2 characters.",
+    lastTooShort: "Lastname must contain at least 2 characters.",
 
-    lastTooLong:
-      "Lastname cannot exceed 50 characters.",
+    lastTooLong: "Lastname cannot exceed 50 characters.",
 
-    emailRequired:
-      "Please enter your email.",
+    emailRequired: "Please enter your email.",
 
-    invalidEmail:
-      "Please enter a valid email address.",
+    invalidEmail: "Please enter a valid email address.",
 
-    emailMissingAt:
-      "Email must include @",
+    emailMissingAt: "Email must include @",
 
-    gmailSuggestion:
-      "Did you mean @gmail.com?",
+    gmailSuggestion: "Did you mean @gmail.com?",
 
-    invalidEmailFormat:
-      "Invalid email format (e.g. name@example.com)",
+    invalidEmailFormat: "Invalid email format (e.g. name@example.com)",
 
     emailDomainExtension:
       "Email domain must include an extension like .com (e.g. gmail.com)",
 
-    passwordRequired:
-      "Please enter your password.",
+    passwordRequired: "Please enter your password.",
 
-    passwordLength:
-      "Password must contain at least 8 characters.",
+    passwordLength: "Password must contain at least 8 characters.",
 
-    passwordUppercase:
-      "Password must contain at least 1 uppercase letter.",
+    passwordUppercase: "Password must contain at least 1 uppercase letter.",
 
-    passwordLowercase:
-      "Password must contain at least 1 lowercase letter.",
+    passwordLowercase: "Password must contain at least 1 lowercase letter.",
 
-    passwordNumber:
-      "Password must contain at least 1 number.",
+    passwordNumber: "Password must contain at least 1 number.",
 
-    confirmRequired:
-      "Please confirm your password.",
+    confirmRequired: "Please confirm your password.",
 
-    passwordMismatch:
-      "Password and confirm password do not match.",
+    passwordMismatch: "Password and confirm password do not match.",
 
-    termsRequired:
-      "Please agree to the Terms of Service and Privacy Policy.",
+    termsRequired: "Please agree to the Terms of Service and Privacy Policy.",
 
     accountCreated:
       "Account created. Check your email and verify your account before signing in.",
@@ -383,333 +255,180 @@ const translations = {
     verificationEmailFailed:
       "Your account was created, but we could not send the verification email. Sign in again to request a new link.",
 
-    emailExists:
-      "This email is already registered.",
+    emailExists: "This email is already registered.",
 
-    registerFailed:
-      "Registration failed. Please try again.",
+    registerFailed: "Registration failed. Please try again.",
 
-    network:
-      "Network error. Please check your internet connection.",
+    network: "Network error. Please check your internet connection.",
 
-    tooMany:
-      "Too many attempts. Please try again later.",
+    tooMany: "Too many attempts. Please try again later.",
 
-    googleFailed:
-      "Google sign up failed.",
+    googleFailed: "Google sign up failed.",
 
-    githubFailed:
-      "GitHub sign up failed.",
+    githubFailed: "GitHub sign up failed.",
 
-    githubDisabled:
-      "GitHub Authentication is not enabled in Firebase.",
+    githubDisabled: "GitHub Authentication is not enabled in Firebase.",
 
     accountExists:
       "An account already exists with this email using another sign-in method.",
 
-    popupBlocked:
-      "Your browser blocked the authentication popup.",
+    popupBlocked: "Your browser blocked the authentication popup.",
 
-    successTitle:
-      "Account created",
+    successTitle: "Account created",
 
-    errorTitle:
-      "Something went wrong",
+    errorTitle: "Something went wrong",
 
-    googleSuccess:
-      "Google authentication successful.",
+    googleSuccess: "Google authentication successful.",
 
-    githubSuccess:
-      "GitHub authentication successful.",
+    githubSuccess: "GitHub authentication successful.",
   },
 };
 
-const createEmailSchema = (
-  t,
-) =>
+const createEmailSchema = (t) =>
   z
     .string()
     .trim()
-    .min(
-      1,
-      t.emailRequired,
-    )
-    .superRefine(
-      (
-        value,
-        ctx,
-      ) => {
-        if (!value) {
-          return;
-        }
+    .min(1, t.emailRequired)
+    .superRefine((value, ctx) => {
+      if (!value) {
+        return;
+      }
 
-        if (
-          !value.includes(
-            "@",
-          )
-        ) {
-          ctx.addIssue({
-            code: "custom",
-            message:
-              t.emailMissingAt,
-          });
+      if (!value.includes("@")) {
+        ctx.addIssue({
+          code: "custom",
+          message: t.emailMissingAt,
+        });
 
-          return;
-        }
+        return;
+      }
 
-        const parts =
-          value.split(
-            "@",
-          );
+      const parts = value.split("@");
 
-        if (
-          parts.length !== 2
-        ) {
-          ctx.addIssue({
-            code: "custom",
-            message:
-              t.invalidEmailFormat,
-          });
+      if (parts.length !== 2) {
+        ctx.addIssue({
+          code: "custom",
+          message: t.invalidEmailFormat,
+        });
 
-          return;
-        }
+        return;
+      }
 
-        const [
-          localPart,
-          domain,
-        ] = parts;
+      const [localPart, domain] = parts;
 
-        if (
-          !localPart ||
-          !domain
-        ) {
-          ctx.addIssue({
-            code: "custom",
-            message:
-              t.invalidEmail,
-          });
+      if (!localPart || !domain) {
+        ctx.addIssue({
+          code: "custom",
+          message: t.invalidEmail,
+        });
 
-          return;
-        }
+        return;
+      }
 
-        if (
-          domain.endsWith(
-            ".",
-          )
-        ) {
-          ctx.addIssue({
-            code: "custom",
-            message:
-              t.emailDomainExtension,
-          });
+      if (domain.endsWith(".")) {
+        ctx.addIssue({
+          code: "custom",
+          message: t.emailDomainExtension,
+        });
 
-          return;
-        }
+        return;
+      }
 
-        const gmailTypoPattern =
-          /^gmail\.(co|con|cmo)$/i;
+      const gmailTypoPattern = /^gmail\.(co|con|cmo)$/i;
 
-        if (
-          gmailTypoPattern.test(
-            domain,
-          )
-        ) {
-          ctx.addIssue({
-            code: "custom",
-            message:
-              t.gmailSuggestion,
-          });
+      if (gmailTypoPattern.test(domain)) {
+        ctx.addIssue({
+          code: "custom",
+          message: t.gmailSuggestion,
+        });
 
-          return;
-        }
+        return;
+      }
 
-        const domainParts =
-          domain.split(
-            ".",
-          );
+      const domainParts = domain.split(".");
 
-        const extension =
-          domainParts[
-            domainParts.length -
-              1
-          ];
+      const extension = domainParts[domainParts.length - 1];
 
-        if (
-          domainParts.length <
-            2 ||
-          !extension ||
-          extension.length < 2
-        ) {
-          ctx.addIssue({
-            code: "custom",
-            message:
-              t.invalidEmailFormat,
-          });
+      if (domainParts.length < 2 || !extension || extension.length < 2) {
+        ctx.addIssue({
+          code: "custom",
+          message: t.invalidEmailFormat,
+        });
 
-          return;
-        }
+        return;
+      }
 
-        const emailPattern =
-          /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
-        if (
-          !emailPattern.test(
-            value,
-          )
-        ) {
-          ctx.addIssue({
-            code: "custom",
-            message:
-              t.invalidEmail,
-          });
-        }
-      },
-    );
+      if (!emailPattern.test(value)) {
+        ctx.addIssue({
+          code: "custom",
+          message: t.invalidEmail,
+        });
+      }
+    });
 
-const createRegisterSchema = (
-  t,
-) =>
+const createRegisterSchema = (t) =>
   z
     .object({
       firstName: z
         .string()
         .trim()
-        .min(
-          1,
-          t.firstRequired,
-        )
-        .min(
-          2,
-          t.firstTooShort,
-        )
-        .max(
-          50,
-          t.firstTooLong,
-        ),
+        .min(1, t.firstRequired)
+        .min(2, t.firstTooShort)
+        .max(50, t.firstTooLong),
 
       lastName: z
         .string()
         .trim()
-        .min(
-          1,
-          t.lastRequired,
-        )
-        .min(
-          2,
-          t.lastTooShort,
-        )
-        .max(
-          50,
-          t.lastTooLong,
-        ),
+        .min(1, t.lastRequired)
+        .min(2, t.lastTooShort)
+        .max(50, t.lastTooLong),
 
-      email:
-        createEmailSchema(
-          t,
-        ),
+      email: createEmailSchema(t),
 
       password: z
         .string()
-        .min(
-          1,
-          t.passwordRequired,
-        )
-        .min(
-          8,
-          t.passwordLength,
-        )
-        .regex(
-          /[A-Z]/,
-          t.passwordUppercase,
-        )
-        .regex(
-          /[a-z]/,
-          t.passwordLowercase,
-        )
-        .regex(
-          /[0-9]/,
-          t.passwordNumber,
-        ),
+        .min(1, t.passwordRequired)
+        .min(8, t.passwordLength)
+        .regex(/[A-Z]/, t.passwordUppercase)
+        .regex(/[a-z]/, t.passwordLowercase)
+        .regex(/[0-9]/, t.passwordNumber),
 
-      confirmPassword:
-        z
-          .string()
-          .min(
-            1,
-            t.confirmRequired,
-          ),
+      confirmPassword: z.string().min(1, t.confirmRequired),
 
-      agreeToTerms:
-        z
-          .boolean()
-          .refine(
-            (
-              value,
-            ) =>
-              value ===
-              true,
-            {
-              message:
-                t.termsRequired,
-            },
-          ),
+      agreeToTerms: z.boolean().refine((value) => value === true, {
+        message: t.termsRequired,
+      }),
     })
-    .refine(
-      (data) =>
-        data.password ===
-        data.confirmPassword,
-      {
-        message:
-          t.passwordMismatch,
+    .refine((data) => data.password === data.confirmPassword, {
+      message: t.passwordMismatch,
 
-        path: [
-          "confirmPassword",
-        ],
-      },
-    );
+      path: ["confirmPassword"],
+    });
 
 export default function RegisterPage() {
-  const navigate =
-    useNavigate();
+  const navigate = useNavigate();
+  const { darkMode } = useTheme();
 
-  const {
-    language,
-    isKhmer,
-  } = useLanguage();
+  const { language, isKhmer } = useLanguage();
 
-  const t =
-    translations[
-      language
-    ];
+  const t = translations[language];
 
-  const registerSchema =
-    useMemo(
-      () =>
-        createRegisterSchema(
-          t,
-        ),
-      [t],
-    );
+  const registerSchema = useMemo(() => createRegisterSchema(t), [t]);
 
   const {
     register,
     handleSubmit,
     getValues,
     setError,
-    formState: {
-      errors,
-      isSubmitting,
-    },
+    formState: { errors, isSubmitting },
   } = useForm({
-    resolver:
-      zodResolver(
-        registerSchema,
-      ),
+    resolver: zodResolver(registerSchema),
 
     mode: "onBlur",
 
-    reValidateMode:
-      "onChange",
+    reValidateMode: "onChange",
 
     defaultValues: {
       firstName: "",
@@ -721,40 +440,14 @@ export default function RegisterPage() {
     },
   });
 
-  const {
-    toasts,
-    showToast,
-    dismissToast,
-  } =
-    useAnimatedToastStack({
-      defaultDuration: 4200,
-      limit: 4,
-    });
-
   const [registerMutation] = useRegisterMutation();
 
-  const [
-    showPassword,
-    setShowPassword,
-  ] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
-  const [
-    showConfirmPassword,
-    setShowConfirmPassword,
-  ] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const notifyError = (
-    description,
-  ) => {
-    showToast({
-      status:
-        "error",
-
-      title:
-        t.errorTitle,
-
-      description,
-    });
+  const notifyError = (description) => {
+    toast.error(description, { toastId: "register-error" });
   };
 
   const onSubmit = async (data) => {
@@ -766,11 +459,8 @@ export default function RegisterPage() {
         confirmPassword: data.confirmPassword,
       }).unwrap();
 
-      showToast({
-        status: "success",
-        title: t.successTitle,
-        description: res?.message || t.accountCreated,
-        duration: 3500,
+      toast.success(res?.message || t.accountCreated, {
+        toastId: "register-success",
       });
 
       window.setTimeout(() => {
@@ -781,133 +471,81 @@ export default function RegisterPage() {
       const errorMsg =
         error?.data?.message ||
         (error?.status === 409 ? t.emailExists : null) ||
-        (error?.status === 'FETCH_ERROR' ? t.network : null) ||
+        (error?.status === "FETCH_ERROR" ? t.network : null) ||
         t.registerFailed;
       notifyError(errorMsg);
     }
   };
 
-  const handleOAuthError = (
-    error,
-    provider,
-  ) => {
-    console.error(
-      `${provider} authentication error:`,
-      error,
-    );
-
-    if (
-      error.code ===
-      "auth/popup-blocked"
-    ) {
+  const requireTermsAcceptance = () => {
+    const agree = getValues("agreeToTerms");
+    if (!agree) {
       notifyError(
-        t.popupBlocked,
+        t.termsRequired ||
+          "Please agree to the Terms of Service and Privacy Policy.",
       );
-
-      return;
+      return false;
     }
-
-    if (
-      error.code ===
-      "auth/account-exists-with-different-credential"
-    ) {
-      notifyError(
-        t.accountExists,
-      );
-
-      return;
-    }
-
-    if (
-      provider ===
-        "GitHub" &&
-      error.code ===
-        "auth/operation-not-allowed"
-    ) {
-      notifyError(
-        t.githubDisabled,
-      );
-
-      return;
-    }
-
-    notifyError(
-      provider ===
-        "Google"
-        ? t.googleFailed
-        : t.githubFailed,
-    );
+    return true;
   };
 
-  const handleOAuthSuccess = (
-    provider,
-  ) => {
-    showToast({
-      status:
-        "success",
+  const handleOAuthError = (error, provider) => {
+    console.error(`${provider} authentication error:`, error);
 
-      title:
-        t.successTitle,
+    if (error.code === "auth/popup-blocked") {
+      notifyError(t.popupBlocked);
 
-      description:
-        provider ===
-        "Google"
-          ? t.googleSuccess
-          : t.githubSuccess,
+      return;
+    }
+
+    if (error.code === "auth/account-exists-with-different-credential") {
+      notifyError(t.accountExists);
+
+      return;
+    }
+
+    if (provider === "GitHub" && error.code === "auth/operation-not-allowed") {
+      notifyError(t.githubDisabled);
+
+      return;
+    }
+
+    notifyError(provider === "Google" ? t.googleFailed : t.githubFailed);
+  };
+
+  const handleOAuthSuccess = (provider) => {
+    toast.success(provider === "Google" ? t.googleSuccess : t.githubSuccess, {
+      toastId: "register-oauth-success",
     });
 
-    navigate(
-      "/",
-      {
-        replace: true,
-      },
-    );
+    navigate("/", {
+      replace: true,
+    });
   };
 
   return (
     <>
-      <AnimatedToastStack
-        toasts={
-          toasts
-        }
-        onDismiss={
-          dismissToast
-        }
+      <ToastContainer
         position="top-right"
-        fixed
-        maxVisible={4}
+        autoClose={4200}
+        limit={1}
+        theme={darkMode ? "dark" : "light"}
       />
 
       <main
         className={`auth-page register-page ${
-          isKhmer
-            ? "font-khmer"
-            : "font-brand"
+          isKhmer ? "font-khmer" : "font-brand"
         }`}
       >
-          <Link
-            to="/"
-            className="back-button"
-          >
-            <ArrowLeft
-              size={
-                18
-              }
-            />
-
-            <span>
-              {
-                t.back
-              }
-            </span>
-          </Link>
+        <Link to="/" className="back-button" aria-label={t.back}>
+          <ArrowLeft size={18} />
+          <span>{t.back}</span>
+        </Link>
 
         <section className="auth-visual-section">
           <div className="auth-illustration-wrapper">
             <img
-              src={
-                registerIllustration
-              }
+              src={registerIllustration}
               alt="NEXA registration illustration"
               className="auth-illustration register-illustration"
             />
@@ -917,77 +555,48 @@ export default function RegisterPage() {
         <section className="auth-form-section register-section">
           <div className="register-form-container">
             <div className="auth-heading register-heading">
-              <h1>
-                {
-                  t.title
-                }
-              </h1>
+              <h1>{t.title}</h1>
 
               <p>
-                {
-                  t.alreadyAccount
-                }{" "}
-
-                <Link to="/login">
-                  {
-                    t.login
-                  }
-                </Link>
+                {t.alreadyAccount} <Link to="/login">{t.login}</Link>
               </p>
             </div>
 
             <form
               className="auth-form register-form"
-              onSubmit={handleSubmit(
-                onSubmit,
-                (validationErrors) => {
-                  const firstError = Object.values(validationErrors).find(
-                    (error) => error?.message,
-                  );
-                  if (firstError) notifyError(firstError.message);
-                },
-              )}
+              onSubmit={handleSubmit(onSubmit, (validationErrors) => {
+                const firstError = Object.values(validationErrors).find(
+                  (error) => error?.message,
+                );
+                if (firstError) notifyError(firstError.message);
+              })}
               noValidate
             >
               <div className="name-grid">
                 <div className="form-group">
                   <label htmlFor="register-first-name">
-                    {
-                      t.firstname
-                    }
+                    {t.firstname}
 
-                    <span>
-                      *
-                    </span>
+                    <span>*</span>
                   </label>
 
                   <div
                     className={`input-wrapper no-icon ${
-                      errors.firstName
-                        ? "border-red-500"
-                        : ""
+                      errors.firstName ? "border-red-500" : ""
                     }`}
                   >
                     <input
                       id="register-first-name"
                       type="text"
                       autoComplete="given-name"
-                      placeholder={
-                        t.firstnamePlaceholder
-                      }
-                      aria-invalid={
-                        errors.firstName
-                          ? "true"
-                          : "false"
-                      }
+                      placeholder={t.firstnamePlaceholder}
+                      aria-invalid={errors.firstName ? "true" : "false"}
                       aria-describedby={
                         errors.firstName
                           ? "register-first-name-error"
                           : undefined
                       }
-                      {...register(
-                        "firstName",
-                      )}
+                      {...register("firstName")}
                     />
                   </div>
 
@@ -995,55 +604,35 @@ export default function RegisterPage() {
                     <p
                       id="register-first-name-error"
                       role="alert"
-                      className="mt-1.5 text-xs font-medium text-red-500"
+                      className="mt-1.5 text-base font-medium text-red-500"
                     >
-                      {
-                        errors
-                          .firstName
-                          .message
-                      }
+                      {errors.firstName.message}
                     </p>
                   )}
                 </div>
 
                 <div className="form-group">
                   <label htmlFor="register-last-name">
-                    {
-                      t.lastname
-                    }
+                    {t.lastname}
 
-                    <span>
-                      *
-                    </span>
+                    <span>*</span>
                   </label>
 
                   <div
                     className={`input-wrapper no-icon ${
-                      errors.lastName
-                        ? "border-red-500"
-                        : ""
+                      errors.lastName ? "border-red-500" : ""
                     }`}
                   >
                     <input
                       id="register-last-name"
                       type="text"
                       autoComplete="family-name"
-                      placeholder={
-                        t.lastnamePlaceholder
-                      }
-                      aria-invalid={
-                        errors.lastName
-                          ? "true"
-                          : "false"
-                      }
+                      placeholder={t.lastnamePlaceholder}
+                      aria-invalid={errors.lastName ? "true" : "false"}
                       aria-describedby={
-                        errors.lastName
-                          ? "register-last-name-error"
-                          : undefined
+                        errors.lastName ? "register-last-name-error" : undefined
                       }
-                      {...register(
-                        "lastName",
-                      )}
+                      {...register("lastName")}
                     />
                   </div>
 
@@ -1051,13 +640,9 @@ export default function RegisterPage() {
                     <p
                       id="register-last-name-error"
                       role="alert"
-                      className="mt-1.5 text-xs font-medium text-red-500"
+                      className="mt-1.5 text-base font-medium text-red-500"
                     >
-                      {
-                        errors
-                          .lastName
-                          .message
-                      }
+                      {errors.lastName.message}
                     </p>
                   )}
                 </div>
@@ -1065,49 +650,28 @@ export default function RegisterPage() {
 
               <div className="form-group">
                 <label htmlFor="register-email">
-                  {
-                    t.email
-                  }
+                  {t.email}
 
-                  <span>
-                    *
-                  </span>
+                  <span>*</span>
                 </label>
 
                 <div
                   className={`input-wrapper ${
-                    errors.email
-                      ? "border-red-500"
-                      : ""
+                    errors.email ? "border-red-500" : ""
                   }`}
                 >
-                  <Mail
-                    size={
-                      19
-                    }
-                    className="input-icon"
-                  />
+                  <Mail size={19} className="input-icon" />
 
                   <input
                     id="register-email"
                     type="email"
                     autoComplete="email"
-                    placeholder={
-                      t.emailPlaceholder
-                    }
-                    aria-invalid={
-                      errors.email
-                        ? "true"
-                        : "false"
-                    }
+                    placeholder={t.emailPlaceholder}
+                    aria-invalid={errors.email ? "true" : "false"}
                     aria-describedby={
-                      errors.email
-                        ? "register-email-error"
-                        : undefined
+                      errors.email ? "register-email-error" : undefined
                     }
-                    {...register(
-                      "email",
-                    )}
+                    {...register("email")}
                   />
                 </div>
 
@@ -1115,99 +679,46 @@ export default function RegisterPage() {
                   <p
                     id="register-email-error"
                     role="alert"
-                    className="mt-1.5 text-xs font-medium text-red-500"
+                    className="mt-1.5 text-base font-medium text-red-500"
                   >
-                    {
-                      errors
-                        .email
-                        .message
-                    }
+                    {errors.email.message}
                   </p>
                 )}
               </div>
 
               <div className="form-group">
                 <label htmlFor="register-password">
-                  {
-                    t.password
-                  }
+                  {t.password}
 
-                  <span>
-                    *
-                  </span>
+                  <span>*</span>
                 </label>
 
                 <div
                   className={`input-wrapper ${
-                    errors.password
-                      ? "border-red-500"
-                      : ""
+                    errors.password ? "border-red-500" : ""
                   }`}
                 >
-                  <LockKeyhole
-                    size={
-                      19
-                    }
-                    className="input-icon"
-                  />
+                  <LockKeyhole size={19} className="input-icon" />
 
                   <input
                     id="register-password"
-                    type={
-                      showPassword
-                        ? "text"
-                        : "password"
-                    }
+                    type={showPassword ? "text" : "password"}
                     autoComplete="new-password"
-                    placeholder={
-                      t.passwordPlaceholder
-                    }
-                    aria-invalid={
-                      errors.password
-                        ? "true"
-                        : "false"
-                    }
+                    placeholder={t.passwordPlaceholder}
+                    aria-invalid={errors.password ? "true" : "false"}
                     aria-describedby={
-                      errors.password
-                        ? "register-password-error"
-                        : undefined
+                      errors.password ? "register-password-error" : undefined
                     }
-                    {...register(
-                      "password",
-                      { deps: ["confirmPassword"] },
-                    )}
+                    {...register("password", { deps: ["confirmPassword"] })}
                   />
 
                   <button
                     type="button"
                     className="password-toggle"
-                    aria-label={
-                      showPassword
-                        ? t.hidePassword
-                        : t.showPassword
-                    }
-                    onClick={() =>
-                      setShowPassword(
-                        (
-                          previous,
-                        ) =>
-                          !previous,
-                      )
-                    }
+                    aria-label={showPassword ? t.hidePassword : t.showPassword}
+                    onClick={() => setShowPassword((previous) => !previous)}
                   >
-                    {showPassword ? (
-                      <Eye
-                        size={
-                          19
-                        }
-                      />
-                    ) : (
-                      <EyeOff
-                        size={
-                          19
-                        }
-                      />
-                    )}
+                    {showPassword ? <Eye size={19} /> : <EyeOff size={19} />}
                   </button>
                 </div>
 
@@ -1215,97 +726,55 @@ export default function RegisterPage() {
                   <p
                     id="register-password-error"
                     role="alert"
-                    className="mt-1.5 text-xs font-medium text-red-500"
+                    className="mt-1.5 text-base font-medium text-red-500"
                   >
-                    {
-                      errors
-                        .password
-                        .message
-                    }
+                    {errors.password.message}
                   </p>
                 )}
               </div>
 
               <div className="form-group">
                 <label htmlFor="register-confirm-password">
-                  {
-                    t.confirmPassword
-                  }
+                  {t.confirmPassword}
 
-                  <span>
-                    *
-                  </span>
+                  <span>*</span>
                 </label>
 
                 <div
                   className={`input-wrapper ${
-                    errors.confirmPassword
-                      ? "border-red-500"
-                      : ""
+                    errors.confirmPassword ? "border-red-500" : ""
                   }`}
                 >
-                  <LockKeyhole
-                    size={
-                      19
-                    }
-                    className="input-icon"
-                  />
+                  <LockKeyhole size={19} className="input-icon" />
 
                   <input
                     id="register-confirm-password"
-                    type={
-                      showConfirmPassword
-                        ? "text"
-                        : "password"
-                    }
+                    type={showConfirmPassword ? "text" : "password"}
                     autoComplete="new-password"
-                    placeholder={
-                      t.confirmPlaceholder
-                    }
-                    aria-invalid={
-                      errors.confirmPassword
-                        ? "true"
-                        : "false"
-                    }
+                    placeholder={t.confirmPlaceholder}
+                    aria-invalid={errors.confirmPassword ? "true" : "false"}
                     aria-describedby={
                       errors.confirmPassword
                         ? "register-confirm-password-error"
                         : undefined
                     }
-                    {...register(
-                      "confirmPassword",
-                    )}
+                    {...register("confirmPassword")}
                   />
 
                   <button
                     type="button"
                     className="password-toggle"
                     aria-label={
-                      showConfirmPassword
-                        ? t.hidePassword
-                        : t.showPassword
+                      showConfirmPassword ? t.hidePassword : t.showPassword
                     }
                     onClick={() =>
-                      setShowConfirmPassword(
-                        (
-                          previous,
-                        ) =>
-                          !previous,
-                      )
+                      setShowConfirmPassword((previous) => !previous)
                     }
                   >
                     {showConfirmPassword ? (
-                      <Eye
-                        size={
-                          19
-                        }
-                      />
+                      <Eye size={19} />
                     ) : (
-                      <EyeOff
-                        size={
-                          19
-                        }
-                      />
+                      <EyeOff size={19} />
                     )}
                   </button>
                 </div>
@@ -1314,13 +783,9 @@ export default function RegisterPage() {
                   <p
                     id="register-confirm-password-error"
                     role="alert"
-                    className="mt-1.5 text-xs font-medium text-red-500"
+                    className="mt-1.5 text-base font-medium text-red-500"
                   >
-                    {
-                      errors
-                        .confirmPassword
-                        .message
-                    }
+                    {errors.confirmPassword.message}
                   </p>
                 )}
               </div>
@@ -1330,48 +795,19 @@ export default function RegisterPage() {
                   <label className="checkbox-label">
                     <input
                       type="checkbox"
-                      aria-label={`${
-                        t.agree
-                      } ${
-                        t.terms
-                      } ${
-                        t.and
-                      } ${
-                        t.privacy
-                      }`}
+                      aria-label={`${t.agree} ${t.terms} ${t.and} ${t.privacy}`}
                       aria-describedby={
-                        errors.agreeToTerms
-                          ? "register-terms-error"
-                          : undefined
+                        errors.agreeToTerms ? "register-terms-error" : undefined
                       }
-                      {...register(
-                        "agreeToTerms",
-                      )}
+                      {...register("agreeToTerms")}
                     />
 
                     <span className="custom-checkbox" />
                   </label>
 
                   <span className="checkbox-text">
-                    {
-                      t.agree
-                    }{" "}
-
-                    <Link to="/terms">
-                      {
-                        t.terms
-                      }
-                    </Link>{" "}
-
-                    {
-                      t.and
-                    }{" "}
-
-                    <Link to="/privacy">
-                      {
-                        t.privacy
-                      }
-                    </Link>
+                    {t.agree} <Link to="/terms">{t.terms}</Link> {t.and}{" "}
+                    <Link to="/privacy">{t.privacy}</Link>
                   </span>
                 </div>
 
@@ -1379,13 +815,9 @@ export default function RegisterPage() {
                   <p
                     id="register-terms-error"
                     role="alert"
-                    className="mt-1.5 text-xs font-medium text-red-500"
+                    className="mt-1.5 text-base font-medium text-red-500"
                   >
-                    {
-                      errors
-                        .agreeToTerms
-                        .message
-                    }
+                    {errors.agreeToTerms.message}
                   </p>
                 )}
               </div>
@@ -1393,70 +825,32 @@ export default function RegisterPage() {
               <button
                 type="submit"
                 className="primary-auth-button"
-                disabled={
-                  isSubmitting
-                }
+                disabled={isSubmitting}
               >
-                {isSubmitting
-                  ? t.creating
-                  : t.register}
+                {isSubmitting ? t.creating : t.register}
               </button>
 
               <div className="auth-divider">
                 <span />
 
-                <p>
-                  {
-                    t.signupWith
-                  }
-                </p>
+                <p>{t.signupWith}</p>
 
                 <span />
               </div>
 
               <div className="social-buttons">
                 <GoogleComponent
-                  label={
-                    t.google
-                  }
-                  onBeforeAuth={
-                    requireTermsAcceptance
-                  }
-                  onSuccess={() =>
-                    handleOAuthSuccess(
-                      "Google",
-                    )
-                  }
-                  onError={(
-                    error,
-                  ) =>
-                    handleOAuthError(
-                      error,
-                      "Google",
-                    )
-                  }
+                  label={t.google}
+                  onBeforeAuth={requireTermsAcceptance}
+                  onSuccess={() => handleOAuthSuccess("Google")}
+                  onError={(error) => handleOAuthError(error, "Google")}
                 />
 
                 <GithubComponent
-                  label={
-                    t.github
-                  }
-                  onBeforeAuth={
-                    requireTermsAcceptance
-                  }
-                  onSuccess={() =>
-                    handleOAuthSuccess(
-                      "GitHub",
-                    )
-                  }
-                  onError={(
-                    error,
-                  ) =>
-                    handleOAuthError(
-                      error,
-                      "GitHub",
-                    )
-                  }
+                  label={t.github}
+                  onBeforeAuth={requireTermsAcceptance}
+                  onSuccess={() => handleOAuthSuccess("GitHub")}
+                  onError={(error) => handleOAuthError(error, "GitHub")}
                 />
               </div>
             </form>

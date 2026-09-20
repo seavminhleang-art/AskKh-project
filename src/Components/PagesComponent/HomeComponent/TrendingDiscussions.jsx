@@ -3,16 +3,28 @@ import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { ChatBubbleLeftIcon, ArrowUpIcon } from "@heroicons/react/24/outline";
-import { useGetPostsByScoreQuery, useGetPostsQuery } from "../../../features/posts/postApi";
+import {
+  useGetPostsByScoreQuery,
+  useGetPostsQuery,
+} from "../../../features/posts/postApi";
 
 export default function TrendingDiscussions({ darkMode }) {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const { data: scorePosts, isLoading: isScoreLoading, isError: isScoreError, refetch } = useGetPostsByScoreQuery();
-  const { data: allPosts, isLoading: isAllLoading } = useGetPostsQuery(undefined, { skip: !isScoreError && !!scorePosts?.length });
+  const {
+    data: scorePosts,
+    isLoading: isScoreLoading,
+    isError: isScoreError,
+    refetch,
+  } = useGetPostsByScoreQuery();
+  const { data: allPosts, isLoading: isAllLoading } = useGetPostsQuery(
+    undefined,
+    { skip: !isScoreError && !!scorePosts?.length },
+  );
 
-  const rawPosts = (scorePosts && scorePosts.length > 0) ? scorePosts : (allPosts || []);
+  const rawPosts =
+    scorePosts && scorePosts.length > 0 ? scorePosts : allPosts || [];
   const discussions = rawPosts.slice(0, 3);
   const isLoading = isScoreLoading && isAllLoading;
 
@@ -24,7 +36,7 @@ export default function TrendingDiscussions({ darkMode }) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           whileHover={{ scale: 1.05 }}
-          className={`inline-block text-xs font-bold uppercase tracking-wider px-4 py-1.5 rounded-full mb-3 cursor-pointer ${
+          className={`inline-block text-base font-bold uppercase tracking-wider px-4 py-1.5 rounded-full mb-3 cursor-pointer ${
             darkMode
               ? "bg-red-950/80 text-red-400"
               : "bg-[#fde0e0]/90 text-[var(--home-secondary-text)]"
@@ -33,14 +45,19 @@ export default function TrendingDiscussions({ darkMode }) {
           {t("discBadge")}
         </motion.div>
 
-        <h2 className={`text-3xl md:text-4xl font-bold mb-4 ${
-          darkMode ? "text-red-400" : "text-[var(--home-secondary-text)]"
-        }`}>
+        <h2
+          className={`text-3xl md:text-5xl font-bold mb-4 ${
+            darkMode ? "text-red-400" : "text-[var(--home-secondary-text)]"
+          }`}
+        >
           {t("discTitle")}
         </h2>
 
         <div className="flex justify-end max-w-7xl mx-auto px-2">
-          <Link to="/community/qa" className="text-[var(--home-link-text)] font-semibold text-sm flex items-center gap-1 hover:underline cursor-pointer">
+          <Link
+            to="/community/qa"
+            className="text-[var(--home-link-text)] font-semibold text-lg flex items-center gap-1 hover:underline cursor-pointer"
+          >
             {t("discViewAll")} →
           </Link>
         </div>
@@ -75,25 +92,37 @@ export default function TrendingDiscussions({ darkMode }) {
           ))}
         </div>
       ) : isScoreError && (!rawPosts || rawPosts.length === 0) ? (
-        <div className={`rounded-3xl p-8 text-center border ${
-          darkMode ? "bg-zinc-900/60 border-zinc-800 text-zinc-400" : "bg-white border-gray-100 text-gray-500"
-        }`}>
-          <p className="text-sm mb-3">Unable to load discussions at the moment.</p>
+        <div
+          className={`rounded-3xl p-8 text-center border ${
+            darkMode
+              ? "bg-zinc-900/60 border-zinc-800 text-zinc-400"
+              : "bg-white border-gray-100 text-gray-500"
+          }`}
+        >
+          <p className="text-lg mb-3">
+            Unable to load discussions at the moment.
+          </p>
           <button
             onClick={() => refetch()}
-            className="px-4 py-2 text-xs font-semibold rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition"
+            className="px-4 py-2 text-base font-semibold rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition"
           >
             Retry
           </button>
         </div>
       ) : discussions.length === 0 ? (
-        <div className={`rounded-3xl p-8 text-center border ${
-          darkMode ? "bg-zinc-900/60 border-zinc-800 text-zinc-400" : "bg-white border-gray-100 text-gray-500"
-        }`}>
-          <p className="text-sm">No trending discussions yet. Be the first to start a conversation!</p>
+        <div
+          className={`rounded-3xl p-8 text-center border ${
+            darkMode
+              ? "bg-zinc-900/60 border-zinc-800 text-zinc-400"
+              : "bg-white border-gray-100 text-gray-500"
+          }`}
+        >
+          <p className="text-lg">
+            No trending discussions yet. Be the first to start a conversation!
+          </p>
           <Link
             to="/community/qa"
-            className="mt-3 inline-block px-4 py-2 text-xs font-semibold rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition"
+            className="mt-3 inline-block px-4 py-2 text-base font-semibold rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition"
           >
             Go to Q&A Community
           </Link>
@@ -103,11 +132,12 @@ export default function TrendingDiscussions({ darkMode }) {
           {discussions.map((discussion, idx) => {
             const tags = discussion.tagResponses?.length
               ? discussion.tagResponses.map((t) => `#${t.tagName}`)
-              : ['#Community', '#ISTAD'];
+              : ["#Community", "#ISTAD"];
             const excerpt = discussion.body
-              ? discussion.body.slice(0, 110) + (discussion.body.length > 110 ? '...' : '')
-              : '';
-            const authorName = discussion.ownerDisplayName || 'Scholar';
+              ? discussion.body.slice(0, 110) +
+                (discussion.body.length > 110 ? "..." : "")
+              : "";
+            const authorName = discussion.ownerDisplayName || "Scholar";
             const answersCount = discussion.comments?.length || 0;
             const scoreCount = discussion.score ?? 0;
 
@@ -116,7 +146,7 @@ export default function TrendingDiscussions({ darkMode }) {
                 key={discussion.id || idx}
                 whileHover={{ y: -6 }}
                 transition={{ duration: 0.3 }}
-                onClick={() => navigate('/community/qa')}
+                onClick={() => navigate("/community/qa")}
                 className={`backdrop-blur-md rounded-3xl p-6 flex flex-col justify-between cursor-pointer transition-colors duration-300 ${
                   darkMode
                     ? "bg-zinc-900/90 text-slate-100"
@@ -128,8 +158,10 @@ export default function TrendingDiscussions({ darkMode }) {
                     {tags.map((tag, tIdx) => (
                       <span
                         key={tIdx}
-                        className={`text-xs font-semibold px-3 py-1 rounded-full ${
-                          darkMode ? "bg-blue-950/80 text-blue-400" : "bg-blue-50 text-blue-600"
+                        className={`text-base font-semibold px-3 py-1 rounded-full ${
+                          darkMode
+                            ? "bg-blue-950/80 text-blue-400"
+                            : "bg-blue-50 text-blue-600"
                         }`}
                       >
                         {tag}
@@ -137,37 +169,55 @@ export default function TrendingDiscussions({ darkMode }) {
                     ))}
                   </div>
 
-                  <h3 className={`text-base font-bold mb-2 leading-snug line-clamp-2 ${
-                    darkMode ? "text-slate-100" : "text-gray-900"
-                  }`}>
+                  <h3
+                    className={`text-base font-bold mb-2 leading-snug line-clamp-2 ${
+                      darkMode ? "text-slate-100" : "text-gray-900"
+                    }`}
+                  >
                     {discussion.title}
                   </h3>
-                  <p className={`text-xs md:text-sm leading-relaxed mb-6 line-clamp-3 ${
-                    darkMode ? "text-slate-400" : "text-gray-600"
-                  }`}>
+                  <p
+                    className={`text-base md:text-lg leading-relaxed mb-6 line-clamp-3 ${
+                      darkMode ? "text-slate-400" : "text-gray-600"
+                    }`}
+                  >
                     {excerpt}
                   </p>
                 </div>
 
-                <div className={`flex items-center justify-between pt-4 border-t text-xs ${
-                  darkMode ? "border-zinc-800 text-slate-400" : "border-gray-100 text-gray-500"
-                }`}>
+                <div
+                  className={`flex items-center justify-between pt-4 border-t text-base ${
+                    darkMode
+                      ? "border-zinc-800 text-slate-400"
+                      : "border-gray-100 text-gray-500"
+                  }`}
+                >
                   <div className="flex items-center gap-2">
-                    <div className="w-7 h-7 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-xs">
+                    <div className="w-7 h-7 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-base">
                       {authorName.charAt(0).toUpperCase()}
                     </div>
-                    <span className={`font-medium truncate max-w-[120px] ${darkMode ? "text-slate-300" : "text-gray-700"}`}>
+                    <span
+                      className={`font-medium truncate max-w-[120px] ${darkMode ? "text-slate-300" : "text-gray-700"}`}
+                    >
                       {authorName}
                     </span>
                   </div>
 
                   <div className="flex items-center gap-4">
-                    <span className={`flex items-center gap-1.5 ${darkMode ? "text-slate-400" : "text-gray-500"}`}>
-                      <ChatBubbleLeftIcon className={`w-4 h-4 ${darkMode ? "text-slate-500" : "text-gray-400"}`} />
+                    <span
+                      className={`flex items-center gap-1.5 ${darkMode ? "text-slate-400" : "text-gray-500"}`}
+                    >
+                      <ChatBubbleLeftIcon
+                        className={`w-4 h-4 ${darkMode ? "text-slate-500" : "text-gray-400"}`}
+                      />
                       {answersCount}
                     </span>
-                    <span className={`flex items-center gap-1 font-semibold ${darkMode ? "text-blue-400" : "text-blue-600"}`}>
-                      <ArrowUpIcon className={`w-4 h-4 stroke-[2.5] ${darkMode ? "text-blue-400" : "text-blue-600"}`} />
+                    <span
+                      className={`flex items-center gap-1 font-semibold ${darkMode ? "text-blue-400" : "text-blue-600"}`}
+                    >
+                      <ArrowUpIcon
+                        className={`w-4 h-4 stroke-[2.5] ${darkMode ? "text-blue-400" : "text-blue-600"}`}
+                      />
                       {scoreCount}
                     </span>
                   </div>

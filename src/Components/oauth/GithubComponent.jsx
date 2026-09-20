@@ -32,6 +32,13 @@ export default function GithubComponent({
         return;
       }
 
+      if (onBeforeAuth) {
+        const allowed = await onBeforeAuth();
+        if (allowed === false) {
+          return;
+        }
+      }
+
       if (!auth || !githubProvider) {
         onError?.(new Error("Firebase OAuth is not configured yet. Please log in with email/password or add Firebase environment keys."));
         return;

@@ -22,7 +22,7 @@ export default function RecentRecoveries({ darkMode }) {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           transition={{ duration: 0.2 }}
-          className={`inline-block text-xs font-bold uppercase tracking-wider px-4 py-1.5 rounded-full mb-3 cursor-pointer ${
+          className={`inline-block text-base font-bold uppercase tracking-wider px-4 py-1.5 rounded-full mb-3 cursor-pointer ${
             darkMode
               ? "bg-zinc-800 text-[var(--home-secondary-text)]"
               : "bg-[var(--color-brand-secondary-light)] text-[var(--home-secondary-text)]"
@@ -31,13 +31,15 @@ export default function RecentRecoveries({ darkMode }) {
           {t("recBadge")}
         </motion.div>
 
-        <h2 className="text-3xl md:text-4xl font-bold text-[var(--home-secondary-text)] mb-3">
+        <h2 className="text-3xl md:text-5xl font-bold text-[var(--home-secondary-text)] mb-3">
           {t("recTitle")}
         </h2>
 
-        <p className={`max-w-xl mx-auto text-sm md:text-base leading-relaxed ${
-          darkMode ? "text-slate-400" : "text-gray-600"
-        }`}>
+        <p
+          className={`max-w-xl mx-auto text-lg md:text-lg leading-relaxed ${
+            darkMode ? "text-slate-400" : "text-gray-600"
+          }`}
+        >
           {t("recSubtitle")}
         </p>
       </div>
@@ -61,25 +63,35 @@ export default function RecentRecoveries({ darkMode }) {
           ))}
         </div>
       ) : isError ? (
-        <div className={`rounded-3xl p-8 text-center border ${
-          darkMode ? "bg-zinc-900/60 border-zinc-800 text-zinc-400" : "bg-white border-gray-100 text-gray-500"
-        }`}>
-          <p className="text-sm mb-3">Unable to load recent recoveries at the moment.</p>
+        <div
+          className={`rounded-3xl p-8 text-center border ${
+            darkMode
+              ? "bg-zinc-900/60 border-zinc-800 text-zinc-400"
+              : "bg-white border-gray-100 text-gray-500"
+          }`}
+        >
+          <p className="text-lg mb-3">
+            Unable to load recent recoveries at the moment.
+          </p>
           <button
             onClick={() => refetch()}
-            className="px-4 py-2 text-xs font-semibold rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition"
+            className="px-4 py-2 text-base font-semibold rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition"
           >
             Retry
           </button>
         </div>
       ) : items.length === 0 ? (
-        <div className={`rounded-3xl p-8 text-center border ${
-          darkMode ? "bg-zinc-900/60 border-zinc-800 text-zinc-400" : "bg-white border-gray-100 text-gray-500"
-        }`}>
-          <p className="text-sm">No recent lost or found items reported yet.</p>
+        <div
+          className={`rounded-3xl p-8 text-center border ${
+            darkMode
+              ? "bg-zinc-900/60 border-zinc-800 text-zinc-400"
+              : "bg-white border-gray-100 text-gray-500"
+          }`}
+        >
+          <p className="text-lg">No recent lost or found items reported yet.</p>
           <Link
             to="/community/lost-found"
-            className="mt-3 inline-block px-4 py-2 text-xs font-semibold rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition"
+            className="mt-3 inline-block px-4 py-2 text-base font-semibold rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition"
           >
             Report an Item
           </Link>
@@ -87,21 +99,30 @@ export default function RecentRecoveries({ darkMode }) {
       ) : (
         <div className="grid md:grid-cols-3 gap-8">
           {items.map((item, idx) => {
-            const isFound = item.itemType === 'FOUND';
+            const isFound = item.itemType === "FOUND";
             const statusBg = isFound
               ? "bg-[var(--color-brand-primary)] text-white"
               : "bg-[var(--color-brand-secondary)] text-white";
-            const location = item.locationLabel || item.freeTextLocation || 'Campus';
-            const date = item.itemDate || (item.createdAt ? new Date(item.createdAt).toLocaleDateString() : 'Recent');
-            const author = item.categoryName || 'General';
-            const img = item.photoUrl || (isFound ? "src/assets/Website/OIP (1).webp" : "src/assets/Website/kwfinwtieBa9DJNMHRxB63.jpg");
+            const location =
+              item.locationLabel || item.freeTextLocation || "Campus";
+            const date =
+              item.itemDate ||
+              (item.createdAt
+                ? new Date(item.createdAt).toLocaleDateString()
+                : "Recent");
+            const author = item.categoryName || "General";
+            const img =
+              item.photoUrl ||
+              (isFound
+                ? "src/assets/Website/OIP (1).webp"
+                : "src/assets/Website/kwfinwtieBa9DJNMHRxB63.jpg");
 
             return (
               <motion.div
                 key={item.id || idx}
                 whileHover={{ y: -6 }}
                 transition={{ duration: 0.3 }}
-                onClick={() => navigate('/community/lost-found')}
+                onClick={() => navigate("/community/lost-found")}
                 className={`backdrop-blur-md rounded-3xl p-5 flex flex-col justify-between cursor-pointer transition-colors duration-300 ${
                   darkMode
                     ? "bg-zinc-900/90 text-slate-100"
@@ -109,55 +130,73 @@ export default function RecentRecoveries({ darkMode }) {
                 }`}
               >
                 <div>
-                  <div className={`relative h-48 rounded-2xl overflow-hidden mb-4 ${
-                    darkMode ? "bg-zinc-950" : "bg-gray-100"
-                  }`}>
-                    <span className={`absolute top-3 left-3 z-10 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider ${statusBg} shadow-md`}>
-                      {item.itemType || (isFound ? t("recStatusFound") : t("recStatusLost"))}
+                  <div
+                    className={`relative h-48 rounded-2xl overflow-hidden mb-4 ${
+                      darkMode ? "bg-zinc-950" : "bg-gray-100"
+                    }`}
+                  >
+                    <span
+                      className={`absolute top-3 left-3 z-10 text-[14px] font-bold px-3 py-1 rounded-full uppercase tracking-wider ${statusBg} shadow-md`}
+                    >
+                      {item.itemType ||
+                        (isFound ? t("recStatusFound") : t("recStatusLost"))}
                     </span>
                     <img
                       src={img}
                       alt={item.title}
                       onError={(e) => {
                         e.target.onerror = null;
-                        e.target.src = "src/assets/Website/kwfinwtieBa9DJNMHRxB63.jpg";
+                        e.target.src =
+                          "src/assets/Website/kwfinwtieBa9DJNMHRxB63.jpg";
                       }}
                       className="w-full h-full object-cover transform hover:scale-105 transition duration-500"
                     />
                   </div>
 
-                  <div className={`flex items-center justify-between text-xs mb-2 ${
-                    darkMode ? "text-slate-400" : "text-gray-400"
-                  }`}>
-                    <span className={`flex items-center gap-1 font-medium truncate max-w-[180px] ${
-                      darkMode ? "text-slate-300" : "text-gray-500"
-                    }`}>
+                  <div
+                    className={`flex items-center justify-between text-base mb-2 ${
+                      darkMode ? "text-slate-400" : "text-gray-400"
+                    }`}
+                  >
+                    <span
+                      className={`flex items-center gap-1 font-medium truncate max-w-[180px] ${
+                        darkMode ? "text-slate-300" : "text-gray-500"
+                      }`}
+                    >
                       <MapPinIcon className="w-3.5 h-3.5 text-[var(--home-secondary-text)] flex-shrink-0" />
                       {location}
                     </span>
                     <span className="flex-shrink-0">{date}</span>
                   </div>
 
-                  <h3 className={`text-base font-bold mb-1.5 leading-snug line-clamp-1 ${
-                    darkMode ? "text-slate-100" : "text-gray-900"
-                  }`}>
+                  <h3
+                    className={`text-base font-bold mb-1.5 leading-snug line-clamp-1 ${
+                      darkMode ? "text-slate-100" : "text-gray-900"
+                    }`}
+                  >
                     {item.title}
                   </h3>
-                  <p className={`text-xs leading-relaxed mb-6 line-clamp-2 ${
-                    darkMode ? "text-slate-400" : "text-gray-600"
-                  }`}>
-                    {item.description || 'No additional description provided.'}
+                  <p
+                    className={`text-base leading-relaxed mb-6 line-clamp-2 ${
+                      darkMode ? "text-slate-400" : "text-gray-600"
+                    }`}
+                  >
+                    {item.description || "No additional description provided."}
                   </p>
                 </div>
 
-                <div className={`flex items-center justify-between pt-4 border-t ${
-                  darkMode ? "border-zinc-800" : "border-gray-100"
-                }`}>
+                <div
+                  className={`flex items-center justify-between pt-4 border-t ${
+                    darkMode ? "border-zinc-800" : "border-gray-100"
+                  }`}
+                >
                   <div className="flex items-center gap-2">
-                    <div className="w-7 h-7 rounded-full bg-indigo-600 text-white font-bold flex items-center justify-center text-xs">
+                    <div className="w-7 h-7 rounded-full bg-indigo-600 text-white font-bold flex items-center justify-center text-base">
                       {author.charAt(0).toUpperCase()}
                     </div>
-                    <span className={`text-xs font-medium ${darkMode ? "text-slate-300" : "text-gray-700"}`}>
+                    <span
+                      className={`text-base font-medium ${darkMode ? "text-slate-300" : "text-gray-700"}`}
+                    >
                       {author}
                     </span>
                   </div>
@@ -167,9 +206,9 @@ export default function RecentRecoveries({ darkMode }) {
                     whileTap={{ scale: 0.95 }}
                     onClick={(e) => {
                       e.stopPropagation();
-                      navigate('/community/lost-found');
+                      navigate("/community/lost-found");
                     }}
-                    className={`text-xs font-semibold px-3.5 py-1.5 rounded-full transition ${
+                    className={`text-base font-semibold px-3.5 py-1.5 rounded-full transition ${
                       darkMode
                         ? "bg-emerald-950/80 text-emerald-400 hover:bg-emerald-900/80"
                         : "bg-emerald-50 text-[var(--color-brand-accent)] hover:bg-emerald-100"

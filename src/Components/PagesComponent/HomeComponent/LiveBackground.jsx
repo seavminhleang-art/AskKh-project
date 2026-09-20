@@ -45,8 +45,8 @@ export default function LiveBackground({ darkMode }) {
           if (dist < 140) {
             ctx.beginPath();
             // Dynamically adjust line color for dark/light mode
-            ctx.strokeStyle = darkMode 
-              ? `rgba(59, 130, 246, ${0.18 * (1 - dist / 140)})` 
+            ctx.strokeStyle = darkMode
+              ? `rgba(59, 130, 246, ${0.18 * (1 - dist / 140)})`
               : `rgba(0, 86, 255, ${0.12 * (1 - dist / 140)})`;
             ctx.lineWidth = 0.6;
             ctx.moveTo(nodes[i].x, nodes[i].y);
@@ -65,7 +65,9 @@ export default function LiveBackground({ darkMode }) {
 
         ctx.beginPath();
         ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
-        ctx.fillStyle = darkMode ? "rgba(59, 130, 246, 0.5)" : "rgba(0, 86, 255, 0.3)";
+        ctx.fillStyle = darkMode
+          ? "rgba(59, 130, 246, 0.5)"
+          : "rgba(0, 86, 255, 0.3)";
         ctx.fill();
       });
 
@@ -82,18 +84,25 @@ export default function LiveBackground({ darkMode }) {
 
   return (
     <div className="absolute inset-0 pointer-events-none overflow-hidden -z-10">
-      <canvas ref={canvasRef} className="absolute inset-0 z-0 w-full h-full opacity-70" />
-      
+      <canvas
+        ref={canvasRef}
+        className="absolute inset-0 z-0 w-full h-full opacity-70"
+      />
+
       {/* Background glowing blur gradient adapted to dark/light mode */}
-      <div className={`absolute top-1/3 right-1/4 w-[600px] h-[600px] rounded-full blur-[130px] -z-10 transition-colors duration-300 ${
-        darkMode ? "bg-blue-900/10" : "bg-blue-100/50"
-      }`} />
+      <div
+        className={`absolute top-1/3 right-1/4 w-[600px] h-[600px] rounded-full blur-[130px] -z-10 transition-colors duration-300 ${
+          darkMode ? "bg-blue-900/10" : "bg-blue-100/50"
+        }`}
+      />
 
       <motion.div
         animate={{ y: [0, -15, 0], rotate: [0, 5, 0] }}
         transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-        className={`absolute top-24 right-[28%] shadow-lg px-3 py-1.5 rounded-xl font-bold text-xs text-amber-500 flex items-center gap-1.5 z-10 backdrop-blur-md border ${
-          darkMode ? "bg-zinc-900/90 border-zinc-800" : "bg-white border-gray-100"
+        className={`absolute top-24 right-[28%] shadow-lg px-3 py-1.5 rounded-xl font-bold text-base text-amber-500 flex items-center gap-1.5 z-10 backdrop-blur-md border ${
+          darkMode
+            ? "bg-zinc-900/90 border-zinc-800"
+            : "bg-white border-gray-100"
         }`}
       >
         <span>⚡</span> JS
@@ -102,8 +111,10 @@ export default function LiveBackground({ darkMode }) {
       <motion.div
         animate={{ y: [0, 18, 0], rotate: [0, -6, 0] }}
         transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-        className={`absolute top-1/3 right-[15%] shadow-lg px-3 py-1.5 rounded-xl font-bold text-xs text-red-500 flex items-center gap-1.5 z-10 backdrop-blur-md border ${
-          darkMode ? "bg-zinc-900/90 border-zinc-800" : "bg-white border-gray-100"
+        className={`absolute top-1/3 right-[15%] shadow-lg px-3 py-1.5 rounded-xl font-bold text-base text-red-500 flex items-center gap-1.5 z-10 backdrop-blur-md border ${
+          darkMode
+            ? "bg-zinc-900/90 border-zinc-800"
+            : "bg-white border-gray-100"
         }`}
       >
         <span>🔥</span> HTML5
@@ -112,8 +123,10 @@ export default function LiveBackground({ darkMode }) {
       <motion.div
         animate={{ y: [0, -12, 0], x: [0, 8, 0] }}
         transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-        className={`absolute bottom-1/3 right-[32%] shadow-lg px-3 py-1.5 rounded-xl font-bold text-xs text-blue-500 flex items-center gap-1.5 z-10 backdrop-blur-md border ${
-          darkMode ? "bg-zinc-900/90 border-zinc-800" : "bg-white border-gray-100"
+        className={`absolute bottom-1/3 right-[32%] shadow-lg px-3 py-1.5 rounded-xl font-bold text-base text-blue-500 flex items-center gap-1.5 z-10 backdrop-blur-md border ${
+          darkMode
+            ? "bg-zinc-900/90 border-zinc-800"
+            : "bg-white border-gray-100"
         }`}
       >
         <span>⚛️</span> React
@@ -122,8 +135,10 @@ export default function LiveBackground({ darkMode }) {
       <motion.div
         animate={{ y: [0, 14, 0], x: [0, -10, 0] }}
         transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        className={`absolute bottom-20 right-[20%] shadow-lg px-3 py-1.5 rounded-xl font-bold text-xs text-yellow-500 flex items-center gap-1.5 z-10 backdrop-blur-md border ${
-          darkMode ? "bg-zinc-900/90 border-zinc-800" : "bg-white border-gray-100"
+        className={`absolute bottom-20 right-[20%] shadow-lg px-3 py-1.5 rounded-xl font-bold text-base text-yellow-500 flex items-center gap-1.5 z-10 backdrop-blur-md border ${
+          darkMode
+            ? "bg-zinc-900/90 border-zinc-800"
+            : "bg-white border-gray-100"
         }`}
       >
         <span>🐍</span> Python

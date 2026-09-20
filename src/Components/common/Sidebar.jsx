@@ -1,5 +1,5 @@
-import React from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import React from "react";
+import { NavLink, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
   Layers,
@@ -18,71 +18,98 @@ import {
   LogOut,
   ChevronLeft,
   ChevronRight,
-} from 'lucide-react';
-import Avatar from '../ui/Avatar';
-import { useAppDispatch, useAppSelector } from '../../hooks/useAppStore';
-import { logout } from '../../store/slices/authSlice';
-import { ROLES } from '../../constants';
-import { cn } from '@/lib/utils';
+} from "lucide-react";
+import Avatar from "../ui/Avatar";
+import { useAppDispatch, useAppSelector } from "../../hooks/useAppStore";
+import { logout } from "../../store/slices/authSlice";
+import { ROLES } from "../../constants";
+import { cn } from "@/lib/utils";
 
-export default function Sidebar({ mode = 'user', mobile = false }) {
+export default function Sidebar({ mode = "user", mobile = false }) {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { user, role } = useAppSelector((state) => state.auth);
 
   const userNavItems = [
-    { label: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
-    { label: 'Questions', path: '/dashboard/questions', icon: HelpCircle },
-    { label: 'Lost & Found', path: '/dashboard/lost-found', icon: Search },
-    { label: 'Smart Matches', path: '/dashboard/matches', icon: Sparkles },
-    { label: 'My Claims', path: '/dashboard/claims', icon: Bookmark },
-    { label: 'Notifications', path: '/dashboard/notifications', icon: Bell },
+    { label: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
+    { label: "Questions", path: "/dashboard/questions", icon: HelpCircle },
+    { label: "Lost & Found", path: "/dashboard/lost-found", icon: Search },
+    { label: "Smart Matches", path: "/dashboard/matches", icon: Sparkles },
+    { label: "My Claims", path: "/dashboard/claims", icon: Bookmark },
+    { label: "Notifications", path: "/dashboard/notifications", icon: Bell },
   ];
 
   const adminNavItems = [
-    { label: 'Dashboard', path: '/admin/dashboard', icon: LayoutDashboard },
+    { label: "Dashboard", path: "/admin/dashboard", icon: LayoutDashboard },
   ];
 
-  const navItems = mode === 'admin' ? adminNavItems : userNavItems;
+  const navItems = mode === "admin" ? adminNavItems : userNavItems;
 
   const handleLogout = () => {
     dispatch(logout());
-    navigate('/dashboard');
+    navigate("/login");
   };
 
   return (
-    <aside className={cn(mobile ? "w-full flex flex-col gap-6 p-4" : "w-56 lg:w-64 shrink-0 hidden md:flex flex-col min-h-screen p-4 justify-between transition-colors", mode === 'admin' ? "admin-sidebar" : "border-r border-slate-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-900/60 backdrop-blur-md")}>
+    <aside
+      className={cn(
+        mobile
+          ? "w-full flex flex-col gap-6 p-4"
+          : "w-56 lg:w-64 shrink-0 hidden md:flex flex-col min-h-screen p-4 justify-between transition-colors",
+        mode === "admin"
+          ? "admin-sidebar"
+          : "border-r border-slate-200/80 dark:border-slate-800 bg-white/70 dark:bg-slate-900/60 backdrop-blur-md",
+      )}
+    >
       <div className="space-y-6">
-        {mode === 'admin' && (
+        {mode === "admin" && (
           <div className="flex items-center gap-3 px-2 pt-2">
             <span className="admin-brand-mark">N</span>
             <div>
-              <p className="text-sm font-black tracking-wide text-white">NEXA</p>
-              <p className="text-[10px] font-bold uppercase tracking-[.18em] text-indigo-400">Administration</p>
+              <p className="text-lg font-black tracking-wide text-white">
+                NEXA
+              </p>
+              <p className="text-[14px] font-bold uppercase tracking-[.18em] text-indigo-400">
+                Administration
+              </p>
             </div>
           </div>
         )}
 
         {/* User / Admin Mini Profile Badge */}
         {user && (
-          <div className={cn("p-3.5 rounded-2xl border flex items-center gap-3", mode === 'admin' ? "admin-profile" : "bg-slate-50 dark:bg-slate-800/60 border-slate-200/60 dark:border-slate-800")}>
+          <div
+            className={cn(
+              "p-3.5 rounded-2xl border flex items-center gap-3",
+              mode === "admin"
+                ? "admin-profile"
+                : "bg-slate-50 dark:bg-slate-800/60 border-slate-200/60 dark:border-slate-800",
+            )}
+          >
             <Avatar src={user.avatar} name={user.name} size="md" />
             <div className="min-w-0 flex-1">
-              <p className={cn("text-sm font-bold truncate", mode === 'admin' ? "text-white" : "text-slate-900 dark:text-white")}>
+              <p
+                className={cn(
+                  "text-lg font-bold truncate",
+                  mode === "admin"
+                    ? "text-white"
+                    : "text-slate-900 dark:text-white",
+                )}
+              >
                 {user.name}
               </p>
               <div className="flex items-center gap-1.5 mt-0.5">
                 <span
                   className={cn(
-                    'px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase',
-                    mode === 'admin'
-                      ? 'bg-rose-500/15 text-rose-600 dark:text-rose-400'
-                      : 'bg-blue-500/15 text-blue-600 dark:text-blue-400'
+                    "px-2 py-0.5 rounded-full text-[14px] font-extrabold uppercase",
+                    mode === "admin"
+                      ? "bg-rose-500/15 text-rose-600 dark:text-rose-400"
+                      : "bg-blue-500/15 text-blue-600 dark:text-blue-400",
                   )}
                 >
                   {role}
                 </span>
-                <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
+                <span className="text-base text-slate-500 dark:text-slate-400 font-medium">
                   {user.points || 0} pts
                 </span>
               </div>
@@ -92,8 +119,15 @@ export default function Sidebar({ mode = 'user', mobile = false }) {
 
         {/* Section Label */}
         <div>
-          <p className={cn("px-3 text-[11px] font-extrabold uppercase tracking-wider mb-2", mode === 'admin' ? "text-slate-400" : "text-slate-400 dark:text-slate-500")}>
-            {mode === 'admin' ? 'Campus Administration' : 'Member Workspace'}
+          <p
+            className={cn(
+              "px-3 text-[14px] font-extrabold uppercase tracking-wider mb-2",
+              mode === "admin"
+                ? "text-slate-400"
+                : "text-slate-400 dark:text-slate-500",
+            )}
+          >
+            {mode === "admin" ? "Campus Administration" : "Member Workspace"}
           </p>
 
           <nav className="space-y-1">
@@ -103,17 +137,20 @@ export default function Sidebar({ mode = 'user', mobile = false }) {
                 <NavLink
                   key={item.path}
                   to={item.path}
-                  end={item.path === '/admin/dashboard' || item.path === '/dashboard'}
+                  end={
+                    item.path === "/admin/dashboard" ||
+                    item.path === "/dashboard"
+                  }
                   className={({ isActive }) =>
                     cn(
-                      'flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all select-none',
+                      "flex items-center justify-between px-3.5 py-2.5 rounded-xl text-lg font-semibold transition-all select-none",
                       isActive
-                        ? mode === 'admin'
-                          ? 'admin-nav-active font-bold'
-                          : 'bg-blue-50 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400 font-bold'
-                        : mode === 'admin'
-                          ? 'admin-nav-idle'
-                          : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-800/60'
+                        ? mode === "admin"
+                          ? "admin-nav-active font-bold"
+                          : "bg-blue-50 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400 font-bold"
+                        : mode === "admin"
+                          ? "admin-nav-idle"
+                          : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/80 dark:hover:bg-slate-800/60",
                     )
                   }
                 >
@@ -122,7 +159,7 @@ export default function Sidebar({ mode = 'user', mobile = false }) {
                     <span>{item.label}</span>
                   </div>
                   {item.badge && (
-                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300">
+                    <span className="px-2 py-0.5 rounded-full text-[14px] font-bold bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300">
                       {item.badge}
                     </span>
                   )}
@@ -135,10 +172,9 @@ export default function Sidebar({ mode = 'user', mobile = false }) {
 
       {/* Bottom Actions */}
       <div className="space-y-2 pt-4 border-t border-slate-100 dark:border-slate-800/80">
-
         <button
           onClick={handleLogout}
-          className="flex w-full items-center gap-2 px-3.5 py-2 text-xs font-semibold text-slate-500 hover:text-rose-600 dark:hover:text-rose-400 transition-colors cursor-pointer"
+          className="flex w-full items-center gap-2 px-3.5 py-2 text-base font-semibold text-slate-500 hover:text-rose-600 dark:hover:text-rose-400 transition-colors cursor-pointer"
         >
           <LogOut className="w-4 h-4" />
           <span>Sign Out</span>

@@ -30,7 +30,7 @@ export default function PlatformArchitecture({ darkMode }) {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         whileHover={{ scale: 1.05 }}
-        className={`inline-block text-xs font-semibold uppercase tracking-wider px-4 py-1.5 rounded-full mb-4 cursor-pointer ${
+        className={`inline-block text-base font-semibold uppercase tracking-wider px-4 py-1.5 rounded-full mb-4 cursor-pointer ${
           darkMode
             ? "bg-zinc-800 text-[var(--home-primary-text)]"
             : "bg-[var(--color-brand-primary-light)] text-[var(--home-primary-text)]"
@@ -39,13 +39,15 @@ export default function PlatformArchitecture({ darkMode }) {
         {t("archBadge")}
       </motion.div>
 
-      <h2 className="text-3xl md:text-4xl font-bold text-[var(--home-primary-text)] mb-3">
+      <h2 className="text-3xl md:text-5xl font-bold text-[var(--home-primary-text)] mb-3">
         {t("archTitle")}
       </h2>
 
-      <p className={`max-w-xl mx-auto text-sm md:text-base mb-12 leading-relaxed ${
-        darkMode ? "text-slate-400" : "text-gray-600"
-      }`}>
+      <p
+        className={`max-w-xl mx-auto text-lg md:text-lg mb-12 leading-relaxed ${
+          darkMode ? "text-slate-400" : "text-gray-600"
+        }`}
+      >
         {t("archSubtitle")}
       </p>
 
@@ -62,13 +64,23 @@ export default function PlatformArchitecture({ darkMode }) {
             }`}
           >
             <div>
-              <div className={`h-48 rounded-2xl overflow-hidden mb-6 ${darkMode ? "bg-zinc-950" : "bg-gray-900"}`}>
-                <img src={item.img} alt={item.title} className="w-full h-full object-cover opacity-90 hover:scale-110 transition duration-500" />
+              <div
+                className={`h-48 rounded-2xl overflow-hidden mb-6 ${darkMode ? "bg-zinc-950" : "bg-gray-900"}`}
+              >
+                <img
+                  src={item.img}
+                  alt={item.title}
+                  className="w-full h-full object-cover opacity-90 hover:scale-110 transition duration-500"
+                />
               </div>
-              <h3 className={`text-lg font-bold mb-2 ${darkMode ? "text-slate-100" : "text-gray-900"}`}>
+              <h3
+                className={`text-lg font-bold mb-2 ${darkMode ? "text-slate-100" : "text-gray-900"}`}
+              >
                 {item.title}
               </h3>
-              <p className={`text-sm leading-relaxed ${darkMode ? "text-slate-400" : "text-gray-600"}`}>
+              <p
+                className={`text-lg leading-relaxed ${darkMode ? "text-slate-400" : "text-gray-600"}`}
+              >
                 {item.desc}
               </p>
             </div>
