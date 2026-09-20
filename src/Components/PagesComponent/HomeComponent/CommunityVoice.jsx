@@ -16,14 +16,16 @@ export default function CommunityVoice({ darkMode }) {
       quote: t("test2Quote"),
       author: t("test2Author"),
       role: t("test2Role"),
-      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150",
+      avatar:
+        "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150",
     },
     {
       quote: t("test3Quote"),
       author: t("test3Author"),
       role: t("test3Role"),
-      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150",
-    }
+      avatar:
+        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150",
+    },
   ];
 
   return (
@@ -36,7 +38,7 @@ export default function CommunityVoice({ darkMode }) {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           transition={{ duration: 0.2 }}
-          className={`inline-block text-xs font-bold uppercase tracking-wider px-4 py-1.5 rounded-full mb-3  cursor-pointer ${
+          className={`inline-block text-base font-bold uppercase tracking-wider px-4 py-1.5 rounded-full mb-3  cursor-pointer ${
             darkMode
               ? "bg-zinc-800 text-[var(--home-primary-text)]"
               : "bg-[var(--color-brand-primary-light)] text-[var(--home-primary-text)]"
@@ -45,13 +47,15 @@ export default function CommunityVoice({ darkMode }) {
           {t("testBadge")}
         </motion.div>
 
-        <h2 className="text-3xl md:text-4xl font-bold text-[var(--home-primary-text)] mb-3">
+        <h2 className="text-3xl md:text-5xl font-bold text-[var(--home-primary-text)] mb-3">
           {t("testTitle")}
         </h2>
 
-        <p className={`max-w-xl mx-auto text-sm md:text-base leading-relaxed ${
-          darkMode ? "text-slate-400" : "text-gray-600"
-        }`}>
+        <p
+          className={`max-w-xl mx-auto text-lg md:text-lg leading-relaxed ${
+            darkMode ? "text-slate-400" : "text-gray-600"
+          }`}
+        >
           {t("testSubtitle")}
         </p>
       </div>
@@ -68,15 +72,19 @@ export default function CommunityVoice({ darkMode }) {
                 : "bg-white/95 text-gray-800"
             }`}
           >
-            <p className={`text-sm leading-relaxed mb-6 italic ${
-              darkMode ? "text-slate-300" : "text-gray-700"
-            }`}>
+            <p
+              className={`text-lg leading-relaxed mb-6 italic ${
+                darkMode ? "text-slate-300" : "text-gray-700"
+              }`}
+            >
               "{testimonial.quote}"
             </p>
 
-            <div className={`flex items-center gap-3 pt-4 border-t ${
-              darkMode ? "border-zinc-800" : "border-gray-100"
-            }`}>
+            <div
+              className={`flex items-center gap-3 pt-4 border-t ${
+                darkMode ? "border-zinc-800" : "border-gray-100"
+              }`}
+            >
               <img
                 src={testimonial.avatar}
                 alt={testimonial.author}
@@ -85,10 +93,14 @@ export default function CommunityVoice({ darkMode }) {
                 }`}
               />
               <div>
-                <h4 className={`font-bold text-sm ${darkMode ? "text-slate-100" : "text-gray-900"}`}>
+                <h4
+                  className={`font-bold text-lg ${darkMode ? "text-slate-100" : "text-gray-900"}`}
+                >
                   {testimonial.author}
                 </h4>
-                <p className={`text-xs ${darkMode ? "text-slate-400" : "text-gray-500"}`}>
+                <p
+                  className={`text-base ${darkMode ? "text-slate-400" : "text-gray-500"}`}
+                >
                   {testimonial.role}
                 </p>
               </div>

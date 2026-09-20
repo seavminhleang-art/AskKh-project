@@ -13,6 +13,7 @@ import {
 export default function GoogleComponent({
   label = "Google",
   loadingLabel = "...",
+  onBeforeAuth,
   onSuccess,
   onError,
   disabled = false,
@@ -28,6 +29,18 @@ export default function GoogleComponent({
         loading ||
         disabled
       ) {
+        return;
+      }
+
+      if (onBeforeAuth) {
+        const allowed = await onBeforeAuth();
+        if (allowed === false) {
+          return;
+        }
+      }
+
+      if (!auth || !googleProvider) {
+        onError?.(new Error("Firebase OAuth is not configured yet. Please log in with email/password or add Firebase environment keys."));
         return;
       }
 
@@ -68,6 +81,9 @@ export default function GoogleComponent({
       disabled={
         loading ||
         disabled
+      }
+      aria-busy={
+        loading
       }
     >
       <Icon

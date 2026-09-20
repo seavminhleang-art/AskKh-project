@@ -1,442 +1,276 @@
-// import React, { useState } from 'react';
-// import { useOutletContext } from 'react-router-dom';
-// import SidebarLeft from '../miniComponent/SidebarLeft';
-// import SidebarRight from '../miniComponent/SidebarRight';
-// import PostCard from '../miniComponent/PostCard';
-// import CreatePostView from '../miniComponent/CreatePostView';
-// import DetailView from '../miniComponent/DetailView';
-// import { useLanguage } from '../Language/LanguageContext.jsx';
-// import enTranslations from '../locales/en.json';
-// import kmTranslations from '../locales/km.json';
-
-// const googleSansStyle = {
-//   fontFamily: '"Google Sans",sans-serif'
-// };
-
-// export default function QACommunity({ darkMode: propDarkMode, language: propLanguage }) {
-//   const context = useOutletContext();
-//   const { language } = useLanguage();
-//   const darkMode = propDarkMode ?? context?.darkMode ?? false;
-//   const currentLang = propLanguage ?? language ?? 'en';
-
-//   const t = currentLang === 'km' ? kmTranslations : enTranslations;
-
-//   const [activeTab, setActiveTab] = useState('following');
-//   const [bookmarkedPostIds, setBookmarkedPostIds] = useState([]);
-//   const [selectedPostId, setSelectedPostId] = useState(null);
-//   const [isCreatingPost, setIsCreatingPost] = useState(false);
-
-//   const [posts, setPosts] = useState([
-//     {
-//       id: 1,
-//       title: "How you patch KDE on FreeBSD depends on whether you mean updating to the latest KDE packages or applying a custom different patch file to a specific KDE port component.",
-//       tags: ["linux", "freebsd", "patching"],
-//       author: { name: "Mom Lisa", avatar: "../../src/assets/Website/Lisa.jpg", time: "3days ago" },
-//       views: 651324, 
-//       likes: 36645, 
-//       isLiked: false, 
-//       comments: [
-//         {
-//           id: 101,
-//           text: "Very helpful guide!",
-//           author: { name: "Tong An", avatar: "../../src/assets/Website/Tong An.jpg", time: "2 days ago" },
-//           likes: 5,
-//           isLiked: false,
-//           isOwnComment: false
-//         }
-//       ],
-//       image: "https://picsum.photos/300/200?random=1",
-//       isOwnPost: true
-//     },
-//     {
-//       id: 2,
-//       title: "I am building a high-throughput collaborative app where multiple users can upvote, edit items, and change tags simultaneously.",
-//       tags: ["react", "typescript", "vite"],
-//       author: { name: "Tong An", avatar: "../../src/assets/Website/Tong An.jpg", time: "3days ago" },
-//       views: 244564, 
-//       likes: 10920, 
-//       isLiked: false, 
-//       comments: [],
-//       image: "https://picsum.photos/300/200?random=2",
-//       isOwnPost: false
-//     }
-//   ]);
-
-//   // Handle post selection & auto-increment views (+1)
-//   const handleSelectPost = (id) => {
-//     setPosts((prevPosts) =>
-//       prevPosts.map((post) =>
-//         post.id === id ? { ...post, views: post.views + 1 } : post
-//       )
-//     );
-//     setSelectedPostId(id);
-//   };
-
-//   // Toggle post like (+1 / -1 loop)
-//   const handleToggleLike = (id) => {
-//     setPosts((prevPosts) =>
-//       prevPosts.map((post) => {
-//         if (post.id === id) {
-//           const isLiked = post.isLiked;
-//           return {
-//             ...post,
-//             isLiked: !isLiked,
-//             likes: isLiked ? post.likes - 1 : post.likes + 1
-//           };
-//         }
-//         return post;
-//       })
-//     );
-//   };
-
-//   // Handle updating post comments directly from DetailView
-//   const handleUpdateComments = (postId, updatedComments) => {
-//     setPosts((prevPosts) =>
-//       prevPosts.map((post) =>
-//         post.id === postId ? { ...post, comments: updatedComments } : post
-//       )
-//     );
-//   };
-
-//   const toggleBookmark = (id) => {
-//     setBookmarkedPostIds((prev) =>
-//       prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
-//     );
-//   };
-
-//   const handleDeletePost = (id) => {
-//     setPosts((prevPosts) => prevPosts.filter((post) => post.id !== id));
-//     setBookmarkedPostIds((prev) => prev.filter((itemId) => itemId !== id));
-//     if (selectedPostId === id) setSelectedPostId(null);
-//   };
-
-//   const handleAddPost = (newPost) => {
-//     setPosts([newPost, ...posts]);
-//     setIsCreatingPost(false);
-//     setActiveTab('following');
-//   };
-
-//   const displayedPosts = activeTab === 'bookmarks' 
-//     ? posts.filter(post => bookmarkedPostIds.includes(post.id))
-//     : activeTab === 'following'
-//     ? posts.filter(post => post.isOwnPost)
-//     : posts;
-
-//   const selectedPost = posts.find(p => p.id === selectedPostId);
-
-//   return (
-//     <div 
-//       style={googleSansStyle} 
-//       className={`shared-theme shared-page min-h-screen flex flex-col justify-between transition-colors duration-300 ${
-//         darkMode ? "bg-zinc-950 text-slate-100" : "bg-gray-50 text-gray-900"
-//       }`}
-//     >
-//       <main className="max-w-7xl w-full mx-auto px-4 py-6">
-//         <div className="flex flex-col lg:flex-row gap-6">
-//           <SidebarLeft
-//             darkMode={darkMode}
-//             language={currentLang}
-//             activeTab={activeTab} 
-//             setActiveTab={(tab) => {
-//               setActiveTab(tab);
-//               setIsCreatingPost(false);
-//               setSelectedPostId(null);
-//             }} 
-//             savedCount={bookmarkedPostIds.length} 
-//           />
-
-//           {isCreatingPost ? (
-//             <CreatePostView 
-//               darkMode={darkMode}
-//               language={currentLang}
-//               onAddPost={handleAddPost} 
-//               onCancel={() => setIsCreatingPost(false)} 
-//             />
-//           ) : selectedPost ? (
-//             <DetailView 
-//               darkMode={darkMode}
-//               language={currentLang}
-//               post={selectedPost} 
-//               onBack={() => setSelectedPostId(null)}
-//               onUpdateComments={(updatedComments) => handleUpdateComments(selectedPost.id, updatedComments)}
-//             />
-//           ) : (
-//             <div className="flex-1 space-y-4">
-//               <div className={`rounded-2xl p-2.5 border shadow-sm flex items-center space-x-3 transition-colors ${
-//                 darkMode ? "bg-zinc-900 border-zinc-800" : "bg-white border-gray-100"
-//               }`}>
-//                 <img src="../../src/assets/Website/Lisa.jpg" alt="User Avatar" className="w-8 h-8 rounded-full object-cover" />
-//                 <input 
-//                   type="text" 
-//                   placeholder={t.post.placeholderInput}
-//                   onClick={() => setIsCreatingPost(true)}
-//                   readOnly
-//                   className={`flex-1 rounded-xl px-4 py-2 text-xs focus:outline-none cursor-pointer transition-colors ${
-//                     darkMode 
-//                       ? "bg-zinc-800/80 border border-zinc-700 text-slate-200 placeholder-zinc-400 hover:bg-zinc-800" 
-//                       : "bg-gray-50 border border-gray-100 text-gray-700 placeholder-gray-400 hover:bg-gray-100"
-//                   }`}
-//                 />
-//                 <button 
-//                   onClick={() => setIsCreatingPost(true)}
-//                   className="bg-blue-600 text-white font-medium px-4 py-2 rounded-xl text-xs hover:bg-blue-700 transition-colors shadow-xs"
-//                 >
-//                   {t.post.createPostBtn}
-//                 </button>
-//               </div>
-
-//               {displayedPosts.length === 0 ? (
-//                 <div className={`rounded-2xl p-8 border text-center text-xs transition-colors ${
-//                   darkMode ? "bg-zinc-900 border-zinc-800 text-zinc-500" : "bg-white border-gray-100 text-gray-400"
-//                 }`}>
-//                   {t.post.noPosts}
-//                 </div>
-//               ) : (
-//                 displayedPosts.map((post) => (
-//                   <PostCard 
-//                     key={post.id} 
-//                     {...post} 
-//                     darkMode={darkMode}
-//                     language={currentLang}
-//                     isBookmarked={bookmarkedPostIds.includes(post.id)}
-//                     onToggleBookmark={toggleBookmark}
-//                     onSelectPost={handleSelectPost}
-//                     onToggleLike={handleToggleLike}
-//                     onDeletePost={handleDeletePost}
-//                   />
-//                 ))
-//               )}
-//             </div>
-//           )}
-
-//           {!isCreatingPost && <SidebarRight darkMode={darkMode} language={currentLang} />}
-//         </div>
-//       </main>
-//     </div>
-//   );
-// }
-
-
-
-
-
-
-
-
-
-
-import React, { useState } from 'react';
-import { useOutletContext } from 'react-router-dom';
-import SidebarLeft from '../miniComponent/SidebarLeft';
-import SidebarRight from '../miniComponent/SidebarRight';
-import PostCard from '../miniComponent/PostCard';
-import CreatePostView from '../miniComponent/CreatePostView';
-import DetailView from '../miniComponent/DetailView';
-import { useLanguage } from '../Language/LanguageContext.jsx';
-import enTranslations from '../locales/en.json';
-import kmTranslations from '../locales/km.json';
+import React, { useState } from "react";
+import { useOutletContext, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import SidebarLeft from "../miniComponent/SidebarLeft";
+import SidebarRight from "../miniComponent/SidebarRight";
+import PostCard from "../miniComponent/PostCard";
+import CreatePostView from "../miniComponent/CreatePostView";
+import DetailView from "../miniComponent/DetailView";
+import { useLanguage } from "../Language/LanguageContext.jsx";
+import enTranslations from "../locales/en.json";
+import kmTranslations from "../locales/km.json";
+import {
+  useGetPostsQuery,
+  useGetPostByIdQuery,
+} from "../../features/posts/postApi";
+import { useVotePostMutation } from "../../features/votes/voteApi";
+import {
+  useGetBookmarksQuery,
+  useAddBookmarkMutation,
+  useRemoveBookmarkMutation,
+} from "../../features/bookmarks/bookmarkApi";
 
 const googleSansStyle = {
-  fontFamily: '"Google Sans",sans-serif'
+  fontFamily: '"Google Sans",sans-serif',
 };
 
-export default function QACommunity({ darkMode: propDarkMode, language: propLanguage }) {
+export default function QACommunity({
+  darkMode: propDarkMode,
+  language: propLanguage,
+}) {
   const context = useOutletContext();
+  const navigate = useNavigate();
   const { language } = useLanguage();
   const darkMode = propDarkMode ?? context?.darkMode ?? false;
-  const currentLang = propLanguage ?? language ?? 'en';
+  const currentLang = propLanguage ?? language ?? "en";
 
-  const t = currentLang === 'km' ? kmTranslations : enTranslations;
+  const t = currentLang === "km" ? kmTranslations : enTranslations;
+  const { isAuthenticated, user } = useSelector((state) => state.auth);
 
-  const [activeTab, setActiveTab] = useState('following');
-  const [bookmarkedPostIds, setBookmarkedPostIds] = useState([]);
+  const [activeTab, setActiveTab] = useState("newest");
   const [selectedPostId, setSelectedPostId] = useState(null);
   const [isCreatingPost, setIsCreatingPost] = useState(false);
 
-  const [posts, setPosts] = useState([
-    {
-      id: 1,
-      title: "How you patch KDE on FreeBSD depends on whether you mean updating to the latest KDE packages or applying a custom different patch file to a specific KDE port component.",
-      tags: ["linux", "freebsd", "patching"],
-      author: { name: "Mom Lisa", avatar: "../../src/assets/Website/Lisa.jpg", time: "3days ago" },
-      views: 651324, 
-      likes: 36645, 
-      isLiked: false, 
-      comments: [
-        {
-          id: 101,
-          text: "Very helpful guide!",
-          author: { name: "Tong An", avatar: "../../src/assets/Website/Tong An.jpg", time: "2 days ago" },
-          likes: 5,
-          isLiked: false,
-          isOwnComment: false
-        }
-      ],
-      image: "https://picsum.photos/300/200?random=1",
-      isOwnPost: true
-    },
-    {
-      id: 2,
-      title: "I am building a high-throughput collaborative app where multiple users can upvote, edit items, and change tags simultaneously. When performing optimistic updates with `useMutation` onQueryStarted...",
-      tags: ["react", "typescript", "vite"],
-      author: { name: "Tong An", avatar: "../../src/assets/Website/Tong An.jpg", time: "3days ago" },
-      views: 244564, 
-      likes: 10920, 
-      isLiked: false, 
-      comments: [],
-      image: "https://picsum.photos/300/200?random=2",
-      isOwnPost: false
-    }
-  ]);
+  // Live queries
+  const {
+    data: apiPosts = [],
+    isLoading,
+    isError,
+    refetch,
+  } = useGetPostsQuery();
+  const { data: bookmarksData, refetch: refetchBookmarks } =
+    useGetBookmarksQuery(undefined, {
+      skip: !isAuthenticated,
+    });
 
-  // Fix: Convert views value to a number before adding 1 to prevent string concatenation ("0" + 1 => "01")
+  const [votePostMutation] = useVotePostMutation();
+  const [addBookmarkMutation] = useAddBookmarkMutation();
+  const [removeBookmarkMutation] = useRemoveBookmarkMutation();
+
+  const bookmarkedPostIds = bookmarksData?.bookMarkList?.map((p) => p.id) || [];
+
+  // Handle post selection
   const handleSelectPost = (id) => {
-    setPosts((prevPosts) =>
-      prevPosts.map((post) => {
-        if (post.id === id) {
-          const currentViews = typeof post.views === 'string' 
-            ? parseInt(post.views.replace(/,/g, ''), 10) || 0 
-            : Number(post.views || 0);
-          return { ...post, views: currentViews + 1 };
-        }
-        return post;
-      })
-    );
     setSelectedPostId(id);
   };
 
-  const handleToggleLike = (id) => {
-    setPosts((prevPosts) =>
-      prevPosts.map((post) => {
-        if (post.id === id) {
-          const isLiked = post.isLiked;
-          const currentLikes = typeof post.likes === 'string'
-            ? parseInt(post.likes.replace(/,/g, ''), 10) || 0
-            : Number(post.likes || 0);
-          return {
-            ...post,
-            isLiked: !isLiked,
-            likes: isLiked ? Math.max(0, currentLikes - 1) : currentLikes + 1
-          };
-        }
-        return post;
-      })
-    );
+  // Toggle post like/upvote via live API
+  const handleToggleLike = async (postId) => {
+    if (!isAuthenticated) {
+      toast.info("Please log in to upvote posts");
+      navigate("/login");
+      return;
+    }
+    try {
+      await votePostMutation({ postId, voteTypeId: 1 }).unwrap();
+      refetch();
+    } catch (err) {
+      console.error("Vote failed:", err);
+      toast.error(err?.data?.message || "Vote action failed");
+    }
   };
 
-  const handleUpdateComments = (postId, updatedComments) => {
-    setPosts((prevPosts) =>
-      prevPosts.map((post) =>
-        post.id === postId ? { ...post, comments: updatedComments } : post
-      )
-    );
-  };
-
-  const toggleBookmark = (id) => {
-    if (!posts.some((post) => post.id === id)) return;
-    setBookmarkedPostIds((prev) =>
-      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
-    );
+  // Toggle bookmark via live API
+  const handleToggleBookmark = async (postId) => {
+    if (!isAuthenticated) {
+      toast.info("Please log in to bookmark discussions");
+      navigate("/login");
+      return;
+    }
+    const isBookmarked = bookmarkedPostIds.includes(postId);
+    try {
+      if (isBookmarked) {
+        await removeBookmarkMutation({ postIds: [postId] }).unwrap();
+        toast.info("Removed from bookmarks");
+      } else {
+        await addBookmarkMutation({ postIds: [postId] }).unwrap();
+        toast.success("Saved to bookmarks");
+      }
+      refetchBookmarks();
+    } catch (err) {
+      console.error("Bookmark error:", err);
+      toast.error(err?.data?.message || "Failed to update bookmark");
+    }
   };
 
   const handleAddPost = (newPost) => {
-    // Ensure new posts store views/likes as numbers
-    const formattedPost = {
-      ...newPost,
-      views: Number(newPost.views || 0),
-      likes: Number(newPost.likes || 0)
-    };
-    setPosts([formattedPost, ...posts]);
     setIsCreatingPost(false);
-    setActiveTab('following');
+    setActiveTab("newest");
+    refetch();
   };
 
-  const displayedPosts = activeTab === 'bookmarks' 
-    ? posts.filter(post => bookmarkedPostIds.includes(post.id))
-    : activeTab === 'following'
-    ? posts.filter(post => post.isOwnPost)
-    : posts;
+  // Filter posts based on activeTab
+  const displayedPosts = Array.isArray(apiPosts)
+    ? apiPosts.filter((post) => {
+        if (activeTab === "bookmarks") {
+          return bookmarkedPostIds.includes(post.id);
+        }
+        if (activeTab === "following" || activeTab === "yourPost") {
+          return (
+            post.ownerId === user?.id ||
+            post.ownerDisplayName === user?.displayName
+          );
+        }
+        return true; // 'newest'
+      })
+    : [];
 
-  const selectedPost = posts.find(p => p.id === selectedPostId);
+  const selectedPost = apiPosts.find((p) => p.id === selectedPostId);
 
   return (
-    <div 
-      style={googleSansStyle} 
+    <div
+      style={googleSansStyle}
       className={`shared-theme shared-page min-h-screen flex flex-col justify-between transition-colors duration-300 ${
         darkMode ? "bg-zinc-950 text-slate-100" : "bg-gray-50 text-gray-900"
       }`}
     >
       <main className="max-w-[1600px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className={`grid grid-cols-1 items-start gap-4 lg:gap-6 lg:grid-cols-[224px_minmax(0,1fr)] ${isCreatingPost ? "" : "xl:grid-cols-[224px_minmax(0,1fr)_288px] 2xl:grid-cols-[256px_minmax(0,1fr)_288px]"}`}>
+        <div
+          className={`grid grid-cols-1 items-start gap-4 lg:gap-6 lg:grid-cols-[224px_minmax(0,1fr)] ${isCreatingPost ? "" : "xl:grid-cols-[224px_minmax(0,1fr)_288px] 2xl:grid-cols-[256px_minmax(0,1fr)_288px]"}`}
+        >
           <SidebarLeft
             darkMode={darkMode}
             language={currentLang}
-            activeTab={activeTab} 
+            activeTab={activeTab}
             setActiveTab={(tab) => {
               setActiveTab(tab);
               setIsCreatingPost(false);
               setSelectedPostId(null);
-            }} 
-            savedCount={bookmarkedPostIds.length} 
+            }}
+            savedCount={bookmarkedPostIds.length}
           />
 
           {isCreatingPost ? (
-            <CreatePostView 
+            <CreatePostView
               darkMode={darkMode}
               language={currentLang}
-              onAddPost={handleAddPost} 
-              onCancel={() => setIsCreatingPost(false)} 
+              onAddPost={handleAddPost}
+              onCancel={() => setIsCreatingPost(false)}
             />
           ) : selectedPost ? (
-            <DetailView 
+            <DetailView
               darkMode={darkMode}
               language={currentLang}
-              post={selectedPost} 
-              onBack={() => setSelectedPostId(null)} 
-              onUpdateComments={(updatedComments) => handleUpdateComments(selectedPost.id, updatedComments)}
+              post={selectedPost}
+              onBack={() => setSelectedPostId(null)}
             />
           ) : (
             <div className="min-w-0 space-y-4">
               {/* Post Trigger Input */}
-              <div className={`rounded-2xl p-2.5 flex items-center space-x-3 transition-colors ${
-                darkMode ? "bg-zinc-900" : "bg-white"
-              }`}>
-                <img src="../../src/assets/Website/Lisa.jpg" alt="User Avatar" className="w-8 h-8 shrink-0 rounded-full object-cover" />
-                <input 
-                  type="text" 
-                  placeholder={t.post.placeholderInput}
-                  onClick={() => setIsCreatingPost(true)}
+              <div
+                className={`rounded-2xl p-2.5 flex items-center space-x-3 transition-colors ${
+                  darkMode ? "bg-zinc-900" : "bg-white"
+                }`}
+              >
+                <div className="w-8 h-8 shrink-0 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-base">
+                  {(user?.displayName || "U").charAt(0).toUpperCase()}
+                </div>
+                <input
+                  type="text"
+                  placeholder={
+                    t.post?.placeholderInput || "What is your question?"
+                  }
+                  onClick={() => {
+                    if (!isAuthenticated) {
+                      toast.info("Please log in to ask a question");
+                      navigate("/login");
+                      return;
+                    }
+                    setIsCreatingPost(true);
+                  }}
                   readOnly
-                  className={`min-w-0 flex-1 rounded-xl px-4 py-2 text-xs focus:outline-none cursor-pointer transition-colors ${
-                    darkMode 
-                      ? "bg-zinc-800/80 border border-zinc-700 text-slate-200 placeholder-zinc-400 hover:bg-zinc-800" 
+                  className={`min-w-0 flex-1 rounded-xl px-4 py-2 text-base focus:outline-none cursor-pointer transition-colors ${
+                    darkMode
+                      ? "bg-zinc-800/80 border border-zinc-700 text-slate-200 placeholder-zinc-400 hover:bg-zinc-800"
                       : "bg-gray-50 border border-gray-100 text-gray-700 placeholder-gray-400 hover:bg-gray-100"
                   }`}
                 />
-                <button 
-                  onClick={() => setIsCreatingPost(true)}
-                  className="shrink-0 bg-blue-600 text-white font-medium px-4 py-2 rounded-xl text-xs hover:bg-blue-700 transition-colors"
+                <button
+                  onClick={() => {
+                    if (!isAuthenticated) {
+                      toast.info("Please log in to ask a question");
+                      navigate("/login");
+                      return;
+                    }
+                    setIsCreatingPost(true);
+                  }}
+                  className="shrink-0 bg-blue-600 text-white font-medium px-4 py-2 rounded-xl text-base hover:bg-blue-700 transition-colors"
                 >
-                  {t.post.createPostBtn}
+                  {t.post?.createPostBtn || "Ask Question"}
                 </button>
               </div>
 
-              {/* Feed Content */}
-              {displayedPosts.length === 0 ? (
-                <div className={`rounded-2xl p-8 text-center text-xs transition-colors ${
-                  darkMode ? "bg-zinc-900 text-zinc-500" : "bg-white text-gray-400"
-                }`}>
-                  {t.post.noPosts}
+              {/* Feed Content Loading / Error / List */}
+              {isLoading ? (
+                <div className="space-y-4">
+                  {[1, 2, 3].map((n) => (
+                    <div
+                      key={n}
+                      className={`animate-pulse rounded-2xl p-5 flex gap-4 ${
+                        darkMode ? "bg-zinc-900" : "bg-white"
+                      }`}
+                    >
+                      <div className="w-28 h-28 bg-gray-300 dark:bg-zinc-800 rounded-xl shrink-0" />
+                      <div className="flex-1 space-y-3">
+                        <div className="h-5 w-3/4 bg-gray-300 dark:bg-zinc-800 rounded" />
+                        <div className="h-3.5 w-full bg-gray-200 dark:bg-zinc-800/80 rounded" />
+                        <div className="h-4 w-1/4 bg-gray-200 dark:bg-zinc-800/80 rounded" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : isError ? (
+                <div
+                  className={`rounded-2xl p-8 text-center text-base border transition-colors ${
+                    darkMode
+                      ? "bg-zinc-900 border-zinc-800 text-zinc-400"
+                      : "bg-white border-gray-100 text-gray-500"
+                  }`}
+                >
+                  <p className="mb-3">
+                    Unable to load community posts right now.
+                  </p>
+                  <button
+                    onClick={() => refetch()}
+                    className="px-4 py-2 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-700 transition"
+                  >
+                    Retry
+                  </button>
+                </div>
+              ) : displayedPosts.length === 0 ? (
+                <div
+                  className={`rounded-2xl p-8 text-center text-base border transition-colors ${
+                    darkMode
+                      ? "bg-zinc-900 border-zinc-800 text-zinc-500"
+                      : "bg-white border-gray-100 text-gray-400"
+                  }`}
+                >
+                  {activeTab === "bookmarks"
+                    ? "You have not saved any bookmarks yet."
+                    : activeTab === "following"
+                      ? "You have not posted any questions yet."
+                      : t.post?.noPosts || "No discussions available yet."}
                 </div>
               ) : (
                 displayedPosts.map((post) => (
-                  <PostCard 
-                    key={post.id} 
-                    {...post} 
+                  <PostCard
+                    key={post.id}
+                    {...post}
                     darkMode={darkMode}
                     language={currentLang}
                     isBookmarked={bookmarkedPostIds.includes(post.id)}
-                    onToggleBookmark={toggleBookmark}
+                    onToggleBookmark={handleToggleBookmark}
                     onSelectPost={handleSelectPost}
                     onToggleLike={handleToggleLike}
                   />
@@ -445,7 +279,9 @@ export default function QACommunity({ darkMode: propDarkMode, language: propLang
             </div>
           )}
 
-          {!isCreatingPost && <SidebarRight darkMode={darkMode} language={currentLang} />}
+          {!isCreatingPost && (
+            <SidebarRight darkMode={darkMode} language={currentLang} />
+          )}
         </div>
       </main>
     </div>

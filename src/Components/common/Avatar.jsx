@@ -8,12 +8,19 @@ export default function Avatar({ name = "Admin", src, size = 32 }) {
     .toUpperCase();
 
   if (src) {
-    return <img src={src} alt="" className="rounded-full object-cover" style={{ width: size, height: size }} />;
+    return (
+      <img
+        src={src}
+        alt=""
+        className="rounded-full object-cover"
+        style={{ width: size, height: size }}
+      />
+    );
   }
 
   return (
     <span
-      className="inline-flex shrink-0 items-center justify-center rounded-full bg-blue-100 text-xs font-semibold text-blue-700"
+      className="inline-flex shrink-0 items-center justify-center rounded-full bg-blue-100 text-base font-semibold text-blue-700"
       style={{ width: size, height: size }}
       aria-label={name}
     >

@@ -16,7 +16,7 @@ function NotFoundIllustration({ darkMode }) {
         size: Math.random() * 4 + 3,
         delay: Math.random() * 3,
       })),
-    []
+    [],
   );
 
   const lines = [
@@ -39,7 +39,9 @@ function NotFoundIllustration({ darkMode }) {
     ? ["#7fb8ff", "#5fc6e8", "#4fe0dd"]
     : ["#6fa8f5", "#4fb8dd", "#3fd0d8"];
 
-  const suitGradStops = darkMode ? ["#c9dcf3", "#7fa9dd"] : ["#bcd9f7", "#8fbdec"];
+  const suitGradStops = darkMode
+    ? ["#c9dcf3", "#7fa9dd"]
+    : ["#bcd9f7", "#8fbdec"];
   const helmetFill = darkMode ? "#dbe6f5" : "#eaf3fd";
   const visorFill = darkMode ? "#c3ddef" : "#dff0fb";
   const visorDot = darkMode ? "#5f83aa" : "#6fa8d8";
@@ -128,7 +130,13 @@ function NotFoundIllustration({ darkMode }) {
         />
         <div
           className="absolute rounded-full"
-          style={{ width: "70px", height: "70px", left: "18px", top: "18px", background: planetGrad }}
+          style={{
+            width: "70px",
+            height: "70px",
+            left: "18px",
+            top: "18px",
+            background: planetGrad,
+          }}
         />
       </div>
 
@@ -148,7 +156,13 @@ function NotFoundIllustration({ darkMode }) {
         />
         <div
           className="absolute rounded-full"
-          style={{ width: "38px", height: "38px", left: "10px", top: "10px", background: planetGrad }}
+          style={{
+            width: "38px",
+            height: "38px",
+            left: "10px",
+            top: "10px",
+            background: planetGrad,
+          }}
         />
       </div>
 
@@ -156,7 +170,13 @@ function NotFoundIllustration({ darkMode }) {
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[min(92%,780px)]">
         <svg viewBox="0 0 800 420" width="100%" height="auto">
           <defs>
-            <linearGradient id="notfound-num-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+            <linearGradient
+              id="notfound-num-grad"
+              x1="0%"
+              y1="0%"
+              x2="0%"
+              y2="100%"
+            >
               <stop offset="0%" stopColor={numGradStops[0]} />
               <stop offset="55%" stopColor={numGradStops[1]} />
               <stop offset="100%" stopColor={numGradStops[2]} />
@@ -192,11 +212,24 @@ function NotFoundIllustration({ darkMode }) {
           </text>
 
           <g transform="translate(660,260)" className="notfound-ring-wobble">
-            <ellipse cx="0" cy="0" rx="95" ry="34" fill="none" stroke={orbitRing} strokeWidth="4" />
+            <ellipse
+              cx="0"
+              cy="0"
+              rx="95"
+              ry="34"
+              fill="none"
+              stroke={orbitRing}
+              strokeWidth="4"
+            />
             <g className="notfound-orbit-spin">
               <circle cx="95" cy="0" r="9" fill={orbitBall} />
               <circle cx="95" cy="0" r="9" fill={orbitBall} opacity="0.4">
-                <animate attributeName="r" values="9;13;9" dur="1.6s" repeatCount="indefinite" />
+                <animate
+                  attributeName="r"
+                  values="9;13;9"
+                  dur="1.6s"
+                  repeatCount="indefinite"
+                />
               </circle>
             </g>
           </g>
@@ -206,32 +239,114 @@ function NotFoundIllustration({ darkMode }) {
         <div className="notfound-astro absolute -top-[6%] left-[36%] w-[150px]">
           <svg viewBox="0 0 160 150" width="100%" height="auto">
             <defs>
-              <linearGradient id="notfound-suit-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <linearGradient
+                id="notfound-suit-grad"
+                x1="0%"
+                y1="0%"
+                x2="0%"
+                y2="100%"
+              >
                 <stop offset="0%" stopColor={suitGradStops[0]} />
                 <stop offset="100%" stopColor={suitGradStops[1]} />
               </linearGradient>
-              <radialGradient id="notfound-visor-shine" cx="35%" cy="28%" r="70%">
+              <radialGradient
+                id="notfound-visor-shine"
+                cx="35%"
+                cy="28%"
+                r="70%"
+              >
                 <stop offset="0%" stopColor="#ffffff" stopOpacity="0.9" />
                 <stop offset="60%" stopColor="#ffffff" stopOpacity="0" />
               </radialGradient>
             </defs>
-            <rect x="60" y="95" width="14" height="20" rx="5" fill={suitGradStops[1]} />
-            <ellipse className="notfound-thruster" cx="67" cy="120" rx="6" ry="10" fill={thruster} />
-            <rect x="60" y="90" width="16" height="30" rx="8" fill="url(#notfound-suit-grad)" transform="rotate(10 68 90)" />
-            <rect x="78" y="90" width="16" height="30" rx="8" fill="url(#notfound-suit-grad)" transform="rotate(-6 86 90)" />
-            <ellipse cx="78" cy="80" rx="30" ry="26" fill="url(#notfound-suit-grad)" />
-            <rect x="68" y="72" width="18" height="14" rx="3" fill={helmetFill} />
+            <rect
+              x="60"
+              y="95"
+              width="14"
+              height="20"
+              rx="5"
+              fill={suitGradStops[1]}
+            />
+            <ellipse
+              className="notfound-thruster"
+              cx="67"
+              cy="120"
+              rx="6"
+              ry="10"
+              fill={thruster}
+            />
+            <rect
+              x="60"
+              y="90"
+              width="16"
+              height="30"
+              rx="8"
+              fill="url(#notfound-suit-grad)"
+              transform="rotate(10 68 90)"
+            />
+            <rect
+              x="78"
+              y="90"
+              width="16"
+              height="30"
+              rx="8"
+              fill="url(#notfound-suit-grad)"
+              transform="rotate(-6 86 90)"
+            />
+            <ellipse
+              cx="78"
+              cy="80"
+              rx="30"
+              ry="26"
+              fill="url(#notfound-suit-grad)"
+            />
+            <rect
+              x="68"
+              y="72"
+              width="18"
+              height="14"
+              rx="3"
+              fill={helmetFill}
+            />
             <circle cx="73" cy="79" r="2" fill={visorDot} />
             <circle cx="83" cy="79" r="2" fill={visorDot} />
             <g className="notfound-wave">
-              <rect x="98" y="55" width="14" height="30" rx="7" fill="url(#notfound-suit-grad)" />
+              <rect
+                x="98"
+                y="55"
+                width="14"
+                height="30"
+                rx="7"
+                fill="url(#notfound-suit-grad)"
+              />
               <circle cx="104" cy="52" r="8" fill={helmetFill} />
             </g>
-            <rect x="46" y="62" width="14" height="26" rx="7" fill="url(#notfound-suit-grad)" transform="rotate(30 53 62)" />
+            <rect
+              x="46"
+              y="62"
+              width="14"
+              height="26"
+              rx="7"
+              fill="url(#notfound-suit-grad)"
+              transform="rotate(30 53 62)"
+            />
             <circle cx="78" cy="40" r="32" fill={helmetFill} />
             <circle cx="80" cy="40" r="24" fill={visorFill} />
-            <circle cx="80" cy="40" r="24" fill="url(#notfound-visor-shine)" opacity="0.6" />
-            <rect x="70" y="94" width="16" height="10" rx="3" fill={helmetFill} />
+            <circle
+              cx="80"
+              cy="40"
+              r="24"
+              fill="url(#notfound-visor-shine)"
+              opacity="0.6"
+            />
+            <rect
+              x="70"
+              y="94"
+              width="16"
+              height="10"
+              rx="3"
+              fill={helmetFill}
+            />
           </svg>
         </div>
       </div>
@@ -239,12 +354,17 @@ function NotFoundIllustration({ darkMode }) {
   );
 }
 
-export default function NotFoundPage({ setCursorText, setIsHovered, darkMode: propDarkMode }) {
+export default function NotFoundPage({
+  setCursorText,
+  setIsHovered,
+  darkMode: propDarkMode,
+}) {
   const { t } = useTranslation();
-  
+
   // 2. Safely grab darkMode from App.jsx outlet context if it wasn't passed directly as a prop
   const outletContext = useOutletContext();
-  const darkMode = propDarkMode !== undefined ? propDarkMode : outletContext?.darkMode;
+  const darkMode =
+    propDarkMode !== undefined ? propDarkMode : outletContext?.darkMode;
 
   return (
     <motion.section
@@ -282,7 +402,7 @@ export default function NotFoundPage({ setCursorText, setIsHovered, darkMode: pr
             onMouseLeave={() => setIsHovered && setIsHovered(false)}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="relative bg-[var(--color-brand-primary)] text-white font-semibold px-6 py-2.5 rounded-full hover:bg-[var(--color-brand-primary-dark)] transition cursor-pointer text-sm whitespace-nowrap"
+            className="relative bg-[var(--color-brand-primary)] text-white font-semibold px-6 py-2.5 rounded-full hover:bg-[var(--color-brand-primary-dark)] transition cursor-pointer text-lg whitespace-nowrap"
           >
             {t("goBackHomeButton", "Go back home")}
           </motion.button>

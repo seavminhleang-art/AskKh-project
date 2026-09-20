@@ -1,4 +1,4 @@
-import { initializeApp } from "firebase/app";
+import { initializeApp, getApps, getApp } from "firebase/app";
 import {
   getAuth,
   GoogleAuthProvider,
@@ -14,10 +14,27 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
 
-const app = initializeApp(firebaseConfig);
+const hasValidConfig = Boolean(
+  firebaseConfig.apiKey &&
+  firebaseConfig.apiKey !== "undefined" &&
+  firebaseConfig.apiKey.trim() !== ""
+);
 
-export const auth = getAuth(app);
-export const googleProvider = new GoogleAuthProvider();
-export const githubProvider = new GithubAuthProvider();
+let app = null;
+let auth = null;
+let googleProvider = null;
+let githubProvider = null;
 
+if (hasValidConfig) {
+  try {
+    app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
+    auth = getAuth(app);
+    googleProvider = new GoogleAuthProvider();
+    githubProvider = new GithubAuthProvider();
+  } catch (error) {
+    console.warn("Firebase initialization failed:", error);
+  }
+}
+
+export { auth, googleProvider, githubProvider };
 export default app;

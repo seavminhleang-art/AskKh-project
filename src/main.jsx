@@ -14,6 +14,7 @@ import LeaderboardPage from "./Components/Pages/leaderboard/LeaderBoarderPage.js
 import QACommunity from "./Components/Pages/Q&ACommunity.jsx";
 import LoginPage from "./Components/Auth/LoginPage.jsx";
 import RegisterPage from "./Components/Auth/RegisterPage.jsx";
+import LegalPage from "./Components/Legal/LegalPage.jsx";
 import { LanguageProvider } from "./Components/Language/LanguageContext.jsx";
 import { ThemeProvider as LegacyThemeProvider } from "./Components/theme-provider.jsx";
 import { ThemeProvider } from "./context/ThemeContext.jsx";
@@ -21,7 +22,9 @@ import store from "./store/store.js";
 import DashboardPage from "./pages/user/DashboardPage.jsx";
 import WorkspaceListPage from "./pages/user/WorkspaceListPage.jsx";
 import UserPostPage from "./pages/user/UserPostPage.jsx";
-import AdminDashboardPage from "./Components/Pages/admin/dashboard/Dashboard.jsx";
+import AdminDashboardPage from "./features/admin/workspace/Dashboard.jsx";
+import AdminShell from "./features/admin/workspace/AdminShell.jsx";
+import AdminResourcePage from "./features/admin/workspace/ResourcePage.jsx";
 import ProtectedRoute from "./routes/ProtectedRoute.jsx";
 import UserLayout from "./layouts/UserLayout.jsx";
 
@@ -40,10 +43,9 @@ const router = createBrowserRouter([
       { path: "community/qa", element: <QACommunity /> },
       { path: "community/lost-found", element: <LostAndFoundPage /> },
       { path: "about", element: <About /> },
-      { path: "terms", element: <TermsAndConditions /> },
+      { path: "terms", element: <LegalPage documentType="terms" /> },
+      { path: "privacy", element: <LegalPage documentType="privacy" /> },
       { path: "privacy-policy", element: <PrivacyPolicy /> },
-      // Keep the URL used by the registration page working as well.
-      { path: "privacy", element: <PrivacyPolicy /> },
       { path: "leaderboard", element: <LeaderboardPage /> },
       { path: "*", element: <HomePage /> },
     ],
@@ -65,18 +67,24 @@ const router = createBrowserRouter([
         ],
       },
       {
-        element: <UserLayout mode="admin" dashboardPath="/admin/dashboard" />,
-        children: [
-          { path: "admin", element: <AdminDashboardPage /> },
-          { path: "admin/dashboard", element: <AdminDashboardPage /> },
-        ],
+        element: <ProtectedRoute requiredRole="admin" />,
+        children: [{
+          element: <AdminShell />,
+          children: [
+            { path: "admin", element: <AdminDashboardPage /> },
+            { path: "admin/dashboard", element: <AdminDashboardPage /> },
+            ...["users", "posts", "comments", "tags", "lost-found", "moderation", "marketplace", "notifications", "settings"].map((resource) => ({
+              path: `admin/${resource}`,
+              element: <AdminResourcePage key={resource} resource={resource} />,
+            })),
+          ],
+        }],
       },
     ],
   },
 ]);
 
-const root = document.getElementById("root");
-ReactDOM.createRoot(root).render(
+ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <Provider store={store}>
       <LegacyThemeProvider defaultTheme="light">

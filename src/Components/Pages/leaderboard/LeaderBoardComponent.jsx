@@ -57,7 +57,12 @@ const COPY = {
     championsTitle: "Champions",
     championsSubtitle:
       "Ranked by community votes and helpful contributions. High-quality posts and answers rank higher.",
-    stats: { upvotes: "Upvotes", answers: "Answers", solutions: "Solutions", helpful: "Helpful" },
+    stats: {
+      upvotes: "Upvotes",
+      answers: "Answers",
+      solutions: "Solutions",
+      helpful: "Helpful",
+    },
     tabs: ["All Time", "This Month", "This Week"],
     searchPlaceholder: "Search user or handle...",
     allCategories: "All Categories",
@@ -74,7 +79,7 @@ const COPY = {
     categories: {
       "Web Development": "Web Development",
       JavaScript: "JavaScript",
-      "React": "React",
+      React: "React",
       "Bug Report": "Bug Report",
       "Data Science": "Data Science",
     },
@@ -99,7 +104,12 @@ const COPY = {
     championsTitle: "វីរជនវេទិកា",
     championsSubtitle:
       "តម្រៀបតាមការបោះឆ្នោត និងការរួមចំណែកជាប្រយោជន៍ពីសហគមន៍។ ការបង្ហោះ និងចម្លើយដែលមានគុណភាពខ្ពស់ ត្រូវបានតម្រៀបនៅលំដាប់ខ្ពស់។",
-    stats: { upvotes: "ការគាំទ្រ", answers: "ចម្លើយ", solutions: "ដំណោះស្រាយ", helpful: "ជាប្រយោជន៍" },
+    stats: {
+      upvotes: "ការគាំទ្រ",
+      answers: "ចម្លើយ",
+      solutions: "ដំណោះស្រាយ",
+      helpful: "ជាប្រយោជន៍",
+    },
     tabs: ["គ្រប់ពេល", "ខែនេះ", "សប្តាហ៍នេះ"],
     searchPlaceholder: "ស្វែងរកអ្នកប្រើ ឬឈ្មោះគណនី...",
     allCategories: "គ្រប់ប្រភេទ",
@@ -116,7 +126,7 @@ const COPY = {
     categories: {
       "Web Development": "អភិវឌ្ឍន៍វេបសាយ",
       JavaScript: "ចាវ៉ាស្គ្រីប",
-      "React": "React",
+      React: "React",
       "Bug Report": "រាយការណ៍បញ្ហា",
       "Data Science": "វិទ្យាសាស្ត្រទិន្នន័យ",
     },
@@ -232,7 +242,7 @@ function categoryStyle(t, category) {
   const map = {
     "Web Development": { bg: t.primaryLight, text: t.primary },
     JavaScript: { bg: t.primaryLight, text: "var(--leaderboard-gold)" },
-    "React": { bg: t.navLight, text: t.darkBlue },
+    React: { bg: t.navLight, text: t.darkBlue },
     "Bug Report": { bg: t.secondaryLight, text: t.secondary },
     "Data Science": { bg: t.greenLight, text: t.green },
   };
@@ -248,17 +258,33 @@ const METRICS = [
 
 function MetricValue({ metric, value }) {
   const { Icon, color } = metric;
-  return <span className="inline-flex items-center justify-center gap-1 whitespace-nowrap" style={{ color }}>
-    <Icon size={12} aria-hidden="true" fill={metric.key === "answers" || metric.key === "helpful" ? "currentColor" : "none"} />
-    {value}
-  </span>;
+  return (
+    <span
+      className="inline-flex items-center justify-center gap-1 whitespace-nowrap"
+      style={{ color }}
+    >
+      <Icon
+        size={12}
+        aria-hidden="true"
+        fill={
+          metric.key === "answers" || metric.key === "helpful"
+            ? "currentColor"
+            : "none"
+        }
+      />
+      {value}
+    </span>
+  );
 }
 
 function EyebrowLabel({ children, t }) {
   return (
     <div className="flex items-center gap-2 mb-2">
       <span style={{ width: 20, height: 2, backgroundColor: t.primary }} />
-      <span className="text-[11px] font-medium tracking-[0.16em]" style={{ color: t.primary }}>
+      <span
+        className="text-[16px] font-medium tracking-[0.16em]"
+        style={{ color: t.primary }}
+      >
         {children}
       </span>
     </div>
@@ -267,11 +293,17 @@ function EyebrowLabel({ children, t }) {
 
 function ForumHeader({ t, c, lang }) {
   return (
-    <div className="max-w-xl" style={{ fontFamily: lang === "km" ? KHMER_FONT_STACK : FONT_STACK }}>
+    <div
+      className="max-w-xl"
+      style={{ fontFamily: lang === "km" ? KHMER_FONT_STACK : FONT_STACK }}
+    >
       <EyebrowLabel t={t}>{c.eyebrow}</EyebrowLabel>
-      <h1 className="text-3xl font-normal flex items-center gap-2" style={{ color: t.heading }}>
+      <h1
+        className="text-5xl font-semibold flex items-center"
+        style={{ color: t.heading }}
+      >
         {c.title}
-        <span style={{ color: t.primary }}>.</span>
+   
       </h1>
       <p className="mt-3 text-lg leading-relaxed" style={{ color: t.muted }}>
         {c.subtitle}
@@ -282,13 +314,28 @@ function ForumHeader({ t, c, lang }) {
 
 function PointsLegend({ t, c }) {
   return (
-    <aside className="rounded-xl border px-4 py-4 w-full sm:w-[410px]" style={{ borderColor: t.border, backgroundColor: t.surface }}>
-      <p className="text-sm mb-3" style={{ color: t.heading }}>{c.pointsHeading}</p>
+    <aside
+      className="rounded-xl border px-4 py-4 w-full sm:w-[410px]"
+      style={{ borderColor: t.border, backgroundColor: t.surface }}
+    >
+      <p className="text-lg mb-3" style={{ color: t.heading }}>
+        {c.pointsHeading}
+      </p>
       <ul className="flex flex-wrap gap-x-5 gap-y-3">
         {c.points.map((item, i) => (
-          <li key={item.label} className="flex items-center gap-2 text-[11px] whitespace-nowrap" style={{ color: t.muted }}>
-            <span className="w-2 h-2 rounded-full" style={{ backgroundColor: [...METRICS.map(m => m.color), t.muted][i] }} />
-            {item.label}<span style={{ color: t.heading }}>{item.value}</span>
+          <li
+            key={item.label}
+            className="flex items-center text-[16px] whitespace-nowrap"
+            style={{ color: t.muted }}
+          >
+            <span
+              className="w-2 h-2 rounded-full"
+              style={{
+                backgroundColor: [...METRICS.map((m) => m.color), t.muted][i],
+              }}
+            />
+            {item.label}
+            <span style={{ color: t.heading }}>{item.value}</span>
           </li>
         ))}
       </ul>
@@ -297,19 +344,60 @@ function PointsLegend({ t, c }) {
 }
 
 function ChampionCard({ t, c, rank, name, handle, avatar, points, stats }) {
-  const accent = rank === "1ST" ? "var(--leaderboard-gold)" : rank === "2ND" ? "var(--leaderboard-solutions)" : "var(--leaderboard-bronze)";
+  const accent =
+    rank === "1ST"
+      ? "var(--leaderboard-gold)"
+      : rank === "2ND"
+        ? "var(--leaderboard-solutions)"
+        : "var(--leaderboard-bronze)";
   return (
-    <article className={`relative rounded-xl border pt-7 text-center ${rank === "1ST" ? "sm:-translate-y-6" : ""}`} style={{ borderColor: `color-mix(in srgb, ${accent} 33%, transparent)`, backgroundColor: "var(--bg-card)" }}>
-      <span className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 rounded-full px-4 py-1 text-[11px] font-medium" style={{ color: accent, backgroundColor: t.surface, border: `1px solid color-mix(in srgb, ${accent} 33%, transparent)` }}>{rank}</span>
-      <img src={avatar} alt={`${name} profile`} className="mx-auto h-16 w-16 rounded-full object-cover object-top p-1" style={{ border: `2px solid ${accent}` }} />
-      <p className="mt-2 text-sm font-medium" style={{ color: t.heading }}>{name}</p>
-      <p className="text-[11px]" style={{ color: t.mutedLight }}>{handle}</p>
-      <p className="mt-2 mb-3 text-[28px] leading-tight" style={{ color: accent }}>{points.split(" ")[0]} <span className="text-[10px]">pts</span></p>
-      <div className="grid grid-cols-4 border-t py-2" style={{ borderColor: "var(--border-color)" }}>
-        {METRICS.map(metric => <div key={metric.key} className="text-[11px]">
-          <MetricValue metric={metric} value={stats[metric.key]} />
-          <p className="mt-1 text-[10px]" style={{ color: t.mutedLight }}>{c.stats[metric.key]}</p>
-        </div>)}
+    <article
+      className={`relative rounded-xl border pt-7 text-center ${rank === "1ST" ? "sm:-translate-y-6" : ""}`}
+      style={{
+        borderColor: `color-mix(in srgb, ${accent} 33%, transparent)`,
+        backgroundColor: "var(--bg-card)",
+      }}
+    >
+      <span
+        className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2 rounded-full px-4 py-1 text-[14px] font-medium"
+        style={{
+          color: accent,
+          backgroundColor: t.surface,
+          border: `1px solid color-mix(in srgb, ${accent} 33%, transparent)`,
+        }}
+      >
+        {rank}
+      </span>
+      <img
+        src={avatar}
+        alt={`${name} profile`}
+        className="mx-auto h-16 w-16 rounded-full object-cover object-top p-1"
+        style={{ border: `2px solid ${accent}` }}
+      />
+      <p className="mt-2 text-lg font-medium" style={{ color: t.heading }}>
+        {name}
+      </p>
+      <p className="text-[14px]" style={{ color: t.mutedLight }}>
+        {handle}
+      </p>
+      <p
+        className="mt-2 mb-3 text-[28px] leading-tight"
+        style={{ color: accent }}
+      >
+        {points.split(" ")[0]} <span className="text-[14px]">pts</span>
+      </p>
+      <div
+        className="grid grid-cols-4 border-t py-2"
+        style={{ borderColor: "var(--border-color)" }}
+      >
+        {METRICS.map((metric) => (
+          <div key={metric.key} className="text-[14px]">
+            <MetricValue metric={metric} value={stats[metric.key]} />
+            <p className="mt-1 text-[14px]" style={{ color: t.mutedLight }}>
+              {c.stats[metric.key]}
+            </p>
+          </div>
+        ))}
       </div>
     </article>
   );
@@ -318,15 +406,24 @@ function ChampionCard({ t, c, rank, name, handle, avatar, points, stats }) {
 function ChampionsSection({ t, c, lang }) {
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 pt-24 pb-8">
-      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between mb-12 gap-4" style={{ fontFamily: lang === "km" ? KHMER_FONT_STACK : FONT_STACK }}>
+      <div
+        className="flex flex-col sm:flex-row sm:items-end sm:justify-between mb-12 gap-4"
+        style={{ fontFamily: lang === "km" ? KHMER_FONT_STACK : FONT_STACK }}
+      >
         <div>
           <EyebrowLabel t={t}>{c.championsEyebrow}</EyebrowLabel>
-          <h2 className="text-3xl font-normal flex items-center gap-2" style={{ color: t.heading }}>
+          <h2
+            className="text-5xl font-semibold flex items-center gap-2"
+            style={{ color: t.heading }}
+          >
             {c.championsTitle}
             <span style={{ color: t.primary }}>.</span>
           </h2>
         </div>
-        <p className="max-w-[290px] text-xs leading-relaxed" style={{ color: t.muted }}>
+        <p
+          className="max-w-[290px] text-lg leading-relaxed"
+          style={{ color: t.muted }}
+        >
           {c.championsSubtitle}
         </p>
       </div>
@@ -358,7 +455,7 @@ function CategoryBadge({ t, c, category }) {
   const style = categoryStyle(t, category);
   return (
     <span
-      className="text-[11px] font-medium px-2 py-1 rounded-md whitespace-nowrap"
+      className="text-[14px] font-medium px-2 py-1 rounded-md whitespace-nowrap"
       style={{ backgroundColor: style.bg, color: style.text }}
     >
       {c.categories[category] || category}
@@ -381,7 +478,10 @@ function LeaderboardControls({
   return (
     <div
       className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 px-3 py-4 border-b"
-      style={{ borderColor: t.border, fontFamily: lang === "km" ? KHMER_FONT_STACK : FONT_STACK }}
+      style={{
+        borderColor: t.border,
+        fontFamily: lang === "km" ? KHMER_FONT_STACK : FONT_STACK,
+      }}
     >
       <div className="flex gap-2 flex-wrap">
         {c.tabs.map((tab) => {
@@ -391,10 +491,13 @@ function LeaderboardControls({
               key={tab}
               type="button"
               onClick={() => setActiveTab(tab)}
-              className="px-3 py-2 rounded-lg text-xs font-medium transition-colors"
+              className="px-3 py-2 rounded-lg text-base font-medium transition-colors"
               style={
                 isActive
-                  ? { backgroundColor: "var(--color-brand-primary)", color: "#fff" }
+                  ? {
+                      backgroundColor: "var(--color-brand-primary)",
+                      color: "#fff",
+                    }
                   : { backgroundColor: "transparent", color: t.muted }
               }
             >
@@ -405,22 +508,35 @@ function LeaderboardControls({
       </div>
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="relative">
-          <Search size={14} aria-hidden="true" className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: t.mutedLight }} />
-        <input
-          aria-label={c.searchPlaceholder}
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder={c.searchPlaceholder}
-          className="search-input pl-9 pr-3 py-2 rounded-lg text-xs border outline-none w-full sm:w-60"
-          style={{ borderColor: t.border, color: t.heading, backgroundColor: t.surface }}
-        />
+          <Search
+            size={14}
+            aria-hidden="true"
+            className="absolute left-3 top-1/2 -translate-y-1/2"
+            style={{ color: t.mutedLight }}
+          />
+          <input
+            aria-label={c.searchPlaceholder}
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder={c.searchPlaceholder}
+            className="search-input pl-9 pr-3 py-2 rounded-lg text-base border outline-none w-full sm:w-60"
+            style={{
+              borderColor: t.border,
+              color: t.heading,
+              backgroundColor: t.surface,
+            }}
+          />
         </div>
         <select
           aria-label={c.allCategories}
           value={category}
           onChange={(e) => setCategory(e.target.value)}
-          className="search-input px-3 py-2 rounded-lg text-xs border outline-none"
-          style={{ borderColor: t.border, color: t.muted, backgroundColor: t.surface }}
+          className="search-input px-3 py-2 rounded-lg text-base border outline-none"
+          style={{
+            borderColor: t.border,
+            color: t.muted,
+            backgroundColor: t.surface,
+          }}
         >
           <option value="All Categories">{c.allCategories}</option>
           {categories.map((cat) => (
@@ -436,23 +552,44 @@ function LeaderboardControls({
 
 function LeaderboardTable({ t, c, lang, rows }) {
   return (
-    <div className="overflow-x-auto" style={{ fontFamily: lang === "km" ? KHMER_FONT_STACK : FONT_STACK }}>
-      <table className="w-full min-w-[720px] text-xs border-collapse">
+    <div
+      className="overflow-x-auto"
+      style={{ fontFamily: lang === "km" ? KHMER_FONT_STACK : FONT_STACK }}
+    >
+      <table className="w-full min-w-[720px] text-base border-collapse">
         <thead>
-          <tr className="text-left text-[11px]" style={{ color: t.mutedLight, backgroundColor: t.surfaceAlt }}>
+          <tr
+            className="text-left text-[16px]"
+            style={{ color: t.mutedLight, backgroundColor: t.surfaceAlt }}
+          >
             <th className="py-3 px-5 font-medium">{c.tableHeaders.rank}</th>
             <th className="py-3 px-5 font-medium">{c.tableHeaders.user}</th>
-            <th className="py-3 px-5 font-medium text-right">{c.tableHeaders.upvotes}</th>
-            <th className="py-3 px-5 font-medium text-right">{c.tableHeaders.answers}</th>
-            <th className="py-3 px-5 font-medium text-right">{c.tableHeaders.solutions}</th>
-            <th className="py-3 px-5 font-medium text-right">{c.tableHeaders.helpful}</th>
+            <th className="py-3 px-5 font-medium text-right">
+              {c.tableHeaders.upvotes}
+            </th>
+            <th className="py-3 px-5 font-medium text-right">
+              {c.tableHeaders.answers}
+            </th>
+            <th className="py-3 px-5 font-medium text-right">
+              {c.tableHeaders.solutions}
+            </th>
+            <th className="py-3 px-5 font-medium text-right">
+              {c.tableHeaders.helpful}
+            </th>
             <th className="py-3 px-5 font-medium">{c.tableHeaders.category}</th>
           </tr>
         </thead>
         <tbody>
           {rows.map((r) => (
-            <tr key={r.rank} className="tr-hover transition-colors border-t" style={{ borderColor: t.rowBorder }}>
-              <td className="py-3 px-5 font-semibold" style={{ color: t.heading }}>
+            <tr
+              key={r.rank}
+              className="tr-hover transition-colors border-t"
+              style={{ borderColor: t.rowBorder }}
+            >
+              <td
+                className="py-3 px-5 font-semibold"
+                style={{ color: t.heading }}
+              >
                 {r.rank}
               </td>
               <td className="py-3 px-5">
@@ -462,13 +599,13 @@ function LeaderboardTable({ t, c, lang, rows }) {
                     <p className="font-medium" style={{ color: t.heading }}>
                       {r.name}
                     </p>
-                    <p className="text-xs" style={{ color: t.mutedLight }}>
+                    <p className="text-base" style={{ color: t.mutedLight }}>
                       {r.handle}
                     </p>
                   </div>
                 </div>
               </td>
-              {METRICS.map(metric => (
+              {METRICS.map((metric) => (
                 <td key={metric.key} className="py-3 px-5 text-right">
                   <MetricValue metric={metric} value={r[metric.key]} />
                 </td>
@@ -481,7 +618,10 @@ function LeaderboardTable({ t, c, lang, rows }) {
         </tbody>
       </table>
       {rows.length === 0 && (
-        <p className="text-center py-12 text-sm" style={{ color: t.mutedLight }}>
+        <p
+          className="text-center py-12 text-lg"
+          style={{ color: t.mutedLight }}
+        >
           {c.noResults}
         </p>
       )}
@@ -523,7 +663,10 @@ export default function App({ dark: darkProp, lang: langProp } = {}) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lang]);
 
-  const categories = useMemo(() => Array.from(new Set(USERS.map((u) => u.category))), []);
+  const categories = useMemo(
+    () => Array.from(new Set(USERS.map((u) => u.category))),
+    [],
+  );
 
   const filteredRows = USERS.filter((u) => {
     const q = search.trim().toLowerCase();
@@ -533,7 +676,8 @@ export default function App({ dark: darkProp, lang: langProp } = {}) {
       u.name.toLowerCase().includes(q) ||
       u.handle.toLowerCase().includes(q) ||
       localizedCategory.toLowerCase().includes(q);
-    const matchesCategory = category === "All Categories" || u.category === category;
+    const matchesCategory =
+      category === "All Categories" || u.category === category;
     return matchesSearch && matchesCategory;
   });
 
@@ -549,7 +693,6 @@ export default function App({ dark: darkProp, lang: langProp } = {}) {
         .leaderboard-page .search-input:focus { box-shadow: 0 0 0 3px ${t.primaryLight}; border-color: ${t.primary}; }
         .leaderboard-page ::selection { background-color: ${t.primaryLight}; }
       `}</style>
-
 
       <div className="relative" style={{ zIndex: 1 }}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-8 flex flex-col lg:flex-row lg:justify-between gap-8">
@@ -567,7 +710,9 @@ export default function App({ dark: darkProp, lang: langProp } = {}) {
             style={{
               borderColor: t.border,
               backgroundColor: t.surface,
-              boxShadow: dark ? "0 1px 2px rgba(0,0,0,0.3)" : "0 1px 2px rgba(0,28,85,0.04)",
+              boxShadow: dark
+                ? "0 1px 2px rgba(0,0,0,0.3)"
+                : "0 1px 2px rgba(0,28,85,0.04)",
             }}
           >
             <LeaderboardControls
