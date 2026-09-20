@@ -20,28 +20,30 @@ import Avatar from '../../Components/ui/Avatar';
 import StatusBadge from '../../Components/ui/StatusBadge';
 import { useAppSelector } from '../../hooks/useAppStore';
 import {
-  useGetQuestionsQuery,
-  useGetLostFoundItemsQuery,
-  useGetClaimsQuery,
-  useGetMatchesQuery,
+  useGetMeQuery,
+  useGetPostsQuery,
+  useGetReportsQuery,
   useGetNotificationsQuery,
 } from '../../store/api/apiSlice';
 
 export default function DashboardPage() {
-  const { user } = useAppSelector((state) => state.auth);
+  const { user: authUser } = useAppSelector((state) => state.auth);
+  const { data: meData } = useGetMeQuery(undefined, { skip: !authUser });
+  const user = meData || authUser;
 
-  const { data: questions = [] } = useGetQuestionsQuery();
-  const { data: items = [] } = useGetLostFoundItemsQuery();
-  const { data: claims = [] } = useGetClaimsQuery();
-  const { data: matches = [] } = useGetMatchesQuery();
-  const { data: notifications = [] } = useGetNotificationsQuery();
+  const { data: postsData } = useGetPostsQuery();
+  const { data: reportsData } = useGetReportsQuery();
+  const { data: notificationsData } = useGetNotificationsQuery();
 
-  const myQuestions = questions.filter((q) => q.ownerId === user?.id || q.author?.id === user?.id);
-  const myItems = items.filter((i) => i.userId === user?.id || i.reporter?.id === user?.id);
+  const questions = Array.isArray(postsData?.content) ? postsData.content : (Array.isArray(postsData) ? postsData : []);
+  const items = Array.isArray(reportsData?.content) ? reportsData.content : (Array.isArray(reportsData) ? reportsData : []);
+  const notifications = Array.isArray(notificationsData?.content) ? notificationsData.content : (Array.isArray(notificationsData) ? notificationsData : []);
+
+  const myQuestions = questions.filter((q) => q.ownerId === user?.id || q.author?.id === user?.id || q.userId === user?.id);
+  const myItems = items.filter((i) => i.userId === user?.id || i.reporter?.id === user?.id || i.ownerId === user?.id);
   const myLostCount = myItems.filter((i) => (i.itemType || i.type) === 'LOST').length;
   const myFoundCount = myItems.filter((i) => (i.itemType || i.type) === 'FOUND').length;
-  const myClaims = claims.filter((c) => c.userId === user?.id || c.claimant?.id === user?.id);
-  const activeMatches = matches.filter((m) => m.status === 'NEW' || m.status === 'PENDING' || m.status === 'ACTIVE');
+  const activeMatches = items.filter((i) => i.status === 'MATCHED' || i.status === 'CLAIMED');
 
   return (
     <div className="space-y-8">
@@ -53,10 +55,10 @@ export default function DashboardPage() {
             <span>Welcome back to your workspace</span>
           </div>
           <h1 className="text-2xl sm:text-3xl font-black tracking-tight">
-            Hello, {user?.name || 'Scholar'}!
+            Hello, {user?.displayName || user?.name || 'Scholar'}!
           </h1>
           <p className="text-xs sm:text-sm text-blue-100 leading-relaxed">
-            Here is what's happening today: {activeMatches.length} pending algorithmic item matches and {myQuestions.length} technical discussions on your feed.
+            Here is what's happening today: {items.length} community lost & found reports and {questions.length} technical discussions on your campus feed.
           </p>
         </div>
 

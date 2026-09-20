@@ -6,6 +6,7 @@ import {
 } from "react";
 
 import { Link, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { LayoutGroup, motion, useReducedMotion } from "framer-motion";
 
 import {
@@ -13,10 +14,12 @@ import {
   ChevronDown,
   Menu,
   X,
+  User,
 } from "lucide-react";
 import { useLanguage } from "../Language/LanguageContext.jsx";
 import { ThemeToggle } from "../motion/theme-toggle.jsx";
 import { useTranslation } from "react-i18next";
+import { useGetUnreadCountQuery } from "../../features/notifications/notificationApi.js";
 import nexaLogo from "../../assets/Website/nexa-logo.svg";
 
 function LanguageFlag({ isKhmer }) {
@@ -42,8 +45,12 @@ function LanguageFlag({ isKhmer }) {
 }
 
 export default function Navbar({
-  notificationCount = 0,
+  notificationCount: propNotificationCount,
 }) {
+  const { isAuthenticated, user } = useSelector((state) => state.auth);
+  const { data: unreadData } = useGetUnreadCountQuery(undefined, { skip: !isAuthenticated, pollingInterval: 30000 });
+  const notificationCount = propNotificationCount !== undefined ? propNotificationCount : (unreadData?.unreadCount ?? 0);
+
   const {
     language,
     toggleLanguage,
@@ -374,16 +381,18 @@ export default function Navbar({
             iconClassName="h-5 w-5"
           />
 
-          <button
-            type="button"
+          <Link
+            to={isAuthenticated ? "/dashboard/notifications" : "/login"}
             className="relative inline-flex items-center justify-center w-10 h-10 rounded-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 transition-all duration-200 hover:bg-brand-primary-light dark:hover:bg-gray-700 hover:border-brand-primary hover:text-brand-primary hover:-translate-y-0.5"
             aria-label="Notifications"
           >
             <Bell size={20} />
-            <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-brand-secondary text-white text-[11px] font-bold flex items-center justify-center border-2 border-white dark:border-gray-900">
-              {notificationCount}
-            </span>
-          </button>
+            {notificationCount > 0 && (
+              <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-brand-secondary text-white text-[11px] font-bold flex items-center justify-center border-2 border-white dark:border-gray-900">
+                {notificationCount}
+              </span>
+            )}
+          </Link>
 
           <button
             type="button"
@@ -395,12 +404,30 @@ export default function Navbar({
             <span>{isKhmer ? "EN" : "ខ្មែរ"}</span>
           </button>
 
-          <Link
-            to="/register"
-            className="h-10 px-5.5 inline-flex items-center rounded-full border border-[rgba(255,255,255,0.35)] bg-brand-primary text-white text-sm font-semibold no-underline transition-all duration-200 hover:bg-brand-secondary hover:border-brand-secondary hover:-translate-y-0.5"
-          >
-            {t("getStarted")}
-          </Link>
+          {isAuthenticated ? (
+            <Link
+              to="/dashboard"
+              className="h-10 px-4.5 inline-flex items-center gap-2 rounded-full border border-brand-primary bg-brand-primary text-white text-sm font-semibold no-underline transition-all duration-200 hover:bg-brand-secondary hover:border-brand-secondary hover:-translate-y-0.5 shadow-xs"
+            >
+              <User size={16} />
+              <span>{user?.displayName || user?.name || "Dashboard"}</span>
+            </Link>
+          ) : (
+            <div className="flex items-center gap-2">
+              <Link
+                to="/login"
+                className="h-10 px-4 inline-flex items-center rounded-full border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 text-sm font-semibold no-underline transition-all duration-200 hover:bg-gray-100 dark:hover:bg-gray-800"
+              >
+                {t("login")}
+              </Link>
+              <Link
+                to="/register"
+                className="h-10 px-4.5 inline-flex items-center rounded-full border border-[rgba(255,255,255,0.35)] bg-brand-primary text-white text-sm font-semibold no-underline transition-all duration-200 hover:bg-brand-secondary hover:border-brand-secondary hover:-translate-y-0.5"
+              >
+                {t("getStarted")}
+              </Link>
+            </div>
+          )}
         </div>
 
         {/* Mobile Menu Button */}

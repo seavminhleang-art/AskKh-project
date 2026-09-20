@@ -1,64 +1,20 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { ChatBubbleLeftIcon, ArrowUpIcon } from "@heroicons/react/24/outline";
+import { useGetPostsByScoreQuery, useGetPostsQuery } from "../../../features/posts/postApi";
 
 export default function TrendingDiscussions({ darkMode }) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
-  const discussions = [
-    {
-      tags: ["#React", "#ISTAD"],
-      tagColors: [
-        darkMode
-          ? "bg-blue-950/80 text-blue-400"
-          : "bg-blue-50 text-blue-600",
-        darkMode
-          ? "bg-zinc-800 text-slate-300"
-          : "bg-gray-100 text-gray-600"
-      ],
-      title: t("disc1Title"),
-      excerpt: t("disc1Excerpt"),
-      author: t("disc1Author"),
-      avatar: "https://randomuser.me/api/portraits/men/32.jpg",
-      answers: t("disc1Answers"),
-      votes: "24",
-    },
-    {
-      tags: ["#Database", "#SQL"],
-      tagColors: [
-        darkMode
-          ? "bg-emerald-950/80 text-emerald-400"
-          : "bg-emerald-50 text-emerald-600",
-        darkMode
-          ? "bg-zinc-800 text-slate-300"
-          : "bg-gray-100 text-gray-600"
-      ],
-      title: t("disc2Title"),
-      excerpt: t("disc2Excerpt"),
-      author: t("disc2Author"),
-      avatar: "https://randomuser.me/api/portraits/men/44.jpg",
-      answers: t("disc2Answers"),
-      votes: "42",
-    },
-    {
-      tags: ["#Career", "#Internship"],
-      tagColors: [
-        darkMode
-          ? "bg-amber-950/80 text-amber-400"
-          : "bg-amber-50 text-amber-600",
-        darkMode
-          ? "bg-zinc-800 text-slate-300"
-          : "bg-gray-100 text-gray-600"
-      ],
-      title: t("disc3Title"),
-      excerpt: t("disc3Excerpt"),
-      author: t("disc3Author"),
-      avatar: "https://randomuser.me/api/portraits/men/55.jpg",
-      answers: t("disc3Answers"),
-      votes: "24",
-    },
-  ];
+  const { data: scorePosts, isLoading: isScoreLoading, isError: isScoreError, refetch } = useGetPostsByScoreQuery();
+  const { data: allPosts, isLoading: isAllLoading } = useGetPostsQuery(undefined, { skip: !isScoreError && !!scorePosts?.length });
+
+  const rawPosts = (scorePosts && scorePosts.length > 0) ? scorePosts : (allPosts || []);
+  const discussions = rawPosts.slice(0, 3);
+  const isLoading = isScoreLoading && isAllLoading;
 
   return (
     <section className="mt-28 mb-16 relative z-10 font-[family-name:var(--font-brand)]">
@@ -84,71 +40,143 @@ export default function TrendingDiscussions({ darkMode }) {
         </h2>
 
         <div className="flex justify-end max-w-7xl mx-auto px-2">
-          <motion.a whileHover={{ x: 4 }} href="#" className="text-[var(--home-link-text)] font-semibold text-sm flex items-center gap-1 hover:underline cursor-pointer">
+          <Link to="/community/qa" className="text-[var(--home-link-text)] font-semibold text-sm flex items-center gap-1 hover:underline cursor-pointer">
             {t("discViewAll")} →
-          </motion.a>
+          </Link>
         </div>
       </div>
 
-      <div className="grid md:grid-cols-3 gap-8">
-        {discussions.map((discussion, idx) => (
-          <motion.div
-            key={idx}
-            whileHover={{ y: -6 }}
-            transition={{ duration: 0.3 }}
-            className={`backdrop-blur-md rounded-3xl p-6 flex flex-col justify-between cursor-pointer transition-colors duration-300 ${
-              darkMode
-                ? "bg-zinc-900/90 text-slate-100"
-                : "bg-white/95 text-gray-800"
-            }`}
+      {isLoading ? (
+        <div className="grid md:grid-cols-3 gap-8">
+          {[1, 2, 3].map((n) => (
+            <div
+              key={n}
+              className={`animate-pulse rounded-3xl p-6 flex flex-col justify-between h-64 ${
+                darkMode ? "bg-zinc-900/60" : "bg-white/80"
+              }`}
+            >
+              <div className="space-y-3">
+                <div className="flex gap-2">
+                  <div className="h-5 w-16 bg-gray-300 dark:bg-zinc-800 rounded-full" />
+                  <div className="h-5 w-20 bg-gray-300 dark:bg-zinc-800 rounded-full" />
+                </div>
+                <div className="h-6 w-3/4 bg-gray-300 dark:bg-zinc-800 rounded-lg" />
+                <div className="h-4 w-full bg-gray-200 dark:bg-zinc-800/80 rounded" />
+                <div className="h-4 w-2/3 bg-gray-200 dark:bg-zinc-800/80 rounded" />
+              </div>
+              <div className="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-zinc-800">
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 rounded-full bg-gray-300 dark:bg-zinc-800" />
+                  <div className="h-4 w-24 bg-gray-300 dark:bg-zinc-800 rounded" />
+                </div>
+                <div className="h-4 w-12 bg-gray-300 dark:bg-zinc-800 rounded" />
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : isScoreError && (!rawPosts || rawPosts.length === 0) ? (
+        <div className={`rounded-3xl p-8 text-center border ${
+          darkMode ? "bg-zinc-900/60 border-zinc-800 text-zinc-400" : "bg-white border-gray-100 text-gray-500"
+        }`}>
+          <p className="text-sm mb-3">Unable to load discussions at the moment.</p>
+          <button
+            onClick={() => refetch()}
+            className="px-4 py-2 text-xs font-semibold rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition"
           >
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                {discussion.tags.map((tag, tIdx) => (
-                  <span key={tIdx} className={`text-xs font-semibold px-3 py-1 rounded-full ${discussion.tagColors[tIdx]}`}>
-                    {tag}
-                  </span>
-                ))}
-              </div>
+            Retry
+          </button>
+        </div>
+      ) : discussions.length === 0 ? (
+        <div className={`rounded-3xl p-8 text-center border ${
+          darkMode ? "bg-zinc-900/60 border-zinc-800 text-zinc-400" : "bg-white border-gray-100 text-gray-500"
+        }`}>
+          <p className="text-sm">No trending discussions yet. Be the first to start a conversation!</p>
+          <Link
+            to="/community/qa"
+            className="mt-3 inline-block px-4 py-2 text-xs font-semibold rounded-xl bg-blue-600 text-white hover:bg-blue-700 transition"
+          >
+            Go to Q&A Community
+          </Link>
+        </div>
+      ) : (
+        <div className="grid md:grid-cols-3 gap-8">
+          {discussions.map((discussion, idx) => {
+            const tags = discussion.tagResponses?.length
+              ? discussion.tagResponses.map((t) => `#${t.tagName}`)
+              : ['#Community', '#ISTAD'];
+            const excerpt = discussion.body
+              ? discussion.body.slice(0, 110) + (discussion.body.length > 110 ? '...' : '')
+              : '';
+            const authorName = discussion.ownerDisplayName || 'Scholar';
+            const answersCount = discussion.comments?.length || 0;
+            const scoreCount = discussion.score ?? 0;
 
-              <h3 className={`text-base font-bold mb-2 leading-snug ${
-                darkMode ? "text-slate-100" : "text-gray-900"
-              }`}>
-                {discussion.title}
-              </h3>
-              <p className={`text-xs md:text-sm leading-relaxed mb-6 ${
-                darkMode ? "text-slate-400" : "text-gray-600"
-              }`}>
-                {discussion.excerpt}
-              </p>
-            </div>
+            return (
+              <motion.div
+                key={discussion.id || idx}
+                whileHover={{ y: -6 }}
+                transition={{ duration: 0.3 }}
+                onClick={() => navigate('/community/qa')}
+                className={`backdrop-blur-md rounded-3xl p-6 flex flex-col justify-between cursor-pointer transition-colors duration-300 ${
+                  darkMode
+                    ? "bg-zinc-900/90 text-slate-100"
+                    : "bg-white/95 text-gray-800"
+                }`}
+              >
+                <div>
+                  <div className="flex flex-wrap items-center gap-2 mb-4">
+                    {tags.map((tag, tIdx) => (
+                      <span
+                        key={tIdx}
+                        className={`text-xs font-semibold px-3 py-1 rounded-full ${
+                          darkMode ? "bg-blue-950/80 text-blue-400" : "bg-blue-50 text-blue-600"
+                        }`}
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
 
-            <div className={`flex items-center justify-between pt-4 border-t text-xs ${
-              darkMode ? "border-zinc-800 text-slate-400" : "border-gray-100 text-gray-500"
-            }`}>
-              <div className="flex items-center gap-2">
-                <img src={discussion.avatar} alt={discussion.author} className={`w-7 h-7 rounded-full object-cover ${
-                  darkMode ? "border-zinc-700" : "border-gray-200"
-                }`} />
-                <span className={`font-medium ${darkMode ? "text-slate-300" : "text-gray-700"}`}>
-                  {discussion.author}
-                </span>
-              </div>
+                  <h3 className={`text-base font-bold mb-2 leading-snug line-clamp-2 ${
+                    darkMode ? "text-slate-100" : "text-gray-900"
+                  }`}>
+                    {discussion.title}
+                  </h3>
+                  <p className={`text-xs md:text-sm leading-relaxed mb-6 line-clamp-3 ${
+                    darkMode ? "text-slate-400" : "text-gray-600"
+                  }`}>
+                    {excerpt}
+                  </p>
+                </div>
 
-              <div className="flex items-center gap-4">
-                <span className={`flex items-center gap-1.5 ${darkMode ? "text-slate-400" : "text-gray-500"}`}>
-                  <ChatBubbleLeftIcon className={`w-4 h-4 ${darkMode ? "text-slate-500" : "text-gray-400"}`} />
-                  {discussion.answers}
-                </span>
-                <span className={`flex items-center gap-1 font-semibold ${darkMode ? "text-blue-400" : "text-blue-600"}`}>
-                  <ArrowUpIcon className={`w-4 h-4 stroke-[2.5] ${darkMode ? "text-blue-400" : "text-blue-600"}`} />
-                  {discussion.votes}
-                </span>
-              </div>
-            </div>
-          </motion.div>
-        ))}
-      </div>
+                <div className={`flex items-center justify-between pt-4 border-t text-xs ${
+                  darkMode ? "border-zinc-800 text-slate-400" : "border-gray-100 text-gray-500"
+                }`}>
+                  <div className="flex items-center gap-2">
+                    <div className="w-7 h-7 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-xs">
+                      {authorName.charAt(0).toUpperCase()}
+                    </div>
+                    <span className={`font-medium truncate max-w-[120px] ${darkMode ? "text-slate-300" : "text-gray-700"}`}>
+                      {authorName}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-4">
+                    <span className={`flex items-center gap-1.5 ${darkMode ? "text-slate-400" : "text-gray-500"}`}>
+                      <ChatBubbleLeftIcon className={`w-4 h-4 ${darkMode ? "text-slate-500" : "text-gray-400"}`} />
+                      {answersCount}
+                    </span>
+                    <span className={`flex items-center gap-1 font-semibold ${darkMode ? "text-blue-400" : "text-blue-600"}`}>
+                      <ArrowUpIcon className={`w-4 h-4 stroke-[2.5] ${darkMode ? "text-blue-400" : "text-blue-600"}`} />
+                      {scoreCount}
+                    </span>
+                  </div>
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
+      )}
     </section>
   );
 }

@@ -44,6 +44,10 @@ import {
   useLanguage,
 } from "../Language/LanguageContext.jsx";
 
+import {
+  useRegisterMutation,
+} from "../../features/auth/authApi.js";
+
 import GoogleComponent from "../oauth/GoogleComponent.jsx";
 import GithubComponent from "../oauth/GithubComponent.jsx";
 
@@ -727,6 +731,8 @@ export default function RegisterPage() {
       limit: 4,
     });
 
+  const [registerMutation] = useRegisterMutation();
+
   const [
     showPassword,
     setShowPassword,
@@ -751,151 +757,35 @@ export default function RegisterPage() {
     });
   };
 
-  const requireTermsAcceptance =
-    () => {
-      if (
-        getValues(
-          "agreeToTerms",
-        )
-      ) {
-        return true;
-      }
+  const onSubmit = async (data) => {
+    try {
+      const res = await registerMutation({
+        displayName: `${data.firstName.trim()} ${data.lastName.trim()}`,
+        email: data.email.trim().toLowerCase(),
+        password: data.password,
+        confirmPassword: data.confirmPassword,
+      }).unwrap();
 
-      setError(
-        "agreeToTerms",
-        {
-          type: "manual",
-          message:
-            t.termsRequired,
-        },
-        {
-          shouldFocus: true,
-        },
-      );
+      showToast({
+        status: "success",
+        title: t.successTitle,
+        description: res?.message || t.accountCreated,
+        duration: 3500,
+      });
 
-      return false;
-    };
-
-  const onSubmit =
-    async (data) => {
-      try {
-        const result =
-          await createUserWithEmailAndPassword(
-            auth,
-            data.email
-              .trim()
-              .toLowerCase(),
-            data.password,
-          );
-
-        try {
-          await updateProfile(
-            result.user,
-            {
-              displayName:
-                `${data.firstName.trim()} ${data.lastName.trim()}`,
-            },
-          );
-        } catch (profileError) {
-          try {
-            await deleteUser(
-              result.user,
-            );
-          } catch (rollbackError) {
-            console.error(
-              "Account rollback error:",
-              rollbackError,
-            );
-          }
-
-          throw profileError;
-        }
-
-        let verificationSent =
-          true;
-
-        try {
-          await sendEmailVerification(
-            result.user,
-          );
-        } catch (verificationError) {
-          console.error(
-            "Verification email error:",
-            verificationError,
-          );
-
-          verificationSent =
-            false;
-        }
-
-        await signOut(
-          auth,
-        );
-
-        showToast({
-          status:
-            "success",
-
-          title:
-            t.successTitle,
-
-          description:
-            verificationSent
-              ? t.accountCreated
-              : t.verificationEmailFailed,
-
-          duration:
-            3000,
-        });
-
-        window.setTimeout(
-          () => {
-            navigate(
-              "/login",
-            );
-          },
-          1500,
-        );
-      } catch (error) {
-        console.error(
-          "Registration error:",
-          error,
-        );
-
-        switch (
-          error.code
-        ) {
-          case "auth/email-already-in-use":
-            notifyError(
-              t.emailExists,
-            );
-            break;
-
-          case "auth/invalid-email":
-            notifyError(
-              t.invalidEmail,
-            );
-            break;
-
-          case "auth/network-request-failed":
-            notifyError(
-              t.network,
-            );
-            break;
-
-          case "auth/too-many-requests":
-            notifyError(
-              t.tooMany,
-            );
-            break;
-
-          default:
-            notifyError(
-              t.registerFailed,
-            );
-        }
-      }
-    };
+      window.setTimeout(() => {
+        navigate("/login");
+      }, 1500);
+    } catch (error) {
+      console.error("API registration error:", error);
+      const errorMsg =
+        error?.data?.message ||
+        (error?.status === 409 ? t.emailExists : null) ||
+        (error?.status === 'FETCH_ERROR' ? t.network : null) ||
+        t.registerFailed;
+      notifyError(errorMsg);
+    }
+  };
 
   const handleOAuthError = (
     error,

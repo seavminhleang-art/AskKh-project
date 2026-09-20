@@ -53,7 +53,13 @@ import {
 
 import {
   loginSuccess,
+  setCredentials,
 } from "../../features/auth/authSlice.js";
+
+import {
+  useLoginMutation,
+  useForgotPasswordMutation,
+} from "../../features/auth/authApi.js";
 
 import GoogleComponent from "../oauth/GoogleComponent.jsx";
 import GithubComponent from "../oauth/GithubComponent.jsx";
@@ -562,6 +568,9 @@ export default function LoginPage() {
       limit: 4,
     });
 
+  const [loginMutation] = useLoginMutation();
+  const [forgotPasswordMutation] = useForgotPasswordMutation();
+
   const [
     showPassword,
     setShowPassword,
@@ -628,104 +637,46 @@ export default function LoginPage() {
     }
   };
 
-  const getFirebaseErrorMessage =
-    (error) => {
-      switch (
-        error.code
-      ) {
-        case "auth/invalid-email":
-          return t.invalidEmail;
+  const onSubmit = async (data) => {
+    try {
+      const res = await loginMutation({
+        email: data.email.trim().toLowerCase(),
+        password: data.password,
+      }).unwrap();
 
-        case "auth/user-disabled":
-          return t.disabled;
+      const userObj = {
+        id: res.userId,
+        name: res.displayName || res.email?.split("@")[0] || "Scholar",
+        displayName: res.displayName || res.email?.split("@")[0] || "Scholar",
+        email: res.email,
+        role: "student",
+      };
 
-        case "auth/invalid-credential":
-        case "auth/user-not-found":
-        case "auth/wrong-password":
-          return t.wrongCredentials;
+      dispatch(
+        loginSuccess({
+          accessToken: res.accessToken,
+          refreshToken: res.refreshToken,
+          user: userObj,
+        }),
+      );
 
-        case "auth/network-request-failed":
-          return t.network;
+      showToast({
+        status: "success",
+        title: t.successTitle,
+        description: `${t.welcome}${res.displayName ? `, ${res.displayName}` : ""}!`,
+      });
 
-        case "auth/too-many-requests":
-          return t.tooMany;
-
-        default:
-          return t.loginFailed;
-      }
-    };
-
-  const onSubmit =
-    async (data) => {
-      try {
-        await setPersistence(
-          auth,
-
-          data.rememberMe
-            ? browserLocalPersistence
-            : browserSessionPersistence,
-        );
-
-        const result =
-          await signInWithEmailAndPassword(
-            auth,
-            data.email
-              .trim()
-              .toLowerCase(),
-            data.password,
-          );
-
-        if (
-          !result.user.emailVerified
-        ) {
-          let verificationResent =
-            true;
-
-          try {
-            await sendEmailVerification(
-              result.user,
-            );
-          } catch (verificationError) {
-            console.error(
-              "Verification email error:",
-              verificationError,
-            );
-
-            verificationResent =
-              false;
-          }
-
-          await signOut(
-            auth,
-          );
-
-          notifyError(
-            verificationResent
-              ? t.emailNotVerified
-              : t.emailNotVerifiedNoResend,
-          );
-
-          return;
-        }
-
-        await showLoginSuccess(
-          result.user,
-        );
-
-        navigate(
-          "/",
-          {
-            replace: true,
-          },
-        );
-      } catch (error) {
-        notifyError(
-          getFirebaseErrorMessage(
-            error,
-          ),
-        );
-      }
-    };
+      navigate("/dashboard", { replace: true });
+    } catch (error) {
+      console.error("API login error:", error);
+      const errorMsg =
+        error?.data?.message ||
+        (error?.status === 401 ? t.wrongCredentials : null) ||
+        (error?.status === 'FETCH_ERROR' ? t.network : null) ||
+        t.loginFailed;
+      notifyError(errorMsg);
+    }
+  };
 
   const handleOAuthError = (
     error,
@@ -824,61 +775,21 @@ export default function LoginPage() {
       }
 
       try {
-        setResetLoading(
-          true,
-        );
+        setResetLoading(true);
 
-        await sendPasswordResetEmail(
-          auth,
-          email,
-        );
+        const res = await forgotPasswordMutation({ email }).unwrap();
 
         showToast({
-          status:
-            "success",
-
-          title:
-            t.resetTitle,
-
-          description:
-            t.resetSent,
+          status: "success",
+          title: t.resetTitle,
+          description: res?.message || t.resetSent,
         });
       } catch (error) {
-        console.error(
-          "Password reset error:",
-          error,
-        );
-
-        switch (
-          error.code
-        ) {
-          case "auth/invalid-email":
-            notifyError(
-              t.invalidEmail,
-            );
-            break;
-
-          case "auth/too-many-requests":
-            notifyError(
-              t.tooMany,
-            );
-            break;
-
-          case "auth/network-request-failed":
-            notifyError(
-              t.network,
-            );
-            break;
-
-          default:
-            notifyError(
-              t.resetFailed,
-            );
-        }
+        console.error("Password reset error:", error);
+        const errorMsg = error?.data?.message || t.resetFailed;
+        notifyError(errorMsg);
       } finally {
-        setResetLoading(
-          false,
-        );
+        setResetLoading(false);
       }
     };
 

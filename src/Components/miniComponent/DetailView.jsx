@@ -1,15 +1,31 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ArrowLeft, Send, Heart, Trash2, ImagePlus, X } from 'lucide-react';
-import { useOutletContext } from 'react-router-dom';
+import { useOutletContext, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import {
+  useGetCommentsByPostQuery,
+  useCreateCommentMutation,
+  useDeleteCommentMutation,
+} from '../../features/comments/commentApi';
+import { useGetAnswersQuery, useCreateAnswerMutation } from '../../features/posts/postApi';
 
-const DetailView = ({ post, onBack, onUpdateComments, darkMode: propDarkMode }) => {
+const DetailView = ({ post, onBack, darkMode: propDarkMode }) => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const context = useOutletContext();
   const darkMode = propDarkMode ?? context?.darkMode ?? false;
+  const { isAuthenticated, user } = useSelector((state) => state.auth);
+
+  const { data: apiComments = [], isLoading: isCommentsLoading, refetch: refetchComments } = useGetCommentsByPostQuery(post?.id, {
+    skip: !post?.id,
+  });
+  const { data: apiAnswers = [] } = useGetAnswersQuery(post?.id, { skip: !post?.id });
+  const [createComment, { isLoading: isPostingComment }] = useCreateCommentMutation();
+  const [deleteComment] = useDeleteCommentMutation();
 
   const [commentText, setCommentText] = useState("");
-
   const [commentImage, setCommentImage] = useState(null);
   const [imageError, setImageError] = useState("");
   const [isReadingImage, setIsReadingImage] = useState(false);
@@ -47,57 +63,54 @@ const DetailView = ({ post, onBack, onUpdateComments, darkMode: propDarkMode }) 
     reader.readAsDataURL(file);
   };
 
-  const commentsList = Array.isArray(post.comments) ? post.comments : [];
+  const commentsList = Array.isArray(apiComments) && apiComments.length > 0
+    ? apiComments
+    : (Array.isArray(post?.comments) ? post.comments : []);
 
-  // Add a new comment
-  const handleSendComment = () => {
-    if (isReadingImage || (!commentText.trim() && !commentImage)) return;
+  // Add a new comment via live REST API
+  const handleSendComment = async () => {
+    if (!isAuthenticated) {
+      toast.info('Please log in to leave a comment');
+      navigate('/login');
+      return;
+    }
 
-    const newComment = {
-      id: Date.now(),
-      text: commentText.trim(),
-      image: commentImage,
-      author: {
-        name: "Mom Lisa",
-        avatar: '../../src/assets/Website/Lisa.jpg',
-        time: "Just now"
-      },
-      likes: 0,
-      isLiked: false,
-      isOwnComment: true
-    };
+    const trimmed = commentText.trim();
+    if (trimmed.length < 5) {
+      toast.error('Comment must be at least 5 characters long.');
+      return;
+    }
 
-    const updated = [...commentsList, newComment];
-    onUpdateComments(updated);
-    setCommentText("");
-    setCommentImage(null);
-    setImageError("");
+    try {
+      await createComment({
+        postId: post.id,
+        text: trimmed,
+      }).unwrap();
+
+      setCommentText("");
+      setCommentImage(null);
+      setImageError("");
+      toast.success('Comment added!');
+      refetchComments();
+    } catch (err) {
+      console.error('Failed to post comment:', err);
+      toast.error(err?.data?.message || 'Failed to post comment');
+    }
   };
 
-  // Delete a comment
-  const handleDeleteComment = (commentId) => {
-    const updated = commentsList.filter((c) => c.id !== commentId);
-    onUpdateComments(updated);
+  // Delete a comment via live REST API
+  const handleDeleteComment = async (commentId) => {
+    try {
+      await deleteComment(commentId).unwrap();
+      toast.success('Comment deleted');
+      refetchComments();
+    } catch (err) {
+      console.error('Failed to delete comment:', err);
+      toast.error(err?.data?.message || 'Failed to delete comment');
+    }
   };
 
-  // Toggle comment like (+1 / -1 loop)
-  const handleToggleCommentLike = (commentId) => {
-    const updated = commentsList.map((c) => {
-      if (c.id === commentId) {
-        const isLiked = c.isLiked;
-        return {
-          ...c,
-          isLiked: !isLiked,
-          likes: isLiked ? c.likes - 1 : c.likes + 1
-        };
-      }
-      return c;
-    });
-    onUpdateComments(updated);
-  };
-
-  // Sort comments by highest likes first
-  const sortedComments = [...commentsList].sort((a, b) => b.likes - a.likes);
+  const sortedComments = [...commentsList];
 
   return (
     <div className={`min-w-0 flex-1 rounded-2xl p-6 space-y-6 transition-colors duration-300 ${
@@ -199,17 +212,19 @@ const DetailView = ({ post, onBack, onUpdateComments, darkMode: propDarkMode }) 
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
-                  <img src={comment.author.avatar} alt={comment.author.name} className="w-6 h-6 rounded-full object-cover" />
+                  <div className="w-6 h-6 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-[10px]">
+                    {(comment.userDisplayName || comment.author?.name || 'S').charAt(0).toUpperCase()}
+                  </div>
                   <span className={`text-xs font-bold ${darkMode ? "text-slate-200" : "text-gray-800"}`}>
-                    {comment.author.name}
+                    {comment.userDisplayName || comment.author?.name || 'Scholar'}
                   </span>
                   <span className={`text-[10px] ${darkMode ? "text-zinc-500" : "text-gray-400"}`}>
-                    {comment.author.time}
+                    {comment.creationDate ? new Date(comment.creationDate).toLocaleDateString() : (comment.author?.time || 'Recent')}
                   </span>
                 </div>
 
                 {/* Delete Comment Option */}
-                {comment.isOwnComment && (
+                {(comment.isOwnComment || comment.userId === user?.id) && (
                   <button 
                     onClick={() => handleDeleteComment(comment.id)}
                     className="text-rose-500 hover:text-rose-600 transition-colors p-1"

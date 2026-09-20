@@ -1,18 +1,31 @@
 import React, { useState } from 'react';
 import { Upload, X } from 'lucide-react';
-import { useOutletContext } from 'react-router-dom';
+import { useOutletContext, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import { useCreatePostMutation } from '../../features/posts/postApi';
+import { useUploadSingleMutation } from '../../features/upload/uploadApi';
+import { useGetTagsQuery } from '../../features/tags/tagApi';
 
 const CreatePostView = ({ onAddPost, onCancel, darkMode: propDarkMode }) => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const context = useOutletContext();
   const darkMode = propDarkMode ?? context?.darkMode ?? false;
+  const { isAuthenticated } = useSelector((state) => state.auth);
+
+  const [createPost, { isLoading: isCreating }] = useCreatePostMutation();
+  const [uploadSingle, { isLoading: isUploading }] = useUploadSingleMutation();
+  const { data: availableTags } = useGetTagsQuery();
 
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [tags, setTags] = useState(['react', 'javascript']);
   const [tagInput, setTagInput] = useState('');
   const [coverImage, setCoverImage] = useState(null);
+  const [coverImageFile, setCoverImageFile] = useState(null);
+  const [formError, setFormError] = useState('');
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter' || e.key === ',') {
@@ -36,32 +49,69 @@ const CreatePostView = ({ onAddPost, onCancel, darkMode: propDarkMode }) => {
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
+      setCoverImageFile(file);
       setCoverImage(URL.createObjectURL(file));
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!title.trim()) return;
+    setFormError('');
 
-    const newPost = {
-      id: Date.now(),
-      title,
-      content,
-      isOwnPost: true,
-      tags: tags.length > 0 ? tags : ['general'],
-      author: {
-        name: 'Mom Lisa',
-        avatar: '../../src/assets/Website/Lisa.jpg',
-        time: 'Just now'
-      },
-      views: '0',
-      likes: '0',
-      comments: 0,
-      image: coverImage || 'https://picsum.photos/300/200?random=' + Math.floor(Math.random() * 100)
-    };
+    if (!isAuthenticated) {
+      toast.info('Please log in to create a post');
+      navigate('/login');
+      return;
+    }
 
-    onAddPost(newPost);
+    if (title.trim().length < 10) {
+      setFormError('Title must be at least 10 characters long.');
+      return;
+    }
+
+    if (content.trim().length < 20) {
+      setFormError('Content body must be at least 20 characters long.');
+      return;
+    }
+
+    try {
+      let imageUrls = [];
+      if (coverImageFile) {
+        const formData = new FormData();
+        formData.append('file', coverImageFile);
+        const uploadRes = await uploadSingle(formData).unwrap();
+        if (uploadRes?.uri) {
+          imageUrls.push(uploadRes.uri);
+        }
+      }
+
+      // Map tag strings to tagIds from API if available
+      const matchedTagIds = [];
+      if (Array.isArray(availableTags)) {
+        tags.forEach((tagName) => {
+          const found = availableTags.find(
+            (at) => at.tagName?.toLowerCase() === tagName.toLowerCase()
+          );
+          if (found?.id) matchedTagIds.push(found.id);
+        });
+      }
+
+      const created = await createPost({
+        title: title.trim(),
+        body: content.trim(),
+        postTypeId: 1, // Question
+        tagIds: matchedTagIds,
+        imageUrls,
+      }).unwrap();
+
+      toast.success('Question created successfully!');
+      if (onAddPost) onAddPost(created);
+    } catch (err) {
+      console.error('Failed to create post:', err);
+      const msg = err?.data?.message || err?.error || 'Failed to create post. Please check required fields.';
+      setFormError(msg);
+      toast.error(msg);
+    }
   };
 
   return (
@@ -142,13 +192,20 @@ const CreatePostView = ({ onAddPost, onCancel, darkMode: propDarkMode }) => {
             </label>
           </div>
 
+          {formError && (
+            <div className="p-3 text-xs rounded-xl bg-red-100 dark:bg-red-950/50 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-900/40">
+              {formError}
+            </div>
+          )}
+
           {/* Action Buttons */}
           <div className="flex items-center space-x-3">
             <button
               type="submit"
-              className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-2 rounded-xl text-xs transition-colors"
+              disabled={isCreating || isUploading}
+              className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-medium px-6 py-2 rounded-xl text-xs transition-colors"
             >
-              {t('create.addBlog')}
+              {isCreating || isUploading ? 'Creating...' : t('create.addBlog')}
             </button>
             <button
               type="button"

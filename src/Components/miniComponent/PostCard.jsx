@@ -7,12 +7,19 @@ const PostCard = ({
   id, 
   title, 
   content, 
-  tags, 
+  body,
+  tags = [], 
+  tagResponses,
   author, 
-  views, 
-  likes, 
+  ownerDisplayName,
+  creationDate,
+  views = 0, 
+  viewCount,
+  likes = 0, 
+  score,
   comments, 
   image, 
+  imageUrls,
   isBookmarked, 
   isLiked,
   onToggleBookmark, 
@@ -24,6 +31,16 @@ const PostCard = ({
   const context = useOutletContext();
   const darkMode = propDarkMode ?? context?.darkMode ?? false;
 
+  const normalizedTags = (tagResponses && tagResponses.length > 0)
+    ? tagResponses.map((tr) => tr.tagName || tr)
+    : (Array.isArray(tags) ? tags : []);
+
+  const authorName = author?.name || ownerDisplayName || 'Scholar';
+  const authorAvatar = author?.avatar || `https://api.dicebear.com/7.x/avataaars/svg?seed=${authorName}`;
+  const displayViews = viewCount !== undefined ? viewCount : views;
+  const displayLikes = score !== undefined ? score : likes;
+  const displayContent = content || (body ? body.slice(0, 160) + (body.length > 160 ? '...' : '') : '');
+  const displayImage = image || (imageUrls && imageUrls[0]) || 'https://picsum.photos/300/200?random=' + (id || 1);
   const commentCount = Array.isArray(comments) ? comments.length : (comments || 0);
 
   return (
@@ -32,8 +49,12 @@ const PostCard = ({
     }`}>
       <div className="flex flex-col sm:flex-row gap-4">
         <img 
-          src={image} 
+          src={displayImage} 
           alt="Thumbnail" 
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src = 'https://picsum.photos/300/200?random=1';
+          }}
           className="w-full h-48 sm:w-28 sm:h-28 2xl:w-36 object-cover rounded-xl flex-shrink-0 cursor-pointer"
           onClick={() => onSelectPost(id)} 
         />
@@ -49,9 +70,9 @@ const PostCard = ({
               >
                 {title}
               </h2>
-              {content && (
+              {displayContent && (
                 <p className={`text-xs line-clamp-2 mt-1 ${darkMode ? "text-zinc-400" : "text-gray-500"}`}>
-                  {content}
+                  {displayContent}
                 </p>
               )}
             </div>
@@ -79,7 +100,7 @@ const PostCard = ({
           </div>
 
           <div className="flex flex-wrap gap-1 my-2">
-            {tags.map((t, i) => (
+            {normalizedTags.map((tItem, i) => (
               <span 
                 key={i} 
                 className={`px-2 py-0.5 text-[10px] font-medium rounded-full border ${
@@ -88,20 +109,20 @@ const PostCard = ({
                     : "bg-blue-50 text-blue-600 border-blue-100"
                 }`}
               >
-                #{t}
+                #{tItem}
               </span>
             ))}
           </div>
 
           <div className="flex flex-wrap gap-3 items-center justify-between pt-1">
             <div className="flex items-center space-x-2">
-              <img src={author.avatar} alt={author.name} className="w-6 h-6 rounded-full object-cover" />
+              <img src={authorAvatar} alt={authorName} className="w-6 h-6 rounded-full object-cover" />
               <div>
                 <p className={`text-xs font-bold ${darkMode ? "text-slate-200" : "text-gray-800"}`}>
-                  {author.name}
+                  {authorName}
                 </p>
                 <p className={`text-[10px] ${darkMode ? "text-zinc-500" : "text-gray-400"}`}>
-                  {author.time}
+                  {author?.time || (creationDate ? new Date(creationDate).toLocaleDateString() : 'Recent')}
                 </p>
               </div>
             </div>
@@ -113,7 +134,7 @@ const PostCard = ({
                 className="flex items-center gap-1 hover:text-blue-500 transition-colors"
               >
                 <Eye className="w-3.5 h-3.5" />
-                {Number(views).toLocaleString()}
+                {Number(displayViews).toLocaleString()}
               </button>
 
               <button 
@@ -125,7 +146,7 @@ const PostCard = ({
                 }`}
               >
                 <Heart className={`w-3.5 h-3.5 ${isLiked ? "fill-rose-500 text-rose-500" : ""}`} />
-                {Number(likes).toLocaleString()}
+                {Number(displayLikes).toLocaleString()}
               </button>
 
               <button 

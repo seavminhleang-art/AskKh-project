@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import {
   UploadCloud,
   Send,
@@ -23,29 +26,151 @@ import {
   Eye,
   MapPin,
   Tag,
-  Clock
+  Clock,
+  X,
+  Loader2
 } from 'lucide-react';
+import {
+  useGetCategoriesQuery,
+  useGetLocationsQuery,
+  useCreateReportMutation,
+} from '../../../../features/lostFound/lostFoundApi';
+import { useUploadSingleMutation } from '../../../../features/upload/uploadApi';
 
 export default function CreateReportForm({ onCancel, darkMode }) {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const fileInputRef = useRef(null);
+  const { user, isAuthenticated } = useSelector((state) => state.auth);
+
   const [reportType, setReportType] = useState('LOST'); // 'LOST' | 'FOUND'
   const isLost = reportType === 'LOST';
 
+  const { data: categories = [], isLoading: isLoadingCategories } = useGetCategoriesQuery();
+  const { data: locations = [], isLoading: isLoadingLocations } = useGetLocationsQuery();
+  const [uploadSingle, { isLoading: isUploading }] = useUploadSingleMutation();
+  const [createReport, { isLoading: isSubmitting }] = useCreateReportMutation();
+
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
+  const [errorMsg, setErrorMsg] = useState('');
+
   const [formData, setFormData] = useState({
     title: '',
-    category: '',
+    categoryId: '',
     description: '',
-    date: '',
-    location: '',
-    fullName: 'Sovanrith Chhun',
-    phoneNumber: '+855 12 345 678',
-    email: 'sovanrith@istad.edu.kh',
+    date: new Date().toISOString().split('T')[0],
+    locationId: '',
+    fullName: user?.displayName || user?.name || '',
+    phoneNumber: user?.phoneNumber || '+855 12 345 678',
+    email: user?.email || '',
     contactMethod: 'Email',
     brandModel: '',
     color: '',
     uniqueFeatures: '',
     visibility: 'Public (Everyone can see)'
   });
+
+  const handleFileChange = (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error('File size must be less than 5MB');
+        return;
+      }
+      setSelectedFile(file);
+      setPreviewUrl(URL.createObjectURL(file));
+    }
+  };
+
+  const handleRemoveImage = (e) => {
+    e.stopPropagation();
+    setSelectedFile(null);
+    if (previewUrl) URL.revokeObjectURL(previewUrl);
+    setPreviewUrl(null);
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
+  const handleSubmit = async (e) => {
+    e?.preventDefault?.();
+    setErrorMsg('');
+
+    if (!isAuthenticated) {
+      toast.info('Please log in to submit a report');
+      navigate('/login');
+      return;
+    }
+
+    if (!formData.title.trim()) {
+      setErrorMsg('Item name/title is required.');
+      return;
+    }
+
+    if (!formData.categoryId) {
+      setErrorMsg('Please select a category.');
+      return;
+    }
+
+    if (!formData.locationId) {
+      setErrorMsg('Please select a location.');
+      return;
+    }
+
+    if (!formData.description.trim()) {
+      setErrorMsg('Item description is required.');
+      return;
+    }
+
+    try {
+      let uploadedImageUrls = [];
+      if (selectedFile) {
+        const uploadData = new FormData();
+        uploadData.append('file', selectedFile);
+        const uploadRes = await uploadSingle(uploadData).unwrap();
+        const uploadedUri = uploadRes?.uri || uploadRes?.url || (typeof uploadRes === 'string' ? uploadRes : null);
+        if (uploadedUri) {
+          uploadedImageUrls.push(uploadedUri);
+        }
+      }
+
+      // Format eventDate to ISO 8601
+      let eventDateISO;
+      try {
+        eventDateISO = formData.date ? new Date(formData.date).toISOString() : new Date().toISOString();
+      } catch {
+        eventDateISO = new Date().toISOString();
+      }
+
+      // Build extra context string for details like brand, color, unique features if present
+      let detailedDescription = formData.description.trim();
+      const extraDetails = [];
+      if (formData.brandModel) extraDetails.push(`Brand/Model: ${formData.brandModel}`);
+      if (formData.color) extraDetails.push(`Color: ${formData.color}`);
+      if (formData.uniqueFeatures) extraDetails.push(`Unique Features: ${formData.uniqueFeatures}`);
+      if (formData.contactMethod) extraDetails.push(`Preferred Contact: ${formData.contactMethod}`);
+      if (extraDetails.length > 0) {
+        detailedDescription += `\n\n[Additional Details]\n` + extraDetails.join('\n');
+      }
+
+      await createReport({
+        type: reportType,
+        title: formData.title.trim(),
+        description: detailedDescription,
+        categoryId: Number(formData.categoryId),
+        locationId: Number(formData.locationId),
+        eventDate: eventDateISO,
+        images: uploadedImageUrls,
+      }).unwrap();
+
+      toast.success(isLost ? 'Lost item report submitted successfully!' : 'Found item report submitted successfully!');
+      if (onCancel) onCancel();
+    } catch (err) {
+      console.error('Failed to submit report:', err);
+      const msg = err?.data?.message || err?.error || 'Failed to submit report. Please check the form fields.';
+      setErrorMsg(msg);
+      toast.error(msg);
+    }
+  };
 
   const cardClass = `backdrop-blur-md rounded-3xl transition-colors duration-300 ${
     darkMode
@@ -74,7 +199,7 @@ export default function CreateReportForm({ onCancel, darkMode }) {
           <button
             type="button"
             onClick={() => setReportType('LOST')}
-            className={`px-6 py-2 rounded-xl text-xs font-extrabold transition-all duration-200 ${
+            className={`px-6 py-2 rounded-xl text-xs font-extrabold transition-all duration-200 cursor-pointer ${
               isLost
                 ? 'bg-red-500 text-white'
                 : darkMode
@@ -87,7 +212,7 @@ export default function CreateReportForm({ onCancel, darkMode }) {
           <button
             type="button"
             onClick={() => setReportType('FOUND')}
-            className={`px-6 py-2 rounded-xl text-xs font-extrabold transition-all duration-200 ${
+            className={`px-6 py-2 rounded-xl text-xs font-extrabold transition-all duration-200 cursor-pointer ${
               !isLost
                 ? 'bg-amber-500 text-white'
                 : darkMode
@@ -115,7 +240,7 @@ export default function CreateReportForm({ onCancel, darkMode }) {
           <button
             type="button"
             onClick={onCancel}
-            className={`transition-colors ${darkMode ? 'hover:text-blue-400' : 'hover:text-[var(--color-brand-primary,#3b82f6)]'}`}
+            className={`transition-colors cursor-pointer ${darkMode ? 'hover:text-blue-400' : 'hover:text-[var(--color-brand-primary,#3b82f6)]'}`}
           >
             {t('home')}
           </button>
@@ -123,7 +248,7 @@ export default function CreateReportForm({ onCancel, darkMode }) {
           <button
             type="button"
             onClick={onCancel}
-            className={`transition-colors ${darkMode ? 'hover:text-blue-400' : 'hover:text-[var(--color-brand-primary,#3b82f6)]'}`}
+            className={`transition-colors cursor-pointer ${darkMode ? 'hover:text-blue-400' : 'hover:text-[var(--color-brand-primary,#3b82f6)]'}`}
           >
             {t('reportFormBreadcrumbLostFound')}
           </button>
@@ -135,7 +260,7 @@ export default function CreateReportForm({ onCancel, darkMode }) {
       </div>
 
       {/* MAIN FORM GRID */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         
         {/* LEFT / CENTER COLUMN */}
         <div className="lg:col-span-2 space-y-6">
@@ -152,6 +277,7 @@ export default function CreateReportForm({ onCancel, darkMode }) {
               </label>
               <input
                 type="text"
+                required
                 placeholder={isLost ? t('reportFormItemNamePlaceholderLost') : t('reportFormItemNamePlaceholderFound')}
                 className={inputClass}
                 value={formData.title}
@@ -165,18 +291,31 @@ export default function CreateReportForm({ onCancel, darkMode }) {
                   {t('reportCategoryLabel')} <span className="text-red-500">*</span>
                 </label>
                 <select
+                  required
                   className={`${inputClass} cursor-pointer`}
-                  value={formData.category}
-                  onChange={(e) => setFormData({...formData, category: e.target.value})}
+                  value={formData.categoryId}
+                  onChange={(e) => setFormData({...formData, categoryId: e.target.value})}
                 >
-                  <option value="" className={optionClass}>{t('reportFormCategorySelectPlaceholder')}</option>
-                  <option value="Electronics" className={optionClass}>{t('reportFormCategoryElectronics')}</option>
-                  <option value="Bags & Backpacks" className={optionClass}>{t('reportFormCategoryBags')}</option>
-                  <option value="Clothing" className={optionClass}>{t('reportFormCategoryClothing')}</option>
-                  <option value="Accessories" className={optionClass}>{t('reportFormCategoryAccessories')}</option>
-                  <option value="Keys" className={optionClass}>{t('reportFormCategoryKeys')}</option>
-                  <option value="Books & Documents" className={optionClass}>{t('reportFormCategoryBooks')}</option>
-                  <option value="Others" className={optionClass}>{t('reportFormCategoryOthers')}</option>
+                  <option value="" className={optionClass}>
+                    {isLoadingCategories ? 'Loading categories...' : t('reportFormCategorySelectPlaceholder')}
+                  </option>
+                  {Array.isArray(categories) && categories.map((cat) => (
+                    <option key={cat.id} value={cat.id} className={optionClass}>
+                      {cat.name || cat.categoryName || `Category #${cat.id}`}
+                    </option>
+                  ))}
+                  {/* Fallback default options if server returns empty */}
+                  {(!categories || categories.length === 0) && (
+                    <>
+                      <option value="1" className={optionClass}>{t('reportFormCategoryElectronics')}</option>
+                      <option value="2" className={optionClass}>{t('reportFormCategoryBags')}</option>
+                      <option value="3" className={optionClass}>{t('reportFormCategoryClothing')}</option>
+                      <option value="4" className={optionClass}>{t('reportFormCategoryAccessories')}</option>
+                      <option value="5" className={optionClass}>{t('reportFormCategoryKeys')}</option>
+                      <option value="6" className={optionClass}>{t('reportFormCategoryBooks')}</option>
+                      <option value="7" className={optionClass}>{t('reportFormCategoryOthers')}</option>
+                    </>
+                  )}
                 </select>
               </div>
 
@@ -227,6 +366,7 @@ export default function CreateReportForm({ onCancel, darkMode }) {
 
                 <textarea
                   rows={4}
+                  required
                   placeholder={t('reportDescriptionPlaceholder')}
                   className={`w-full p-3.5 text-xs bg-transparent focus:outline-none resize-y ${
                     darkMode ? 'text-slate-100 placeholder-zinc-500' : 'text-gray-800 placeholder-gray-400'
@@ -270,13 +410,14 @@ export default function CreateReportForm({ onCancel, darkMode }) {
                 </label>
                 <div className="relative">
                   <input
-                    type="text"
+                    type="date"
+                    required
                     placeholder={t('reportFormDatePlaceholder')}
                     className={`${inputClass} pr-9`}
                     value={formData.date}
                     onChange={(e) => setFormData({...formData, date: e.target.value})}
                   />
-                  <Calendar size={14} className={`absolute right-3 top-3 ${darkMode ? 'text-zinc-500' : 'text-gray-400'}`} />
+                  <Calendar size={14} className={`absolute right-3 top-3 pointer-events-none ${darkMode ? 'text-zinc-500' : 'text-gray-400'}`} />
                 </div>
               </div>
 
@@ -284,13 +425,30 @@ export default function CreateReportForm({ onCancel, darkMode }) {
                 <label className={`${labelClass} flex items-center gap-1`}>
                   <MapPin size={13} /> {isLost ? t('reportFormLocationLabelLost') : t('reportFormLocationLabelFound')} <span className="text-red-500">*</span>
                 </label>
-                <input
-                  type="text"
-                  placeholder={t('reportLocationPlaceholder')}
-                  className={inputClass}
-                  value={formData.location}
-                  onChange={(e) => setFormData({...formData, location: e.target.value})}
-                />
+                <select
+                  required
+                  className={`${inputClass} cursor-pointer`}
+                  value={formData.locationId}
+                  onChange={(e) => setFormData({...formData, locationId: e.target.value})}
+                >
+                  <option value="" className={optionClass}>
+                    {isLoadingLocations ? 'Loading locations...' : 'Select campus location...'}
+                  </option>
+                  {Array.isArray(locations) && locations.map((loc) => (
+                    <option key={loc.id} value={loc.id} className={optionClass}>
+                      {loc.name || loc.locationName || `Location #${loc.id}`}
+                    </option>
+                  ))}
+                  {(!locations || locations.length === 0) && (
+                    <>
+                      <option value="1" className={optionClass}>Campus Main Building - Floor 1</option>
+                      <option value="2" className={optionClass}>Campus Library - Level 2</option>
+                      <option value="3" className={optionClass}>IT Lab 302</option>
+                      <option value="4" className={optionClass}>Campus Cafeteria</option>
+                      <option value="5" className={optionClass}>Student Center / Lobby</option>
+                    </>
+                  )}
+                </select>
               </div>
             </div>
           </div>
@@ -348,19 +506,37 @@ export default function CreateReportForm({ onCancel, darkMode }) {
             </div>
           </div>
 
+          {errorMsg && (
+            <div className="p-3 text-xs rounded-xl bg-red-100 dark:bg-red-950/50 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-900/40">
+              {errorMsg}
+            </div>
+          )}
+
           {/* FORM ACTIONS */}
           <div className="flex items-center gap-3 pt-2">
             <button
-              onClick={onCancel}
-              className={`text-white font-semibold text-xs px-6 py-3 rounded-2xl transition-all duration-200 flex items-center gap-2 cursor-pointer ${
+              type="submit"
+              disabled={isSubmitting || isUploading}
+              className={`text-white font-semibold text-xs px-6 py-3 rounded-2xl transition-all duration-200 flex items-center gap-2 cursor-pointer disabled:opacity-50 ${
                 isLost
                   ? 'bg-[var(--color-brand-primary,#3b82f6)] hover:opacity-90'
                   : 'bg-amber-500 hover:bg-amber-600'
               }`}
             >
-              <Send size={14} /> {isLost ? t('reportFormSubmitLost') : t('reportFormSubmitFound')}
+              {isSubmitting || isUploading ? (
+                <>
+                  <Loader2 size={14} className="animate-spin" />
+                  <span>Processing...</span>
+                </>
+              ) : (
+                <>
+                  <Send size={14} />
+                  <span>{isLost ? t('reportFormSubmitLost') : t('reportFormSubmitFound')}</span>
+                </>
+              )}
             </button>
             <button
+              type="button"
               onClick={onCancel}
               className={`font-semibold text-xs px-6 py-3 rounded-2xl transition cursor-pointer backdrop-blur-md ${
                 darkMode
@@ -380,15 +556,44 @@ export default function CreateReportForm({ onCancel, darkMode }) {
           {/* IMAGE UPLOAD SECTION */}
           <div className={`${cardClass} p-5`}>
             <h3 className={`text-sm font-bold mb-3 ${darkMode ? 'text-white' : 'text-gray-900'}`}>{t('reportFormUploadTitle')}</h3>
-            <div className={`border-2 border-dashed rounded-2xl p-6 text-center transition cursor-pointer ${
-              darkMode
-                ? 'border-zinc-800 hover:border-blue-500 bg-zinc-950/60'
-                : 'border-gray-200 hover:border-[var(--color-brand-primary,#3b82f6)] bg-gray-50'
-            }`}>
-              <UploadCloud size={32} className={`mx-auto mb-2 ${darkMode ? 'text-blue-400' : 'text-[var(--color-brand-primary,#3b82f6)]'}`} />
-              <p className={`text-xs font-semibold ${darkMode ? 'text-slate-300' : 'text-gray-700'}`}>{t('reportFormUploadHint')}</p>
-              <p className={`text-[10px] mt-1 ${darkMode ? 'text-slate-500' : 'text-gray-400'}`}>{t('reportFormUploadFormats')}</p>
-            </div>
+            
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handleFileChange}
+            />
+
+            {previewUrl ? (
+              <div className="relative rounded-2xl overflow-hidden border border-zinc-700 group">
+                <img
+                  src={previewUrl}
+                  alt="Report Preview"
+                  className="w-full h-44 object-cover"
+                />
+                <button
+                  type="button"
+                  onClick={handleRemoveImage}
+                  className="absolute top-2 right-2 bg-red-600 hover:bg-red-700 text-white p-1.5 rounded-full shadow-lg transition-colors"
+                >
+                  <X size={14} />
+                </button>
+              </div>
+            ) : (
+              <div
+                onClick={() => fileInputRef.current?.click()}
+                className={`border-2 border-dashed rounded-2xl p-6 text-center transition cursor-pointer ${
+                  darkMode
+                    ? 'border-zinc-800 hover:border-blue-500 bg-zinc-950/60'
+                    : 'border-gray-200 hover:border-[var(--color-brand-primary,#3b82f6)] bg-gray-50'
+                }`}
+              >
+                <UploadCloud size={32} className={`mx-auto mb-2 ${darkMode ? 'text-blue-400' : 'text-[var(--color-brand-primary,#3b82f6)]'}`} />
+                <p className={`text-xs font-semibold ${darkMode ? 'text-slate-300' : 'text-gray-700'}`}>{t('reportFormUploadHint')}</p>
+                <p className={`text-[10px] mt-1 ${darkMode ? 'text-slate-500' : 'text-gray-400'}`}>{t('reportFormUploadFormats')}</p>
+              </div>
+            )}
           </div>
 
           {/* PRIVACY & VISIBILITY SETTINGS */}
@@ -434,7 +639,7 @@ export default function CreateReportForm({ onCancel, darkMode }) {
 
         </div>
 
-      </div>
+      </form>
     </main>
   );
 }
