@@ -35,10 +35,10 @@ const SidebarRight = ({ darkMode: propDarkMode, language = 'en' }) => {
         darkMode ? "bg-zinc-900" : "bg-white"
       }`}>
         <div className="flex items-center justify-between mb-4">
-          <h3 className={`font-bold text-xs ${darkMode ? "text-slate-200" : "text-gray-800"}`}>
+          <h3 className={`font-bold text-sm ${darkMode ? "text-slate-200" : "text-gray-800"}`}>
             {t.sidebarRight.peopleYouKnow}
           </h3>
-          <button className={`text-[11px] font-medium transition-colors hover:underline ${
+          <button className={`text-sm font-medium transition-colors hover:underline ${
             darkMode ? "text-blue-400 hover:text-blue-300" : "text-blue-600 hover:text-blue-700"
           }`}>
             {t.sidebarRight.viewAll}
@@ -53,17 +53,17 @@ const SidebarRight = ({ darkMode: propDarkMode, language = 'en' }) => {
                 <div className="flex items-center space-x-3">
                   <img src={person.avatar} alt={person.name} className="w-9 h-9 rounded-full object-cover" />
                   <div>
-                    <p className={`text-xs font-bold ${darkMode ? "text-slate-200" : "text-gray-800"}`}>
+                    <p className={`text-sm font-bold ${darkMode ? "text-slate-200" : "text-gray-800"}`}>
                       {person.name}
                     </p>
-                    <p className={`text-[10px] ${darkMode ? "text-zinc-400" : "text-gray-400"}`}>
+                    <p className={`text-sm ${darkMode ? "text-zinc-400" : "text-gray-400"}`}>
                       {person.role}
                     </p>
                   </div>
                 </div>
                 <button
                   onClick={() => toggleFollow(person.id)}
-                  className={`text-[11px] font-semibold flex-shrink-0 transition-colors ${
+                  className={`text-sm font-semibold flex-shrink-0 transition-colors ${
                     isFollowing 
                       ? darkMode 
                         ? 'text-blue-400 hover:text-blue-300' 

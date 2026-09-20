@@ -72,7 +72,7 @@ export default function AnswerItem({ answer, questionId, isQuestionAuthor }) {
     >
       {/* Accepted banner */}
       {answer.isAccepted && (
-        <div className="flex items-center gap-1.5 text-xs font-extrabold text-emerald-600 dark:text-emerald-400 mb-3 pb-2 border-b border-emerald-500/20">
+        <div className="flex items-center gap-1.5 text-sm font-extrabold text-emerald-600 dark:text-emerald-400 mb-3 pb-2 border-b border-emerald-500/20">
           <CheckCircle className="w-4 h-4 text-emerald-500" />
           <span>ACCEPTED SOLUTION BY AUTHOR</span>
         </div>
@@ -91,7 +91,7 @@ export default function AnswerItem({ answer, questionId, isQuestionAuthor }) {
             }`}
           >
             <ThumbsUp className="w-3.5 h-3.5" />
-            <span className="text-[11px] font-bold leading-none mt-0.5">{score}</span>
+            <span className="text-sm font-bold leading-none mt-0.5">{score}</span>
           </button>
 
           {isQuestionAuthor && !answer.isAccepted && (
@@ -115,14 +115,14 @@ export default function AnswerItem({ answer, questionId, isQuestionAuthor }) {
           {/* Code snippet if provided */}
           {answer.codeSnippet && (
             <div className="p-3 rounded-xl bg-slate-900 border border-slate-800 overflow-x-auto">
-              <pre className="font-mono text-xs text-emerald-400">
+              <pre className="font-mono text-sm text-emerald-400">
                 <code>{answer.codeSnippet}</code>
               </pre>
             </div>
           )}
 
           {/* Author info & timestamp */}
-          <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs text-slate-500 dark:text-slate-400">
+          <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-100 dark:border-slate-800 text-sm text-slate-500 dark:text-slate-400">
             <div className="flex items-center gap-2">
               <Avatar src={authorAvatar} name={authorName} size="xs" />
               <span className="font-semibold text-slate-700 dark:text-slate-300">
@@ -137,7 +137,7 @@ export default function AnswerItem({ answer, questionId, isQuestionAuthor }) {
 
             <button
               onClick={() => setShowCommentBox(!showCommentBox)}
-              className="inline-flex items-center gap-1 text-xs text-slate-500 hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer"
+              className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-blue-600 dark:hover:text-blue-400 cursor-pointer"
             >
               <MessageCircle className="w-3.5 h-3.5" />
               <span>Reply / Comment</span>
@@ -152,7 +152,7 @@ export default function AnswerItem({ answer, questionId, isQuestionAuthor }) {
                 onChange={(e) => setCommentText(e.target.value)}
                 placeholder="Add a clarifying note or feedback..."
                 rows={2}
-                className="text-xs"
+                className="text-sm"
               />
               <div className="flex justify-end gap-2">
                 <Button size="xs" variant="outline" type="button" onClick={() => setShowCommentBox(false)}>
@@ -169,7 +169,7 @@ export default function AnswerItem({ answer, questionId, isQuestionAuthor }) {
           {answer.comments && answer.comments.length > 0 && (
             <div className="space-y-2 pt-2 border-t border-slate-100 dark:border-slate-800">
               {answer.comments.map((cmt) => (
-                <div key={cmt.id} className="text-xs p-2 rounded-lg bg-slate-50 dark:bg-slate-800/50 flex items-start gap-2">
+                <div key={cmt.id} className="text-sm p-2 rounded-lg bg-slate-50 dark:bg-slate-800/50 flex items-start gap-2">
                   <span className="font-bold text-slate-700 dark:text-slate-300">{cmt.author?.name || cmt.userDisplayName || 'Scholar'}:</span>
                   <span className="text-slate-600 dark:text-slate-400">{cmt.text || cmt.content}</span>
                 </div>

@@ -14,9 +14,9 @@ export default function GenericPanel({ title, description, fields = [] }) {
           <div key={f.label} className="flex items-center justify-between p-3 border border-gray-200 rounded-lg">
             <div>
               <p className="text-sm font-medium text-gray-700">{f.label}</p>
-              {f.hint && <p className="text-xs text-gray-400 mt-0.5">{f.hint}</p>}
+              {f.hint && <p className="text-sm text-gray-400 mt-0.5">{f.hint}</p>}
             </div>
-            <span className="text-xs px-2.5 py-1 rounded-full bg-gray-100 text-gray-500">{f.status || 'Configured'}</span>
+            <span className="text-sm px-2.5 py-1 rounded-full bg-gray-100 text-gray-500">{f.status || 'Configured'}</span>
           </div>
         ))}
       </div>

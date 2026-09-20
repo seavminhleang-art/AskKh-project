@@ -1009,7 +1009,7 @@ export default function RegisterPage() {
                   </div>
 
                   {errors.firstName && (
-                    <p className="mt-1.5 text-xs font-medium text-red-500">
+                    <p className="mt-1.5 text-sm font-medium text-red-500">
                       {
                         errors
                           .firstName
@@ -1056,7 +1056,7 @@ export default function RegisterPage() {
                   </div>
 
                   {errors.lastName && (
-                    <p className="mt-1.5 text-xs font-medium text-red-500">
+                    <p className="mt-1.5 text-sm font-medium text-red-500">
                       {
                         errors
                           .lastName
@@ -1111,7 +1111,7 @@ export default function RegisterPage() {
                 </div>
 
                 {errors.email && (
-                  <p className="mt-1.5 text-xs font-medium text-red-500">
+                  <p className="mt-1.5 text-sm font-medium text-red-500">
                     {
                       errors
                         .email
@@ -1202,7 +1202,7 @@ export default function RegisterPage() {
                 </div>
 
                 {errors.password && (
-                  <p className="mt-1.5 text-xs font-medium text-red-500">
+                  <p className="mt-1.5 text-sm font-medium text-red-500">
                     {
                       errors
                         .password
@@ -1292,7 +1292,7 @@ export default function RegisterPage() {
                 </div>
 
                 {errors.confirmPassword && (
-                  <p className="mt-1.5 text-xs font-medium text-red-500">
+                  <p className="mt-1.5 text-sm font-medium text-red-500">
                     {
                       errors
                         .confirmPassword
@@ -1337,7 +1337,7 @@ export default function RegisterPage() {
                 </label>
 
                 {errors.agreeToTerms && (
-                  <p className="mt-1.5 text-xs font-medium text-red-500">
+                  <p className="mt-1.5 text-sm font-medium text-red-500">
                     {
                       errors
                         .agreeToTerms

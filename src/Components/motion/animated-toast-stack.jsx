@@ -2,17 +2,16 @@
 // beui.dev/components/motion/animated-toast-stack
 
 import { AlertCircle, Bell, Check, Info, LoaderCircle, X } from "lucide-react";
-import { AnimatePresence, motion, useReducedMotion } from "@/lib/motion";
-import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { forwardRef, memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { EASE_OUT } from "@/lib/ease";
 import { cn } from "@/lib/utils";
 
-const STACK_SPRING = {
-  type: "spring",
-  stiffness: 420,
-  damping: 34,
-  mass: 0.75,
+const STACK_TRANSITION = {
+  duration: 0.4,
+  ease: [0.22, 1, 0.36, 1],
+  layout: { duration: 0.32, ease: [0.22, 1, 0.36, 1] },
 };
 
 const CONTENT_TRANSITION = {
@@ -224,14 +223,14 @@ export function AnimatedToastStack({
   return stack;
 }
 
-const ToastItem = memo(function ToastItem({
+const ToastItem = memo(forwardRef(function ToastItem({
   toast,
   index,
   onDismiss,
   classNames,
   icons,
   renderToast
-}) {
+}, ref) {
   const reduce = useReducedMotion();
   const status = toast.status ?? "neutral";
   const Icon = STATUS_ICON[status];
@@ -240,11 +239,12 @@ const ToastItem = memo(function ToastItem({
 
   return (
     <motion.li
-      layout
+      ref={ref}
+      layout={!reduce}
       initial={
         reduce
           ? { opacity: 0 }
-          : { opacity: 0, y: 22, scale: 0.96, filter: "blur(10px)" }
+          : { opacity: 0, y: 20, scale: 0.94, filter: "blur(4px)" }
       }
       animate={
         reduce
@@ -256,13 +256,12 @@ const ToastItem = memo(function ToastItem({
           ? { opacity: 0 }
           : {
               opacity: 0,
-              x: 32,
-              scale: 0.96,
-              filter: "blur(8px)",
-              transition: { duration: 0.18, ease: EASE_OUT },
+              y: -20,
+              scale: 0.94,
+              filter: "blur(4px)",
             }
       }
-      transition={STACK_SPRING}
+      transition={reduce ? { duration: 0.15 } : STACK_TRANSITION}
       drag={canDismiss && !reduce ? "x" : false}
       dragConstraints={{ left: 0, right: 0 }}
       dragElastic={0.18}
@@ -284,7 +283,7 @@ const ToastItem = memo(function ToastItem({
         ) : (
           <div className="flex items-start gap-3">
             <motion.span
-              layout
+              layout={!reduce}
               className={cn(
                 "mt-0.5 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full",
                 STATUS_CLASS[status],
@@ -349,7 +348,7 @@ const ToastItem = memo(function ToastItem({
                   {toast.description ? (
                     <p
                       className={cn(
-                        "mt-0.5 line-clamp-2 text-xs leading-4 text-muted-foreground",
+                        "mt-0.5 line-clamp-2 text-sm leading-4 text-muted-foreground",
                         classNames?.description
                       )}>
                       {toast.description}
@@ -363,7 +362,7 @@ const ToastItem = memo(function ToastItem({
                   type="button"
                   onClick={() => toast.action?.onClick(toast)}
                   className={cn(
-                    "mt-2 inline-flex h-7 items-center rounded-full bg-primary/[0.06] px-3 text-xs font-medium text-foreground transition-colors hover:bg-primary/[0.1]",
+                    "mt-2 inline-flex h-7 items-center rounded-full bg-primary/[0.06] px-3 text-sm font-medium text-foreground transition-colors hover:bg-primary/[0.1]",
                     classNames?.action
                   )}>
                   {toast.action.label}
@@ -389,4 +388,4 @@ const ToastItem = memo(function ToastItem({
       </div>
     </motion.li>
   );
-});
+}));

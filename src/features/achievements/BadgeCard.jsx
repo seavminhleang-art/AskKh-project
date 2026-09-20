@@ -54,7 +54,7 @@ export default function BadgeCard({ achievement }) {
         </div>
 
         <span
-          className={`px-2.5 py-0.5 rounded-lg text-[10px] font-black uppercase border ${tierConfig.color}`}
+          className={`px-2.5 py-0.5 rounded-lg text-sm font-black uppercase border ${tierConfig.color}`}
         >
           {achievement.tier}
         </span>
@@ -64,13 +64,13 @@ export default function BadgeCard({ achievement }) {
         <h4 className="font-bold text-sm text-slate-900 dark:text-white">
           {achievement.title}
         </h4>
-        <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed min-h-[36px]">
+        <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed min-h-[36px]">
           {achievement.description}
         </p>
       </div>
 
       {achievement.unlocked ? (
-        <div className="flex items-center justify-between pt-3 mt-3 border-t border-slate-100 dark:border-slate-800 text-xs">
+        <div className="flex items-center justify-between pt-3 mt-3 border-t border-slate-100 dark:border-slate-800 text-sm">
           <span className="font-bold text-emerald-600 dark:text-emerald-400">
             +{achievement.points} Points Earned
           </span>
@@ -78,7 +78,7 @@ export default function BadgeCard({ achievement }) {
         </div>
       ) : (
         <div className="space-y-1.5 pt-3 mt-3 border-t border-slate-100 dark:border-slate-800">
-          <div className="flex items-center justify-between text-[11px] text-slate-500">
+          <div className="flex items-center justify-between text-sm text-slate-500">
             <span>Progress</span>
             <span className="font-bold">
               {achievement.progress} / {achievement.totalRequired}

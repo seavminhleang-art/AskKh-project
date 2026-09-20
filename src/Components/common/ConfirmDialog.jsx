@@ -37,7 +37,7 @@ export default function ConfirmDialog({
           </div>
           <div>
             <h3 className="text-lg font-bold text-slate-900 dark:text-white">{title}</h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Please review before confirming</p>
+            <p className="text-sm text-slate-500 dark:text-slate-400 mt-0.5">Please review before confirming</p>
           </div>
         </div>
 

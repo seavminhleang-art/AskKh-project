@@ -36,7 +36,7 @@ export default function CommunityVoice({ darkMode }) {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           transition={{ duration: 0.2 }}
-          className={`inline-block text-xs font-bold uppercase tracking-wider px-4 py-1.5 rounded-full mb-3  cursor-pointer ${
+          className={`inline-block text-sm font-bold uppercase tracking-wider px-4 py-1.5 rounded-full mb-3  cursor-pointer ${
             darkMode
               ? "bg-zinc-800 text-[var(--home-primary-text)]"
               : "bg-[var(--color-brand-primary-light)] text-[var(--home-primary-text)]"
@@ -88,7 +88,7 @@ export default function CommunityVoice({ darkMode }) {
                 <h4 className={`font-bold text-sm ${darkMode ? "text-slate-100" : "text-gray-900"}`}>
                   {testimonial.author}
                 </h4>
-                <p className={`text-xs ${darkMode ? "text-slate-400" : "text-gray-500"}`}>
+                <p className={`text-sm ${darkMode ? "text-slate-400" : "text-gray-500"}`}>
                   {testimonial.role}
                 </p>
               </div>

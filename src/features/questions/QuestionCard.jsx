@@ -60,7 +60,7 @@ export default function QuestionCard({ question }) {
             title="Upvote question"
           >
             <ThumbsUp className="w-4 h-4" />
-            <span className="text-xs font-bold leading-none mt-1">{score}</span>
+            <span className="text-sm font-bold leading-none mt-1">{score}</span>
           </button>
         </div>
 
@@ -69,7 +69,7 @@ export default function QuestionCard({ question }) {
           <div className="flex flex-wrap items-center gap-2">
             <Badge variant="blue">{category}</Badge>
             {isAccepted && (
-              <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800">
+              <span className="inline-flex items-center gap-1 text-sm font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800">
                 <CheckCircle2 className="w-3 h-3" />
                 Solved
               </span>
@@ -77,7 +77,7 @@ export default function QuestionCard({ question }) {
           </div>
 
           <Link to={`/community/questions/${question.id}`} className="block group">
-            <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors leading-snug">
+            <h3 className="text-lg sm:text-lg font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors leading-snug">
               {question.title}
             </h3>
           </Link>
@@ -92,7 +92,7 @@ export default function QuestionCard({ question }) {
               {tags.map((tag, idx) => (
                 <span
                   key={idx}
-                  className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg text-xs font-medium bg-slate-100 text-slate-600 dark:bg-slate-800/80 dark:text-slate-300 hover:bg-slate-200 transition-colors"
+                  className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg text-sm font-medium bg-slate-100 text-slate-600 dark:bg-slate-800/80 dark:text-slate-300 hover:bg-slate-200 transition-colors"
                 >
                   <Tag className="w-2.5 h-2.5 opacity-60" />
                   {tag}
@@ -102,7 +102,7 @@ export default function QuestionCard({ question }) {
           )}
 
           {/* Card Footer Meta */}
-          <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-100 dark:border-slate-800/80 text-xs text-slate-500 dark:text-slate-400">
+          <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-100 dark:border-slate-800/80 text-sm text-slate-500 dark:text-slate-400">
             {/* Author */}
             <div className="flex items-center gap-2">
               <Avatar

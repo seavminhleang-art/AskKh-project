@@ -68,7 +68,7 @@ export default function TrendingDiscussions({ darkMode }) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           whileHover={{ scale: 1.05 }}
-          className={`inline-block text-xs font-bold uppercase tracking-wider px-4 py-1.5 rounded-full mb-3 cursor-pointer ${
+          className={`inline-block text-sm font-bold uppercase tracking-wider px-4 py-1.5 rounded-full mb-3 cursor-pointer ${
             darkMode
               ? "bg-red-950/80 text-red-400"
               : "bg-[#fde0e0]/90 text-[var(--home-secondary-text)]"
@@ -105,7 +105,7 @@ export default function TrendingDiscussions({ darkMode }) {
             <div>
               <div className="flex items-center gap-2 mb-4">
                 {discussion.tags.map((tag, tIdx) => (
-                  <span key={tIdx} className={`text-xs font-semibold px-3 py-1 rounded-full ${discussion.tagColors[tIdx]}`}>
+                  <span key={tIdx} className={`text-sm font-semibold px-3 py-1 rounded-full ${discussion.tagColors[tIdx]}`}>
                     {tag}
                   </span>
                 ))}
@@ -116,14 +116,14 @@ export default function TrendingDiscussions({ darkMode }) {
               }`}>
                 {discussion.title}
               </h3>
-              <p className={`text-xs md:text-sm leading-relaxed mb-6 ${
+              <p className={`text-sm md:text-sm leading-relaxed mb-6 ${
                 darkMode ? "text-slate-400" : "text-gray-600"
               }`}>
                 {discussion.excerpt}
               </p>
             </div>
 
-            <div className={`flex items-center justify-between pt-4 border-t text-xs ${
+            <div className={`flex items-center justify-between pt-4 border-t text-sm ${
               darkMode ? "border-zinc-800 text-slate-400" : "border-gray-100 text-gray-500"
             }`}>
               <div className="flex items-center gap-2">

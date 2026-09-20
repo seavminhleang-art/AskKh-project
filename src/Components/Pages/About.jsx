@@ -90,8 +90,8 @@ const visionPointsKey = "aboutPage.visionPoints";
 // Add each person’s full LinkedIn profile URL to linkedin, e.g. https://www.linkedin.com/in/username/.
 // Leave it empty to display an inactive LinkedIn icon.
 const mentors = [
-  { num: "01", name: "aboutPage.members.names.sokcheat", roleLabel: "Senior IT Instructor", role: "aboutPage.members.roles.mentor", photo: sokcheatPhoto, github: "https://github.com/Sokcheatsrorng", linkedin: "" },
-  { num: "02", name: "aboutPage.members.names.rattanakmony", roleLabel: "Senior IT Instructor", role: "aboutPage.members.roles.mentor", photo: rattanakmonyPhoto, github: "https://github.com/aintantony", linkedin: "" },
+  { num: "01", name: "aboutPage.members.names.sokcheat", roleLabel: "Senior IT Instructor", role: "aboutPage.members.roles.mentor", photo: sokcheatPhoto, github: "https://github.com/Sokcheatsrorng", linkedin: "https://www.linkedin.com/in/srorng-sokcheat-09b542341/" },
+  { num: "02", name: "aboutPage.members.names.rattanakmony", roleLabel: "Senior IT Instructor", role: "aboutPage.members.roles.mentor", photo: rattanakmonyPhoto, github: "https://github.com/aintantony", linkedin: "https://www.linkedin.com/in/rattanakmony-pech" },
 ];
 
 const teamLeads = [
@@ -113,7 +113,7 @@ function MemberCard({ num, name, roleLabel, role, photo, github, linkedin, darkM
   return (
     <div className={`rounded-3xl shadow-md overflow-hidden text-center pt-6 hover:shadow-xl transition-all duration-300 hover:-translate-y-2 ${darkMode ? "bg-zinc-900 hover:shadow-brand-primary/10" : "bg-white hover:shadow-brand-primary/20"}`}>
       <div className="flex justify-between items-start px-5">
-        <span className="bg-brand-primary text-white text-xs font-bold px-3 py-1.5 rounded-lg">{num}</span>
+        <span className="bg-brand-primary text-white text-sm font-bold px-3 py-1.5 rounded-lg">{num}</span>
         <div className="grid grid-cols-3 gap-1 mt-1">
           {Array.from({ length: 6 }).map((_, i) => (
             <span key={i} className="w-1 h-1 bg-brand-primary/40 rounded-full" />
@@ -136,11 +136,11 @@ function MemberCard({ num, name, roleLabel, role, photo, github, linkedin, darkM
       <h3 className="text-brand-primary font-bold text-lg">{t(name)}</h3>
       <div className="flex items-center justify-center gap-2 mt-2">
         <span className="w-4 h-px bg-brand-secondary/40" />
-        <p className="text-brand-secondary text-xs font-bold uppercase tracking-wide">{roleLabel}</p>
+        <p className="text-brand-secondary text-sm font-bold uppercase tracking-wide">{roleLabel}</p>
         <span className="w-4 h-px bg-brand-secondary/40" />
       </div>
       <div className="mt-4">
-        <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-brand-primary border border-brand-primary/50 rounded-full px-4 py-1.5">
+        <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-primary border border-brand-primary/50 rounded-full px-4 py-1.5">
           <PeopleIcon />
           {t(role).toUpperCase()}
         </span>
@@ -165,7 +165,7 @@ function MemberCard({ num, name, roleLabel, role, photo, github, linkedin, darkM
   );
 }
 
-export default function AboutAskKh() {
+export default function AboutNexa() {
   const { t } = useTranslation();
   const { darkMode } = useTheme();
   return (
@@ -191,7 +191,7 @@ export default function AboutAskKh() {
         </ScrollReveal>
         <div className="flex justify-center">
           <ScrollReveal animation="scaleIn" delay={200}>
-            <IllustrationImage src={communityDarkImg} alt="About AskKh" className="w-full max-w-m animate-float" />
+            <IllustrationImage src={communityDarkImg} alt="About NEXA" className="w-full max-w-m animate-float" />
           </ScrollReveal>
         </div>
       </section>

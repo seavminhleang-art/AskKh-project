@@ -69,7 +69,7 @@ export default function HeroSection({ darkMode }) {
           <motion.p
             initial={{ opacity: 0, y: -5 }}
             animate={{ opacity: 1, y: 0 }}
-            className={`text-xs font-medium mt-1 ${subscribeStatus === "success" ? "text-[var(--color-brand-accent)]" : "text-[var(--home-secondary-text)]"}`}
+            className={`text-sm font-medium mt-1 ${subscribeStatus === "success" ? "text-[var(--color-brand-accent)]" : "text-[var(--home-secondary-text)]"}`}
           >
             {subscribeMessage}
           </motion.p>

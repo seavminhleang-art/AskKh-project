@@ -21,7 +21,7 @@ export default function Footer() {
             <p className="text-sm text-slate-400 leading-relaxed max-w-sm">
               Empowering the ISTAD community with academic peer Q&A and an intelligent campus lost & found recovery network.
             </p>
-            <div className="space-y-2 text-xs text-slate-400 pt-2">
+            <div className="space-y-2 text-sm text-slate-400 pt-2">
               <div className="flex items-center gap-2">
                 <MapPin className="w-4 h-4 text-blue-400 shrink-0" />
                 <span>Institute of Science and Technology Advanced Development (ISTAD), Phnom Penh</span>
@@ -35,7 +35,7 @@ export default function Footer() {
 
           {/* Q&A / Knowledge Hub */}
           <div className="space-y-3">
-            <h4 className="text-xs font-black tracking-wider uppercase text-white">
+            <h4 className="text-sm font-black tracking-wider uppercase text-white">
               Tech Forum & Q&A
             </h4>
             <ul className="space-y-2 text-sm">
@@ -69,7 +69,7 @@ export default function Footer() {
 
           {/* Lost & Found */}
           <div className="space-y-3">
-            <h4 className="text-xs font-black tracking-wider uppercase text-white">
+            <h4 className="text-sm font-black tracking-wider uppercase text-white">
               Recovery Hub
             </h4>
             <ul className="space-y-2 text-sm">
@@ -103,7 +103,7 @@ export default function Footer() {
 
           {/* Community & Safety */}
           <div className="space-y-3">
-            <h4 className="text-xs font-black tracking-wider uppercase text-white">
+            <h4 className="text-sm font-black tracking-wider uppercase text-white">
               Community & Safety
             </h4>
             <ul className="space-y-2 text-sm">
@@ -133,7 +133,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom copyright and status */}
-        <div className="pt-8 border-t border-slate-900 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+        <div className="pt-8 border-t border-slate-900 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-slate-500">
           <p>© {new Date().getFullYear()} Nexa Ask & Found. ISTAD Academic Capstone Platform.</p>
           <div className="flex items-center gap-4">
             <span className="inline-flex items-center gap-1.5 text-emerald-400">

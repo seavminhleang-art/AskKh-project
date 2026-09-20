@@ -42,7 +42,7 @@ export default function HomePage() {
 
       {/* Custom Mouse Follower Tooltip */}
       <motion.div
-        className={`hidden lg:flex fixed top-0 left-0 pointer-events-none z-50 flex items-center justify-center px-3 py-1.5 rounded-full backdrop-blur-md text-xs font-medium shadow-xl ${
+        className={`hidden lg:flex fixed top-0 left-0 pointer-events-none z-50 flex items-center justify-center px-3 py-1.5 rounded-full backdrop-blur-md text-sm font-medium shadow-xl ${
           darkMode ? "bg-gray-100/90 text-gray-900" : "bg-gray-900/90 text-white"
         }`}
         style={{

@@ -41,7 +41,7 @@ export default function LostFoundCard({ item, onSelectDetails }) {
           </div>
 
           {(item.potentialMatchesCount > 0 || item.matchScore) && (
-            <div className="absolute top-3 right-3 bg-blue-600/90 text-white text-[11px] font-bold px-2.5 py-1 rounded-full backdrop-blur-xs flex items-center gap-1 shadow-md">
+            <div className="absolute top-3 right-3 bg-blue-600/90 text-white text-sm font-bold px-2.5 py-1 rounded-full backdrop-blur-xs flex items-center gap-1 shadow-md">
               <Sparkles className="w-3 h-3 text-amber-300" />
               <span>Smart Match Ready</span>
             </div>
@@ -56,7 +56,7 @@ export default function LostFoundCard({ item, onSelectDetails }) {
                 {categoryName}
               </Badge>
               {item.verified && (
-                <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-blue-600 dark:text-blue-400">
+                <span className="inline-flex items-center gap-1 text-sm font-semibold text-blue-600 dark:text-blue-400">
                   <ShieldCheck className="w-3.5 h-3.5" />
                   Verified
                 </span>
@@ -64,18 +64,18 @@ export default function LostFoundCard({ item, onSelectDetails }) {
             </div>
 
             <Link to={`/community/lost-found/${item.id}`} className="block">
-              <h3 className="text-base font-bold text-slate-900 dark:text-white line-clamp-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white line-clamp-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                 {title}
               </h3>
             </Link>
 
-            <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">
+            <p className="text-sm text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">
               {item.description}
             </p>
           </div>
 
           {/* Metadata Section */}
-          <div className="space-y-2 pt-2 border-t border-slate-100 dark:border-slate-800 text-xs text-slate-500 dark:text-slate-400">
+          <div className="space-y-2 pt-2 border-t border-slate-100 dark:border-slate-800 text-sm text-slate-500 dark:text-slate-400">
             <div className="flex items-center gap-1.5 truncate">
               <MapPin className="w-3.5 h-3.5 text-rose-500 shrink-0" />
               <span className="truncate">{locationText}</span>
@@ -95,7 +95,7 @@ export default function LostFoundCard({ item, onSelectDetails }) {
           {/* Action Row */}
           <div className="pt-3 flex items-center gap-2">
             <Link to={`/community/lost-found/${item.id}`} className="flex-1">
-              <Button variant="outline" size="sm" className="w-full text-xs rounded-xl">
+              <Button variant="outline" size="sm" className="w-full text-sm rounded-xl">
                 View Details
               </Button>
             </Link>
@@ -105,7 +105,7 @@ export default function LostFoundCard({ item, onSelectDetails }) {
                 variant="default"
                 size="sm"
                 onClick={() => setIsClaimModalOpen(true)}
-                className="text-xs rounded-xl gap-1"
+                className="text-sm rounded-xl gap-1"
               >
                 Claim Item
                 <ArrowRight className="w-3 h-3" />

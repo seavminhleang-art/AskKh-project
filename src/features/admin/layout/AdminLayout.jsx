@@ -15,7 +15,7 @@ export default function AdminLayout() {
         </main>
       </div>
       {isDev && (
-        <div className="fixed bottom-3 left-3 z-50 text-[10px] font-medium bg-amber-100 text-amber-700 px-2 py-1 rounded-md pointer-events-none">
+        <div className="fixed bottom-3 left-3 z-50 text-sm font-medium bg-amber-100 text-amber-700 px-2 py-1 rounded-md pointer-events-none">
           MOCK DATA
         </div>
       )}

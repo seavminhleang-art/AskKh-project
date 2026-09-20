@@ -13,7 +13,7 @@ export default function Avatar({ name = "Admin", src, size = 32 }) {
 
   return (
     <span
-      className="inline-flex shrink-0 items-center justify-center rounded-full bg-blue-100 text-xs font-semibold text-blue-700"
+      className="inline-flex shrink-0 items-center justify-center rounded-full bg-blue-100 text-sm font-semibold text-blue-700"
       style={{ width: size, height: size }}
       aria-label={name}
     >

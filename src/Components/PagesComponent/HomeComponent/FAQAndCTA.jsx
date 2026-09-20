@@ -38,7 +38,7 @@ export default function FAQAndCTA({ darkMode }) {
       <section className="mb-28 max-w-4xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-12">
           <div
-            className={`inline-block text-xs font-bold uppercase tracking-wider px-4 py-1.5 rounded-full mb-3 ${
+            className={`inline-block text-sm font-bold uppercase tracking-wider px-4 py-1.5 rounded-full mb-3 ${
               darkMode
                 ? "bg-zinc-800 text-[var(--home-primary-text)]"
                 : "bg-[var(--color-brand-primary-light)] text-[var(--home-primary-text)]"
@@ -127,7 +127,7 @@ export default function FAQAndCTA({ darkMode }) {
             {t("ctaTitle")}
           </h2>
           {/* Forced light gray subtitle color */}
-          <p className="text-xs sm:text-sm mb-8 leading-relaxed max-w-xl mx-auto text-gray-200">
+          <p className="text-sm sm:text-sm mb-8 leading-relaxed max-w-xl mx-auto text-gray-200">
             {t("ctaSubtitle")}
           </p>
 
@@ -155,7 +155,7 @@ export default function FAQAndCTA({ darkMode }) {
               <motion.p
                 initial={{ opacity: 0, y: -5 }}
                 animate={{ opacity: 1, y: 0 }}
-                className={`text-xs font-medium mt-2 ${status === "success" ? "text-emerald-400" : "text-red-400"}`}
+                className={`text-sm font-medium mt-2 ${status === "success" ? "text-emerald-400" : "text-red-400"}`}
               >
                 {message}
               </motion.p>

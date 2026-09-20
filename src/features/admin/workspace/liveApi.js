@@ -1,13 +1,16 @@
+import { FORUM_API_BASE_URL } from '@/config/forumApi';
 import { fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { baseApi } from '@/store/api/baseApi';
+import { managementRequest } from './managementRequests';
 import { auth } from '@/Components/Firebase/firebase';
 
 export const resourcePaths = {
-  users: '/users/search?query=', posts: '/posts', comments: '/posts', tags: '/tags',
+  categories: '/lost-found/categories', locations: '/lost-found/locations', leaderboard: '/users/search?query=',
+  users: '/users/search?query=', posts: '/posts', comments: '/comments/search?query=', tags: '/tags',
   'lost-found': '/lost-found/reports', notifications: '/notifications',
 };
-const request = fetchBaseQuery({
-  baseUrl: import.meta.env.VITE_API_BASE_URL || 'https://forum-istad-api.cheat.casa/api/v1',
+const rawRequest = fetchBaseQuery({
+  baseUrl: FORUM_API_BASE_URL,
   timeout: 15000,
   prepareHeaders: async (headers, { getState }) => {
     const token = auth.currentUser ? await auth.currentUser.getIdToken() : getState().auth.accessToken;
@@ -15,6 +18,20 @@ const request = fetchBaseQuery({
     return headers;
   },
 });
+
+// Keep backend authorization failures visible without clearing the Firebase session.
+async function request(args, api, options) {
+  try {
+    let response = await rawRequest(args, api, options);
+    if (response.error?.status === 401 && auth.currentUser) {
+      await auth.currentUser.getIdToken(true);
+      response = await rawRequest(args, api, options);
+    }
+    return response;
+  } catch (error) {
+    return { error: { status: 'CUSTOM_ERROR', error: error.message || 'Unable to authenticate the API request.' } };
+  }
+}
 
 export function unpackList(data) {
   if (Array.isArray(data)) return { rows: data, total: null };
@@ -28,23 +45,61 @@ export function unpackList(data) {
 const liveApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     adminResource: builder.query({
-      async queryFn(resource, api, options) {
+      async queryFn(argument, api, options) {
+        const { resource, search = '', page = 0 } = typeof argument === 'string' ? { resource: argument } : argument;
         if (!resourcePaths[resource]) return { error: { status: 'CUSTOM_ERROR', error: 'This resource has no configured endpoint.' } };
         try {
-          const response = await request(resourcePaths[resource], api, options);
+          let path = resourcePaths[resource];
+          const searchPaths = { users: '/users/search', posts: '/posts/search', comments: '/comments/search', tags: '/tags/search' };
+          if (search && searchPaths[resource]) path = `${searchPaths[resource]}?query=${encodeURIComponent(search)}`;
+          if (resource === 'notifications') path = `/notifications?page=${page}&size=20`;
+          const response = await request(path, api, options);
           if (response.error) return response;
           const data = unpackList(response.data);
-          if (resource === 'comments') {
-            if (!data.rows.every(post => Array.isArray(post.comments))) throw new Error('Comments are not included in the posts response.');
-            return { data: { rows: data.rows.flatMap(post => post.comments.map(comment => ({ ...comment, postTitle: post.title }))), total: null } };
-          }
           return { data };
         } catch (error) {
           return { error: { status: 'CUSTOM_ERROR', error: error.message } };
         }
       },
-      providesTags: ['Analytics'],
+      providesTags: (_result, _error, argument) => {
+        const resource = typeof argument === 'string' ? argument : argument.resource;
+        const tags = { categories: 'Category', locations: 'Location', leaderboard: 'User', users: 'User', posts: 'Post', comments: 'Comment', tags: 'Tag', 'lost-found': 'LostFound', notifications: 'Notification' };
+        return ['Analytics', ...(tags[resource] ? [tags[resource]] : [])];
+      },
+    }),
+    adminManage: builder.mutation({
+      async queryFn(argument, api, options) {
+        try { return await request(managementRequest(argument), api, options); }
+        catch (error) { return { error: { status: 'CUSTOM_ERROR', error: error.message } }; }
+      },
+      invalidatesTags: (result, error) => error ? [] : ['User', 'Post', 'Comment', 'Tag', 'Claim', 'Match', 'LostFound', 'Category', 'Analytics'],
+    }),
+    adminReportRelated: builder.query({
+      async queryFn({ id, kind }, api, options) {
+        if (!['claims', 'matches'].includes(kind) || id == null) return { error: { status: 'CUSTOM_ERROR', error: 'Invalid report request.' } };
+        const response = await request(`/lost-found/reports/${encodeURIComponent(id)}/${kind}`, api, options);
+        if (response.error) return response;
+        try { return { data: unpackList(response.data) }; }
+        catch (error) { return { error: { status: 'CUSTOM_ERROR', error: error.message } }; }
+      },
+      providesTags: ['Claim', 'LostFound'],
+    }),
+    adminProfile: builder.query({
+      queryFn: (_argument, api, options) => request('/users/me', api, options),
+      providesTags: ['User'],
+    }),
+    adminUnreadCount: builder.query({
+      queryFn: (_argument, api, options) => request('/notifications/unread-count', api, options),
+      providesTags: ['Notification'],
+    }),
+    adminMarkRead: builder.mutation({
+      queryFn: (id, api, options) => request({ url: `/notifications/${encodeURIComponent(id)}/read`, method: 'PATCH' }, api, options),
+      invalidatesTags: ['Notification'],
+    }),
+    adminMarkAllRead: builder.mutation({
+      queryFn: (_argument, api, options) => request({ url: '/notifications/read-all', method: 'PATCH' }, api, options),
+      invalidatesTags: ['Notification'],
     }),
   }),
 });
-export const { useAdminResourceQuery } = liveApi;
+export const { useAdminResourceQuery, useAdminManageMutation, useAdminReportRelatedQuery, useAdminProfileQuery, useAdminUnreadCountQuery, useAdminMarkReadMutation, useAdminMarkAllReadMutation } = liveApi;

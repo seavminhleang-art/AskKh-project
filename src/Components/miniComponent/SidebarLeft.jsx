@@ -1,22 +1,18 @@
 import React from 'react';
 import { Search, Bookmark, Heart } from 'lucide-react';
-import { FaJava, FaLinux, FaPen, FaReact } from 'react-icons/fa';
+import { Hash } from 'lucide-react';
+import { useGetPopularTagsQuery } from '../../features/tags/tagApi';
+import { rowsOf } from '../../features/qa/model';
 import { useOutletContext } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-const SidebarLeft = ({ activeTab, setActiveTab, savedCount, darkMode: propDarkMode }) => {
+const SidebarLeft = ({ onSelectTag, activeTab, setActiveTab, savedCount, darkMode: propDarkMode }) => {
   const { t } = useTranslation();
   const context = useOutletContext();
   const darkMode = propDarkMode ?? context?.darkMode ?? false;
 
-  const tags = [
-    { name: '#javascript', count: '82,645 Posted by this tag', icon: FaReact },
-    { name: '#java', count: '65,523 Posted • Trending', icon: FaJava },
-    { name: '#typescript', count: '51,354 • Trending in Bangladesh', icon: FaJava },
-    { name: '#frontend', count: '48,029 Posted by this tag', icon: FaPen },
-    { name: '#linux', count: '51,354 • Trending in Bangladesh', icon: FaLinux },
-    { name: '#react', count: '82,645 Posted by this tag', icon: FaReact }
-  ];
+  const query = useGetPopularTagsQuery();
+  const tags = rowsOf(query.data).slice(0, 8).map(tag => ({ name: tag.tagName, count: `${tag.count ?? 0} posts`, icon: Hash }));
 
   return (
     <aside className="w-full min-w-0 space-y-6">
@@ -45,8 +41,8 @@ const SidebarLeft = ({ activeTab, setActiveTab, savedCount, darkMode: propDarkMo
             <Search className="w-4 h-4" />
           </div>
           <div className="text-left">
-            <p className="font-semibold text-xs">{t('nav.newest')}</p>
-            <p className={`text-[10px] ${
+            <p className="font-semibold text-sm">{t('nav.newest')}</p>
+            <p className={`text-sm ${
               activeTab === 'newest' 
                 ? 'text-blue-100' 
                 : darkMode 
@@ -80,8 +76,8 @@ const SidebarLeft = ({ activeTab, setActiveTab, savedCount, darkMode: propDarkMo
               <Bookmark className="w-4 h-4 fill-current" />
             </div>
             <div className="text-left">
-              <p className="font-semibold text-xs">{t('nav.bookmarks')}</p>
-              <p className={`text-[10px] ${
+              <p className="font-semibold text-sm">{t('nav.bookmarks')}</p>
+              <p className={`text-sm ${
                 activeTab === 'bookmarks' 
                   ? 'text-blue-100' 
                   : darkMode 
@@ -93,7 +89,7 @@ const SidebarLeft = ({ activeTab, setActiveTab, savedCount, darkMode: propDarkMo
             </div>
           </div>
           {savedCount > 0 && (
-            <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+            <span className={`text-sm font-bold px-2 py-0.5 rounded-full ${
               activeTab === 'bookmarks' 
                 ? 'bg-white text-blue-600' 
                 : darkMode 
@@ -126,8 +122,8 @@ const SidebarLeft = ({ activeTab, setActiveTab, savedCount, darkMode: propDarkMo
             <Heart className="w-4 h-4" />
           </div>
           <div className="text-left">
-            <p className="font-semibold text-xs">{t('nav.yourPost')}</p>
-            <p className={`text-[10px] ${
+            <p className="font-semibold text-sm">{t('nav.yourPost')}</p>
+            <p className={`text-sm ${
               activeTab === 'following' 
                 ? 'text-blue-100' 
                 : darkMode 
@@ -144,14 +140,16 @@ const SidebarLeft = ({ activeTab, setActiveTab, savedCount, darkMode: propDarkMo
       <div className={`rounded-2xl p-4 transition-colors ${
         darkMode ? "bg-zinc-900" : "bg-white"
       }`}>
-        <h3 className={`font-bold text-xs mb-3 ${darkMode ? "text-slate-200" : "text-gray-800"}`}>
+        <h3 className={`font-bold text-sm mb-3 ${darkMode ? "text-slate-200" : "text-gray-800"}`}>
           {t('sidebar.popularTags')}
         </h3>
+        {query.isLoading && <p role="status" className="text-sm">Loading tags…</p>}
+        {query.isError && <button className="text-sm" onClick={query.refetch}>Retry loading tags</button>}
         <div className="space-y-3">
           {tags.map((tag, idx) => {
             const IconComponent = tag.icon;
             return (
-              <div key={idx} className="flex items-center space-x-3 cursor-pointer group">
+              <button type="button" onClick={() => onSelectTag?.(tag.name)} key={idx} className="flex w-full text-left items-center space-x-3 cursor-pointer group">
                 <div className={`p-2 rounded-lg transition-colors ${
                   darkMode 
                     ? "bg-zinc-800 text-zinc-400 group-hover:bg-blue-950/50 group-hover:text-blue-400" 
@@ -160,18 +158,18 @@ const SidebarLeft = ({ activeTab, setActiveTab, savedCount, darkMode: propDarkMo
                   <IconComponent className="w-3.5 h-3.5" />
                 </div>
                 <div>
-                  <p className={`text-xs font-bold transition-colors ${
+                  <p className={`text-sm font-bold transition-colors ${
                     darkMode 
                       ? "text-slate-200 group-hover:text-blue-400" 
                       : "text-gray-800 group-hover:text-blue-600"
                   }`}>
                     {tag.name}
                   </p>
-                  <p className={`text-[10px] ${darkMode ? "text-zinc-400" : "text-gray-400"}`}>
+                  <p className={`text-sm ${darkMode ? "text-zinc-400" : "text-gray-400"}`}>
                     {tag.count}
                   </p>
                 </div>
-              </div>
+              </button>
             );
           })}
         </div>

@@ -5,6 +5,7 @@ import { Provider } from "react-redux";
 import "./index.css";
 import "./i18n";
 import App from "./App.jsx";
+import Preloader from "./Components/Animations/Preloader.jsx";
 
 import TermsAndConditions from "./Components/Pages/TermAndConditions.jsx";
 import PrivacyPolicy from "./Components/Pages/Policy.jsx";
@@ -93,7 +94,7 @@ const router = createBrowserRouter([
           children: [
             { path: "admin", element: <AdminDashboardPage /> },
             { path: "admin/dashboard", element: <AdminDashboardPage /> },
-            ...["users", "posts", "comments", "tags", "lost-found", "moderation", "marketplace", "notifications", "settings"].map(resource => ({
+            ...["users", "posts", "comments", "tags", "lost-found", "moderation", "marketplace", "notifications", "settings", "locations", "claims", "leaderboard"].map(resource => ({
               path: `admin/${resource}`, element: <AdminResourcePage key={resource} resource={resource} />,
             })),
           ],
@@ -110,7 +111,9 @@ ReactDOM.createRoot(root).render(
       <LegacyThemeProvider defaultTheme="light">
         <ThemeProvider>
           <LanguageProvider>
-            <RouterProvider router={router} />
+            <Preloader>
+              <RouterProvider router={router} />
+            </Preloader>
           </LanguageProvider>
         </ThemeProvider>
       </LegacyThemeProvider>

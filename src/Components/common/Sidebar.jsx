@@ -58,7 +58,7 @@ export default function Sidebar({ mode = 'user', mobile = false }) {
             <span className="admin-brand-mark">N</span>
             <div>
               <p className="text-sm font-black tracking-wide text-white">NEXA</p>
-              <p className="text-[10px] font-bold uppercase tracking-[.18em] text-indigo-400">Administration</p>
+              <p className="text-sm font-bold uppercase tracking-[.18em] text-indigo-400">Administration</p>
             </div>
           </div>
         )}
@@ -74,7 +74,7 @@ export default function Sidebar({ mode = 'user', mobile = false }) {
               <div className="flex items-center gap-1.5 mt-0.5">
                 <span
                   className={cn(
-                    'px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase',
+                    'px-2 py-0.5 rounded-full text-sm font-extrabold uppercase',
                     mode === 'admin'
                       ? 'bg-rose-500/15 text-rose-600 dark:text-rose-400'
                       : 'bg-blue-500/15 text-blue-600 dark:text-blue-400'
@@ -82,7 +82,7 @@ export default function Sidebar({ mode = 'user', mobile = false }) {
                 >
                   {role}
                 </span>
-                <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
+                <span className="text-sm text-slate-500 dark:text-slate-400 font-medium">
                   {user.points || 0} pts
                 </span>
               </div>
@@ -92,7 +92,7 @@ export default function Sidebar({ mode = 'user', mobile = false }) {
 
         {/* Section Label */}
         <div>
-          <p className={cn("px-3 text-[11px] font-extrabold uppercase tracking-wider mb-2", mode === 'admin' ? "text-slate-400" : "text-slate-400 dark:text-slate-500")}>
+          <p className={cn("px-3 text-sm font-extrabold uppercase tracking-wider mb-2", mode === 'admin' ? "text-slate-400" : "text-slate-400 dark:text-slate-500")}>
             {mode === 'admin' ? 'Campus Administration' : 'Member Workspace'}
           </p>
 
@@ -122,7 +122,7 @@ export default function Sidebar({ mode = 'user', mobile = false }) {
                     <span>{item.label}</span>
                   </div>
                   {item.badge && (
-                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300">
+                    <span className="px-2 py-0.5 rounded-full text-sm font-bold bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300">
                       {item.badge}
                     </span>
                   )}
@@ -138,7 +138,7 @@ export default function Sidebar({ mode = 'user', mobile = false }) {
 
         <button
           onClick={handleLogout}
-          className="flex w-full items-center gap-2 px-3.5 py-2 text-xs font-semibold text-slate-500 hover:text-rose-600 dark:hover:text-rose-400 transition-colors cursor-pointer"
+          className="flex w-full items-center gap-2 px-3.5 py-2 text-sm font-semibold text-slate-500 hover:text-rose-600 dark:hover:text-rose-400 transition-colors cursor-pointer"
         >
           <LogOut className="w-4 h-4" />
           <span>Sign Out</span>

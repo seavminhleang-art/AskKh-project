@@ -52,7 +52,7 @@ export default function RecentRecoveries({ darkMode }) {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           transition={{ duration: 0.2 }}
-          className={`inline-block text-xs font-bold uppercase tracking-wider px-4 py-1.5 rounded-full mb-3 cursor-pointer ${
+          className={`inline-block text-sm font-bold uppercase tracking-wider px-4 py-1.5 rounded-full mb-3 cursor-pointer ${
             darkMode
               ? "bg-zinc-800 text-[var(--home-secondary-text)]"
               : "bg-[var(--color-brand-secondary-light)] text-[var(--home-secondary-text)]"
@@ -88,13 +88,13 @@ export default function RecentRecoveries({ darkMode }) {
               <div className={`relative h-48 rounded-2xl overflow-hidden mb-4 ${
                 darkMode ? "bg-zinc-950" : "bg-gray-100"
               }`}>
-                <span className={`absolute top-3 left-3 z-10 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider ${item.statusBg} shadow-md`}>
+                <span className={`absolute top-3 left-3 z-10 text-sm font-bold px-3 py-1 rounded-full uppercase tracking-wider ${item.statusBg} shadow-md`}>
                   {item.status}
                 </span>
                 <img src={item.img} alt={item.title} className="w-full h-full object-cover transform hover:scale-105 transition duration-500" />
               </div>
 
-              <div className={`flex items-center justify-between text-xs mb-2 ${
+              <div className={`flex items-center justify-between text-sm mb-2 ${
                 darkMode ? "text-slate-400" : "text-gray-400"
               }`}>
                 <span className={`flex items-center gap-1 font-medium truncate max-w-[180px] ${
@@ -111,7 +111,7 @@ export default function RecentRecoveries({ darkMode }) {
               }`}>
                 {item.title}
               </h3>
-              <p className={`text-xs leading-relaxed mb-6 ${
+              <p className={`text-sm leading-relaxed mb-6 ${
                 darkMode ? "text-slate-400" : "text-gray-600"
               }`}>
                 {item.desc}
@@ -125,7 +125,7 @@ export default function RecentRecoveries({ darkMode }) {
                 <img src={item.avatar} alt={item.author} className={`w-7 h-7 rounded-full object-cover ${
                   darkMode ? "border-zinc-700" : "border-gray-200"
                 }`} />
-                <span className={`text-xs font-medium ${darkMode ? "text-slate-300" : "text-gray-700"}`}>
+                <span className={`text-sm font-medium ${darkMode ? "text-slate-300" : "text-gray-700"}`}>
                   {item.author}
                 </span>
               </div>
@@ -133,7 +133,7 @@ export default function RecentRecoveries({ darkMode }) {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className={`text-xs font-semibold px-3.5 py-1.5 rounded-full transition ${
+                className={`text-sm font-semibold px-3.5 py-1.5 rounded-full transition ${
                   darkMode
                     ? "bg-emerald-950/80 text-emerald-400 hover:bg-emerald-900/80"
                     : "bg-emerald-50 text-[var(--color-brand-accent)] hover:bg-emerald-100"

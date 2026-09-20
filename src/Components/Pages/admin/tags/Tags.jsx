@@ -32,10 +32,10 @@ export default function Tags() {
 
       {!isLoading && (
         <Card className="p-4 mb-4">
-          <p className="text-xs text-gray-400 mb-2">Popular tags</p>
+          <p className="text-sm text-gray-400 mb-2">Popular tags</p>
           <div className="flex gap-2 flex-wrap">
             {popular.map((t) => (
-              <span key={t.id} className="px-3 py-1.5 bg-brand-primary-light text-brand-primary rounded-full text-xs font-medium">
+              <span key={t.id} className="px-3 py-1.5 bg-brand-primary-light text-brand-primary rounded-full text-sm font-medium">
                 #{t.name} · {t.usageCount}
               </span>
             ))}

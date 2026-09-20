@@ -33,7 +33,7 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div>
-            <h3 className="text-white font-semibold mb-4 text-sm uppercase tracking-wider">Navigation</h3>
+            <h3 className="text-white font-semibold mb-4 text-lg uppercase tracking-wider">Navigation</h3>
             <ul className="space-y-2.5 text-sm">
               <li><a href="#" className="hover:text-white transition-colors">Home</a></li>
               <li><a href="#" className="hover:text-white transition-colors">Explore All Items</a></li>
@@ -45,7 +45,7 @@ export default function Footer() {
 
           {/* Categories */}
           <div>
-            <h3 className="text-white font-semibold mb-4 text-sm uppercase tracking-wider">Top Categories</h3>
+            <h3 className="text-white font-semibold mb-4 text-lg uppercase tracking-wider">Top Categories</h3>
             <ul className="space-y-2.5 text-sm">
               <li><a href="#" className="hover:text-white transition-colors">ID & Passports</a></li>
               <li><a href="#" className="hover:text-white transition-colors">Mobile & Laptops</a></li>
@@ -57,7 +57,7 @@ export default function Footer() {
 
           {/* Contact & Support */}
           <div>
-            <h3 className="text-white font-semibold mb-4 text-sm uppercase tracking-wider">Contact & Safety</h3>
+            <h3 className="text-white font-semibold mb-4 text-lg uppercase tracking-wider">Contact & Safety</h3>
             <ul className="space-y-3 text-sm text-slate-400">
               <li className="flex items-center gap-2.5">
                 <MapPin className="w-4 h-4 text-blue-400 shrink-0" />
@@ -77,7 +77,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+        <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-slate-500">
           <p>© {new Date().getFullYear()} Ask & Found Cambodia. All rights reserved.</p>
           <div className="flex items-center gap-1">
             <span>Crafted with</span>

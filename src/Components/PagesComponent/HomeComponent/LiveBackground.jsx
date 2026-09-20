@@ -92,7 +92,7 @@ export default function LiveBackground({ darkMode }) {
       <motion.div
         animate={{ y: [0, -15, 0], rotate: [0, 5, 0] }}
         transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-        className={`absolute top-24 right-[28%] shadow-lg px-3 py-1.5 rounded-xl font-bold text-xs text-amber-500 flex items-center gap-1.5 z-10 backdrop-blur-md border ${
+        className={`absolute top-24 right-[28%] shadow-lg px-3 py-1.5 rounded-xl font-bold text-sm text-amber-500 flex items-center gap-1.5 z-10 backdrop-blur-md border ${
           darkMode ? "bg-zinc-900/90 border-zinc-800" : "bg-white border-gray-100"
         }`}
       >
@@ -102,7 +102,7 @@ export default function LiveBackground({ darkMode }) {
       <motion.div
         animate={{ y: [0, 18, 0], rotate: [0, -6, 0] }}
         transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-        className={`absolute top-1/3 right-[15%] shadow-lg px-3 py-1.5 rounded-xl font-bold text-xs text-red-500 flex items-center gap-1.5 z-10 backdrop-blur-md border ${
+        className={`absolute top-1/3 right-[15%] shadow-lg px-3 py-1.5 rounded-xl font-bold text-sm text-red-500 flex items-center gap-1.5 z-10 backdrop-blur-md border ${
           darkMode ? "bg-zinc-900/90 border-zinc-800" : "bg-white border-gray-100"
         }`}
       >
@@ -112,7 +112,7 @@ export default function LiveBackground({ darkMode }) {
       <motion.div
         animate={{ y: [0, -12, 0], x: [0, 8, 0] }}
         transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
-        className={`absolute bottom-1/3 right-[32%] shadow-lg px-3 py-1.5 rounded-xl font-bold text-xs text-blue-500 flex items-center gap-1.5 z-10 backdrop-blur-md border ${
+        className={`absolute bottom-1/3 right-[32%] shadow-lg px-3 py-1.5 rounded-xl font-bold text-sm text-blue-500 flex items-center gap-1.5 z-10 backdrop-blur-md border ${
           darkMode ? "bg-zinc-900/90 border-zinc-800" : "bg-white border-gray-100"
         }`}
       >
@@ -122,7 +122,7 @@ export default function LiveBackground({ darkMode }) {
       <motion.div
         animate={{ y: [0, 14, 0], x: [0, -10, 0] }}
         transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        className={`absolute bottom-20 right-[20%] shadow-lg px-3 py-1.5 rounded-xl font-bold text-xs text-yellow-500 flex items-center gap-1.5 z-10 backdrop-blur-md border ${
+        className={`absolute bottom-20 right-[20%] shadow-lg px-3 py-1.5 rounded-xl font-bold text-sm text-yellow-500 flex items-center gap-1.5 z-10 backdrop-blur-md border ${
           darkMode ? "bg-zinc-900/90 border-zinc-800" : "bg-white border-gray-100"
         }`}
       >

@@ -35,7 +35,7 @@ function SectionBlock({ num, title, paragraphs = [], list, groups, outro = [] })
             <div className="space-y-4 mb-3">
               {groups.map((g, i) => (
                 <div key={i}>
-                  <h3 className="text-sm font-semibold text-brand-primary mb-2">
+                  <h3 className="text-lg font-semibold text-brand-primary mb-2">
                     {g.heading}
                   </h3>
                   <BulletList items={g.items} />

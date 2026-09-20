@@ -380,7 +380,7 @@ export default function Navbar({
             aria-label="Notifications"
           >
             <Bell size={20} />
-            <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-brand-secondary text-white text-[11px] font-bold flex items-center justify-center border-2 border-white dark:border-gray-900">
+            <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-brand-secondary text-white text-sm font-bold flex items-center justify-center border-2 border-white dark:border-gray-900">
               {notificationCount}
             </span>
           </button>
@@ -510,7 +510,7 @@ export default function Navbar({
             aria-label="Notifications"
           >
             <Bell size={20} />
-            <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-brand-secondary text-white text-[11px] font-bold flex items-center justify-center border-2 border-white dark:border-gray-900">
+            <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-brand-secondary text-white text-sm font-bold flex items-center justify-center border-2 border-white dark:border-gray-900">
               {notificationCount}
             </span>
           </button>

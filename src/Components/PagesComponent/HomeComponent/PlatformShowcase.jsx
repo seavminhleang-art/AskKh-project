@@ -54,7 +54,7 @@ export default function PlatformShowcase({ darkMode }) {
           <div className={`absolute inset-0 transition-opacity duration-300 ${darkMode ? "bg-zinc-950/60" : "bg-black/40"}`}></div>
 
           <div className="relative z-10 text-center py-16 px-6">
-            <span className="inline-block bg-white/20 text-white text-xs font-semibold px-3 py-1 rounded-full mb-3 backdrop-blur-md">
+            <span className="inline-block bg-white/20 text-white text-sm font-semibold px-3 py-1 rounded-full mb-3 backdrop-blur-md">
               {t("showcaseBadge")}
             </span>
             <h2 className="text-2xl md:text-3xl font-bold mb-2 text-white">
@@ -67,7 +67,7 @@ export default function PlatformShowcase({ darkMode }) {
         </div>
 
         <div className="p-8">
-          <span className={`inline-block text-xs font-semibold px-3 py-1 rounded-full mb-3 ${
+          <span className={`inline-block text-sm font-semibold px-3 py-1 rounded-full mb-3 ${
             darkMode
               ? "bg-zinc-800 text-[var(--home-primary-text)]"
               : "bg-[var(--color-brand-primary-light)] text-[var(--home-primary-text)]"
@@ -91,7 +91,7 @@ export default function PlatformShowcase({ darkMode }) {
                 <p className={`font-medium ${darkMode ? "text-slate-100" : "text-gray-900"}`}>
                   {t("showcaseTeamName")}
                 </p>
-                <p className={`text-xs ${darkMode ? "text-slate-300" : "text-gray-600"}`}>
+                <p className={`text-sm ${darkMode ? "text-slate-300" : "text-gray-600"}`}>
                   {t("brand")}
                 </p>
               </div>
@@ -116,7 +116,7 @@ export default function PlatformShowcase({ darkMode }) {
             }`}
           >
             <div className="flex-1 pr-4">
-              <span className={`inline-block ${card.labelColor} text-xs font-semibold px-3 py-1 rounded-full mb-2`}>
+              <span className={`inline-block ${card.labelColor} text-sm font-semibold px-3 py-1 rounded-full mb-2`}>
                 {card.label}
               </span>
               <p className={`font-medium text-sm leading-snug ${darkMode ? "text-slate-200" : "text-gray-900"}`}>

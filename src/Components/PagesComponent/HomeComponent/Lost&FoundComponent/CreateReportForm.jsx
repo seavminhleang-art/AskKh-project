@@ -53,13 +53,13 @@ export default function CreateReportForm({ onCancel, darkMode }) {
       : 'bg-white/95 text-gray-800'
   }`;
 
-  const inputClass = `w-full rounded-2xl px-3.5 py-2.5 text-xs transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--color-brand-primary,#3b82f6)]/40 ${
+  const inputClass = `w-full rounded-2xl px-3.5 py-2.5 text-sm transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--color-brand-primary,#3b82f6)]/40 ${
     darkMode
       ? 'bg-zinc-950/60 border border-zinc-800 text-slate-100 placeholder-zinc-500'
       : 'bg-gray-50 border border-gray-100 text-gray-800 placeholder-gray-400'
   }`;
 
-  const labelClass = `block text-xs font-bold mb-1.5 ${darkMode ? 'text-slate-300' : 'text-gray-700'}`;
+  const labelClass = `block text-sm font-bold mb-1.5 ${darkMode ? 'text-slate-300' : 'text-gray-700'}`;
   const optionClass = darkMode ? 'bg-zinc-900 text-slate-100' : 'bg-white text-gray-800';
 
   return (
@@ -74,7 +74,7 @@ export default function CreateReportForm({ onCancel, darkMode }) {
           <button
             type="button"
             onClick={() => setReportType('LOST')}
-            className={`px-6 py-2 rounded-xl text-xs font-extrabold transition-all duration-200 ${
+            className={`px-6 py-2 rounded-xl text-sm font-extrabold transition-all duration-200 ${
               isLost
                 ? 'bg-red-500 text-white'
                 : darkMode
@@ -87,7 +87,7 @@ export default function CreateReportForm({ onCancel, darkMode }) {
           <button
             type="button"
             onClick={() => setReportType('FOUND')}
-            className={`px-6 py-2 rounded-xl text-xs font-extrabold transition-all duration-200 ${
+            className={`px-6 py-2 rounded-xl text-sm font-extrabold transition-all duration-200 ${
               !isLost
                 ? 'bg-amber-500 text-white'
                 : darkMode
@@ -106,12 +106,12 @@ export default function CreateReportForm({ onCancel, darkMode }) {
           <h1 className={`text-2xl md:text-3xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
             {isLost ? t('reportFormTitleLost') : t('reportFormTitleFound')}
           </h1>
-          <p className={`text-xs md:text-sm mt-1 ${darkMode ? 'text-slate-400' : 'text-gray-500'}`}>
+          <p className={`text-sm md:text-sm mt-1 ${darkMode ? 'text-slate-400' : 'text-gray-500'}`}>
             {isLost ? t('reportFormSubtitleLost') : t('reportFormSubtitleFound')}
           </p>
         </div>
 
-        <div className={`flex items-center gap-1.5 text-xs ${darkMode ? 'text-slate-400' : 'text-gray-500'}`}>
+        <div className={`flex items-center gap-1.5 text-sm ${darkMode ? 'text-slate-400' : 'text-gray-500'}`}>
           <button
             type="button"
             onClick={onCancel}
@@ -228,7 +228,7 @@ export default function CreateReportForm({ onCancel, darkMode }) {
                 <textarea
                   rows={4}
                   placeholder={t('reportDescriptionPlaceholder')}
-                  className={`w-full p-3.5 text-xs bg-transparent focus:outline-none resize-y ${
+                  className={`w-full p-3.5 text-sm bg-transparent focus:outline-none resize-y ${
                     darkMode ? 'text-slate-100 placeholder-zinc-500' : 'text-gray-800 placeholder-gray-400'
                   }`}
                   value={formData.description}
@@ -352,7 +352,7 @@ export default function CreateReportForm({ onCancel, darkMode }) {
           <div className="flex items-center gap-3 pt-2">
             <button
               onClick={onCancel}
-              className={`text-white font-semibold text-xs px-6 py-3 rounded-2xl transition-all duration-200 flex items-center gap-2 cursor-pointer ${
+              className={`text-white font-semibold text-sm px-6 py-3 rounded-2xl transition-all duration-200 flex items-center gap-2 cursor-pointer ${
                 isLost
                   ? 'bg-[var(--color-brand-primary,#3b82f6)] hover:opacity-90'
                   : 'bg-amber-500 hover:bg-amber-600'
@@ -362,7 +362,7 @@ export default function CreateReportForm({ onCancel, darkMode }) {
             </button>
             <button
               onClick={onCancel}
-              className={`font-semibold text-xs px-6 py-3 rounded-2xl transition cursor-pointer backdrop-blur-md ${
+              className={`font-semibold text-sm px-6 py-3 rounded-2xl transition cursor-pointer backdrop-blur-md ${
                 darkMode
                   ? 'bg-zinc-900/90 border border-zinc-800 text-slate-300 hover:bg-zinc-800'
                   : 'bg-white/95 border border-gray-100 text-gray-700 hover:bg-gray-100'
@@ -386,8 +386,8 @@ export default function CreateReportForm({ onCancel, darkMode }) {
                 : 'border-gray-200 hover:border-[var(--color-brand-primary,#3b82f6)] bg-gray-50'
             }`}>
               <UploadCloud size={32} className={`mx-auto mb-2 ${darkMode ? 'text-blue-400' : 'text-[var(--color-brand-primary,#3b82f6)]'}`} />
-              <p className={`text-xs font-semibold ${darkMode ? 'text-slate-300' : 'text-gray-700'}`}>{t('reportFormUploadHint')}</p>
-              <p className={`text-[10px] mt-1 ${darkMode ? 'text-slate-500' : 'text-gray-400'}`}>{t('reportFormUploadFormats')}</p>
+              <p className={`text-sm font-semibold ${darkMode ? 'text-slate-300' : 'text-gray-700'}`}>{t('reportFormUploadHint')}</p>
+              <p className={`text-sm mt-1 ${darkMode ? 'text-slate-500' : 'text-gray-400'}`}>{t('reportFormUploadFormats')}</p>
             </div>
           </div>
 
@@ -398,7 +398,7 @@ export default function CreateReportForm({ onCancel, darkMode }) {
             </h3>
             
             <div className="space-y-3">
-              <label className={`flex items-start gap-2.5 text-xs cursor-pointer ${darkMode ? 'text-slate-300' : 'text-gray-600'}`}>
+              <label className={`flex items-start gap-2.5 text-sm cursor-pointer ${darkMode ? 'text-slate-300' : 'text-gray-600'}`}>
                 <input
                   type="radio"
                   name="visibility"
@@ -410,11 +410,11 @@ export default function CreateReportForm({ onCancel, darkMode }) {
                 />
                 <div>
                   <span className={`font-semibold block ${darkMode ? 'text-slate-200' : 'text-gray-800'}`}>{t('reportFormVisibilityPublicLabel')}</span>
-                  <span className={`text-[11px] ${darkMode ? 'text-slate-500' : 'text-gray-500'}`}>{t('reportFormVisibilityPublicDesc')}</span>
+                  <span className={`text-sm ${darkMode ? 'text-slate-500' : 'text-gray-500'}`}>{t('reportFormVisibilityPublicDesc')}</span>
                 </div>
               </label>
 
-              <label className={`flex items-start gap-2.5 text-xs cursor-pointer ${darkMode ? 'text-slate-300' : 'text-gray-600'}`}>
+              <label className={`flex items-start gap-2.5 text-sm cursor-pointer ${darkMode ? 'text-slate-300' : 'text-gray-600'}`}>
                 <input
                   type="radio"
                   name="visibility"
@@ -426,7 +426,7 @@ export default function CreateReportForm({ onCancel, darkMode }) {
                 />
                 <div>
                   <span className={`font-semibold block ${darkMode ? 'text-slate-200' : 'text-gray-800'}`}>{t('reportFormVisibilitySecurityLabel')}</span>
-                  <span className={`text-[11px] ${darkMode ? 'text-slate-500' : 'text-gray-500'}`}>{t('reportFormVisibilitySecurityDesc')}</span>
+                  <span className={`text-sm ${darkMode ? 'text-slate-500' : 'text-gray-500'}`}>{t('reportFormVisibilitySecurityDesc')}</span>
                 </div>
               </label>
             </div>

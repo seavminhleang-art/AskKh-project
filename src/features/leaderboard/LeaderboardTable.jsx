@@ -32,7 +32,7 @@ export default function LeaderboardTable({ users = [] }) {
         );
       default:
         return (
-          <div className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-xs text-slate-500">
+          <div className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm text-slate-500">
             {rank}
           </div>
         );
@@ -67,12 +67,12 @@ export default function LeaderboardTable({ users = [] }) {
                       <ShieldCheck className="w-3.5 h-3.5 text-blue-500" />
                     )}
                   </div>
-                  <div className="text-xs text-slate-400 truncate max-w-xs">{user.title}</div>
+                  <div className="text-sm text-slate-400 truncate max-w-xs">{user.title}</div>
                 </div>
               </div>
             </TableCell>
             <TableCell>
-              <span className="px-2 py-0.5 rounded text-[11px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+              <span className="px-2 py-0.5 rounded text-sm font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
                 {user.role}
               </span>
             </TableCell>

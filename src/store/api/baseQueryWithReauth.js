@@ -1,7 +1,9 @@
 import { fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { setCredentials, logout } from '../../features/auth/authSlice';
 
-export const BASE_API_URL = 'https://forum-istad-api.cheat.casa/api/v1';
+import { FORUM_API_BASE_URL } from '../../config/forumApi';
+
+export const BASE_API_URL = FORUM_API_BASE_URL;
 
 const rawBaseQuery = fetchBaseQuery({
   baseUrl: BASE_API_URL,

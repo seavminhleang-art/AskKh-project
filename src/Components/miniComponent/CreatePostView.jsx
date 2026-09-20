@@ -1,7 +1,11 @@
-import React, { useState } from 'react';
+import React, { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { Upload, X } from 'lucide-react';
 import { useOutletContext } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+
+import { useGetTagsQuery } from '../../features/tags/tagApi';
+import { rowsOf, errorMessage } from '../../features/qa/model';
+const CodeEditor = lazy(() => import('./CodeEditor'));
 
 const CreatePostView = ({ onAddPost, onCancel, darkMode: propDarkMode }) => {
   const { t } = useTranslation();
@@ -10,9 +14,19 @@ const CreatePostView = ({ onAddPost, onCancel, darkMode: propDarkMode }) => {
 
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [tags, setTags] = useState(['react', 'javascript']);
+  const [tags, setTags] = useState([]);
   const [tagInput, setTagInput] = useState('');
+  const [imageFile, setImageFile] = useState(null);
   const [coverImage, setCoverImage] = useState(null);
+  const [codeSnippet, setCodeSnippet] = useState('');
+  const [codeLanguage, setCodeLanguage] = useState('javascript');
+  const [showCode, setShowCode] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState('');
+  const tagQuery = useGetTagsQuery();
+  const availableTags = rowsOf(tagQuery.data);
+  const previewUrl = useRef(null);
+  useEffect(() => () => { if (previewUrl.current) URL.revokeObjectURL(previewUrl.current); }, []);
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter' || e.key === ',') {
@@ -23,6 +37,7 @@ const CreatePostView = ({ onAddPost, onCancel, darkMode: propDarkMode }) => {
 
   const addTag = () => {
     const formattedTag = tagInput.trim().replace(/^#/, '').toLowerCase();
+    if (!availableTags.some(tag => tag.tagName.toLowerCase() === formattedTag)) { setError('Choose an existing tag from the suggestions.'); return; }
     if (formattedTag && !tags.includes(formattedTag)) {
       setTags([...tags, formattedTag]);
       setTagInput('');
@@ -36,32 +51,26 @@ const CreatePostView = ({ onAddPost, onCancel, darkMode: propDarkMode }) => {
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setCoverImage(URL.createObjectURL(file));
+      if (!['image/jpeg', 'image/png', 'image/webp', 'image/gif'].includes(file.type) || file.size > 5 * 1024 * 1024) { setError('Choose a JPG, PNG, WebP, or GIF under 5 MB.'); return; }
+      if (previewUrl.current) URL.revokeObjectURL(previewUrl.current);
+      previewUrl.current = URL.createObjectURL(file);
+      setCoverImage(previewUrl.current);
+      setImageFile(file);
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!title.trim()) return;
-
-    const newPost = {
-      id: Date.now(),
-      title,
-      content,
-      isOwnPost: true,
-      tags: tags.length > 0 ? tags : ['general'],
-      author: {
-        name: 'Mom Lisa',
-        avatar: '../../src/assets/Website/Lisa.jpg',
-        time: 'Just now'
-      },
-      views: '0',
-      likes: '0',
-      comments: 0,
-      image: coverImage || 'https://picsum.photos/300/200?random=' + Math.floor(Math.random() * 100)
-    };
-
-    onAddPost(newPost);
+    if (submitting) return;
+    if (title.trim().length < 10 || content.trim().length < 20) { setError('Use at least 10 characters for the title and 20 for the description.'); return; }
+    if (codeSnippet.length > 20000) { setError('Code must be 20,000 characters or fewer.'); return; }
+    setSubmitting(true); setError('');
+    try {
+      await onAddPost({ title: title.trim(), body: content.trim(), postTypeId: 1,
+        tagIds: tags.map(name => availableTags.find(tag => tag.tagName.toLowerCase() === name)?.id).filter(id => id != null),
+        codeSnippet: showCode ? codeSnippet : null, codeLanguage: showCode && codeSnippet ? codeLanguage : null, imageUrls: [], imageFile });
+    } catch (error) { setError(errorMessage(error)); }
+    finally { setSubmitting(false); }
   };
 
   return (
@@ -72,7 +81,7 @@ const CreatePostView = ({ onAddPost, onCancel, darkMode: propDarkMode }) => {
         {t('create.title')}
       </h1>
 
-      <form onSubmit={handleSubmit} className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+      <form aria-busy={submitting} onSubmit={handleSubmit} className="grid grid-cols-1 xl:grid-cols-3 gap-6">
         <div className="xl:col-span-2 space-y-6">
           {/* Details Section */}
           <div className={`rounded-2xl p-6 space-y-4 transition-colors ${
@@ -83,15 +92,15 @@ const CreatePostView = ({ onAddPost, onCancel, darkMode: propDarkMode }) => {
             </h3>
 
             <div>
-              <label className={`block text-xs font-semibold mb-1 ${darkMode ? "text-slate-300" : "text-gray-700"}`}>
+              <label className={`block text-sm font-semibold mb-1 ${darkMode ? "text-slate-300" : "text-gray-700"}`}>
                 {t('create.blogTitleLabel')} <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
-                value={title}
+                minLength={10} maxLength={300} value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder={t('create.blogTitleLabel')}
-                className={`w-full rounded-xl px-3 py-2 text-xs border focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors ${
+                className={`w-full rounded-xl px-3 py-2 text-sm border focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors ${
                   darkMode 
                     ? "bg-zinc-800/80 border-zinc-700 text-slate-100 placeholder-zinc-500" 
                     : "bg-white border-gray-200 text-gray-900 placeholder-gray-400"
@@ -101,16 +110,16 @@ const CreatePostView = ({ onAddPost, onCancel, darkMode: propDarkMode }) => {
             </div>
 
             <div>
-              <label className={`block text-xs font-semibold mb-1 ${darkMode ? "text-slate-300" : "text-gray-700"}`}>
+              <label className={`block text-sm font-semibold mb-1 ${darkMode ? "text-slate-300" : "text-gray-700"}`}>
                 {t('create.contentLabel')}
               </label>
               <div className={`border rounded-xl overflow-hidden ${darkMode ? "border-zinc-700" : "border-gray-200"}`}>
                 <textarea
-                  rows="6"
+                  rows="6" required minLength={20}
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
                   placeholder={t('create.placeholderContent')}
-                  className={`w-full p-3 text-xs focus:outline-none transition-colors ${
+                  className={`w-full p-3 text-sm focus:outline-none transition-colors ${
                     darkMode ? "bg-zinc-900 text-slate-100 placeholder-zinc-500" : "bg-white text-gray-900 placeholder-gray-400"
                   }`}
                 ></textarea>
@@ -118,6 +127,15 @@ const CreatePostView = ({ onAddPost, onCancel, darkMode: propDarkMode }) => {
             </div>
           </div>
 
+          <section className="rounded-2xl border border-slate-300/30 p-5 space-y-3">
+            <label className="flex items-center gap-2 text-sm font-semibold"><input type="checkbox" checked={showCode} onChange={event => setShowCode(event.target.checked)}/>Add a code snippet</label>
+            {showCode && <>
+              <label className="flex items-center gap-3 text-sm">Language<select className="rounded-lg border p-2 bg-transparent" value={codeLanguage} onChange={event => setCodeLanguage(event.target.value)}>{['javascript', 'typescript', 'python', 'java', 'html', 'css', 'sql', 'plaintext'].map(language => <option key={language}>{language}</option>)}</select></label>
+              <Suspense fallback={<p>Loading code editor…</p>}><CodeEditor value={codeSnippet} onChange={setCodeSnippet} language={codeLanguage} darkMode={darkMode}/></Suspense>
+              <p className="text-sm opacity-60">{codeSnippet.length.toLocaleString()} / 20,000 characters</p>
+            </>}
+          </section>
+          {error && <p role="alert" className="text-sm text-red-500">{error}</p>}
           {/* Cover Image */}
           <div className={`rounded-2xl p-6 space-y-4 transition-colors ${
             darkMode ? "bg-zinc-900" : "bg-white"
@@ -133,7 +151,7 @@ const CreatePostView = ({ onAddPost, onCancel, darkMode: propDarkMode }) => {
               ) : (
                 <>
                   <Upload className={`w-8 h-8 mb-2 ${darkMode ? "text-zinc-500" : "text-gray-400"}`} />
-                  <span className={`text-xs font-semibold ${darkMode ? "text-slate-300" : "text-gray-700"}`}>
+                  <span className={`text-sm font-semibold ${darkMode ? "text-slate-300" : "text-gray-700"}`}>
                     {t('create.uploadFile')}
                   </span>
                 </>
@@ -145,15 +163,15 @@ const CreatePostView = ({ onAddPost, onCancel, darkMode: propDarkMode }) => {
           {/* Action Buttons */}
           <div className="flex items-center space-x-3">
             <button
-              type="submit"
-              className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-2 rounded-xl text-xs transition-colors"
+              type="submit" disabled={submitting}
+              className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-2 rounded-xl text-sm transition-colors"
             >
-              {t('create.addBlog')}
+              {submitting ? 'Publishing…' : t('create.addBlog')}
             </button>
             <button
               type="button"
-              onClick={onCancel}
-              className={`font-medium px-6 py-2 rounded-xl text-xs transition-colors border ${
+              onClick={onCancel} disabled={submitting}
+              className={`font-medium px-6 py-2 rounded-xl text-sm transition-colors border ${
                 darkMode 
                   ? "bg-red-950/40 text-red-400 hover:bg-red-900/50 border-red-900/30" 
                   : "bg-red-50 text-red-500 hover:bg-red-100 border-transparent"
@@ -176,11 +194,11 @@ const CreatePostView = ({ onAddPost, onCancel, darkMode: propDarkMode }) => {
             <div className="flex gap-2">
               <input
                 type="text"
-                value={tagInput}
+                list="qa-tags" value={tagInput}
                 onChange={(e) => setTagInput(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder={t('create.tagsPlaceholder')}
-                className={`min-w-0 flex-1 rounded-xl px-3 py-2 text-xs border focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors ${
+                className={`min-w-0 flex-1 rounded-xl px-3 py-2 text-sm border focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors ${
                   darkMode 
                     ? "bg-zinc-800/80 border-zinc-700 text-slate-100 placeholder-zinc-500" 
                     : "bg-white border-gray-200 text-gray-900 placeholder-gray-400"
@@ -189,18 +207,20 @@ const CreatePostView = ({ onAddPost, onCancel, darkMode: propDarkMode }) => {
               <button
                 type="button"
                 onClick={addTag}
-                className="bg-blue-600 text-white text-xs px-3 py-2 rounded-xl hover:bg-blue-700 transition-colors font-medium shrink-0"
+                className="bg-blue-600 text-white text-sm px-3 py-2 rounded-xl hover:bg-blue-700 transition-colors font-medium shrink-0"
               >
                 {t('create.tags')}
               </button>
             </div>
 
+            <datalist id="qa-tags">{availableTags.map(tag => <option key={tag.id} value={tag.tagName}/>)}</datalist>
+            {tagQuery.isError && <p role="alert" className="text-sm">Could not load tags. <button type="button" onClick={tagQuery.refetch}>Retry</button></p>}
             {/* Render Tag Chips */}
             <div className="flex flex-wrap gap-2 pt-2">
               {tags.map((tagItem, idx) => (
                 <span
                   key={idx}
-                  className={`inline-flex items-center gap-1.5 px-3 py-1 text-xs font-medium rounded-full border ${
+                  className={`inline-flex items-center gap-1.5 px-3 py-1 text-sm font-medium rounded-full border ${
                     darkMode 
                       ? "bg-blue-950/50 text-blue-400 border-blue-900/50" 
                       : "bg-blue-50 text-blue-600 border-blue-100"

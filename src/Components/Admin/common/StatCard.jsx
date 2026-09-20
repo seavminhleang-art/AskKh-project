@@ -37,7 +37,7 @@ export default function StatCard({ icon: Icon, title, value, trend, direction, s
         )}
       </div>
       {(trend !== undefined || supportingText) && (
-        <div className="mt-3 flex items-center gap-1.5 text-xs">
+        <div className="mt-3 flex items-center gap-1.5 text-sm">
           {trend !== undefined && (
             <span className={`inline-flex items-center gap-0.5 font-medium ${direction === 'up' ? 'text-green-600' : 'text-red-600'}`}>
               {direction === 'up' ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}

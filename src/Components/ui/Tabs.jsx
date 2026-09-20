@@ -23,7 +23,7 @@ export function Tabs({ tabs, activeTab, onChange, className }) {
             {tab.badge !== undefined && (
               <span
                 className={cn(
-                  'px-2 py-0.5 text-[11px] rounded-full font-bold',
+                  'px-2 py-0.5 text-sm rounded-full font-bold',
                   isActive
                     ? 'bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300'
                     : 'bg-slate-200 text-slate-700 dark:bg-slate-700 dark:text-slate-300'

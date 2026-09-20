@@ -75,7 +75,7 @@ export default function Sidebar() {
           {!collapsed && (
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-gray-800 truncate">{admin.name}</p>
-              <p className="text-xs text-gray-400 truncate">{admin.email}</p>
+              <p className="text-sm text-gray-400 truncate">{admin.email}</p>
             </div>
           )}
           {!collapsed && (

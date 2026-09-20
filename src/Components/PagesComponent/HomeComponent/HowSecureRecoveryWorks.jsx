@@ -22,13 +22,13 @@ export default function HowSecureRecoveryWorks({ darkMode }) {
               <div className="w-20 h-20 bg-[var(--color-brand-primary)] rounded-3xl flex items-center justify-center shadow-lg shadow-[var(--color-brand-primary)]/30 transform -rotate-6">
                 <MapPin className="w-10 h-10 text-white" />
               </div>
-              <div className="absolute -top-2 -right-4 bg-white dark:bg-zinc-800 px-2.5 py-1 rounded-full text-xs font-bold text-[var(--home-secondary-text)] shadow-md">
+              <div className="absolute -top-2 -right-4 bg-white dark:bg-zinc-800 px-2.5 py-1 rounded-full text-sm font-bold text-[var(--home-secondary-text)] shadow-md">
                 {t("tagScope", { defaultValue: "ISTAD" })}
               </div>
             </div>
             <div className="mt-4 bg-white/90 dark:bg-zinc-800/90 backdrop-blur-sm px-4 py-2 rounded-xl shadow-sm flex items-center gap-2">
               <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-xs font-medium text-slate-700 dark:text-slate-200">
+              <span className="text-sm font-medium text-slate-700 dark:text-slate-200">
                 {t("recoveryLocationTagged", { defaultValue: "Location Tagged" })}
               </span>
             </div>
@@ -49,27 +49,27 @@ export default function HowSecureRecoveryWorks({ darkMode }) {
             <div className="bg-slate-900 rounded-xl p-3 shadow-xl">
               <div className="grid grid-cols-2 gap-2 mb-3">
                 <div className="bg-rose-500/10 rounded-lg p-2 text-center">
-                  <span className="text-[10px] font-bold text-rose-500 block uppercase">
+                  <span className="text-sm font-bold text-rose-500 block uppercase">
                     {t("recoveryLostLog", { defaultValue: "LOST LOG" })}
                   </span>
                   <span className="text-sm font-extrabold text-white mt-1 block">92%</span>
-                  <span className="text-[9px] text-slate-400">
+                  <span className="text-sm text-slate-400">
                     {t("recoveryMatchScore", { defaultValue: "Match Score" })}
                   </span>
                 </div>
                 <div className="bg-amber-500/10 rounded-lg p-2 text-center">
-                  <span className="text-[10px] font-bold text-amber-500 block uppercase">
+                  <span className="text-sm font-bold text-amber-500 block uppercase">
                     {t("recoveryFoundItem", { defaultValue: "FOUND ITEM" })}
                   </span>
                   <span className="text-sm font-extrabold text-white mt-1 block">92%</span>
-                  <span className="text-[9px] text-slate-400">
+                  <span className="text-sm text-slate-400">
                     {t("recoveryMatchScore", { defaultValue: "Match Score" })}
                   </span>
                 </div>
               </div>
               <div className="bg-emerald-500/20 rounded-lg py-1 px-2 flex items-center justify-center gap-1.5">
                 <Search className="w-3.5 h-3.5 text-emerald-400" />
-                <span className="text-[11px] font-semibold text-emerald-400">
+                <span className="text-sm font-semibold text-emerald-400">
                   {t("recoveryMatchedAsset", { defaultValue: "Matched Asset" })}
                 </span>
               </div>
@@ -94,10 +94,10 @@ export default function HowSecureRecoveryWorks({ darkMode }) {
               <ShieldCheck className="w-9 h-9 text-white" />
             </div>
             <div className="bg-white dark:bg-zinc-800 px-3 py-1.5 rounded-lg shadow-md text-center">
-              <p className="text-[11px] font-semibold text-slate-700 dark:text-slate-200">
+              <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">
                 {t("recoverySecVerification", { defaultValue: "Security Verification" })}
               </p>
-              <p className="text-[9px] text-slate-400 dark:text-slate-400">
+              <p className="text-sm text-slate-400 dark:text-slate-400">
                 {t("recoverySecRequirement", { defaultValue: "Provide Serial Code / Wallpaper" })}
               </p>
             </div>
@@ -114,7 +114,7 @@ export default function HowSecureRecoveryWorks({ darkMode }) {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         whileHover={{ scale: 1.05 }}
-        className={`inline-block text-xs font-semibold uppercase tracking-wider px-4 py-1.5 rounded-full mb-4 shadow-sm cursor-pointer ${
+        className={`inline-block text-sm font-semibold uppercase tracking-wider px-4 py-1.5 rounded-full mb-4 shadow-sm cursor-pointer ${
           darkMode
             ? "bg-zinc-800 text-[var(--home-primary-text)]"
             : "bg-[var(--color-brand-primary-light)] text-[var(--home-primary-text)]"
@@ -152,7 +152,7 @@ export default function HowSecureRecoveryWorks({ darkMode }) {
                 {item.graphic}
               </div>
               <div className="flex items-center gap-3 mb-2">
-                <span className="w-6 h-6 bg-[var(--color-brand-primary)] text-white font-bold text-xs rounded-md flex items-center justify-center shrink-0 shadow">
+                <span className="w-6 h-6 bg-[var(--color-brand-primary)] text-white font-bold text-sm rounded-md flex items-center justify-center shrink-0 shadow">
                   {item.id}
                 </span>
                 <h3 className={`text-lg font-bold ${darkMode ? "text-slate-100" : "text-gray-900"}`}>

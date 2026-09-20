@@ -61,7 +61,7 @@ export default function FooterComponent() {
 
           {/* Quick Link */}
           <div className="no-transition">
-            <h3 className="text-white font-semibold text-sm tracking-wide mb-4">
+            <h3 className="text-white font-semibold text-lg tracking-wide mb-4">
               {t("footer.quickLinksTitle")}
             </h3>
 
@@ -81,7 +81,7 @@ export default function FooterComponent() {
 
           {/* Legal & Policies */}
           <div className="no-transition">
-            <h3 className="text-white font-semibold text-sm tracking-wide mb-4">
+            <h3 className="text-white font-semibold text-lg tracking-wide mb-4">
               {t("footer.legalTitle")}
             </h3>
 
@@ -101,7 +101,7 @@ export default function FooterComponent() {
 
           {/* Address & Contact */}
           <div className="no-transition">
-            <h3 className="text-white font-semibold text-sm tracking-wide mb-4">
+            <h3 className="text-white font-semibold text-lg tracking-wide mb-4">
               {t("footer.contactTitle")}
             </h3>
 
@@ -128,7 +128,7 @@ export default function FooterComponent() {
 
           {/* Sponsor */}
           <div className="self-start">
-            <h3 className="text-white font-semibold text-sm tracking-wide mb-4">
+            <h3 className="text-white font-semibold text-lg tracking-wide mb-4">
               {t("footer.organizedTitle")}
             </h3>
 
@@ -142,7 +142,7 @@ export default function FooterComponent() {
 
         {/* Bottom bar */}
         <div className="mt-12 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-gray-500 order-2 sm:order-1">
+          <p className="text-sm text-gray-500 order-2 sm:order-1">
             {t("footer.copyright")}
           </p>
           <div className="flex items-center gap-3 order-1 sm:order-2">

@@ -36,11 +36,11 @@ export default function UserDetails() {
           </div>
           <div className="grid grid-cols-2 gap-3 mt-5 text-left">
             <div className="p-3 bg-gray-50 rounded-lg">
-              <p className="text-xs text-gray-400 flex items-center gap-1"><Award size={12} /> Reputation</p>
+              <p className="text-sm text-gray-400 flex items-center gap-1"><Award size={12} /> Reputation</p>
               <p className="font-semibold text-gray-800">{user.reputation.toLocaleString()}</p>
             </div>
             <div className="p-3 bg-gray-50 rounded-lg">
-              <p className="text-xs text-gray-400 flex items-center gap-1"><Calendar size={12} /> Joined</p>
+              <p className="text-sm text-gray-400 flex items-center gap-1"><Calendar size={12} /> Joined</p>
               <p className="font-semibold text-gray-800">{user.joined}</p>
             </div>
           </div>
@@ -57,7 +57,7 @@ export default function UserDetails() {
               {activity.posts.map((p) => (
                 <div key={p.id} className="flex items-center justify-between py-2.5">
                   <p className="text-sm text-gray-700">{p.title}</p>
-                  <span className="text-xs text-gray-400">{p.date}</span>
+                  <span className="text-sm text-gray-400">{p.date}</span>
                 </div>
               ))}
             </div>
@@ -68,7 +68,7 @@ export default function UserDetails() {
               {activity.comments.map((c) => (
                 <div key={c.id} className="py-2.5">
                   <p className="text-sm text-gray-700">{c.body}</p>
-                  <span className="text-xs text-gray-400">{c.date}</span>
+                  <span className="text-sm text-gray-400">{c.date}</span>
                 </div>
               ))}
             </div>

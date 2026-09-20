@@ -22,11 +22,11 @@ export default function Navbar({ onOpenPostModal, onOpenAuthModal, currentTab, s
                 <span className="text-xl font-bold bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent">
                   Ask & Found
                 </span>
-                <span className="px-2 py-0.5 text-[10px] font-bold bg-amber-100 text-amber-800 rounded-full border border-amber-200">
+                <span className="px-2 py-0.5 text-sm font-bold bg-amber-100 text-amber-800 rounded-full border border-amber-200">
                   KH
                 </span>
               </div>
-              <p className="text-[11px] text-slate-500 font-medium">Reconnecting Cambodia</p>
+              <p className="text-sm text-slate-500 font-medium">Reconnecting Cambodia</p>
             </div>
           </div>
 

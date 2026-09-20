@@ -21,7 +21,7 @@ function StatCard({ stat }) {
         </div>
         <span className="admin-stat-icon"><Icon className="h-5 w-5" aria-hidden="true" /></span>
       </div>
-      <p className="mt-5 text-xs text-slate-400">
+      <p className="mt-5 text-sm text-slate-400">
         <span className={isUp ? "text-emerald-400" : "text-rose-400"}>
           {isUp ? "+" : ""}{stat.trend}%
         </span>{" "}{stat.supportingText}
@@ -49,7 +49,7 @@ export default function Dashboard() {
       <section className="mt-6 grid grid-cols-1 gap-6 xl:grid-cols-3">
         <article className="admin-panel p-5 sm:p-6 xl:col-span-2">
           <div className="flex items-center justify-between gap-4">
-            <h2 className="text-base font-bold text-white">Weekly activity</h2>
+            <h2 className="text-lg font-bold text-white">Weekly activity</h2>
             <span className="admin-eyebrow">Posts by day</span>
           </div>
           <div className="mt-6 grid grid-cols-7 gap-2 sm:gap-3" aria-label="Weekly post activity">
@@ -58,14 +58,14 @@ export default function Dashboard() {
                 <div className="admin-chart-track flex-1 flex items-end rounded-lg overflow-hidden">
                   <div className="admin-chart-bar w-full rounded-t-lg" style={{ height: `${value}%` }} title={`${value} posts`} />
                 </div>
-                <span className="text-center text-xs text-slate-400">{days[index]}</span>
+                <span className="text-center text-sm text-slate-400">{days[index]}</span>
               </div>
             ))}
           </div>
         </article>
 
         <article className="admin-panel p-5 sm:p-6 flex flex-col">
-          <h2 className="text-base font-bold text-white">Moderation queue</h2>
+          <h2 className="text-lg font-bold text-white">Moderation queue</h2>
           <p className="mt-6 text-5xl font-bold tracking-tight text-white">143</p>
           <p className="mt-2 text-sm text-slate-400">items awaiting review</p>
           <a href="#recent-posts" className="admin-inline-link mt-auto pt-8 text-sm font-semibold">Review recent content →</a>
@@ -74,10 +74,10 @@ export default function Dashboard() {
 
       <section id="recent-posts" className="admin-panel mt-6 overflow-hidden">
         <div className="flex items-center justify-between border-b border-white/10 px-5 sm:px-6 py-5">
-          <h2 className="text-base font-bold text-white">Recent posts</h2>
+          <h2 className="text-lg font-bold text-white">Recent posts</h2>
           <span className="admin-eyebrow">{mockRecentPosts.length} results</span>
         </div>
-        <div className="admin-post-header admin-post-grid px-5 sm:px-6 py-3 text-xs font-bold uppercase tracking-wider text-slate-500 bg-white/[.025]">
+        <div className="admin-post-header admin-post-grid px-5 sm:px-6 py-3 text-sm font-bold uppercase tracking-wider text-slate-500 bg-white/[.025]">
           <span>Post</span><span>Author</span><span>Date</span><span>Status</span>
         </div>
         <div className="divide-y divide-white/10">

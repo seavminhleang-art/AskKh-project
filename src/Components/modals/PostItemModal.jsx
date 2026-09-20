@@ -159,7 +159,7 @@ export default function PostItemModal({ isOpen, onClose, initialType = 'LOST' })
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+            <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
               Item Title *
             </label>
             <Input
@@ -168,12 +168,12 @@ export default function PostItemModal({ isOpen, onClose, initialType = 'LOST' })
               placeholder="e.g. MacBook Air M2 13-inch (Midnight Blue) with stickers"
               error={errors.name}
             />
-            {errors.name && <p className="text-xs text-rose-500 mt-1">{errors.name}</p>}
+            {errors.name && <p className="text-sm text-rose-500 mt-1">{errors.name}</p>}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+              <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
                 Category *
               </label>
               <select
@@ -190,7 +190,7 @@ export default function PostItemModal({ isOpen, onClose, initialType = 'LOST' })
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+              <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
                 Campus Location *
               </label>
               <select
@@ -213,7 +213,7 @@ export default function PostItemModal({ isOpen, onClose, initialType = 'LOST' })
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+              <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
                 Date *
               </label>
               <Input
@@ -223,7 +223,7 @@ export default function PostItemModal({ isOpen, onClose, initialType = 'LOST' })
               />
             </div>
             <div>
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+              <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
                 Approximate Time
               </label>
               <Input
@@ -235,7 +235,7 @@ export default function PostItemModal({ isOpen, onClose, initialType = 'LOST' })
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+            <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
               Detailed Description & Distinguishing Marks *
             </label>
             <Textarea
@@ -246,12 +246,12 @@ export default function PostItemModal({ isOpen, onClose, initialType = 'LOST' })
               error={errors.description}
             />
             {errors.description && (
-              <p className="text-xs text-rose-500 mt-1">{errors.description}</p>
+              <p className="text-sm text-rose-500 mt-1">{errors.description}</p>
             )}
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+            <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
               Confidential Hidden Detail (For Ownership Verification)
             </label>
             <Input
@@ -259,14 +259,14 @@ export default function PostItemModal({ isOpen, onClose, initialType = 'LOST' })
               onChange={(e) => setHiddenDetail(e.target.value)}
               placeholder="e.g. Serial number, desktop wallpaper, student ID number inside..."
             />
-            <p className="text-[11px] text-slate-400 mt-1">
+            <p className="text-sm text-slate-400 mt-1">
               Kept hidden. Claimants must describe this detail to verify legitimate ownership.
             </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+              <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
                 Contact Info / Desk *
               </label>
               <Input
@@ -276,15 +276,15 @@ export default function PostItemModal({ isOpen, onClose, initialType = 'LOST' })
                 error={errors.contactInfo}
               />
               {errors.contactInfo && (
-                <p className="text-xs text-rose-500 mt-1">{errors.contactInfo}</p>
+                <p className="text-sm text-rose-500 mt-1">{errors.contactInfo}</p>
               )}
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+              <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
                 Upload Photo (API Upload)
               </label>
-              <label className="flex items-center gap-2 px-3 py-2.5 rounded-xl border border-dashed border-slate-300 dark:border-slate-700 hover:border-blue-500 bg-slate-50 dark:bg-slate-800/60 cursor-pointer text-xs text-slate-600 dark:text-slate-300">
+              <label className="flex items-center gap-2 px-3 py-2.5 rounded-xl border border-dashed border-slate-300 dark:border-slate-700 hover:border-blue-500 bg-slate-50 dark:bg-slate-800/60 cursor-pointer text-sm text-slate-600 dark:text-slate-300">
                 {isUploading ? (
                   <Loader2 className="w-4 h-4 animate-spin text-blue-600" />
                 ) : (

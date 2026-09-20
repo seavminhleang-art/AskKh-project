@@ -74,13 +74,13 @@ export default function NotificationItem({ notification }) {
           >
             {notification.title}
           </h4>
-          <span className="text-[11px] text-slate-400 shrink-0 flex items-center gap-1">
+          <span className="text-sm text-slate-400 shrink-0 flex items-center gap-1">
             <Clock className="w-3 h-3" />
             {new Date(notification.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
           </span>
         </div>
 
-        <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+        <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
           {notification.message}
         </p>
       </div>

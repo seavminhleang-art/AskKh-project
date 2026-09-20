@@ -28,7 +28,7 @@ export default function Pagination({
           <button
             key={pageNum}
             onClick={() => onPageChange(pageNum)}
-            className={`w-9 h-9 rounded-xl text-xs font-bold transition-colors select-none cursor-pointer ${
+            className={`w-9 h-9 rounded-xl text-sm font-bold transition-colors select-none cursor-pointer ${
               pageNum === currentPage
                 ? 'bg-blue-600 text-white shadow-xs dark:bg-blue-600'
                 : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'

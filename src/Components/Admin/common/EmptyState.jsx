@@ -7,7 +7,7 @@ export default function EmptyState({ icon: Icon = Inbox, title = 'No records fou
         <Icon size={22} />
       </div>
       <p className="text-sm font-medium text-gray-700">{title}</p>
-      {description && <p className="text-xs text-gray-400 mt-1 max-w-xs">{description}</p>}
+      {description && <p className="text-sm text-gray-400 mt-1 max-w-xs">{description}</p>}
     </div>
   )
 }

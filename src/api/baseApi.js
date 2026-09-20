@@ -1,8 +1,9 @@
+import { FORUM_API_BASE_URL } from '@/config/forumApi';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { logout, setAccessToken } from '@/redux/slices/authSlice'
 
 const rawBaseQuery = fetchBaseQuery({
-  baseUrl: import.meta.env.VITE_API_BASE_URL,
+  baseUrl: FORUM_API_BASE_URL,
   prepareHeaders: (headers, { getState }) => {
     const token = getState().auth.accessToken
     if (token) {
