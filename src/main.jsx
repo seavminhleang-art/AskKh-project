@@ -14,6 +14,7 @@ import LeaderboardPage from "./Components/Pages/leaderboard/LeaderBoarderPage.js
 import QACommunity from "./Components/Pages/Q&ACommunity.jsx";
 import LoginPage from "./Components/Auth/LoginPage.jsx";
 import RegisterPage from "./Components/Auth/RegisterPage.jsx";
+import LegalPage from "./Components/Legal/LegalPage.jsx";
 import { LanguageProvider } from "./Components/Language/LanguageContext.jsx";
 import { ThemeProvider as LegacyThemeProvider } from "./Components/theme-provider.jsx";
 import { ThemeProvider } from "./context/ThemeContext.jsx";
@@ -42,10 +43,9 @@ const router = createBrowserRouter([
       { path: "community/qa", element: <QACommunity /> },
       { path: "community/lost-found", element: <LostAndFoundPage /> },
       { path: "about", element: <About /> },
-      { path: "terms", element: <TermsAndConditions /> },
+      { path: "terms", element: <LegalPage documentType="terms" /> },
+      { path: "privacy", element: <LegalPage documentType="privacy" /> },
       { path: "privacy-policy", element: <PrivacyPolicy /> },
-      // Keep the URL used by the registration page working as well.
-      { path: "privacy", element: <PrivacyPolicy /> },
       { path: "leaderboard", element: <LeaderboardPage /> },
       { path: "*", element: <HomePage /> },
     ],
@@ -73,8 +73,9 @@ const router = createBrowserRouter([
           children: [
             { path: "admin", element: <AdminDashboardPage /> },
             { path: "admin/dashboard", element: <AdminDashboardPage /> },
-            ...["users", "posts", "comments", "tags", "lost-found", "moderation", "marketplace", "notifications", "settings"].map(resource => ({
-              path: `admin/${resource}`, element: <AdminResourcePage key={resource} resource={resource} />,
+            ...["users", "posts", "comments", "tags", "lost-found", "moderation", "marketplace", "notifications", "settings"].map((resource) => ({
+              path: `admin/${resource}`,
+              element: <AdminResourcePage key={resource} resource={resource} />,
             })),
           ],
         }],
@@ -83,8 +84,7 @@ const router = createBrowserRouter([
   },
 ]);
 
-const root = document.getElementById("root");
-ReactDOM.createRoot(root).render(
+ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <Provider store={store}>
       <LegacyThemeProvider defaultTheme="light">

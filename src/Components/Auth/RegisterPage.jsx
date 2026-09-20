@@ -18,6 +18,8 @@ import {
 
 import {
   createUserWithEmailAndPassword,
+  deleteUser,
+  sendEmailVerification,
   signOut,
   updateProfile,
 } from "firebase/auth";
@@ -89,6 +91,12 @@ const translations = {
 
     passwordPlaceholder:
       "បញ្ចូលពាក្យសម្ងាត់",
+
+    showPassword:
+      "បង្ហាញពាក្យសម្ងាត់",
+
+    hidePassword:
+      "លាក់ពាក្យសម្ងាត់",
 
     confirmPassword:
       "បញ្ជាក់ពាក្យសម្ងាត់",
@@ -184,7 +192,10 @@ const translations = {
       "សូមយល់ព្រមនឹងលក្ខខណ្ឌ និងគោលការណ៍ឯកជនភាព។",
 
     accountCreated:
-      "បង្កើតគណនីបានជោគជ័យ។ ឥឡូវនេះអ្នកអាចចូលគណនីបាន។",
+      "បង្កើតគណនីបានជោគជ័យ។ សូមពិនិត្យអ៊ីមែលរបស់អ្នក និងផ្ទៀងផ្ទាត់គណនីមុនពេលចូល។",
+
+    verificationEmailFailed:
+      "គណនីត្រូវបានបង្កើត ប៉ុន្តែមិនអាចផ្ញើអ៊ីមែលផ្ទៀងផ្ទាត់បានទេ។ សូមចូលម្ដងទៀតដើម្បីស្នើតំណថ្មី។",
 
     emailExists:
       "អ៊ីមែលនេះបានចុះឈ្មោះរួចហើយ។",
@@ -262,6 +273,12 @@ const translations = {
 
     passwordPlaceholder:
       "Enter your password",
+
+    showPassword:
+      "Show password",
+
+    hidePassword:
+      "Hide password",
 
     confirmPassword:
       "Confirm Password",
@@ -357,7 +374,10 @@ const translations = {
       "Please agree to the Terms of Service and Privacy Policy.",
 
     accountCreated:
-      "Account created successfully. You can now log in.",
+      "Account created. Check your email and verify your account before signing in.",
+
+    verificationEmailFailed:
+      "Your account was created, but we could not send the verification email. Sign in again to request a new link.",
 
     emailExists:
       "This email is already registered.",
@@ -670,6 +690,8 @@ export default function RegisterPage() {
   const {
     register,
     handleSubmit,
+    getValues,
+    setError,
     formState: {
       errors,
       isSubmitting,
@@ -729,6 +751,31 @@ export default function RegisterPage() {
     });
   };
 
+  const requireTermsAcceptance =
+    () => {
+      if (
+        getValues(
+          "agreeToTerms",
+        )
+      ) {
+        return true;
+      }
+
+      setError(
+        "agreeToTerms",
+        {
+          type: "manual",
+          message:
+            t.termsRequired,
+        },
+        {
+          shouldFocus: true,
+        },
+      );
+
+      return false;
+    };
+
   const onSubmit =
     async (data) => {
       try {
@@ -741,13 +788,45 @@ export default function RegisterPage() {
             data.password,
           );
 
-        await updateProfile(
-          result.user,
-          {
-            displayName:
-              `${data.firstName.trim()} ${data.lastName.trim()}`,
-          },
-        );
+        try {
+          await updateProfile(
+            result.user,
+            {
+              displayName:
+                `${data.firstName.trim()} ${data.lastName.trim()}`,
+            },
+          );
+        } catch (profileError) {
+          try {
+            await deleteUser(
+              result.user,
+            );
+          } catch (rollbackError) {
+            console.error(
+              "Account rollback error:",
+              rollbackError,
+            );
+          }
+
+          throw profileError;
+        }
+
+        let verificationSent =
+          true;
+
+        try {
+          await sendEmailVerification(
+            result.user,
+          );
+        } catch (verificationError) {
+          console.error(
+            "Verification email error:",
+            verificationError,
+          );
+
+          verificationSent =
+            false;
+        }
 
         await signOut(
           auth,
@@ -761,7 +840,9 @@ export default function RegisterPage() {
             t.successTitle,
 
           description:
-            t.accountCreated,
+            verificationSent
+              ? t.accountCreated
+              : t.verificationEmailFailed,
 
           duration:
             3000,
@@ -884,6 +965,13 @@ export default function RegisterPage() {
           ? t.googleSuccess
           : t.githubSuccess,
     });
+
+    navigate(
+      "/",
+      {
+        replace: true,
+      },
+    );
   };
 
   return (
@@ -930,7 +1018,7 @@ export default function RegisterPage() {
               src={
                 registerIllustration
               }
-              alt="AskKH registration illustration"
+              alt="NEXA registration illustration"
               className="auth-illustration register-illustration"
             />
           </div>
@@ -1002,6 +1090,11 @@ export default function RegisterPage() {
                           ? "true"
                           : "false"
                       }
+                      aria-describedby={
+                        errors.firstName
+                          ? "register-first-name-error"
+                          : undefined
+                      }
                       {...register(
                         "firstName",
                       )}
@@ -1009,7 +1102,11 @@ export default function RegisterPage() {
                   </div>
 
                   {errors.firstName && (
-                    <p className="mt-1.5 text-xs font-medium text-red-500">
+                    <p
+                      id="register-first-name-error"
+                      role="alert"
+                      className="mt-1.5 text-xs font-medium text-red-500"
+                    >
                       {
                         errors
                           .firstName
@@ -1049,6 +1146,11 @@ export default function RegisterPage() {
                           ? "true"
                           : "false"
                       }
+                      aria-describedby={
+                        errors.lastName
+                          ? "register-last-name-error"
+                          : undefined
+                      }
                       {...register(
                         "lastName",
                       )}
@@ -1056,7 +1158,11 @@ export default function RegisterPage() {
                   </div>
 
                   {errors.lastName && (
-                    <p className="mt-1.5 text-xs font-medium text-red-500">
+                    <p
+                      id="register-last-name-error"
+                      role="alert"
+                      className="mt-1.5 text-xs font-medium text-red-500"
+                    >
                       {
                         errors
                           .lastName
@@ -1104,6 +1210,11 @@ export default function RegisterPage() {
                         ? "true"
                         : "false"
                     }
+                    aria-describedby={
+                      errors.email
+                        ? "register-email-error"
+                        : undefined
+                    }
                     {...register(
                       "email",
                     )}
@@ -1111,7 +1222,11 @@ export default function RegisterPage() {
                 </div>
 
                 {errors.email && (
-                  <p className="mt-1.5 text-xs font-medium text-red-500">
+                  <p
+                    id="register-email-error"
+                    role="alert"
+                    className="mt-1.5 text-xs font-medium text-red-500"
+                  >
                     {
                       errors
                         .email
@@ -1162,6 +1277,11 @@ export default function RegisterPage() {
                         ? "true"
                         : "false"
                     }
+                    aria-describedby={
+                      errors.password
+                        ? "register-password-error"
+                        : undefined
+                    }
                     {...register(
                       "password",
                       { deps: ["confirmPassword"] },
@@ -1173,8 +1293,8 @@ export default function RegisterPage() {
                     className="password-toggle"
                     aria-label={
                       showPassword
-                        ? "Hide password"
-                        : "Show password"
+                        ? t.hidePassword
+                        : t.showPassword
                     }
                     onClick={() =>
                       setShowPassword(
@@ -1202,7 +1322,11 @@ export default function RegisterPage() {
                 </div>
 
                 {errors.password && (
-                  <p className="mt-1.5 text-xs font-medium text-red-500">
+                  <p
+                    id="register-password-error"
+                    role="alert"
+                    className="mt-1.5 text-xs font-medium text-red-500"
+                  >
                     {
                       errors
                         .password
@@ -1253,6 +1377,11 @@ export default function RegisterPage() {
                         ? "true"
                         : "false"
                     }
+                    aria-describedby={
+                      errors.confirmPassword
+                        ? "register-confirm-password-error"
+                        : undefined
+                    }
                     {...register(
                       "confirmPassword",
                     )}
@@ -1263,8 +1392,8 @@ export default function RegisterPage() {
                     className="password-toggle"
                     aria-label={
                       showConfirmPassword
-                        ? "Hide password"
-                        : "Show password"
+                        ? t.hidePassword
+                        : t.showPassword
                     }
                     onClick={() =>
                       setShowConfirmPassword(
@@ -1292,7 +1421,11 @@ export default function RegisterPage() {
                 </div>
 
                 {errors.confirmPassword && (
-                  <p className="mt-1.5 text-xs font-medium text-red-500">
+                  <p
+                    id="register-confirm-password-error"
+                    role="alert"
+                    className="mt-1.5 text-xs font-medium text-red-500"
+                  >
                     {
                       errors
                         .confirmPassword
@@ -1303,15 +1436,31 @@ export default function RegisterPage() {
               </div>
 
               <div>
-                <label className="checkbox-label terms-checkbox">
-                  <input
-                    type="checkbox"
-                    {...register(
-                      "agreeToTerms",
-                    )}
-                  />
+                <div className="terms-checkbox">
+                  <label className="checkbox-label">
+                    <input
+                      type="checkbox"
+                      aria-label={`${
+                        t.agree
+                      } ${
+                        t.terms
+                      } ${
+                        t.and
+                      } ${
+                        t.privacy
+                      }`}
+                      aria-describedby={
+                        errors.agreeToTerms
+                          ? "register-terms-error"
+                          : undefined
+                      }
+                      {...register(
+                        "agreeToTerms",
+                      )}
+                    />
 
-                  <span className="custom-checkbox" />
+                    <span className="custom-checkbox" />
+                  </label>
 
                   <span className="checkbox-text">
                     {
@@ -1334,10 +1483,14 @@ export default function RegisterPage() {
                       }
                     </Link>
                   </span>
-                </label>
+                </div>
 
                 {errors.agreeToTerms && (
-                  <p className="mt-1.5 text-xs font-medium text-red-500">
+                  <p
+                    id="register-terms-error"
+                    role="alert"
+                    className="mt-1.5 text-xs font-medium text-red-500"
+                  >
                     {
                       errors
                         .agreeToTerms
@@ -1376,6 +1529,9 @@ export default function RegisterPage() {
                   label={
                     t.google
                   }
+                  onBeforeAuth={
+                    requireTermsAcceptance
+                  }
                   onSuccess={() =>
                     handleOAuthSuccess(
                       "Google",
@@ -1394,6 +1550,9 @@ export default function RegisterPage() {
                 <GithubComponent
                   label={
                     t.github
+                  }
+                  onBeforeAuth={
+                    requireTermsAcceptance
                   }
                   onSuccess={() =>
                     handleOAuthSuccess(

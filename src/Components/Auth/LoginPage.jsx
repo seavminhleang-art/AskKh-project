@@ -25,8 +25,10 @@ import {
   browserLocalPersistence,
   browserSessionPersistence,
   sendPasswordResetEmail,
+  sendEmailVerification,
   setPersistence,
   signInWithEmailAndPassword,
+  signOut,
 } from "firebase/auth";
 
 import {
@@ -83,6 +85,12 @@ const translations = {
 
     passwordPlaceholder:
       "បញ្ចូលពាក្យសម្ងាត់",
+
+    showPassword:
+      "បង្ហាញពាក្យសម្ងាត់",
+
+    hidePassword:
+      "លាក់ពាក្យសម្ងាត់",
 
     remember:
       "ចងចាំខ្ញុំ",
@@ -174,6 +182,12 @@ const translations = {
     resetFailed:
       "មិនអាចផ្ញើអ៊ីមែលកំណត់ពាក្យសម្ងាត់ឡើងវិញបានទេ។",
 
+    emailNotVerified:
+      "សូមផ្ទៀងផ្ទាត់អ៊ីមែលរបស់អ្នកជាមុនសិន។ យើងបានផ្ញើតំណផ្ទៀងផ្ទាត់ថ្មីទៅកាន់ប្រអប់សំបុត្ររបស់អ្នក។",
+
+    emailNotVerifiedNoResend:
+      "សូមផ្ទៀងផ្ទាត់អ៊ីមែលរបស់អ្នកជាមុនសិន។ មិនអាចផ្ញើតំណផ្ទៀងផ្ទាត់ថ្មីបានទេ—សូមព្យាយាមម្ដងទៀតនៅពេលក្រោយ។",
+
     welcome:
       "សូមស្វាគមន៍",
 
@@ -208,6 +222,12 @@ const translations = {
 
     passwordPlaceholder:
       "Enter your password",
+
+    showPassword:
+      "Show password",
+
+    hidePassword:
+      "Hide password",
 
     remember:
       "Remember me",
@@ -298,6 +318,12 @@ const translations = {
 
     resetFailed:
       "Unable to send password reset email.",
+
+    emailNotVerified:
+      "Verify your email before signing in. We sent a new verification link to your inbox.",
+
+    emailNotVerifiedNoResend:
+      "Verify your email before signing in. We could not send a new verification link; please try again later.",
 
     welcome:
       "Welcome",
@@ -649,8 +675,48 @@ export default function LoginPage() {
             data.password,
           );
 
+        if (
+          !result.user.emailVerified
+        ) {
+          let verificationResent =
+            true;
+
+          try {
+            await sendEmailVerification(
+              result.user,
+            );
+          } catch (verificationError) {
+            console.error(
+              "Verification email error:",
+              verificationError,
+            );
+
+            verificationResent =
+              false;
+          }
+
+          await signOut(
+            auth,
+          );
+
+          notifyError(
+            verificationResent
+              ? t.emailNotVerified
+              : t.emailNotVerifiedNoResend,
+          );
+
+          return;
+        }
+
         await showLoginSuccess(
           result.user,
+        );
+
+        navigate(
+          "/",
+          {
+            replace: true,
+          },
         );
       } catch (error) {
         notifyError(
@@ -862,7 +928,7 @@ export default function LoginPage() {
               src={
                 loginIllustration
               }
-              alt="AskKH login illustration"
+              alt="NEXA login illustration"
               className="auth-illustration login-illustration"
             />
           </div>
@@ -925,12 +991,30 @@ export default function LoginPage() {
                         ? "true"
                         : "false"
                     }
+                    aria-describedby={
+                      errors.email
+                        ? "login-email-error"
+                        : undefined
+                    }
                     {...register(
                       "email",
                     )}
                   />
                 </div>
 
+                {errors.email && (
+                  <p
+                    id="login-email-error"
+                    role="alert"
+                    className="mt-1.5 text-xs font-medium text-red-500"
+                  >
+                    {
+                      errors
+                        .email
+                        .message
+                    }
+                  </p>
+                )}
               </div>
 
               <div className="form-group">
@@ -974,6 +1058,11 @@ export default function LoginPage() {
                         ? "true"
                         : "false"
                     }
+                    aria-describedby={
+                      errors.password
+                        ? "login-password-error"
+                        : undefined
+                    }
                     {...register(
                       "password",
                     )}
@@ -984,8 +1073,8 @@ export default function LoginPage() {
                     className="password-toggle"
                     aria-label={
                       showPassword
-                        ? "Hide password"
-                        : "Show password"
+                        ? t.hidePassword
+                        : t.showPassword
                     }
                     onClick={() =>
                       setShowPassword(
@@ -1012,6 +1101,19 @@ export default function LoginPage() {
                   </button>
                 </div>
 
+                {errors.password && (
+                  <p
+                    id="login-password-error"
+                    role="alert"
+                    className="mt-1.5 text-xs font-medium text-red-500"
+                  >
+                    {
+                      errors
+                        .password
+                        .message
+                    }
+                  </p>
+                )}
               </div>
 
               <div className="login-options">
