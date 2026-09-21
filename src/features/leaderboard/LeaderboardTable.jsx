@@ -1,38 +1,38 @@
-import React from "react";
-import { Trophy, ShieldCheck } from "lucide-react";
-import Avatar from "../../Components/ui/Avatar";
+import React from 'react';
+import { Trophy, ShieldCheck } from 'lucide-react';
+import Avatar from '../../Components/ui/Avatar';
 import Table, {
   TableHeader,
   TableBody,
   TableRow,
   TableHead,
   TableCell,
-} from "../../Components/ui/Table";
+} from '../../Components/ui/Table';
 
 export default function LeaderboardTable({ users = [] }) {
   const getRankBadge = (rank) => {
     switch (rank) {
       case 1:
         return (
-          <div className="w-8 h-8 rounded-full bg-amber-100 text-amber-600 dark:bg-amber-950/60 dark:text-amber-400 flex items-center justify-center font-black text-lg border border-amber-300 dark:border-amber-700">
+          <div className="w-8 h-8 rounded-full bg-amber-100 text-amber-600 dark:bg-amber-950/60 dark:text-amber-400 flex items-center justify-center font-black text-sm border border-amber-300 dark:border-amber-700">
             <Trophy className="w-4 h-4 text-amber-500" />
           </div>
         );
       case 2:
         return (
-          <div className="w-8 h-8 rounded-full bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-300 flex items-center justify-center font-black text-lg border border-slate-300">
+          <div className="w-8 h-8 rounded-full bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-300 flex items-center justify-center font-black text-sm border border-slate-300">
             2
           </div>
         );
       case 3:
         return (
-          <div className="w-8 h-8 rounded-full bg-amber-900/10 text-amber-800 dark:bg-amber-950/40 dark:text-amber-500 flex items-center justify-center font-black text-lg border border-amber-800/30">
+          <div className="w-8 h-8 rounded-full bg-amber-900/10 text-amber-800 dark:bg-amber-950/40 dark:text-amber-500 flex items-center justify-center font-black text-sm border border-amber-800/30">
             3
           </div>
         );
       default:
         return (
-          <div className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-base text-slate-500">
+          <div className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm text-slate-500">
             {rank}
           </div>
         );
@@ -55,9 +55,7 @@ export default function LeaderboardTable({ users = [] }) {
         {users.map((user, index) => (
           <TableRow key={user.id}>
             <TableCell className="text-center font-bold">
-              <div className="flex justify-center">
-                {getRankBadge(index + 1)}
-              </div>
+              <div className="flex justify-center">{getRankBadge(index + 1)}</div>
             </TableCell>
             <TableCell>
               <div className="flex items-center gap-3">
@@ -65,18 +63,16 @@ export default function LeaderboardTable({ users = [] }) {
                 <div>
                   <div className="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
                     <span>{user.name}</span>
-                    {user.role === "ADMIN" && (
+                    {user.role === 'ADMIN' && (
                       <ShieldCheck className="w-3.5 h-3.5 text-blue-500" />
                     )}
                   </div>
-                  <div className="text-base text-slate-400 truncate max-w-xs">
-                    {user.title}
-                  </div>
+                  <div className="text-sm text-slate-400 truncate max-w-xs">{user.title}</div>
                 </div>
               </div>
             </TableCell>
             <TableCell>
-              <span className="px-2 py-0.5 rounded text-[14px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+              <span className="px-2 py-0.5 rounded text-sm font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
                 {user.role}
               </span>
             </TableCell>

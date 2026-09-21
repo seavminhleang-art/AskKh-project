@@ -1,10 +1,9 @@
-import { Outlet } from "react-router-dom";
-import Sidebar from "./Sidebar";
-import Topbar from "./Topbar";
+import { Outlet } from 'react-router-dom'
+import Sidebar from './Sidebar'
+import Topbar from './Topbar'
 
 export default function AdminLayout() {
-  const isDev =
-    import.meta.env.DEV && import.meta.env.VITE_USE_MOCK_API !== "false";
+  const isDev = import.meta.env.DEV && import.meta.env.VITE_USE_MOCK_API !== 'false'
 
   return (
     <div className="flex min-h-screen bg-[#F7F8FA]">
@@ -16,10 +15,10 @@ export default function AdminLayout() {
         </main>
       </div>
       {isDev && (
-        <div className="fixed bottom-3 left-3 z-50 text-[14px] font-medium bg-amber-100 text-amber-700 px-2 py-1 rounded-md pointer-events-none">
+        <div className="fixed bottom-3 left-3 z-50 text-sm font-medium bg-amber-100 text-amber-700 px-2 py-1 rounded-md pointer-events-none">
           MOCK DATA
         </div>
       )}
     </div>
-  );
+  )
 }

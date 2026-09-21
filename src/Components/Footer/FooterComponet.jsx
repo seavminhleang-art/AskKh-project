@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useTheme } from "../../context/ThemeContext.jsx";
 import { MapPin, Phone, Mail } from "lucide-react";
-
 import {
   FaFacebookF,
   FaInstagram,
@@ -31,9 +30,7 @@ export default function FooterComponent() {
   ];
 
   return (
-    <footer
-      className={`relative overflow-hidden transition-colors duration-300 ${darkMode ? "bg-zinc-950 text-gray-300" : "bg-brand-primary-dark text-gray-300"}`}
-    >
+    <footer className={`relative overflow-hidden transition-colors duration-300 ${darkMode ? "bg-zinc-950 text-gray-300" : "bg-brand-primary-dark text-gray-300"}`}>
       {/* subtle vertical stripe background, matches reference */}
       <div
         className="pointer-events-none absolute inset-0 opacity-10"
@@ -57,7 +54,7 @@ export default function FooterComponent() {
                 />
               </Link>
             </div>
-            <p className="text-lg leading-relaxed text-gray-400 max-w-[220px]">
+            <p className="text-sm leading-relaxed text-gray-400 max-w-[220px]">
               {t("footer.brandDesc")}
             </p>
           </div>
@@ -73,7 +70,7 @@ export default function FooterComponent() {
                 <li key={link.label}>
                   <Link
                     to={link.to}
-                    className="text-lg text-gray-400 hover:text-brand-secondary transition-all duration-200 no-underline hover:translate-x-1 inline-block"
+                    className="text-sm text-gray-400 hover:text-brand-secondary transition-all duration-200 no-underline hover:translate-x-1 inline-block"
                   >
                     {link.label}
                   </Link>
@@ -93,7 +90,7 @@ export default function FooterComponent() {
                 <li key={item.label}>
                   <Link
                     to={item.to}
-                    className="text-lg text-gray-400 hover:text-brand-secondary transition-all duration-200 no-underline hover:translate-x-1 inline-block"
+                    className="text-sm text-gray-400 hover:text-brand-secondary transition-all duration-200 no-underline hover:translate-x-1 inline-block"
                   >
                     {item.label}
                   </Link>
@@ -109,23 +106,20 @@ export default function FooterComponent() {
             </h3>
 
             <ul className="space-y-3">
-              <li className="flex items-start gap-2.5 text-lg text-gray-400">
-                <MapPin
-                  size={16}
-                  className="mt-0.5 shrink-0 text-brand-secondary"
-                />
+              <li className="flex items-start gap-2.5 text-sm text-gray-400">
+                <MapPin size={16} className="mt-0.5 shrink-0 text-brand-secondary" />
                 <span>
                   #40, St 273, Sangkat Boeung Kak II, Khan Toul Kork, Phnom
                   Penh, Cambodia
                 </span>
               </li>
 
-              <li className="flex items-center gap-2.5 text-lg text-gray-400">
+              <li className="flex items-center gap-2.5 text-sm text-gray-400">
                 <Phone size={16} className="shrink-0 text-brand-secondary" />
                 <span>(+855) 95-990-910</span>
               </li>
 
-              <li className="flex items-center gap-2.5 text-lg text-gray-400">
+              <li className="flex items-center gap-2.5 text-sm text-gray-400">
                 <Mail size={16} className="shrink-0 text-brand-secondary" />
                 <span>info.istad@gmail.com</span>
               </li>
@@ -148,22 +142,20 @@ export default function FooterComponent() {
 
         {/* Bottom bar */}
         <div className="mt-12 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-base text-gray-500 order-2 sm:order-1">
+          <p className="text-sm text-gray-500 order-2 sm:order-1">
             {t("footer.copyright")}
           </p>
           <div className="flex items-center gap-3 order-1 sm:order-2">
-            {[FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn].map(
-              (Icon, i) => (
-                <a
-                  key={i}
-                  href="#"
-                  aria-label="Social link"
-                  className="flex items-center justify-center w-8 h-8 rounded-full bg-white/10 text-gray-300 hover:bg-brand-secondary hover:text-white transition-all duration-300 hover:scale-110"
-                >
-                  <Icon size={13} />
-                </a>
-              ),
-            )}
+            {[FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn].map((Icon, i) => (
+              <a
+                key={i}
+                href="#"
+                aria-label="Social link"
+                className="flex items-center justify-center w-8 h-8 rounded-full bg-white/10 text-gray-300 hover:bg-brand-secondary hover:text-white transition-all duration-300 hover:scale-110"
+              >
+                <Icon size={13} />
+              </a>
+            ))}
           </div>
         </div>
       </div>

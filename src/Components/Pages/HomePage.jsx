@@ -11,6 +11,7 @@ import CommunityVoice from "../PagesComponent/HomeComponent/CommunityVoice";
 import FAQAndCTA from "../PagesComponent/HomeComponent/FAQAndCTA";
 import HowCommunityQAWorks from "../PagesComponent/HomeComponent/HowCommunityQAWorks"; // New Q&A Component
 
+
 export default function HomePage() {
   // Grab darkMode from App.jsx via React Router context
   const { darkMode } = useOutletContext();
@@ -37,12 +38,12 @@ export default function HomePage() {
         darkMode ? "bg-[#121212] text-gray-100" : "bg-[#f5f5f5] text-gray-800"
       }`}
     >
+     
+
       {/* Custom Mouse Follower Tooltip */}
       <motion.div
-        className={`hidden lg:flex fixed top-0 left-0 pointer-events-none z-50 flex items-center justify-center px-3 py-1.5 rounded-full backdrop-blur-md text-base font-medium shadow-xl ${
-          darkMode
-            ? "bg-gray-100/90 text-gray-900"
-            : "bg-gray-900/90 text-white"
+        className={`hidden lg:flex fixed top-0 left-0 pointer-events-none z-50 flex items-center justify-center px-3 py-1.5 rounded-full backdrop-blur-md text-sm font-medium shadow-xl ${
+          darkMode ? "bg-gray-100/90 text-gray-900" : "bg-gray-900/90 text-white"
         }`}
         style={{
           x: cursorXSpring,
@@ -58,53 +59,17 @@ export default function HomePage() {
         {cursorText || "Explore"}
       </motion.div>
 
-      <HeroSection
-        setCursorText={setCursorText}
-        setIsHovered={setIsHovered}
-        darkMode={darkMode}
-      />
-
+      <HeroSection setCursorText={setCursorText} setIsHovered={setIsHovered} darkMode={darkMode} />
+      
       {/* Integrated Component */}
-      <PlatformShowcase
-        setCursorText={setCursorText}
-        setIsHovered={setIsHovered}
-        darkMode={darkMode}
-      />
-      <PlatformArchitecture
-        setCursorText={setCursorText}
-        setIsHovered={setIsHovered}
-        darkMode={darkMode}
-      />
-      <HowSecureRecoveryWorks
-        setCursorText={setCursorText}
-        setIsHovered={setIsHovered}
-        darkMode={darkMode}
-      />
-      <TrendingDiscussions
-        setCursorText={setCursorText}
-        setIsHovered={setIsHovered}
-        darkMode={darkMode}
-      />
-      <HowCommunityQAWorks
-        setCursorText={setCursorText}
-        setIsHovered={setIsHovered}
-        darkMode={darkMode}
-      />
-      <RecentRecoveries
-        setCursorText={setCursorText}
-        setIsHovered={setIsHovered}
-        darkMode={darkMode}
-      />
-      <CommunityVoice
-        setCursorText={setCursorText}
-        setIsHovered={setIsHovered}
-        darkMode={darkMode}
-      />
-      <FAQAndCTA
-        setCursorText={setCursorText}
-        setIsHovered={setIsHovered}
-        darkMode={darkMode}
-      />
+      <PlatformShowcase setCursorText={setCursorText} setIsHovered={setIsHovered} darkMode={darkMode} />
+      <PlatformArchitecture setCursorText={setCursorText} setIsHovered={setIsHovered} darkMode={darkMode} />
+      <HowSecureRecoveryWorks setCursorText={setCursorText} setIsHovered={setIsHovered} darkMode={darkMode} />
+      <TrendingDiscussions setCursorText={setCursorText} setIsHovered={setIsHovered} darkMode={darkMode} />
+      <HowCommunityQAWorks setCursorText={setCursorText} setIsHovered={setIsHovered} darkMode={darkMode} />
+      <RecentRecoveries setCursorText={setCursorText} setIsHovered={setIsHovered} darkMode={darkMode} />
+      <CommunityVoice setCursorText={setCursorText} setIsHovered={setIsHovered} darkMode={darkMode} />
+      <FAQAndCTA setCursorText={setCursorText} setIsHovered={setIsHovered} darkMode={darkMode} />
     </div>
   );
 }

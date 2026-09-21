@@ -70,7 +70,7 @@ export default function NexaLogo({ className = '' }) {
           className="dark:text-blue-400 font-bold"
           style={{
             fontFamily: "'Google Sans', 'Product Sans', sans-serif",
-            fontSize: '9px',
+            fontSize: '14px',
             fontWeight: '700',
             letterSpacing: '0.02em',
           }}

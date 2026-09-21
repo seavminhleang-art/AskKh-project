@@ -5,13 +5,14 @@ import { Provider } from "react-redux";
 import "./index.css";
 import "./i18n";
 import App from "./App.jsx";
-import About from "./Components/Pages/About.jsx";
+import Preloader from "./Components/Animations/Preloader.jsx";
+
 import TermsAndConditions from "./Components/Pages/TermAndConditions.jsx";
 import PrivacyPolicy from "./Components/Pages/Policy.jsx";
-import HomePage from "./Components/Pages/HomePage.jsx";
-import LostAndFoundPage from "./Components/Pages/LostAndFoundPage.jsx";
-import LeaderboardPage from "./Components/Pages/leaderboard/LeaderBoarderPage.jsx";
-import QACommunity from "./Components/Pages/Q&ACommunity.jsx";
+
+
+
+
 import LoginPage from "./Components/Auth/LoginPage.jsx";
 import RegisterPage from "./Components/Auth/RegisterPage.jsx";
 import LegalPage from "./Components/Legal/LegalPage.jsx";
@@ -27,6 +28,26 @@ import AdminShell from "./features/admin/workspace/AdminShell.jsx";
 import AdminResourcePage from "./features/admin/workspace/ResourcePage.jsx";
 import ProtectedRoute from "./routes/ProtectedRoute.jsx";
 import UserLayout from "./layouts/UserLayout.jsx";
+
+// Load the page and minimum skeleton duration concurrently.
+// React caches each resolved page, so revisiting it does not repeat the delay.
+const lazyWithSkeletonDelay = (loadPage) => React.lazy(async () => {
+  const [page] = await Promise.all([
+    loadPage(),
+    new Promise((resolve) => setTimeout(resolve, 2000)),
+  ]);
+  return page;
+});
+
+const About = lazyWithSkeletonDelay(() => import("./Components/Pages/About.jsx"));
+
+const HomePage = lazyWithSkeletonDelay(() => import("./Components/Pages/HomePage.jsx"));
+
+const LostAndFoundPage = lazyWithSkeletonDelay(() => import("./Components/Pages/LostAndFoundPage.jsx"));
+
+const LeaderboardPage = lazyWithSkeletonDelay(() => import("./Components/Pages/leaderboard/LeaderBoarderPage.jsx"));
+
+const QACommunity = lazyWithSkeletonDelay(() => import("./Components/Pages/Q&ACommunity.jsx"));
 
 function RootLayout() {
   return <App />;
@@ -73,9 +94,8 @@ const router = createBrowserRouter([
           children: [
             { path: "admin", element: <AdminDashboardPage /> },
             { path: "admin/dashboard", element: <AdminDashboardPage /> },
-            ...["users", "posts", "comments", "tags", "lost-found", "moderation", "marketplace", "notifications", "settings"].map((resource) => ({
-              path: `admin/${resource}`,
-              element: <AdminResourcePage key={resource} resource={resource} />,
+            ...["users", "posts", "comments", "tags", "lost-found", "moderation", "marketplace", "notifications", "settings", "locations", "claims", "leaderboard"].map(resource => ({
+              path: `admin/${resource}`, element: <AdminResourcePage key={resource} resource={resource} />,
             })),
           ],
         }],
@@ -90,7 +110,9 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <LegacyThemeProvider defaultTheme="light">
         <ThemeProvider>
           <LanguageProvider>
-            <RouterProvider router={router} />
+            <Preloader>
+              <RouterProvider router={router} />
+            </Preloader>
           </LanguageProvider>
         </ThemeProvider>
       </LegacyThemeProvider>

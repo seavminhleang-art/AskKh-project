@@ -46,11 +46,11 @@ export const authApi = baseApi.injectEndpoints({
       }),
     }),
     logoutApi: builder.mutation({
-      query: (body) => ({
-        url: '/auth/logout',
-        method: 'POST',
-        body: body || {},
-      }),
+      queryFn: (body, api, _options, fetchWithBQ) => {
+        const refreshToken = body?.refreshToken || api.getState().auth.refreshToken;
+        if (!refreshToken) return { error: { status: 'CUSTOM_ERROR', error: 'No forum API refresh token is available for logout.' } };
+        return fetchWithBQ({ url: '/auth/logout', method: 'POST', body: { refreshToken } });
+      },
       async onQueryStarted(args, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled;
@@ -102,5 +102,7 @@ export const {
   useForgotPasswordMutation,
   useResetPasswordMutation,
 } = authApi;
+
+export const useLogoutUserMutation = useLogoutApiMutation;
 
 export default authApi;

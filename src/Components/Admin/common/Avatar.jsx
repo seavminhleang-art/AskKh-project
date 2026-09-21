@@ -12,7 +12,7 @@ export default function Avatar({ src, name, size = 32 }) {
   return (
     <div
       className="rounded-full bg-brand-primary-light text-brand-primary flex items-center justify-center font-medium flex-shrink-0"
-      style={{ width: size, height: size, fontSize: size * 0.38 }}
+      style={{ width: size, height: size, fontSize: Math.max(14, size * 0.38) }}
     >
       {initials}
     </div>

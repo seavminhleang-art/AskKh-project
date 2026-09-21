@@ -1,434 +1,689 @@
-import { useMemo, useState } from "react";
+import {
+  useMemo,
+  useState,
+} from "react";
 
-import { Link, useNavigate } from "react-router-dom";
+import {
+  Link,
+  useNavigate,
+} from "react-router-dom";
 
-import { ArrowLeft, Eye, EyeOff, LockKeyhole, Mail } from "lucide-react";
+import {
+  ArrowLeft,
+  Eye,
+  EyeOff,
+  LockKeyhole,
+  Mail,
+} from "lucide-react";
 
 import {
   createUserWithEmailAndPassword,
-  deleteUser,
-  sendEmailVerification,
   signOut,
   updateProfile,
 } from "firebase/auth";
 
-import { useForm } from "react-hook-form";
+import {
+  useForm,
+} from "react-hook-form";
 
-import { zodResolver } from "@hookform/resolvers/zod";
+import {
+  zodResolver,
+} from "@hookform/resolvers/zod";
 
-import { z } from "zod";
+import {
+  z,
+} from "zod";
 
-import { auth } from "../Firebase/firebase.js";
+import {
+  auth,
+} from "../Firebase/firebase.js";
 
-import { useLanguage } from "../Language/LanguageContext.jsx";
-import { useTheme } from "../../context/ThemeContext.jsx";
-
-import { useRegisterMutation } from "../../features/auth/authApi.js";
+import {
+  useLanguage,
+} from "../Language/LanguageContext.jsx";
 
 import GoogleComponent from "../oauth/GoogleComponent.jsx";
 import GithubComponent from "../oauth/GithubComponent.jsx";
-import { toast, ToastContainer } from "react-toastify";
+
+import {
+  AnimatedToastStack,
+  useAnimatedToastStack,
+} from "@/Components/motion/animated-toast-stack";
 
 import registerIllustration from "../../assets/Website/register-illustration.png";
 
 const translations = {
   km: {
-    back: "ត្រឡប់ទៅគេហទំព័រ",
+    back:
+      "ត្រឡប់ទៅគេហទំព័រ",
 
-    title: "បង្កើតគណនីរបស់អ្នក",
+    title:
+      "បង្កើតគណនីរបស់អ្នក",
 
-    alreadyAccount: "មានគណនីរួចហើយ?",
+    alreadyAccount:
+      "មានគណនីរួចហើយ?",
 
-    login: "ចូលគណនី",
+    login:
+      "ចូលគណនី",
 
-    firstname: "នាមខ្លួន",
+    firstname:
+      "នាមខ្លួន",
 
-    firstnamePlaceholder: "បញ្ចូលនាមខ្លួន",
+    firstnamePlaceholder:
+      "បញ្ចូលនាមខ្លួន",
 
-    lastname: "នាមត្រកូល",
+    lastname:
+      "នាមត្រកូល",
 
-    lastnamePlaceholder: "បញ្ចូលនាមត្រកូល",
+    lastnamePlaceholder:
+      "បញ្ចូលនាមត្រកូល",
 
-    email: "អ៊ីមែល",
+    email:
+      "អ៊ីមែល",
 
-    emailPlaceholder: "បញ្ចូលអ៊ីមែលរបស់អ្នក",
+    emailPlaceholder:
+      "បញ្ចូលអ៊ីមែលរបស់អ្នក",
 
-    password: "ពាក្យសម្ងាត់",
+    password:
+      "ពាក្យសម្ងាត់",
 
-    passwordPlaceholder: "បញ្ចូលពាក្យសម្ងាត់",
+    passwordPlaceholder:
+      "បញ្ចូលពាក្យសម្ងាត់",
 
-    showPassword: "បង្ហាញពាក្យសម្ងាត់",
+    confirmPassword:
+      "បញ្ជាក់ពាក្យសម្ងាត់",
 
-    hidePassword: "លាក់ពាក្យសម្ងាត់",
+    confirmPlaceholder:
+      "បញ្ចូលពាក្យសម្ងាត់ម្ដងទៀត",
 
-    confirmPassword: "បញ្ជាក់ពាក្យសម្ងាត់",
+    agree:
+      "ខ្ញុំយល់ព្រមនឹង",
 
-    confirmPlaceholder: "បញ្ចូលពាក្យសម្ងាត់ម្ដងទៀត",
+    terms:
+      "លក្ខខណ្ឌនៃសេវាកម្ម",
 
-    agree: "ខ្ញុំយល់ព្រមនឹង",
+    and:
+      "និង",
 
-    terms: "លក្ខខណ្ឌនៃសេវាកម្ម",
+    privacy:
+      "គោលការណ៍ឯកជនភាព",
 
-    and: "និង",
+    register:
+      "ចុះឈ្មោះ",
 
-    privacy: "គោលការណ៍ឯកជនភាព",
+    creating:
+      "កំពុងបង្កើតគណនី...",
 
-    register: "ចុះឈ្មោះ",
+    signupWith:
+      "ឬចុះឈ្មោះជាមួយ",
 
-    creating: "កំពុងបង្កើតគណនី...",
+    google:
+      "Google",
 
-    signupWith: "ឬចុះឈ្មោះជាមួយ",
+    github:
+      "GitHub",
 
-    google: "Google",
+    firstRequired:
+      "សូមបញ្ចូលនាមខ្លួន។",
 
-    github: "GitHub",
+    firstTooShort:
+      "នាមខ្លួនត្រូវមានយ៉ាងហោចណាស់ ២ តួអក្សរ។",
 
-    firstRequired: "សូមបញ្ចូលនាមខ្លួន។",
+    firstTooLong:
+      "នាមខ្លួនមិនអាចលើសពី ៥០ តួអក្សរ។",
 
-    firstTooShort: "នាមខ្លួនត្រូវមានយ៉ាងហោចណាស់ ២ តួអក្សរ។",
+    lastRequired:
+      "សូមបញ្ចូលនាមត្រកូល។",
 
-    firstTooLong: "នាមខ្លួនមិនអាចលើសពី ៥០ តួអក្សរ។",
+    lastTooShort:
+      "នាមត្រកូលត្រូវមានយ៉ាងហោចណាស់ ២ តួអក្សរ។",
 
-    lastRequired: "សូមបញ្ចូលនាមត្រកូល។",
+    lastTooLong:
+      "នាមត្រកូលមិនអាចលើសពី ៥០ តួអក្សរ។",
 
-    lastTooShort: "នាមត្រកូលត្រូវមានយ៉ាងហោចណាស់ ២ តួអក្សរ។",
+    emailRequired:
+      "សូមបញ្ចូលអ៊ីមែល។",
 
-    lastTooLong: "នាមត្រកូលមិនអាចលើសពី ៥០ តួអក្សរ។",
+    invalidEmail:
+      "សូមបញ្ចូលអ៊ីមែលឱ្យបានត្រឹមត្រូវ។",
 
-    emailRequired: "សូមបញ្ចូលអ៊ីមែល។",
+    emailMissingAt:
+      "អ៊ីមែលត្រូវមានសញ្ញា @",
 
-    invalidEmail: "សូមបញ្ចូលអ៊ីមែលឱ្យបានត្រឹមត្រូវ។",
+    gmailSuggestion:
+      "តើអ្នកចង់សរសេរ @gmail.com មែនទេ?",
 
-    emailMissingAt: "អ៊ីមែលត្រូវមានសញ្ញា @",
-
-    gmailSuggestion: "តើអ្នកចង់សរសេរ @gmail.com មែនទេ?",
-
-    invalidEmailFormat: "ទម្រង់អ៊ីមែលមិនត្រឹមត្រូវ (ឧ. name@example.com)",
+    invalidEmailFormat:
+      "ទម្រង់អ៊ីមែលមិនត្រឹមត្រូវ (ឧ. name@example.com)",
 
     emailDomainExtension:
       "Domain របស់អ៊ីមែលត្រូវមានផ្នែកបន្ថែមដូចជា .com (ឧ. gmail.com)",
 
-    passwordRequired: "សូមបញ្ចូលពាក្យសម្ងាត់។",
+    passwordRequired:
+      "សូមបញ្ចូលពាក្យសម្ងាត់។",
 
-    passwordLength: "ពាក្យសម្ងាត់ត្រូវមានយ៉ាងហោចណាស់ ៨ តួអក្សរ។",
+    passwordLength:
+      "ពាក្យសម្ងាត់ត្រូវមានយ៉ាងហោចណាស់ ៨ តួអក្សរ។",
 
-    passwordUppercase: "ពាក្យសម្ងាត់ត្រូវមានអក្សរធំយ៉ាងហោចណាស់ ១។",
+    passwordUppercase:
+      "ពាក្យសម្ងាត់ត្រូវមានអក្សរធំយ៉ាងហោចណាស់ ១។",
 
-    passwordLowercase: "ពាក្យសម្ងាត់ត្រូវមានអក្សរតូចយ៉ាងហោចណាស់ ១។",
+    passwordLowercase:
+      "ពាក្យសម្ងាត់ត្រូវមានអក្សរតូចយ៉ាងហោចណាស់ ១។",
 
-    passwordNumber: "ពាក្យសម្ងាត់ត្រូវមានលេខយ៉ាងហោចណាស់ ១។",
+    passwordNumber:
+      "ពាក្យសម្ងាត់ត្រូវមានលេខយ៉ាងហោចណាស់ ១។",
 
-    confirmRequired: "សូមបញ្ជាក់ពាក្យសម្ងាត់។",
+    confirmRequired:
+      "សូមបញ្ជាក់ពាក្យសម្ងាត់។",
 
-    passwordMismatch: "ពាក្យសម្ងាត់ទាំងពីរមិនត្រូវគ្នា។",
+    passwordMismatch:
+      "ពាក្យសម្ងាត់ទាំងពីរមិនត្រូវគ្នា។",
 
-    termsRequired: "សូមយល់ព្រមនឹងលក្ខខណ្ឌ និងគោលការណ៍ឯកជនភាព។",
+    termsRequired:
+      "សូមយល់ព្រមនឹងលក្ខខណ្ឌ និងគោលការណ៍ឯកជនភាព។",
 
     accountCreated:
-      "បង្កើតគណនីបានជោគជ័យ។ សូមពិនិត្យអ៊ីមែលរបស់អ្នក និងផ្ទៀងផ្ទាត់គណនីមុនពេលចូល។",
+      "បង្កើតគណនីបានជោគជ័យ។ ឥឡូវនេះអ្នកអាចចូលគណនីបាន។",
 
-    verificationEmailFailed:
-      "គណនីត្រូវបានបង្កើត ប៉ុន្តែមិនអាចផ្ញើអ៊ីមែលផ្ទៀងផ្ទាត់បានទេ។ សូមចូលម្ដងទៀតដើម្បីស្នើតំណថ្មី។",
+    emailExists:
+      "អ៊ីមែលនេះបានចុះឈ្មោះរួចហើយ។",
 
-    emailExists: "អ៊ីមែលនេះបានចុះឈ្មោះរួចហើយ។",
+    registerFailed:
+      "ការចុះឈ្មោះបរាជ័យ។",
 
-    registerFailed: "ការចុះឈ្មោះបរាជ័យ។",
+    network:
+      "មានបញ្ហាបណ្តាញ។ សូមពិនិត្យអ៊ីនធឺណិតរបស់អ្នក។",
 
-    network: "មានបញ្ហាបណ្តាញ។ សូមពិនិត្យអ៊ីនធឺណិតរបស់អ្នក។",
+    tooMany:
+      "ការព្យាយាមច្រើនពេក។ សូមព្យាយាមម្ដងទៀតនៅពេលក្រោយ។",
 
-    tooMany: "ការព្យាយាមច្រើនពេក។ សូមព្យាយាមម្ដងទៀតនៅពេលក្រោយ។",
+    googleFailed:
+      "ការចុះឈ្មោះតាម Google បរាជ័យ។",
 
-    googleFailed: "ការចុះឈ្មោះតាម Google បរាជ័យ។",
+    githubFailed:
+      "ការចុះឈ្មោះតាម GitHub បរាជ័យ។",
 
-    githubFailed: "ការចុះឈ្មោះតាម GitHub បរាជ័យ។",
+    githubDisabled:
+      "GitHub Authentication មិនទាន់បានបើកក្នុង Firebase។",
 
-    githubDisabled: "GitHub Authentication មិនទាន់បានបើកក្នុង Firebase។",
+    accountExists:
+      "អ៊ីមែលនេះមានគណនីរួចហើយជាមួយវិធីចូលផ្សេង។",
 
-    accountExists: "អ៊ីមែលនេះមានគណនីរួចហើយជាមួយវិធីចូលផ្សេង។",
+    popupBlocked:
+      "Browser បានបិទ authentication popup។",
 
-    popupBlocked: "Browser បានបិទ authentication popup។",
+    successTitle:
+      "បង្កើតគណនីជោគជ័យ",
 
-    successTitle: "បង្កើតគណនីជោគជ័យ",
+    errorTitle:
+      "មានបញ្ហា",
 
-    errorTitle: "មានបញ្ហា",
+    googleSuccess:
+      "ចូលតាម Google បានជោគជ័យ។",
 
-    googleSuccess: "ចូលតាម Google បានជោគជ័យ។",
-
-    githubSuccess: "ចូលតាម GitHub បានជោគជ័យ។",
+    githubSuccess:
+      "ចូលតាម GitHub បានជោគជ័យ។",
   },
 
   en: {
-    back: "Back to website",
+    back:
+      "Back to website",
 
-    title: "Create your account",
+    title:
+      "Create your account",
 
-    alreadyAccount: "Already have an account?",
+    alreadyAccount:
+      "Already have an account?",
 
-    login: "Login",
+    login:
+      "Login",
 
-    firstname: "Firstname",
+    firstname:
+      "Firstname",
 
-    firstnamePlaceholder: "Enter your firstname",
+    firstnamePlaceholder:
+      "Enter your firstname",
 
-    lastname: "Lastname",
+    lastname:
+      "Lastname",
 
-    lastnamePlaceholder: "Enter your lastname",
+    lastnamePlaceholder:
+      "Enter your lastname",
 
-    email: "Email",
+    email:
+      "Email",
 
-    emailPlaceholder: "Enter your email address",
+    emailPlaceholder:
+      "Enter your email address",
 
-    password: "Password",
+    password:
+      "Password",
 
-    passwordPlaceholder: "Enter your password",
+    passwordPlaceholder:
+      "Enter your password",
 
-    showPassword: "Show password",
+    confirmPassword:
+      "Confirm Password",
 
-    hidePassword: "Hide password",
+    confirmPlaceholder:
+      "Confirm your password",
 
-    confirmPassword: "Confirm Password",
+    agree:
+      "I agree to the",
 
-    confirmPlaceholder: "Confirm your password",
+    terms:
+      "Terms of Service",
 
-    agree: "I agree to the",
+    and:
+      "and",
 
-    terms: "Terms of Service",
+    privacy:
+      "Privacy Policy",
 
-    and: "and",
+    register:
+      "Register",
 
-    privacy: "Privacy Policy",
+    creating:
+      "Creating account...",
 
-    register: "Register",
+    signupWith:
+      "or sign up with",
 
-    creating: "Creating account...",
+    google:
+      "Google",
 
-    signupWith: "or sign up with",
+    github:
+      "GitHub",
 
-    google: "Google",
+    firstRequired:
+      "Please enter your firstname.",
 
-    github: "GitHub",
+    firstTooShort:
+      "Firstname must contain at least 2 characters.",
 
-    firstRequired: "Please enter your firstname.",
+    firstTooLong:
+      "Firstname cannot exceed 50 characters.",
 
-    firstTooShort: "Firstname must contain at least 2 characters.",
+    lastRequired:
+      "Please enter your lastname.",
 
-    firstTooLong: "Firstname cannot exceed 50 characters.",
+    lastTooShort:
+      "Lastname must contain at least 2 characters.",
 
-    lastRequired: "Please enter your lastname.",
+    lastTooLong:
+      "Lastname cannot exceed 50 characters.",
 
-    lastTooShort: "Lastname must contain at least 2 characters.",
+    emailRequired:
+      "Please enter your email.",
 
-    lastTooLong: "Lastname cannot exceed 50 characters.",
+    invalidEmail:
+      "Please enter a valid email address.",
 
-    emailRequired: "Please enter your email.",
+    emailMissingAt:
+      "Email must include @",
 
-    invalidEmail: "Please enter a valid email address.",
+    gmailSuggestion:
+      "Did you mean @gmail.com?",
 
-    emailMissingAt: "Email must include @",
-
-    gmailSuggestion: "Did you mean @gmail.com?",
-
-    invalidEmailFormat: "Invalid email format (e.g. name@example.com)",
+    invalidEmailFormat:
+      "Invalid email format (e.g. name@example.com)",
 
     emailDomainExtension:
       "Email domain must include an extension like .com (e.g. gmail.com)",
 
-    passwordRequired: "Please enter your password.",
+    passwordRequired:
+      "Please enter your password.",
 
-    passwordLength: "Password must contain at least 8 characters.",
+    passwordLength:
+      "Password must contain at least 8 characters.",
 
-    passwordUppercase: "Password must contain at least 1 uppercase letter.",
+    passwordUppercase:
+      "Password must contain at least 1 uppercase letter.",
 
-    passwordLowercase: "Password must contain at least 1 lowercase letter.",
+    passwordLowercase:
+      "Password must contain at least 1 lowercase letter.",
 
-    passwordNumber: "Password must contain at least 1 number.",
+    passwordNumber:
+      "Password must contain at least 1 number.",
 
-    confirmRequired: "Please confirm your password.",
+    confirmRequired:
+      "Please confirm your password.",
 
-    passwordMismatch: "Password and confirm password do not match.",
+    passwordMismatch:
+      "Password and confirm password do not match.",
 
-    termsRequired: "Please agree to the Terms of Service and Privacy Policy.",
+    termsRequired:
+      "Please agree to the Terms of Service and Privacy Policy.",
 
     accountCreated:
-      "Account created. Check your email and verify your account before signing in.",
+      "Account created successfully. You can now log in.",
 
-    verificationEmailFailed:
-      "Your account was created, but we could not send the verification email. Sign in again to request a new link.",
+    emailExists:
+      "This email is already registered.",
 
-    emailExists: "This email is already registered.",
+    registerFailed:
+      "Registration failed. Please try again.",
 
-    registerFailed: "Registration failed. Please try again.",
+    network:
+      "Network error. Please check your internet connection.",
 
-    network: "Network error. Please check your internet connection.",
+    tooMany:
+      "Too many attempts. Please try again later.",
 
-    tooMany: "Too many attempts. Please try again later.",
+    googleFailed:
+      "Google sign up failed.",
 
-    googleFailed: "Google sign up failed.",
+    githubFailed:
+      "GitHub sign up failed.",
 
-    githubFailed: "GitHub sign up failed.",
-
-    githubDisabled: "GitHub Authentication is not enabled in Firebase.",
+    githubDisabled:
+      "GitHub Authentication is not enabled in Firebase.",
 
     accountExists:
       "An account already exists with this email using another sign-in method.",
 
-    popupBlocked: "Your browser blocked the authentication popup.",
+    popupBlocked:
+      "Your browser blocked the authentication popup.",
 
-    successTitle: "Account created",
+    successTitle:
+      "Account created",
 
-    errorTitle: "Something went wrong",
+    errorTitle:
+      "Something went wrong",
 
-    googleSuccess: "Google authentication successful.",
+    googleSuccess:
+      "Google authentication successful.",
 
-    githubSuccess: "GitHub authentication successful.",
+    githubSuccess:
+      "GitHub authentication successful.",
   },
 };
 
-const createEmailSchema = (t) =>
+const createEmailSchema = (
+  t,
+) =>
   z
     .string()
     .trim()
-    .min(1, t.emailRequired)
-    .superRefine((value, ctx) => {
-      if (!value) {
-        return;
-      }
+    .min(
+      1,
+      t.emailRequired,
+    )
+    .superRefine(
+      (
+        value,
+        ctx,
+      ) => {
+        if (!value) {
+          return;
+        }
 
-      if (!value.includes("@")) {
-        ctx.addIssue({
-          code: "custom",
-          message: t.emailMissingAt,
-        });
+        if (
+          !value.includes(
+            "@",
+          )
+        ) {
+          ctx.addIssue({
+            code: "custom",
+            message:
+              t.emailMissingAt,
+          });
 
-        return;
-      }
+          return;
+        }
 
-      const parts = value.split("@");
+        const parts =
+          value.split(
+            "@",
+          );
 
-      if (parts.length !== 2) {
-        ctx.addIssue({
-          code: "custom",
-          message: t.invalidEmailFormat,
-        });
+        if (
+          parts.length !== 2
+        ) {
+          ctx.addIssue({
+            code: "custom",
+            message:
+              t.invalidEmailFormat,
+          });
 
-        return;
-      }
+          return;
+        }
 
-      const [localPart, domain] = parts;
+        const [
+          localPart,
+          domain,
+        ] = parts;
 
-      if (!localPart || !domain) {
-        ctx.addIssue({
-          code: "custom",
-          message: t.invalidEmail,
-        });
+        if (
+          !localPart ||
+          !domain
+        ) {
+          ctx.addIssue({
+            code: "custom",
+            message:
+              t.invalidEmail,
+          });
 
-        return;
-      }
+          return;
+        }
 
-      if (domain.endsWith(".")) {
-        ctx.addIssue({
-          code: "custom",
-          message: t.emailDomainExtension,
-        });
+        if (
+          domain.endsWith(
+            ".",
+          )
+        ) {
+          ctx.addIssue({
+            code: "custom",
+            message:
+              t.emailDomainExtension,
+          });
 
-        return;
-      }
+          return;
+        }
 
-      const gmailTypoPattern = /^gmail\.(co|con|cmo)$/i;
+        const gmailTypoPattern =
+          /^gmail\.(co|con|cmo)$/i;
 
-      if (gmailTypoPattern.test(domain)) {
-        ctx.addIssue({
-          code: "custom",
-          message: t.gmailSuggestion,
-        });
+        if (
+          gmailTypoPattern.test(
+            domain,
+          )
+        ) {
+          ctx.addIssue({
+            code: "custom",
+            message:
+              t.gmailSuggestion,
+          });
 
-        return;
-      }
+          return;
+        }
 
-      const domainParts = domain.split(".");
+        const domainParts =
+          domain.split(
+            ".",
+          );
 
-      const extension = domainParts[domainParts.length - 1];
+        const extension =
+          domainParts[
+            domainParts.length -
+              1
+          ];
 
-      if (domainParts.length < 2 || !extension || extension.length < 2) {
-        ctx.addIssue({
-          code: "custom",
-          message: t.invalidEmailFormat,
-        });
+        if (
+          domainParts.length <
+            2 ||
+          !extension ||
+          extension.length < 2
+        ) {
+          ctx.addIssue({
+            code: "custom",
+            message:
+              t.invalidEmailFormat,
+          });
 
-        return;
-      }
+          return;
+        }
 
-      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+        const emailPattern =
+          /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
-      if (!emailPattern.test(value)) {
-        ctx.addIssue({
-          code: "custom",
-          message: t.invalidEmail,
-        });
-      }
-    });
+        if (
+          !emailPattern.test(
+            value,
+          )
+        ) {
+          ctx.addIssue({
+            code: "custom",
+            message:
+              t.invalidEmail,
+          });
+        }
+      },
+    );
 
-const createRegisterSchema = (t) =>
+const createRegisterSchema = (
+  t,
+) =>
   z
     .object({
       firstName: z
         .string()
         .trim()
-        .min(1, t.firstRequired)
-        .min(2, t.firstTooShort)
-        .max(50, t.firstTooLong),
+        .min(
+          1,
+          t.firstRequired,
+        )
+        .min(
+          2,
+          t.firstTooShort,
+        )
+        .max(
+          50,
+          t.firstTooLong,
+        ),
 
       lastName: z
         .string()
         .trim()
-        .min(1, t.lastRequired)
-        .min(2, t.lastTooShort)
-        .max(50, t.lastTooLong),
+        .min(
+          1,
+          t.lastRequired,
+        )
+        .min(
+          2,
+          t.lastTooShort,
+        )
+        .max(
+          50,
+          t.lastTooLong,
+        ),
 
-      email: createEmailSchema(t),
+      email:
+        createEmailSchema(
+          t,
+        ),
 
       password: z
         .string()
-        .min(1, t.passwordRequired)
-        .min(8, t.passwordLength)
-        .regex(/[A-Z]/, t.passwordUppercase)
-        .regex(/[a-z]/, t.passwordLowercase)
-        .regex(/[0-9]/, t.passwordNumber),
+        .min(
+          1,
+          t.passwordRequired,
+        )
+        .min(
+          8,
+          t.passwordLength,
+        )
+        .regex(
+          /[A-Z]/,
+          t.passwordUppercase,
+        )
+        .regex(
+          /[a-z]/,
+          t.passwordLowercase,
+        )
+        .regex(
+          /[0-9]/,
+          t.passwordNumber,
+        ),
 
-      confirmPassword: z.string().min(1, t.confirmRequired),
+      confirmPassword:
+        z
+          .string()
+          .min(
+            1,
+            t.confirmRequired,
+          ),
 
-      agreeToTerms: z.boolean().refine((value) => value === true, {
-        message: t.termsRequired,
-      }),
+      agreeToTerms:
+        z
+          .boolean()
+          .refine(
+            (
+              value,
+            ) =>
+              value ===
+              true,
+            {
+              message:
+                t.termsRequired,
+            },
+          ),
     })
-    .refine((data) => data.password === data.confirmPassword, {
-      message: t.passwordMismatch,
+    .refine(
+      (data) =>
+        data.password ===
+        data.confirmPassword,
+      {
+        message:
+          t.passwordMismatch,
 
-      path: ["confirmPassword"],
-    });
+        path: [
+          "confirmPassword",
+        ],
+      },
+    );
 
 export default function RegisterPage() {
-  const navigate = useNavigate();
-  const { darkMode } = useTheme();
+  const navigate =
+    useNavigate();
 
-  const { language, isKhmer } = useLanguage();
+  const {
+    language,
+    isKhmer,
+  } = useLanguage();
 
-  const t = translations[language];
+  const t =
+    translations[
+      language
+    ];
 
-  const registerSchema = useMemo(() => createRegisterSchema(t), [t]);
+  const registerSchema =
+    useMemo(
+      () =>
+        createRegisterSchema(
+          t,
+        ),
+      [t],
+    );
 
   const {
     register,
     handleSubmit,
-    getValues,
-    setError,
-    formState: { errors, isSubmitting },
+    formState: {
+      errors,
+      isSubmitting,
+    },
   } = useForm({
-    resolver: zodResolver(registerSchema),
+    resolver:
+      zodResolver(
+        registerSchema,
+      ),
 
     mode: "onBlur",
 
-    reValidateMode: "onChange",
+    reValidateMode:
+      "onChange",
 
     defaultValues: {
       firstName: "",
@@ -440,113 +695,242 @@ export default function RegisterPage() {
     },
   });
 
-  const [registerMutation] = useRegisterMutation();
-
-  const [showPassword, setShowPassword] = useState(false);
-
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
-  const notifyError = (description) => {
-    toast.error(description, { toastId: "register-error" });
-  };
-
-  const onSubmit = async (data) => {
-    try {
-      const res = await registerMutation({
-        displayName: `${data.firstName.trim()} ${data.lastName.trim()}`,
-        email: data.email.trim().toLowerCase(),
-        password: data.password,
-        confirmPassword: data.confirmPassword,
-      }).unwrap();
-
-      toast.success(res?.message || t.accountCreated, {
-        toastId: "register-success",
-      });
-
-      window.setTimeout(() => {
-        navigate("/login");
-      }, 1500);
-    } catch (error) {
-      console.error("API registration error:", error);
-      const errorMsg =
-        error?.data?.message ||
-        (error?.status === 409 ? t.emailExists : null) ||
-        (error?.status === "FETCH_ERROR" ? t.network : null) ||
-        t.registerFailed;
-      notifyError(errorMsg);
-    }
-  };
-
-  const requireTermsAcceptance = () => {
-    const agree = getValues("agreeToTerms");
-    if (!agree) {
-      notifyError(
-        t.termsRequired ||
-          "Please agree to the Terms of Service and Privacy Policy.",
-      );
-      return false;
-    }
-    return true;
-  };
-
-  const handleOAuthError = (error, provider) => {
-    console.error(`${provider} authentication error:`, error);
-
-    if (error.code === "auth/popup-blocked") {
-      notifyError(t.popupBlocked);
-
-      return;
-    }
-
-    if (error.code === "auth/account-exists-with-different-credential") {
-      notifyError(t.accountExists);
-
-      return;
-    }
-
-    if (provider === "GitHub" && error.code === "auth/operation-not-allowed") {
-      notifyError(t.githubDisabled);
-
-      return;
-    }
-
-    notifyError(provider === "Google" ? t.googleFailed : t.githubFailed);
-  };
-
-  const handleOAuthSuccess = (provider) => {
-    toast.success(provider === "Google" ? t.googleSuccess : t.githubSuccess, {
-      toastId: "register-oauth-success",
+  const {
+    toasts,
+    showToast,
+    dismissToast,
+  } =
+    useAnimatedToastStack({
+      defaultDuration: 4200,
+      limit: 4,
     });
 
-    navigate("/", {
-      replace: true,
+  const [
+    showPassword,
+    setShowPassword,
+  ] = useState(false);
+
+  const [
+    showConfirmPassword,
+    setShowConfirmPassword,
+  ] = useState(false);
+
+  const notifyError = (
+    description,
+  ) => {
+    showToast({
+      status:
+        "error",
+
+      title:
+        t.errorTitle,
+
+      description,
+    });
+  };
+
+  const onSubmit =
+    async (data) => {
+      try {
+        const result =
+          await createUserWithEmailAndPassword(
+            auth,
+            data.email
+              .trim()
+              .toLowerCase(),
+            data.password,
+          );
+
+        await updateProfile(
+          result.user,
+          {
+            displayName:
+              `${data.firstName.trim()} ${data.lastName.trim()}`,
+          },
+        );
+
+        await signOut(
+          auth,
+        );
+
+        showToast({
+          status:
+            "success",
+
+          title:
+            t.successTitle,
+
+          description:
+            t.accountCreated,
+
+          duration:
+            3000,
+        });
+
+        window.setTimeout(
+          () => {
+            navigate(
+              "/login",
+            );
+          },
+          1500,
+        );
+      } catch (error) {
+        console.error(
+          "Registration error:",
+          error,
+        );
+
+        switch (
+          error.code
+        ) {
+          case "auth/email-already-in-use":
+            notifyError(
+              t.emailExists,
+            );
+            break;
+
+          case "auth/invalid-email":
+            notifyError(
+              t.invalidEmail,
+            );
+            break;
+
+          case "auth/network-request-failed":
+            notifyError(
+              t.network,
+            );
+            break;
+
+          case "auth/too-many-requests":
+            notifyError(
+              t.tooMany,
+            );
+            break;
+
+          default:
+            notifyError(
+              t.registerFailed,
+            );
+        }
+      }
+    };
+
+  const handleOAuthError = (
+    error,
+    provider,
+  ) => {
+    console.error(
+      `${provider} authentication error:`,
+      error,
+    );
+
+    if (
+      error.code ===
+      "auth/popup-blocked"
+    ) {
+      notifyError(
+        t.popupBlocked,
+      );
+
+      return;
+    }
+
+    if (
+      error.code ===
+      "auth/account-exists-with-different-credential"
+    ) {
+      notifyError(
+        t.accountExists,
+      );
+
+      return;
+    }
+
+    if (
+      provider ===
+        "GitHub" &&
+      error.code ===
+        "auth/operation-not-allowed"
+    ) {
+      notifyError(
+        t.githubDisabled,
+      );
+
+      return;
+    }
+
+    notifyError(
+      provider ===
+        "Google"
+        ? t.googleFailed
+        : t.githubFailed,
+    );
+  };
+
+  const handleOAuthSuccess = (
+    provider,
+  ) => {
+    showToast({
+      status:
+        "success",
+
+      title:
+        t.successTitle,
+
+      description:
+        provider ===
+        "Google"
+          ? t.googleSuccess
+          : t.githubSuccess,
     });
   };
 
   return (
     <>
-      <ToastContainer
+      <AnimatedToastStack
+        toasts={
+          toasts
+        }
+        onDismiss={
+          dismissToast
+        }
         position="top-right"
-        autoClose={4200}
-        limit={1}
-        theme={darkMode ? "dark" : "light"}
+        fixed
+        maxVisible={4}
       />
 
       <main
         className={`auth-page register-page ${
-          isKhmer ? "font-khmer" : "font-brand"
+          isKhmer
+            ? "font-khmer"
+            : "font-brand"
         }`}
       >
-        <Link to="/" className="back-button" aria-label={t.back}>
-          <ArrowLeft size={18} />
-          <span>{t.back}</span>
-        </Link>
+          <Link
+            to="/"
+            className="back-button"
+          >
+            <ArrowLeft
+              size={
+                18
+              }
+            />
+
+            <span>
+              {
+                t.back
+              }
+            </span>
+          </Link>
 
         <section className="auth-visual-section">
           <div className="auth-illustration-wrapper">
             <img
-              src={registerIllustration}
-              alt="NEXA registration illustration"
+              src={
+                registerIllustration
+              }
+              alt="AskKH registration illustration"
               className="auth-illustration register-illustration"
             />
           </div>
@@ -555,94 +939,129 @@ export default function RegisterPage() {
         <section className="auth-form-section register-section">
           <div className="register-form-container">
             <div className="auth-heading register-heading">
-              <h1>{t.title}</h1>
+              <h1>
+                {
+                  t.title
+                }
+              </h1>
 
               <p>
-                {t.alreadyAccount} <Link to="/login">{t.login}</Link>
+                {
+                  t.alreadyAccount
+                }{" "}
+
+                <Link to="/login">
+                  {
+                    t.login
+                  }
+                </Link>
               </p>
             </div>
 
             <form
               className="auth-form register-form"
-              onSubmit={handleSubmit(onSubmit, (validationErrors) => {
-                const firstError = Object.values(validationErrors).find(
-                  (error) => error?.message,
-                );
-                if (firstError) notifyError(firstError.message);
-              })}
+              onSubmit={handleSubmit(
+                onSubmit,
+                (validationErrors) => {
+                  const firstError = Object.values(validationErrors).find(
+                    (error) => error?.message,
+                  );
+                  if (firstError) notifyError(firstError.message);
+                },
+              )}
               noValidate
             >
               <div className="name-grid">
                 <div className="form-group">
                   <label htmlFor="register-first-name">
-                    {t.firstname}
+                    {
+                      t.firstname
+                    }
 
-                    <span>*</span>
+                    <span>
+                      *
+                    </span>
                   </label>
 
                   <div
                     className={`input-wrapper no-icon ${
-                      errors.firstName ? "border-red-500" : ""
+                      errors.firstName
+                        ? "border-red-500"
+                        : ""
                     }`}
                   >
                     <input
                       id="register-first-name"
                       type="text"
                       autoComplete="given-name"
-                      placeholder={t.firstnamePlaceholder}
-                      aria-invalid={errors.firstName ? "true" : "false"}
-                      aria-describedby={
-                        errors.firstName
-                          ? "register-first-name-error"
-                          : undefined
+                      placeholder={
+                        t.firstnamePlaceholder
                       }
-                      {...register("firstName")}
+                      aria-invalid={
+                        errors.firstName
+                          ? "true"
+                          : "false"
+                      }
+                      {...register(
+                        "firstName",
+                      )}
                     />
                   </div>
 
                   {errors.firstName && (
-                    <p
-                      id="register-first-name-error"
-                      role="alert"
-                      className="mt-1.5 text-base font-medium text-red-500"
-                    >
-                      {errors.firstName.message}
+                    <p className="mt-1.5 text-sm font-medium text-red-500">
+                      {
+                        errors
+                          .firstName
+                          .message
+                      }
                     </p>
                   )}
                 </div>
 
                 <div className="form-group">
                   <label htmlFor="register-last-name">
-                    {t.lastname}
+                    {
+                      t.lastname
+                    }
 
-                    <span>*</span>
+                    <span>
+                      *
+                    </span>
                   </label>
 
                   <div
                     className={`input-wrapper no-icon ${
-                      errors.lastName ? "border-red-500" : ""
+                      errors.lastName
+                        ? "border-red-500"
+                        : ""
                     }`}
                   >
                     <input
                       id="register-last-name"
                       type="text"
                       autoComplete="family-name"
-                      placeholder={t.lastnamePlaceholder}
-                      aria-invalid={errors.lastName ? "true" : "false"}
-                      aria-describedby={
-                        errors.lastName ? "register-last-name-error" : undefined
+                      placeholder={
+                        t.lastnamePlaceholder
                       }
-                      {...register("lastName")}
+                      aria-invalid={
+                        errors.lastName
+                          ? "true"
+                          : "false"
+                      }
+                      {...register(
+                        "lastName",
+                      )}
                     />
                   </div>
 
                   {errors.lastName && (
-                    <p
-                      id="register-last-name-error"
-                      role="alert"
-                      className="mt-1.5 text-base font-medium text-red-500"
-                    >
-                      {errors.lastName.message}
+                    <p className="mt-1.5 text-sm font-medium text-red-500">
+                      {
+                        errors
+                          .lastName
+                          .message
+                      }
                     </p>
                   )}
                 </div>
@@ -650,174 +1069,280 @@ export default function RegisterPage() {
 
               <div className="form-group">
                 <label htmlFor="register-email">
-                  {t.email}
+                  {
+                    t.email
+                  }
 
-                  <span>*</span>
+                  <span>
+                    *
+                  </span>
                 </label>
 
                 <div
                   className={`input-wrapper ${
-                    errors.email ? "border-red-500" : ""
+                    errors.email
+                      ? "border-red-500"
+                      : ""
                   }`}
                 >
-                  <Mail size={19} className="input-icon" />
+                  <Mail
+                    size={
+                      19
+                    }
+                    className="input-icon"
+                  />
 
                   <input
                     id="register-email"
                     type="email"
                     autoComplete="email"
-                    placeholder={t.emailPlaceholder}
-                    aria-invalid={errors.email ? "true" : "false"}
-                    aria-describedby={
-                      errors.email ? "register-email-error" : undefined
+                    placeholder={
+                      t.emailPlaceholder
                     }
-                    {...register("email")}
+                    aria-invalid={
+                      errors.email
+                        ? "true"
+                        : "false"
+                    }
+                    {...register(
+                      "email",
+                    )}
                   />
                 </div>
 
                 {errors.email && (
-                  <p
-                    id="register-email-error"
-                    role="alert"
-                    className="mt-1.5 text-base font-medium text-red-500"
-                  >
-                    {errors.email.message}
+                  <p className="mt-1.5 text-sm font-medium text-red-500">
+                    {
+                      errors
+                        .email
+                        .message
+                    }
                   </p>
                 )}
               </div>
 
               <div className="form-group">
                 <label htmlFor="register-password">
-                  {t.password}
+                  {
+                    t.password
+                  }
 
-                  <span>*</span>
+                  <span>
+                    *
+                  </span>
                 </label>
 
                 <div
                   className={`input-wrapper ${
-                    errors.password ? "border-red-500" : ""
+                    errors.password
+                      ? "border-red-500"
+                      : ""
                   }`}
                 >
-                  <LockKeyhole size={19} className="input-icon" />
+                  <LockKeyhole
+                    size={
+                      19
+                    }
+                    className="input-icon"
+                  />
 
                   <input
                     id="register-password"
-                    type={showPassword ? "text" : "password"}
-                    autoComplete="new-password"
-                    placeholder={t.passwordPlaceholder}
-                    aria-invalid={errors.password ? "true" : "false"}
-                    aria-describedby={
-                      errors.password ? "register-password-error" : undefined
+                    type={
+                      showPassword
+                        ? "text"
+                        : "password"
                     }
-                    {...register("password", { deps: ["confirmPassword"] })}
-                  />
-
-                  <button
-                    type="button"
-                    className="password-toggle"
-                    aria-label={showPassword ? t.hidePassword : t.showPassword}
-                    onClick={() => setShowPassword((previous) => !previous)}
-                  >
-                    {showPassword ? <Eye size={19} /> : <EyeOff size={19} />}
-                  </button>
-                </div>
-
-                {errors.password && (
-                  <p
-                    id="register-password-error"
-                    role="alert"
-                    className="mt-1.5 text-base font-medium text-red-500"
-                  >
-                    {errors.password.message}
-                  </p>
-                )}
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="register-confirm-password">
-                  {t.confirmPassword}
-
-                  <span>*</span>
-                </label>
-
-                <div
-                  className={`input-wrapper ${
-                    errors.confirmPassword ? "border-red-500" : ""
-                  }`}
-                >
-                  <LockKeyhole size={19} className="input-icon" />
-
-                  <input
-                    id="register-confirm-password"
-                    type={showConfirmPassword ? "text" : "password"}
                     autoComplete="new-password"
-                    placeholder={t.confirmPlaceholder}
-                    aria-invalid={errors.confirmPassword ? "true" : "false"}
-                    aria-describedby={
-                      errors.confirmPassword
-                        ? "register-confirm-password-error"
-                        : undefined
+                    placeholder={
+                      t.passwordPlaceholder
                     }
-                    {...register("confirmPassword")}
+                    aria-invalid={
+                      errors.password
+                        ? "true"
+                        : "false"
+                    }
+                    {...register(
+                      "password",
+                      { deps: ["confirmPassword"] },
+                    )}
                   />
 
                   <button
                     type="button"
                     className="password-toggle"
                     aria-label={
-                      showConfirmPassword ? t.hidePassword : t.showPassword
+                      showPassword
+                        ? "Hide password"
+                        : "Show password"
                     }
                     onClick={() =>
-                      setShowConfirmPassword((previous) => !previous)
+                      setShowPassword(
+                        (
+                          previous,
+                        ) =>
+                          !previous,
+                      )
+                    }
+                  >
+                    {showPassword ? (
+                      <Eye
+                        size={
+                          19
+                        }
+                      />
+                    ) : (
+                      <EyeOff
+                        size={
+                          19
+                        }
+                      />
+                    )}
+                  </button>
+                </div>
+
+                {errors.password && (
+                  <p className="mt-1.5 text-sm font-medium text-red-500">
+                    {
+                      errors
+                        .password
+                        .message
+                    }
+                  </p>
+                )}
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="register-confirm-password">
+                  {
+                    t.confirmPassword
+                  }
+
+                  <span>
+                    *
+                  </span>
+                </label>
+
+                <div
+                  className={`input-wrapper ${
+                    errors.confirmPassword
+                      ? "border-red-500"
+                      : ""
+                  }`}
+                >
+                  <LockKeyhole
+                    size={
+                      19
+                    }
+                    className="input-icon"
+                  />
+
+                  <input
+                    id="register-confirm-password"
+                    type={
+                      showConfirmPassword
+                        ? "text"
+                        : "password"
+                    }
+                    autoComplete="new-password"
+                    placeholder={
+                      t.confirmPlaceholder
+                    }
+                    aria-invalid={
+                      errors.confirmPassword
+                        ? "true"
+                        : "false"
+                    }
+                    {...register(
+                      "confirmPassword",
+                    )}
+                  />
+
+                  <button
+                    type="button"
+                    className="password-toggle"
+                    aria-label={
+                      showConfirmPassword
+                        ? "Hide password"
+                        : "Show password"
+                    }
+                    onClick={() =>
+                      setShowConfirmPassword(
+                        (
+                          previous,
+                        ) =>
+                          !previous,
+                      )
                     }
                   >
                     {showConfirmPassword ? (
-                      <Eye size={19} />
+                      <Eye
+                        size={
+                          19
+                        }
+                      />
                     ) : (
-                      <EyeOff size={19} />
+                      <EyeOff
+                        size={
+                          19
+                        }
+                      />
                     )}
                   </button>
                 </div>
 
                 {errors.confirmPassword && (
-                  <p
-                    id="register-confirm-password-error"
-                    role="alert"
-                    className="mt-1.5 text-base font-medium text-red-500"
-                  >
-                    {errors.confirmPassword.message}
+                  <p className="mt-1.5 text-sm font-medium text-red-500">
+                    {
+                      errors
+                        .confirmPassword
+                        .message
+                    }
                   </p>
                 )}
               </div>
 
               <div>
-                <div className="terms-checkbox">
-                  <label className="checkbox-label">
-                    <input
-                      type="checkbox"
-                      aria-label={`${t.agree} ${t.terms} ${t.and} ${t.privacy}`}
-                      aria-describedby={
-                        errors.agreeToTerms ? "register-terms-error" : undefined
-                      }
-                      {...register("agreeToTerms")}
-                    />
+                <label className="checkbox-label terms-checkbox">
+                  <input
+                    type="checkbox"
+                    {...register(
+                      "agreeToTerms",
+                    )}
+                  />
 
-                    <span className="custom-checkbox" />
-                  </label>
+                  <span className="custom-checkbox" />
 
                   <span className="checkbox-text">
-                    {t.agree} <Link to="/terms">{t.terms}</Link> {t.and}{" "}
-                    <Link to="/privacy">{t.privacy}</Link>
+                    {
+                      t.agree
+                    }{" "}
+
+                    <Link to="/terms">
+                      {
+                        t.terms
+                      }
+                    </Link>{" "}
+
+                    {
+                      t.and
+                    }{" "}
+
+                    <Link to="/privacy">
+                      {
+                        t.privacy
+                      }
+                    </Link>
                   </span>
-                </div>
+                </label>
 
                 {errors.agreeToTerms && (
-                  <p
-                    id="register-terms-error"
-                    role="alert"
-                    className="mt-1.5 text-base font-medium text-red-500"
-                  >
-                    {errors.agreeToTerms.message}
+                  <p className="mt-1.5 text-sm font-medium text-red-500">
+                    {
+                      errors
+                        .agreeToTerms
+                        .message
+                    }
                   </p>
                 )}
               </div>
@@ -825,32 +1350,64 @@ export default function RegisterPage() {
               <button
                 type="submit"
                 className="primary-auth-button"
-                disabled={isSubmitting}
+                disabled={
+                  isSubmitting
+                }
               >
-                {isSubmitting ? t.creating : t.register}
+                {isSubmitting
+                  ? t.creating
+                  : t.register}
               </button>
 
               <div className="auth-divider">
                 <span />
 
-                <p>{t.signupWith}</p>
+                <p>
+                  {
+                    t.signupWith
+                  }
+                </p>
 
                 <span />
               </div>
 
               <div className="social-buttons">
                 <GoogleComponent
-                  label={t.google}
-                  onBeforeAuth={requireTermsAcceptance}
-                  onSuccess={() => handleOAuthSuccess("Google")}
-                  onError={(error) => handleOAuthError(error, "Google")}
+                  label={
+                    t.google
+                  }
+                  onSuccess={() =>
+                    handleOAuthSuccess(
+                      "Google",
+                    )
+                  }
+                  onError={(
+                    error,
+                  ) =>
+                    handleOAuthError(
+                      error,
+                      "Google",
+                    )
+                  }
                 />
 
                 <GithubComponent
-                  label={t.github}
-                  onBeforeAuth={requireTermsAcceptance}
-                  onSuccess={() => handleOAuthSuccess("GitHub")}
-                  onError={(error) => handleOAuthError(error, "GitHub")}
+                  label={
+                    t.github
+                  }
+                  onSuccess={() =>
+                    handleOAuthSuccess(
+                      "GitHub",
+                    )
+                  }
+                  onError={(
+                    error,
+                  ) =>
+                    handleOAuthError(
+                      error,
+                      "GitHub",
+                    )
+                  }
                 />
               </div>
             </form>

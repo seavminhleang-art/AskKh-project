@@ -2,19 +2,27 @@ import { useState } from 'react';
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { signOut } from 'firebase/auth';
-import { LayoutDashboard, Users, FileText, MessageSquare, Tags, Search, ShieldAlert, Store, Bell, Settings, LogOut, PanelLeftClose, PanelLeftOpen, Menu, X, ChevronRight } from 'lucide-react';
+import { LayoutDashboard, FileText, MessageSquare, Tags, Search, ShieldAlert, Store, Bell, Settings, LogOut, MapPin, Inbox, Trophy, UserRoundPlus, X } from 'lucide-react';
 import { auth } from '@/Components/Firebase/firebase';
 import { logout } from '@/features/auth/authSlice';
 import { baseApi } from '@/store/api/baseApi';
 import './admin.css';
+import AdminTopbar from './AdminTopbar';
 
-export const navigation = [
-  ['dashboard', 'Dashboard', LayoutDashboard], ['users', 'Users', Users], ['posts', 'Posts', FileText],
+const sidebarNavigation = [
+  ['dashboard', 'Dashboard', LayoutDashboard], ['moderation', 'Moderation', ShieldAlert],
+  ['locations', 'Location', MapPin], ['claims', 'Claim Log', Inbox],
+  ['leaderboard', 'Leaderboard', Trophy], ['users', 'User Management', UserRoundPlus], ['settings', 'Setting', Settings],
+];
+
+export const navigation = [...sidebarNavigation,
+  ['posts', 'Posts', FileText],
   ['comments', 'Comments', MessageSquare], ['tags', 'Tags', Tags], ['lost-found', 'Lost & Found', Search],
-  ['moderation', 'Moderation', ShieldAlert], ['marketplace', 'Marketplace', Store], ['notifications', 'Notifications', Bell], ['settings', 'Settings', Settings],
+  ['marketplace', 'Marketplace', Store], ['notifications', 'Notifications', Bell],
 ];
 export default function AdminShell() {
   const [collapsed, setCollapsed] = useState(false);
+  const [dark, setDark] = useState(false);
   const [mobile, setMobile] = useState(false);
   const [error, setError] = useState('');
   const [leaving, setLeaving] = useState(false);
@@ -31,13 +39,13 @@ export default function AdminShell() {
     catch { setError('Unable to sign out. Please try again.'); }
     finally { setLeaving(false); }
   }
-  return <div className={`admin-live ${collapsed ? 'is-collapsed' : ''}`}>
-    {mobile && <button className="admin-scrim" aria-label="Close navigation" onClick={() => setMobile(false)} />}
+  return <div className={`admin-live ${collapsed ? 'is-collapsed' : ''} ${dark ? 'al-dark' : ''}`}>
+    {mobile && <button className="al-scrim" aria-label="Close navigation" onClick={() => setMobile(false)} />}
     <aside className={`al-sidebar ${mobile ? 'is-open' : ''}`}>
-      <div className="al-brand"><span className="al-logo">A</span><strong className="al-label">Ask-Kh Admin</strong><button className="al-collapse" aria-label="Toggle sidebar" onClick={() => setCollapsed(!collapsed)}>{collapsed ? <PanelLeftOpen size={18}/> : <PanelLeftClose size={18}/>}</button><button className="al-mobile" aria-label="Close navigation" onClick={() => setMobile(false)}><X size={20}/></button></div>
-      <nav aria-label="Admin navigation">{navigation.map(([key, label, Icon]) => <NavLink title={label} key={key} to={`/admin/${key}`} onClick={() => setMobile(false)} className={({isActive}) => isActive ? 'active' : ''}><Icon size={18}/><span className="al-label">{label}</span></NavLink>)}</nav>
-      <div className="al-account"><span className="al-avatar">{initials}</span><div className="al-label"><strong>{name}</strong><small>{user?.email}</small></div><button disabled={leaving} onClick={exit} aria-label="Sign out"><LogOut size={18}/></button></div>
+      <div className="al-brand"><NavLink to="/admin/dashboard" className="al-wordmark" aria-label="Ask.Kh dashboard"><span className="al-wordmark-disc">Ask</span><span className="al-label">.Kh</span></NavLink><button className="al-mobile" aria-label="Close navigation" onClick={() => setMobile(false)}><X size={18}/></button></div>
+      <nav aria-label="Admin navigation">{sidebarNavigation.map(([key, label, Icon]) => <NavLink title={label} key={key} to={`/admin/${key}`} onClick={() => setMobile(false)} className={({isActive}) => isActive || (key === 'dashboard' && pathname === '/admin') ? 'active' : ''}><Icon size={18} strokeWidth={1.5}/><span className="al-label">{label}</span></NavLink>)}</nav>
+      <div className="al-account"><button className="al-logout" disabled={leaving} onClick={exit} aria-label="Log out" title="Log out"><span className="al-avatar">{user?.avatar || user?.photoURL ? <img src={user.avatar || user.photoURL} alt=""/> : initials}</span><span className="al-label">{leaving ? 'Logging out…' : 'Log out'}</span><LogOut size={17} strokeWidth={1.5}/></button></div>
     </aside>
-    <div className="al-workspace"><header className="al-topbar"><button className="al-mobile" aria-label="Open navigation" onClick={() => setMobile(true)}><Menu size={22}/></button><div><small>Admin <ChevronRight size={12}/> {title}</small><strong>{title}</strong></div><div className="al-top-actions"><NavLink to="/admin/notifications" aria-label="Notifications"><Bell size={21}/></NavLink><NavLink className="al-avatar" to="/admin/settings" aria-label="Account settings">{initials}</NavLink></div></header><main className="al-main">{error && <p role="alert" className="al-alert">{error}</p>}<Outlet/></main></div>
+    <div className="al-workspace"><AdminTopbar title={title} navigation={navigation} collapsed={collapsed} dark={dark} onToggleTheme={() => setDark(value => !value)} onToggleSidebar={() => window.matchMedia('(max-width: 767px)').matches ? setMobile(value => !value) : setCollapsed(value => !value)}/><main className="al-main">{error && <p role="alert" className="al-alert">{error}</p>}<Outlet/></main></div>
   </div>;
 }

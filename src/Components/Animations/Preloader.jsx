@@ -12,11 +12,15 @@ const Preloader = ({ children }) => {
     return () => clearTimeout(timer);
   }, []);
 
-  if (isLoading) {
-    return <LoadingSpinner />;
-  }
-
-  return <>{children}</>;
+  return (
+    <>
+      {/* Mount the app immediately so routes and requests load during the intro. */}
+      <div style={{ display: isLoading ? "none" : "contents" }}>
+        {children}
+      </div>
+      {isLoading && <LoadingSpinner />}
+    </>
+  );
 };
 
 export default Preloader;
