@@ -1,4 +1,4 @@
-import nexaLogo from "@/assets/Website/nexa-orbit-logo.svg";
+import BrandLogo from "@/Components/common/BrandLogo";
 import { useWorkspaceTranslation } from "@/locales/workspace/useWorkspaceTranslation";
 import { useState } from "react";
 import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
@@ -98,7 +98,7 @@ export default function AdminShell() {
             className="al-wordmark"
             aria-label="NEXA dashboard"
           >
-            <img src={nexaLogo} alt="NEXA" className="al-brand-image" />
+            <BrandLogo alt="NEXA" className="al-brand-image" darkMode={dark} />
           </NavLink>
           <button
             className="al-mobile"

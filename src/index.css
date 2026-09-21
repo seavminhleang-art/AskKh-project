@@ -638,3 +638,8 @@ html.dark .about-page .shadow-md { box-shadow: 0 4px 16px rgb(0 0 0 / .3); }
 @media(max-width:600px) { .workspace-profile-name { display:none; }.workspace-topbar-actions { gap:6px; }.workspace-profile summary { gap:3px; padding:2px; }.uw-topbar>a>span.font-bold { display:none; }.workspace-language-control { padding-left:7px; gap:4px; } }
 .workspace-language-button:focus-visible { outline:2px solid #4070f4; outline-offset:3px; }
 @media(max-width:600px) { .workspace-language-button { padding-inline:10px; gap:6px; } }
+
+/* Theme-specific transparent brand artwork. */
+.nexa-logo-dark { display: none !important; }
+.dark .nexa-logo-light { display: none !important; }
+.dark .nexa-logo-dark { display: block !important; }

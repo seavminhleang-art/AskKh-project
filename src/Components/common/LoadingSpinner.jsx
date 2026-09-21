@@ -1,4 +1,4 @@
-import nexaLogo from "../../assets/Website/nexa-orbit-logo.svg";
+import BrandLogo from "@/Components/common/BrandLogo";
 
 export default function LoadingSpinner({
   fullScreen = true,
@@ -21,7 +21,7 @@ export default function LoadingSpinner({
           <div className="nexa-loader-ring nexa-loader-ring-three" />
           <div className="nexa-loader-orbit" />
           <div className="nexa-loader-core">
-            <img src={nexaLogo} alt="" />
+            <BrandLogo alt="" />
           </div>
         </div>
 

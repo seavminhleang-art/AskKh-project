@@ -1,4 +1,4 @@
-import nexaLogo from "../../assets/Website/nexa-orbit-logo.svg";
+import BrandLogo from "@/Components/common/BrandLogo";
 import { useWorkspaceTranslation } from "@/locales/workspace/useWorkspaceTranslation";
 import React, { useId } from "react";
 import { LayoutGroup, motion, useReducedMotion } from "framer-motion";
@@ -127,7 +127,7 @@ export default function Sidebar({ mode = "user", mobile = false }) {
       <aside className={`uw-sidebar ${mobile ? "is-mobile" : ""}`}>
         {!mobile && (
           <NavLink to="/dashboard" className="uw-brand">
-            <img src={nexaLogo} alt="NEXA" style={{ width: 168, height: 56, objectFit: "contain" }} />
+            <BrandLogo alt="NEXA" style={{ width: 168, height: 56, objectFit: "contain" }} />
           </NavLink>
         )}
         <LayoutGroup id={indicatorId}>

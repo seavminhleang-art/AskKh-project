@@ -17,7 +17,7 @@ import {
 import { useLanguage } from "../Language/LanguageContext.jsx";
 import { ThemeToggle } from "../motion/theme-toggle.jsx";
 import { useTranslation } from "react-i18next";
-import nexaLogo from "../../assets/Website/nexa-orbit-logo.svg";
+import BrandLogo from "@/Components/common/BrandLogo";
 
 import LanguageFlag from "../common/LanguageFlag";
 
@@ -236,7 +236,7 @@ export default function Navbar({
           className="flex items-center gap-2.5 shrink-0 no-underline"
           onClick={() => handleNavClick("Home")}
         >
-          <img src={nexaLogo} alt="NEXA" className="h-12 w-auto max-w-[160px] object-contain" />
+          <BrandLogo alt="NEXA" className="h-12 w-auto max-w-[160px] object-contain" />
         </Link>
 
         {/* Desktop Navigation */}

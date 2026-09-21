@@ -11,7 +11,7 @@ import {
 } from "react-icons/fa";
 
 import istadLogo from "../../assets/Website/istad-logo.png";
-import nexaLogo from "../../assets/Website/nexa-orbit-logo.svg";
+import BrandLogo from "@/Components/common/BrandLogo";
 
 export default function FooterComponent() {
   const { t } = useTranslation();
@@ -47,8 +47,7 @@ export default function FooterComponent() {
           <div className="lg:col-span-1">
             <div className="flex items-center gap-2 mb-1">
               <Link to="/" className="flex items-center group py-0.9 shrink-0">
-                <img
-                  src={nexaLogo}
+                <BrandLogo
                   alt="NEXA"
                   className="h-18 w-50 object-contain group-hover:scale-105 transition-transform duration-300"
                 />

@@ -212,3 +212,19 @@
 .al-brand-image { display:block; width:168px; height:56px; object-fit:contain; }
 .is-collapsed .al-brand-image { width:68px; height:40px; }
 @media(max-width:767px) { .is-collapsed .al-sidebar.is-open .al-brand-image { width:150px; height:50px; } }
+.admin-live .workspace-language-button {
+  background: #fff;
+  border-color: #e1e7f2;
+  color: #5268ff;
+}
+.admin-live .workspace-language-button:hover {
+  background: #eef0ff;
+}
+.admin-live.al-dark .workspace-language-button {
+  background: #252e3e;
+  border-color: #3a465c;
+  color: #a5b0ff;
+}
+.admin-live.al-dark .workspace-language-button:hover {
+  background: #303b50;
+}
