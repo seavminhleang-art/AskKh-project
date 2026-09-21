@@ -1,3 +1,4 @@
+import ctaBackground from "@/assets/Website/6c7ff7fe28445370734294dd07ed376b.jpg";
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
@@ -109,7 +110,7 @@ export default function FAQAndCTA({ darkMode }) {
       <section
         style={{
           // PUT YOUR BACKGROUND IMAGE HERE:
-          backgroundImage: `url('src/assets/Website/6c7ff7fe28445370734294dd07ed376b.jpg')`,
+          backgroundImage: `url("${ctaBackground}")`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat'

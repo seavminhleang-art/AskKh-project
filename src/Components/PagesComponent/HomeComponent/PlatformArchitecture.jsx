@@ -1,3 +1,5 @@
+import architectureImage from "@/assets/Website/Gemini_Generated_Image_6kpehf6kpehf6kpe.jpg";
+import architectureCommunityImage from "@/assets/Website/37469a0f02d084ef19d3cf0b052af250.jpg";
 import React from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
@@ -14,12 +16,12 @@ export default function PlatformArchitecture({ darkMode }) {
     {
       title: t("archCard2Title"),
       desc: t("archCard2Desc"),
-      img: "src/assets/Website/Gemini_Generated_Image_6kpehf6kpehf6kpe.jpg",
+      img: architectureImage,
     },
     {
       title: t("archCard3Title"),
       desc: t("archCard3Desc"),
-      img: "https://i.pinimg.com/736x/37/46/9a/37469a0f02d084ef19d3cf0b052af250.jpg",
+      img: architectureCommunityImage,
     },
   ];
 

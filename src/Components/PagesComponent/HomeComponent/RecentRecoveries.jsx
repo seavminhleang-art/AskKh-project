@@ -1,3 +1,6 @@
+import recoveryOneImage from "@/assets/Website/kwfinwtieBa9DJNMHRxB63.jpg";
+import recoveryTwoImage from "@/assets/Website/OIP.webp";
+import recoveryThreeImage from "@/assets/Website/OIP (1).webp";
 import React from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
@@ -16,7 +19,7 @@ export default function RecentRecoveries({ darkMode }) {
       date: t("recDate"),
       author: t("recAuthor"),
       avatar: "https://randomuser.me/api/portraits/men/22.jpg",
-      img: "src/assets/Website/kwfinwtieBa9DJNMHRxB63.jpg",
+      img: recoveryOneImage,
     },
     {
       status: t("recStatusLost"),
@@ -27,7 +30,7 @@ export default function RecentRecoveries({ darkMode }) {
       date: t("recDate"),
       author: t("recAuthor"),
       avatar: "https://randomuser.me/api/portraits/men/22.jpg",
-      img: "src/assets/Website/OIP.webp",
+      img: recoveryTwoImage,
     },
     {
       status: t("recStatusFound"),
@@ -38,7 +41,7 @@ export default function RecentRecoveries({ darkMode }) {
       date: t("recDate"),
       author: t("recAuthor"),
       avatar: "https://randomuser.me/api/portraits/men/22.jpg",
-      img: "src/assets/Website/OIP (1).webp",
+      img: recoveryThreeImage,
     }
   ];
 

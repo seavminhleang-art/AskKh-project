@@ -1,3 +1,7 @@
+import showcaseOneImage from "@/assets/Website/ed7ac18f0a66acd81f8a54a9846aa975.jpg";
+import showcaseTwoImage from "@/assets/Website/4dba6191ebd18650c52de2ed5fb47f7d.jpg";
+import showcaseThreeImage from "@/assets/Website/0534f7df0b08edc70592d10d4bd908c0.jpg";
+import showcaseBackground from "@/assets/Website/d54a0076d493ce9c0d95d99a16ecec15.jpg";
 import React from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
@@ -12,7 +16,7 @@ export default function PlatformShowcase({ darkMode }) {
         ? "bg-zinc-800 text-[var(--home-primary-text)]"
         : "bg-[var(--color-brand-primary-light)] text-[var(--home-primary-text)]",
       text: t("showcaseCard1Text"),
-      img: "https://i.pinimg.com/1200x/ed/7a/c1/ed7ac18f0a66acd81f8a54a9846aa975.jpg",
+      img: showcaseOneImage,
     },
     {
       label: t("showcaseCard2Label"),
@@ -20,7 +24,7 @@ export default function PlatformShowcase({ darkMode }) {
         ? "bg-emerald-950/80 text-emerald-400"
         : "bg-emerald-50 text-[var(--color-brand-accent)]",
       text: t("showcaseCard2Text"),
-      img: "https://i.pinimg.com/736x/4d/ba/61/4dba6191ebd18650c52de2ed5fb47f7d.jpg",
+      img: showcaseTwoImage,
     },
     {
       label: t("showcaseCard3Label"),
@@ -28,7 +32,7 @@ export default function PlatformShowcase({ darkMode }) {
         ? "bg-zinc-800 text-[var(--home-secondary-text)]"
         : "bg-[var(--color-brand-secondary-light)] text-[var(--home-secondary-text)]",
       text: t("showcaseCard3Text"),
-      img: "https://i.pinimg.com/1200x/05/34/f7/0534f7df0b08edc70592d10d4bd908c0.jpg",
+      img: showcaseThreeImage,
     },
   ];
 
@@ -48,7 +52,7 @@ export default function PlatformShowcase({ darkMode }) {
             className="absolute inset-0 bg-cover bg-center transform hover:scale-105 transition duration-700"
             style={{
               backgroundImage:
-                "url('https://i.pinimg.com/1200x/d5/4a/00/d54a0076d493ce9c0d95d99a16ecec15.jpg')",
+                `url("${showcaseBackground}")`,
             }}
           ></div>
           <div className={`absolute inset-0 transition-opacity duration-300 ${darkMode ? "bg-zinc-950/60" : "bg-black/40"}`}></div>
