@@ -1,4 +1,5 @@
 .user-workspace {
+  font-family: var(--font-brand);
   --uw-card: var(--bg-card, #fff);
   --uw-line: var(--border-color, #e5eaf1);
   --uw-muted: var(--text-muted, #718096);

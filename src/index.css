@@ -608,7 +608,7 @@ html.dark .about-page .shadow-md { box-shadow: 0 4px 16px rgb(0 0 0 / .3); }
 }
 
 .workspace-language { max-width:130px; min-height:34px; padding:4px 8px; border:1px solid var(--border-color,#e5e7eb); border-radius:6px; background:var(--bg-card,#fff); color:var(--text-main,#17243a); font-size:14px; }
-:lang(km) .user-workspace, :lang(km) .admin-live { font-family:"Noto Sans Khmer","Khmer OS Battambang","Google Sans",sans-serif; line-height:1.85; }
+:lang(km) .user-workspace, :lang(km) .admin-live { line-height:1.85; }
 :lang(km) .uw-sidebar h2, :lang(km) .ad-eyebrow { letter-spacing:0; }
 :lang(km) .uw-topbar { gap:10px; }
 :lang(km) .uw-welcome h1 { line-height:1.7; }
