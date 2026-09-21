@@ -11,7 +11,7 @@ import {
 } from "react-icons/fa";
 
 import istadLogo from "../../assets/Website/istad-logo.png";
-import nexaLogo from "../../assets/Website/nexa-logo.svg";
+import nexaLogo from "../../assets/Website/nexa-orbit-logo.svg";
 
 export default function FooterComponent() {
   const { t } = useTranslation();

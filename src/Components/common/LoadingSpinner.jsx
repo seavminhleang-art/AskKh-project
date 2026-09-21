@@ -1,4 +1,4 @@
-import nexaLogo from "../../assets/Website/nexa-logo.svg";
+import nexaLogo from "../../assets/Website/nexa-orbit-logo.svg";
 
 export default function LoadingSpinner({
   fullScreen = true,

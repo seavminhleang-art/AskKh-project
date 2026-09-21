@@ -606,3 +606,35 @@ html.dark .about-page .shadow-md { box-shadow: 0 4px 16px rgb(0 0 0 / .3); }
   .admin-post-grid { grid-template-columns: minmax(0, 2.2fr) minmax(0, 1fr) minmax(0, .85fr) minmax(0, .8fr); gap: 1rem; }
   .admin-post-header { display: grid; }
 }
+
+.workspace-language { max-width:130px; min-height:34px; padding:4px 8px; border:1px solid var(--border-color,#e5e7eb); border-radius:6px; background:var(--bg-card,#fff); color:var(--text-main,#17243a); font-size:14px; }
+:lang(km) .user-workspace, :lang(km) .admin-live { font-family:"Noto Sans Khmer","Khmer OS Battambang","Google Sans",sans-serif; line-height:1.85; }
+:lang(km) .uw-sidebar h2, :lang(km) .ad-eyebrow { letter-spacing:0; }
+:lang(km) .uw-topbar { gap:10px; }
+:lang(km) .uw-welcome h1 { line-height:1.7; }
+:lang(km) .al-sidebar nav a { height:auto; }
+@media(max-width:600px) { .workspace-language { max-width:85px; }.uw-topbar>div { gap:10px; }.al-top-actions { gap:5px; } }
+
+/* Matching language, notification, and profile controls in workspace headers. */
+.workspace-topbar-actions { display:flex; align-items:center; gap:10px; flex-shrink:0; }
+.workspace-language-control { position:relative; display:inline-flex; align-items:center; gap:6px; height:36px; border:1px solid var(--border-color,#e5e7eb); border-radius:7px; background:var(--bg-card,#fff); color:var(--text-main,#17243a); padding:0 9px; flex-shrink:0; }
+.workspace-language-control .workspace-language { appearance:none; width:auto; max-width:none; min-height:34px; border:0; border-radius:0; padding:0 18px 0 0; background:transparent; cursor:pointer; font-weight:500; }
+.workspace-language-control>svg:last-child { position:absolute; right:8px; pointer-events:none; }
+.workspace-icon-button { display:inline-flex; justify-content:center; align-items:center; width:36px; height:36px; border:1px solid var(--border-color,#e5e7eb); border-radius:7px; flex-shrink:0; }
+.workspace-profile { position:relative; color:var(--text-main,#17243a); }
+.workspace-profile summary { list-style:none; display:flex; align-items:center; gap:8px; min-height:36px; border-radius:7px; padding:3px 5px; cursor:pointer; }
+.workspace-profile summary::-webkit-details-marker { display:none; }
+.workspace-profile summary:hover,.workspace-profile[open] summary { background:var(--bg-secondary,#f5f7fb); }
+.workspace-profile-avatar { width:30px; height:30px; flex-shrink:0; display:grid; place-items:center; border-radius:50%; background:#dceaff; color:#275abb; font-size:14px; font-weight:600; overflow:hidden; }
+.workspace-profile-avatar img { width:100%; height:100%; object-fit:cover; }
+.workspace-profile-name { max-width:160px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; font-size:14px; font-weight:600; }
+.workspace-profile-panel { position:absolute; right:0; top:calc(100% + 10px); width:250px; max-width:calc(100vw - 32px); background:var(--bg-card,#fff); border:1px solid var(--border-color,#e5e7eb); border-radius:10px; padding:6px; box-shadow:0 12px 35px #12243a20; z-index:60; }
+.workspace-profile-info { display:grid; gap:3px; border-bottom:1px solid var(--border-color,#e5e7eb); padding:10px 10px 14px; margin-bottom:4px; overflow-wrap:anywhere; }
+.workspace-profile-info span { color:var(--text-muted,#718096); font-size:14px; }
+.workspace-profile-panel>a { display:flex; align-items:center; gap:10px; padding:10px; border-radius:6px; font-size:14px; }
+.workspace-profile-panel>a:hover { background:var(--bg-secondary,#f5f7fb); }
+.workspace-language:focus-visible,.workspace-profile summary:focus-visible { outline:2px solid #4070f4; outline-offset:3px; }
+@media(max-width:1000px) { .workspace-profile-name { max-width:100px; } }
+@media(max-width:600px) { .workspace-profile-name { display:none; }.workspace-topbar-actions { gap:6px; }.workspace-profile summary { gap:3px; padding:2px; }.uw-topbar>a>span.font-bold { display:none; }.workspace-language-control { padding-left:7px; gap:4px; } }
+.workspace-language-button:focus-visible { outline:2px solid #4070f4; outline-offset:3px; }
+@media(max-width:600px) { .workspace-language-button { padding-inline:10px; gap:6px; } }

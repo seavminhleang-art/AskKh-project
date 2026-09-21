@@ -207,3 +207,8 @@
 @media(max-width:1000px) { .al-top-search { width:140px; }.al-topbar { gap:12px; }.al-main { padding:24px 20px; } }
 @media(max-width:600px) { .al-main { padding:22px 14px; }.al-topbar { height:auto; }.al-top-search { width:auto; }.al-top-popover { top:100%; } }
 @media(prefers-reduced-motion:reduce) { .al-sidebar,.al-sidebar nav a,.al-icon-button,.al-logout,.al-top-popover { transition:none; animation:none; }.al-sidebar nav a:hover,.al-icon-button:hover,.al-icon-button:active,.al-button:active { transform:none; } }
+
+/* Shared NEXA artwork in expanded and collapsed navigation. */
+.al-brand-image { display:block; width:168px; height:56px; object-fit:contain; }
+.is-collapsed .al-brand-image { width:68px; height:40px; }
+@media(max-width:767px) { .is-collapsed .al-sidebar.is-open .al-brand-image { width:150px; height:50px; } }

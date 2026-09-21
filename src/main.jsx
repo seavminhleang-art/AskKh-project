@@ -21,6 +21,8 @@ import { ThemeProvider } from "./context/ThemeContext.jsx";
 import store from "./store/store.js";
 import DashboardPage from "./pages/user/DashboardPage.jsx";
 import WorkspaceListPage from "./pages/user/WorkspaceListPage.jsx";
+import ProfilePage from './pages/user/ProfilePage.jsx';
+import QuestionDetailPage from './pages/user/QuestionDetailPage.jsx';
 import UserPostPage from "./pages/user/UserPostPage.jsx";
 import AdminDashboardPage from "./features/admin/workspace/Dashboard.jsx";
 import AdminShell from "./features/admin/workspace/AdminShell.jsx";
@@ -78,13 +80,17 @@ const router = createBrowserRouter([
         element: <UserLayout />,
         children: [
           { path: "dashboard", element: <DashboardPage /> },
-          { path: "dashboard/questions", element: <WorkspaceListPage page="questions" /> },
+          { path: "dashboard/activity", element: <DashboardPage activity /> },
+          { path: "dashboard/profile", element: <ProfilePage /> },
+          { path: "dashboard/settings", element: <ProfilePage settings /> },
+          { path: "dashboard/questions/:id", element: <QuestionDetailPage /> },
+          { path: "dashboard/questions", element: <WorkspaceListPage key="questions" page="questions" /> },
           { path: "dashboard/questions/new", element: <UserPostPage kind="question" /> },
-          { path: "dashboard/lost-found", element: <WorkspaceListPage page="lost-found" /> },
+          { path: "dashboard/lost-found", element: <WorkspaceListPage key="lost-found" page="lost-found" /> },
           { path: "dashboard/lost-found/new", element: <UserPostPage kind="item" /> },
-          { path: "dashboard/matches", element: <WorkspaceListPage page="matches" /> },
-          { path: "dashboard/claims", element: <WorkspaceListPage page="claims" /> },
-          { path: "dashboard/notifications", element: <WorkspaceListPage page="notifications" /> },
+          { path: "dashboard/matches", element: <WorkspaceListPage key="matches" page="matches" /> },
+          { path: "dashboard/claims", element: <WorkspaceListPage key="claims" page="claims" /> },
+          { path: "dashboard/notifications", element: <WorkspaceListPage key="notifications" page="notifications" /> },
         ],
       },
       {

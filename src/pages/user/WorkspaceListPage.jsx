@@ -1,57 +1,425 @@
-import { Link } from 'react-router-dom';
-import { Bell, Bookmark, HelpCircle, MapPin, Search, Sparkles } from 'lucide-react';
+import { useWorkspaceTranslation } from "@/locales/workspace/useWorkspaceTranslation";
+import { useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import {
-  INITIAL_CLAIMS,
-  INITIAL_LOST_FOUND_ITEMS,
-  INITIAL_SMART_MATCHES,
-  INITIAL_NOTIFICATIONS,
-  INITIAL_QUESTIONS,
-} from '../../constants/mockData';
-
-const PAGE_CONFIG = {
-  questions: { title: 'Questions', description: 'Browse technical discussions from the campus community.', icon: HelpCircle, items: INITIAL_QUESTIONS },
-  'lost-found': { title: 'Lost & Found', description: 'Review reported lost and found items on campus.', icon: Search, items: INITIAL_LOST_FOUND_ITEMS },
-  matches: { title: 'Smart Matches', description: 'Potential matches found for reported belongings.', icon: Sparkles, items: INITIAL_SMART_MATCHES },
-  claims: { title: 'My Claims', description: 'Track ownership-verification requests.', icon: Bookmark, items: INITIAL_CLAIMS },
-  notifications: { title: 'Notifications', description: 'Your recent account and campus updates.', icon: Bell, items: INITIAL_NOTIFICATIONS },
+  useWorkspaceDataQuery,
+  useWorkspaceSaveMutation,
+} from "../../features/workspace/workspaceApi";
+import {
+  rows,
+  dateLabel,
+  ownClaims,
+  message,
+} from "../../features/workspace/workspaceModel";
+import { Heading, QueryState, Empty, Badge, QuickLinks } from "./WorkspaceUI";
+const titles = {
+  questions: "Q & A Community",
+  "lost-found": "Lost & Found",
+  claims: "My Claims",
+  matches: "Smart Matches",
+  notifications: "Notifications",
 };
-
-function ItemSummary({ page, item }) {
-  if (page === 'questions') return <><h2>{item.title}</h2><p>{item.description}</p><small>{item.answers.length} answers · {item.views} views</small></>;
-  if (page === 'lost-found') return <><h2>{item.name}</h2><p>{item.description}</p><small><MapPin className="inline h-3.5 w-3.5" /> {item.location} · {item.status}</small></>;
-  if (page === 'matches') return <><h2>{item.lostItem.name} ↔ {item.foundItem.name}</h2><p>{item.matchingAttributes[0]?.detail}</p><small>{item.matchScore}% confidence · {item.status}</small></>;
-  if (page === 'claims') return <><h2>{item.item.name}</h2><p>{item.proofDescription}</p><small>Claim #{item.id} · {item.status}</small></>;
-  return <><h2>{item.title}</h2><p>{item.message}</p><small>{item.isRead ? 'Read' : 'New'} · {new Date(item.createdAt).toLocaleDateString()}</small></>;
-}
-
-export default function WorkspaceListPage({ page }) {
-  const config = PAGE_CONFIG[page];
-  const Icon = config.icon;
-  const storageKey = page === 'questions' ? 'nexa_user_questions' : page === 'lost-found' ? 'nexa_user_lost_found_items' : null;
-  const localItems = storageKey ? JSON.parse(window.localStorage.getItem(storageKey) || '[]') : [];
-  const localMatches = page === 'matches' ? JSON.parse(window.localStorage.getItem('nexa_user_smart_matches') || '[]') : [];
-  const items = [...localItems, ...localMatches, ...config.items];
-  const createPath = page === 'questions' ? '/dashboard/questions/new' : page === 'lost-found' ? '/dashboard/lost-found/new' : null;
-
+function ReportRelated({ page, reportId, userId }) {
+  const { w, locale } = useWorkspaceTranslation();
+  const query = useWorkspaceDataQuery(
+    {
+      resource: page,
+      id: reportId,
+    },
+    {
+      skip: !reportId,
+    },
+  );
+  if (!reportId)
+    return (
+      <Empty>
+        {w("Select a report to view")} {page}.
+      </Empty>
+    );
+  const items =
+    page === "claims" ? ownClaims(rows(query.data), userId) : rows(query.data);
   return (
-    <section className="mx-auto max-w-5xl space-y-6">
-      <header className="flex items-start gap-4 rounded-3xl bg-gradient-to-r from-blue-700 to-indigo-900 p-6 text-white shadow-lg">
-        <div className="rounded-2xl bg-white/15 p-3"><Icon className="h-6 w-6" /></div>
-        <div className="flex-1"><h1 className="text-2xl font-black">{config.title}</h1><p className="mt-1 text-sm text-blue-100">{config.description}</p></div>
-        {createPath && <Link to={createPath} className="rounded-xl bg-white px-4 py-2 text-sm font-bold text-blue-700">+ Create</Link>}
-      </header>
-
-      <div className="space-y-3">
-        {items.map((item) => (
-          <article key={item.id} className="rounded-2xl bg-white p-5 transition dark:bg-slate-900">
-            {page === 'lost-found' && item.images?.[0] && <img src={item.images[0]} alt={item.name} className="mb-4 h-44 w-full rounded-xl object-cover sm:w-64" />}
-            {page === 'matches' && (item.lostItem.images?.[0] || item.foundItem.images?.[0]) && <div className="mb-4 flex gap-3"><img src={item.lostItem.images?.[0] || item.foundItem.images?.[0]} alt="Matched item" className="h-24 w-24 rounded-xl object-cover" /><img src={item.foundItem.images?.[0] || item.lostItem.images?.[0]} alt="Matched item" className="h-24 w-24 rounded-xl object-cover" /></div>}
-            <ItemSummary page={page} item={item} />
+    <QueryState query={query}>
+      {!items.length ? (
+        <Empty>
+          {w("No")}
+          {page === "claims" ? w("claims from your account") : w("matches")}
+          {w("for this report.")}
+        </Empty>
+      ) : (
+        items.map((item) => (
+          <article className="uw-row" key={item.id}>
+            <div>
+              <h2>
+                {page === "claims"
+                  ? w("Claim #{{value0}}", {
+                      value0: item.id,
+                    })
+                  : w("Match #{{value0}}", {
+                      value0: item.id,
+                    })}
+              </h2>
+              <p>
+                {page === "claims"
+                  ? w("Submitted {{value0}}", {
+                      value0: dateLabel(item.createdAt, locale),
+                    })
+                  : w("Lost report #{{value0}} \xB7 Found report #{{value1}}", {
+                      value0: item.lostItemId,
+                      value1: item.foundItemId,
+                    })}
+              </p>
+              {page === "claims" && (
+                <p>
+                  {w("Finder confirmation:")}{" "}
+                  {item.confirmedByFinder ? w("Confirmed") : w("Pending")}
+                  {w("\xB7 Your confirmation:")}{" "}
+                  {item.confirmedByClaimant ? w("Confirmed") : w("Pending")}
+                </p>
+              )}
+            </div>
+            <Badge>{w(item.status)}</Badge>
           </article>
-        ))}
-      </div>
-
-      <Link to="/dashboard" className="inline-flex text-sm font-semibold text-blue-600 hover:underline">← Back to dashboard</Link>
+        ))
+      )}
+    </QueryState>
+  );
+}
+function ClaimForm({ report, onClose }) {
+  const { w } = useWorkspaceTranslation();
+  const [save, state] = useWorkspaceSaveMutation();
+  const [error, setError] = useState("");
+  const [saved, setSaved] = useState(false);
+  async function submit(event) {
+    event.preventDefault();
+    setError("");
+    try {
+      await save({
+        resource: "claims",
+        action: "create",
+        id: report.id,
+        body: {
+          describedHiddenDetail: new FormData(event.currentTarget)
+            .get("detail")
+            .trim(),
+        },
+      }).unwrap();
+      setSaved(true);
+    } catch (error) {
+      setError(message(error));
+    }
+  }
+  return (
+    <section className="uw-card">
+      <h2>
+        {w("Claim:")} {report.title}
+      </h2>
+      {saved ? (
+        <p role="status" className="uw-success mt-4">
+          {w("Your claim was submitted. Track it under My Claims.")}
+        </p>
+      ) : (
+        <form className="uw-form mt-4" onSubmit={submit}>
+          <label>
+            {w("Describe a detail that proves ownership")}
+            <textarea name="detail" required minLength={5} rows={4} />
+          </label>
+          {error && (
+            <p role="alert" className="uw-error">
+              {w(error)}
+            </p>
+          )}
+          <button className="uw-button" disabled={state.isLoading}>
+            {state.isLoading ? w("Submitting\u2026") : w("Submit claim")}
+          </button>
+        </form>
+      )}
+      <button className="uw-button secondary mt-4" onClick={onClose}>
+        {w("Close")}
+      </button>
     </section>
+  );
+}
+export default function WorkspaceListPage({ page }) {
+  const { w, locale } = useWorkspaceTranslation();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const search = searchParams.get("search") || "";
+  const setSearch = (value) =>
+    setSearchParams(
+      value
+        ? {
+            search: value,
+          }
+        : {},
+    );
+  const [filter, setFilter] = useState("all");
+  const [pageNumber, setPageNumber] = useState(0);
+  const [reportId, setReportId] = useState("");
+  const [claim, setClaim] = useState(null);
+  const [error, setError] = useState("");
+  const resource =
+    page === "questions"
+      ? "posts"
+      : page === "notifications"
+        ? "notifications"
+        : "reports";
+  const query = useWorkspaceDataQuery({
+    resource,
+    page: pageNumber,
+  });
+  const profileQuery = useWorkspaceDataQuery({
+    resource: "profile",
+  });
+  const profile = profileQuery.data?.data ?? profileQuery.data;
+  const [save, state] = useWorkspaceSaveMutation();
+  const all = rows(query.data);
+  const items = all.filter((item) => {
+    if (page === "questions" && item.postTypeId === 2) return false;
+    if (
+      filter === "mine" &&
+      (profile?.id == null ||
+        String(item.ownerId ?? item.userId) !== String(profile.id))
+    )
+      return false;
+    if (filter === "unread" && item.read) return false;
+    return `${item.title || ""} ${item.body || item.description || ""}`
+      .toLowerCase()
+      .includes(search.toLowerCase());
+  });
+  async function mark(action, id) {
+    setError("");
+    try {
+      await save({
+        resource: "notifications",
+        action,
+        id,
+      }).unwrap();
+    } catch (error) {
+      setError(message(error));
+    }
+  }
+  const related = page === "claims" || page === "matches";
+  const totalPages = query.data?.totalPages ?? query.data?.data?.totalPages;
+  return (
+    <div className="uw-page">
+      <Heading
+        title={w(titles[page])}
+        description={
+          related
+            ? w("Select a report to review its updates.")
+            : page === "notifications"
+              ? w(
+                  "Stay updated on your questions, claims, and community activity.",
+                )
+              : w("Find answers, share knowledge, and help your community.")
+        }
+      >
+        {page === "questions" || page === "lost-found" ? (
+          <Link className="uw-button" to={`/dashboard/${page}/new`}>
+            {page === "questions" ? w("Ask a question") : w("Report an item")}
+          </Link>
+        ) : page === "notifications" ? (
+          <button
+            className="uw-button"
+            disabled={state.isLoading || query.isLoading || query.isError}
+            onClick={() => mark("read-all")}
+          >
+            {w("Mark all as read")}
+          </button>
+        ) : null}
+      </Heading>
+      {error && (
+        <p role="alert" className="uw-error">
+          {w(error)}
+        </p>
+      )}
+      {claim && (
+        <ClaimForm
+          key={claim.id}
+          report={claim}
+          onClose={() => setClaim(null)}
+        />
+      )}
+      <div className="uw-columns">
+        <section className="uw-card">
+          <QueryState query={query}>
+            {related ? (
+              <>
+                <label className="uw-form">
+                  {w("Report")}
+                  <select
+                    aria-label={w("Report")}
+                    value={reportId}
+                    onChange={(event) => setReportId(event.target.value)}
+                  >
+                    <option value="">{w("Select a report")}</option>
+                    {all.map((item) => (
+                      <option key={item.id} value={item.id}>
+                        #{item.id} · {item.title}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                {page === "claims" ? (
+                  <QueryState query={profileQuery}>
+                    <ReportRelated
+                      page={page}
+                      reportId={reportId}
+                      userId={profile?.id}
+                    />
+                  </QueryState>
+                ) : (
+                  <ReportRelated page={page} reportId={reportId} />
+                )}
+              </>
+            ) : (
+              <>
+                <div className="uw-toolbar">
+                  <input
+                    aria-label={w("Search {{value0}}", {
+                      value0: w(titles[page]),
+                    })}
+                    placeholder={w("Search\u2026")}
+                    value={search}
+                    onChange={(event) => setSearch(event.target.value)}
+                  />
+                  <select
+                    aria-label={w("Filter records")}
+                    value={filter}
+                    onChange={(event) => setFilter(event.target.value)}
+                  >
+                    <option value="all">
+                      {w(
+                        page === "notifications" ? "All updates" : "All posts",
+                      )}
+                    </option>
+                    <option
+                      value={page === "notifications" ? "unread" : "mine"}
+                    >
+                      {page === "notifications"
+                        ? w("Unread")
+                        : w("My contributions")}
+                    </option>
+                  </select>
+                </div>
+                {items.length === 0 && (
+                  <Empty>{w("No results to show.")}</Empty>
+                )}
+                {items.map((item) => (
+                  <article className="uw-row" key={item.id}>
+                    {item.photoUrl && (
+                      <img
+                        src={item.photoUrl}
+                        alt=""
+                        className="h-16 w-16 rounded-lg object-cover"
+                      />
+                    )}
+                    <div>
+                      <h2>
+                        {page === "questions" ? (
+                          <Link to={`/dashboard/questions/${item.id}`}>
+                            {item.title}
+                          </Link>
+                        ) : (
+                          item.title
+                        )}
+                      </h2>
+                      <p className="line-clamp-2">
+                        {item.body || item.description}
+                      </p>
+                      <p className="mt-2">
+                        {item.ownerDisplayName ||
+                          item.locationLabel ||
+                          item.freeTextLocation}{" "}
+                        {dateLabel(item.creationDate || item.createdAt, locale)}
+                      </p>
+                      {page === "questions" && (
+                        <div className="uw-toolbar mt-2">
+                          <span>
+                            {item.score ?? 0} {w("votes \xB7")}{" "}
+                            {item.viewCount ?? 0} {w("views")}
+                          </span>
+                          {item.tagResponses?.map((tag) => (
+                            <Badge key={tag.id}>{tag.tagName}</Badge>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                    {page === "notifications" ? (
+                      <button
+                        className="uw-button secondary"
+                        disabled={item.read || state.isLoading}
+                        onClick={() => mark("mark-read", item.id)}
+                      >
+                        {item.read ? w("Read") : w("Mark read")}
+                      </button>
+                    ) : page === "lost-found" ? (
+                      <div className="uw-stack">
+                        <Badge>{w(item.status || item.itemType)}</Badge>
+                        {item.itemType?.toLowerCase() === "found" &&
+                          profile?.id != null &&
+                          String(item.userId) !== String(profile.id) && (
+                            <button
+                              className="uw-button secondary"
+                              onClick={() => setClaim(item)}
+                            >
+                              {w("Claim item")}
+                            </button>
+                          )}
+                      </div>
+                    ) : null}
+                  </article>
+                ))}
+                {page === "notifications" && (
+                  <div className="uw-actions mt-5">
+                    <button
+                      className="uw-button secondary"
+                      disabled={pageNumber === 0 || query.isFetching}
+                      onClick={() => setPageNumber((value) => value - 1)}
+                    >
+                      {w("Previous")}
+                    </button>
+                    <span>
+                      {w("Page")} {pageNumber + 1}
+                    </span>
+                    <button
+                      className="uw-button secondary"
+                      disabled={
+                        query.isFetching ||
+                        (totalPages != null
+                          ? pageNumber + 1 >= totalPages
+                          : all.length < 20)
+                      }
+                      onClick={() => setPageNumber((value) => value + 1)}
+                    >
+                      {w("Next")}
+                    </button>
+                  </div>
+                )}
+              </>
+            )}
+          </QueryState>
+        </section>
+        <div className="uw-stack">
+          <QuickLinks />
+          <aside className="uw-card">
+            <h2>
+              {page === "claims"
+                ? w("Ownership verification")
+                : w("Community tips")}
+            </h2>
+            <p className="uw-muted mt-3">
+              {page === "claims"
+                ? w(
+                    "Describe identifying details when submitting a claim. The finder reviews your request before approving it.",
+                  )
+                : w(
+                    "Be specific, be respectful, and share enough detail for others to help.",
+                  )}
+            </p>
+          </aside>
+        </div>
+      </div>
+    </div>
   );
 }

@@ -1,11 +1,12 @@
-import React from 'react';
-import { Outlet } from 'react-router-dom';
-import Sidebar from '../Components/common/Sidebar';
-import WorkspaceTopbar from './WorkspaceTopbar';
-import PageBackground from '../Components/common/PageBackground';
+import React, { useState } from "react";
+import { Outlet } from "react-router-dom";
+import Sidebar from "../Components/common/Sidebar";
+import WorkspaceTopbar from "./WorkspaceTopbar";
+import "../pages/user/workspace.css";
 
-export default function UserLayout({ mode = 'user', dashboardPath = '/dashboard' }) {
-  if (mode === 'admin') {
+export default function UserLayout({ mode = "user" }) {
+  const [collapsed, setCollapsed] = useState(false);
+  if (mode === "admin") {
     return (
       <div className="admin-workspace min-h-screen flex text-slate-100">
         <Sidebar mode="admin" />
@@ -20,12 +21,17 @@ export default function UserLayout({ mode = 'user', dashboardPath = '/dashboard'
   }
 
   return (
-    <div className="shared-page min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors">
-      <PageBackground />
-      <WorkspaceTopbar mode={mode} />
-      <div className="flex-1 flex w-full min-h-0">
-        <Sidebar mode={mode} />
-        <main className="flex-1 p-4 sm:p-6 lg:p-8 min-w-0 overflow-hidden">
+    <div
+      className={`user-workspace uw-shell ${collapsed ? "sidebar-collapsed" : ""}`}
+    >
+      <Sidebar mode={mode} />
+      <div className="uw-shell-content">
+        <WorkspaceTopbar
+          mode={mode}
+          collapsed={collapsed}
+          onToggleSidebar={() => setCollapsed((value) => !value)}
+        />
+        <main className="uw-main">
           <Outlet />
         </main>
       </div>

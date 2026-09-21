@@ -3,72 +3,36 @@ import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { MapPin, Clock, ShieldCheck, Search, PlusCircle, Tag, Building2 } from 'lucide-react';
 
-const sampleItems = [
-  {
-    id: 1,
-    type: 'LOST',
-    title: 'ASUS ROG Strix G15 Gaming Laptop',
-    description: 'Gaming laptop with illuminated ROG logo, RGB keyboard, and angular cooling vents. Left behind after system setup session.',
-    location: 'ISTAD, Mobile Lab, Lower Floor',
-    timeAgo: '3 min read',
-    reporter: 'Jude Bellingham',
-    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80',
-    image: 'https://images.unsplash.com/photo-1603302576837-37561b2e2302?w=500&auto=format&fit=crop&q=80',
-    category: 'Electronics'
-  },
-  {
-    id: 2,
-    type: 'LOST',
-    title: 'SAPPHIRE Silver Wristwatch',
-    description: 'Elegant silver wristwatch with dark navy dial and date display window. Stainless steel band with polished finish. Last seen near hallway seating area after afternoon lecture.',
-    location: 'ISTAD, Mobile Lab, Lower Floor',
-    timeAgo: '1 hours read',
-    reporter: 'Jude Bellingham',
-    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80',
-    image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=500&auto=format&fit=crop&q=80',
-    category: 'Accessories'
-  },
-  {
-    id: 3,
-    type: 'FOUND',
-    title: 'Casual Navy Jacket',
-    description: 'Elegant dark navy jacket with corduroy collar. Found hanging near the hallway seating area.',
-    location: 'ISTAD, Mobile Lab, Lower Floor',
-    timeAgo: '20 min read',
-    reporter: 'Jude Bellingham',
-    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80',
-    image: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=500&auto=format&fit=crop&q=80',
-    category: 'Clothing'
-  }
-];
-
-const categories = [
-  { name: 'All Categories', count: 48 },
-  { name: 'Electronics', count: 12 },
-  { name: 'Bags', count: 8 },
-  { name: 'Clothing', count: 9 },
-  { name: 'Accessories', count: 6 },
-  { name: 'Keys', count: 5 },
-  { name: 'Books & Documents', count: 4 },
-  { name: 'Others', count: 4 }
-];
-
-const locations = [
-  { name: 'Library Building', count: 14 },
-  { name: 'Cafeteria', count: 9 },
-  { name: 'Student Center', count: 7 },
-  { name: 'Main Entrance', count: 6 },
-  { name: 'Parking Area', count: 5 }
-];
+import { useWorkspaceDataQuery } from '@/features/workspace/workspaceApi';
+import { rows, message, dateLabel } from '@/features/workspace/workspaceModel';
+import ReportDetails from './ReportDetails';
 
 export default function ItemFeedView({ onOpenReport, darkMode }) {
   const { t } = useTranslation();
+  const reports = useWorkspaceDataQuery({ resource: 'reports' });
+  const categoryQuery = useWorkspaceDataQuery({ resource: 'categories' });
+  const locationQuery = useWorkspaceDataQuery({ resource: 'locations' });
+  const [selectedReport, setSelectedReport] = useState(null);
+  const [selectedLocation, setSelectedLocation] = useState('');
+  const locationRows = rows(locationQuery.data);
+  const categoryRows = rows(categoryQuery.data);
+  const items = rows(reports.data).map(item => ({
+    ...item, type: String(item.itemType || '').toUpperCase(),
+    title: item.title || '', description: item.description || '',
+    category: item.categoryName || categoryRows.find(c => String(c.id) === String(item.categoryId))?.name || 'Uncategorized',
+    location: item.freeTextLocation || locationRows.filter(l => String(l.id) === String(item.locationId)).map(l => [l.building, l.floor, l.room].filter(Boolean).join(', '))[0] || '—',
+    timeAgo: dateLabel(item.createdAt || item.itemDate),
+    reporter: item.reporterName || item.user?.username || '',
+    avatar: item.user?.profileImageUrl, image: item.photoUrl,
+  }));
+  const categories = [{ name: 'All Categories', count: items.length }, ...categoryRows.map(c => ({ name: c.name || c.categoryName, count: items.filter(i => String(i.categoryId) === String(c.id)).length }))];
+  const locations = locationRows.map(l => ({ id: String(l.id), name: [l.building, l.floor, l.room].filter(Boolean).join(', '), count: items.filter(i => String(i.locationId) === String(l.id)).length }));
   const [activeTab, setActiveTab] = useState('All Items');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All Categories');
   const [sortBy, setSortBy] = useState('Newest');
 
-  const filteredItems = sampleItems.filter((item) => {
+  const filteredItems = items.filter((item) => {
     const matchesTab =
       activeTab === 'All Items' ||
       (activeTab === 'Lost Items' && item.type === 'LOST') ||
@@ -82,8 +46,8 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
     const matchesCategory =
       selectedCategory === 'All Categories' || item.category === selectedCategory;
 
-    return matchesTab && matchesSearch && matchesCategory;
-  });
+    return matchesTab && matchesSearch && matchesCategory && (!selectedLocation || String(item.locationId) === selectedLocation);
+  }).sort((a, b) => (sortBy === 'Newest' ? -1 : 1) * ((Date.parse(a.createdAt || a.itemDate) || 0) - (Date.parse(b.createdAt || b.itemDate) || 0)));
 
   return (
     <section className="mb-20 relative z-10 font-[family-name:var(--font-brand)]">
@@ -112,6 +76,10 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
         </div>
       </div>
 
+      {selectedReport && <ReportDetails report={selectedReport} darkMode={darkMode} onClose={() => setSelectedReport(null)} />}
+      {[reports, categoryQuery, locationQuery].map((query, index) => query.isError && <p role="alert" key={index}>{message(query.error)} <button onClick={query.refetch}>Retry</button></p>)}
+      {reports.isFetching && <p role="status">Loading reports…</p>}
+      {selectedLocation && <button onClick={() => setSelectedLocation('')}>Clear location filter</button>}
       <main className="w-full">
         <div className={`flex border-b mb-6 gap-8 ${darkMode ? 'border-zinc-800' : 'border-gray-200'}`}>
           {[
@@ -188,7 +156,7 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           <div className="lg:col-span-3 space-y-4">
-            {filteredItems.length === 0 ? (
+            {!reports.isLoading && !reports.isError && filteredItems.length === 0 ? (
               <div className={`backdrop-blur-md rounded-3xl p-12 text-center text-sm font-medium ${
                 darkMode ? 'bg-zinc-900/90 text-slate-400' : 'bg-white/95 text-gray-500'
               }`}>
@@ -225,7 +193,7 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
                   <div className={`w-full md:w-56 h-48 rounded-2xl overflow-hidden flex-shrink-0 flex items-center justify-center p-2 ${
                     darkMode ? 'bg-zinc-950/60' : 'bg-gray-50'
                   }`}>
-                    <img src={item.image} alt={item.title} className="w-full h-full object-contain transform group-hover:scale-110 transition duration-500 ease-out" />
+                    {item.image && <img src={item.image} alt={item.title} className="w-full h-full object-contain transform group-hover:scale-110 transition duration-500 ease-out" />}
                   </div>
 
                   <div className="flex-1 flex flex-col justify-between pt-6 md:pt-0">
@@ -250,12 +218,13 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
                       darkMode ? 'border-zinc-800 text-slate-400' : 'border-gray-100 text-gray-600'
                     }`}>
                       <div className="flex items-center gap-2.5">
-                        <img src={item.avatar} alt={item.reporter} className="w-7 h-7 rounded-full object-cover ring-2 ring-transparent group-hover:ring-[var(--color-brand-primary,#3b82f6)]/50 transition-all duration-200" />
+                        {item.avatar && <img src={item.avatar} alt={item.reporter} className="w-7 h-7 rounded-full object-cover ring-2 ring-transparent group-hover:ring-[var(--color-brand-primary,#3b82f6)]/50 transition-all duration-200" />}
                         <span className={`text-sm font-medium ${darkMode ? 'text-slate-300' : 'text-gray-700'}`}>
                           {item.reporter}
                         </span>
                       </div>
                       <motion.button
+                        onClick={() => setSelectedReport(item)}
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         className={`text-sm font-semibold px-4 py-2 rounded-xl transition-all duration-200 cursor-pointer ${
@@ -264,7 +233,7 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
                             : 'bg-emerald-50 text-[var(--color-brand-accent,#10b981)] hover:bg-emerald-100'
                         }`}
                       >
-                        {t('recVerifyBtn')}
+                        {item.type === 'FOUND' ? t('recVerifyBtn') : 'View details'}
                       </motion.button>
                     </div>
                   </div>
@@ -289,6 +258,8 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
                   <motion.li
                     key={idx}
                     onClick={() => setSelectedCategory(cat.name)}
+                    role="button" tabIndex={0}
+                    onKeyDown={event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); setSelectedCategory(cat.name); } }}
                     whileHover={{ x: 4 }}
                     transition={{ duration: 0.15 }}
                     className={`flex items-center justify-between text-sm cursor-pointer p-1.5 rounded-xl transition-colors ${
@@ -320,6 +291,9 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
                 {locations.map((loc, idx) => (
                   <motion.li
                     key={idx}
+                    onClick={() => setSelectedLocation(loc.id)}
+                    role="button" tabIndex={0}
+                    onKeyDown={event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); setSelectedLocation(loc.id); } }}
                     whileHover={{ x: 4 }}
                     transition={{ duration: 0.15 }}
                     className={`flex items-center justify-between text-sm cursor-pointer p-1.5 rounded-xl transition-colors ${

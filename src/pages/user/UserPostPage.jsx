@@ -1,88 +1,295 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { HelpCircle, Search } from 'lucide-react';
-import { INITIAL_LOST_FOUND_ITEMS } from '../../constants/mockData';
-
-const STORAGE_KEYS = { question: 'nexa_user_questions', item: 'nexa_user_lost_found_items', match: 'nexa_user_smart_matches' };
-
-function saveEntry(kind, entry) {
-  const stored = JSON.parse(window.localStorage.getItem(STORAGE_KEYS[kind]) || '[]');
-  window.localStorage.setItem(STORAGE_KEYS[kind], JSON.stringify([entry, ...stored]));
-}
-
+import { useWorkspaceTranslation } from "@/locales/workspace/useWorkspaceTranslation";
+import { useState } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import {
+  useWorkspaceDataQuery,
+  useWorkspaceSaveMutation,
+} from "../../features/workspace/workspaceApi";
+import { rows, message } from "../../features/workspace/workspaceModel";
+import { Heading, QueryState } from "./WorkspaceUI";
 export default function UserPostPage({ kind }) {
+  const { w } = useWorkspaceTranslation();
+  const question = kind === "question";
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const isQuestion = kind === 'question';
-  const [form, setForm] = useState({ title: '', description: '', tags: '', type: 'LOST', location: '', image: '' });
-  const [imageError, setImageError] = useState('');
-  const update = (event) => setForm((current) => ({ ...current, [event.target.name]: event.target.value }));
-  const selectImage = (event) => {
-    const file = event.target.files?.[0];
-    setImageError('');
-    if (!file) return;
-    if (!file.type.startsWith('image/') || file.size > 900_000) {
-      setImageError('Choose an image under 900 KB so it can be saved in this mock workspace.');
-      event.target.value = '';
-      return;
-    }
-    const reader = new FileReader();
-    reader.onload = () => setForm((current) => ({ ...current, image: reader.result }));
-    reader.readAsDataURL(file);
-  };
-
-  const submit = (event) => {
+  const tags = useWorkspaceDataQuery({
+    resource: question ? "tags" : "categories",
+  });
+  const [save, state] = useWorkspaceSaveMutation();
+  const [error, setError] = useState("");
+  async function submit(event) {
     event.preventDefault();
-    const timestamp = Date.now();
-    if (isQuestion) {
-      saveEntry('question', {
-        id: `local-q-${timestamp}`, title: form.title, description: form.description,
-        tags: form.tags.split(',').map((tag) => tag.trim()).filter(Boolean), answers: [], views: 0,
-        author: { name: 'You' }, createdAt: new Date().toISOString(),
-      });
-      navigate('/dashboard/questions');
-    } else {
-      const report = {
-        id: `local-item-${timestamp}`, name: form.title, description: form.description, type: form.type,
-        status: form.type, location: form.location, category: 'other', reporter: { name: 'You' },
-        createdAt: new Date().toISOString(), images: form.image ? [form.image] : [],
-      };
-      saveEntry('item', report);
-      const oppositeItem = INITIAL_LOST_FOUND_ITEMS.find((item) => item.type !== form.type);
-      if (oppositeItem) {
-        saveEntry('match', {
-          id: `local-match-${timestamp}`,
-          lostItem: form.type === 'LOST' ? report : oppositeItem,
-          foundItem: form.type === 'FOUND' ? report : oppositeItem,
-          matchScore: form.image ? 78 : 64,
-          status: 'NEW', createdAt: new Date().toISOString(),
-          matchingAttributes: [
-            { label: 'Report type', score: 'Compatible', detail: 'A lost report was paired with a found report.' },
-            { label: 'Photo signal', score: form.image ? 'Included' : 'Missing', detail: form.image ? 'Your uploaded image will help campus staff verify the match.' : 'Add a photo to improve match confidence.' },
-          ],
-        });
+    setError("");
+    const form = new FormData(event.currentTarget);
+    try {
+      let body;
+      if (question) {
+        body = {
+          title: form.get("title").trim(),
+          body: form.get("description").trim(),
+          postTypeId: 1,
+          tagIds: form.getAll("tagIds").map(Number),
+          imageUrls: [],
+          codeSnippet: form.get("codeSnippet") || null,
+          codeLanguage: form.get("codeSnippet")
+            ? form.get("codeLanguage")
+            : null,
+        };
+        if (body.title.length < 10 || body.body.length < 20)
+          throw new Error(
+            "Use at least 10 characters for the title and 20 for the description.",
+          );
+        const image = form.get("image");
+        if (image?.size) {
+          if (
+            !["image/jpeg", "image/png", "image/webp", "image/gif"].includes(
+              image.type,
+            ) ||
+            image.size > 5 * 1024 * 1024
+          )
+            throw new Error("Choose an image under 5 MB.");
+          const multipart = new FormData();
+          multipart.append(
+            "post",
+            new Blob([JSON.stringify(body)], {
+              type: "application/json",
+            }),
+          );
+          multipart.append("images", image);
+          await save({
+            resource: "post-images",
+            action: "create",
+            body: multipart,
+          }).unwrap();
+        } else
+          await save({
+            resource: "posts",
+            action: "create",
+            body,
+          }).unwrap();
+      } else {
+        body = {
+          title: form.get("title").trim(),
+          description: form.get("description").trim(),
+          itemType: form.get("itemType"),
+          itemDate: form.get("itemDate"),
+          scope: form.get("scope"),
+          freeTextLocation: form.get("location").trim(),
+          categoryId: form.get("categoryId")
+            ? Number(form.get("categoryId"))
+            : null,
+          hiddenDetail: form.get("hiddenDetail") || null,
+          photoUrl: form.get("photoUrl") || null,
+        };
+        await save({
+          resource: "reports",
+          action: "create",
+          body,
+        }).unwrap();
       }
-      navigate('/dashboard/lost-found');
+      navigate(`/dashboard/${question ? "questions" : "lost-found"}`);
+    } catch (error) {
+      setError(message(error));
     }
-  };
-
-  const Icon = isQuestion ? HelpCircle : Search;
-  const title = isQuestion ? 'Ask a question' : 'Report a lost or found item';
-
+  }
   return (
-    <section className="mx-auto max-w-3xl">
-      <div className="rounded-3xl bg-gradient-to-r from-blue-700 to-indigo-900 p-6 text-white shadow-lg">
-        <Icon className="mb-3 h-7 w-7" /><h1 className="text-2xl font-black">{title}</h1>
-        <p className="mt-1 text-sm text-blue-100">This is saved locally in your browser for the current mock workspace.</p>
-      </div>
-      <form onSubmit={submit} className="mt-6 space-y-5 rounded-3xl bg-white p-6 dark:bg-slate-900">
-        {!isQuestion && <label className="block text-sm font-semibold">Report type<select name="type" value={form.type} onChange={update} className="mt-2 w-full rounded-xl border border-slate-200 bg-white p-3 dark:border-slate-700 dark:bg-slate-800"><option value="LOST">I lost an item</option><option value="FOUND">I found an item</option></select></label>}
-        <label className="block text-sm font-semibold">{isQuestion ? 'Question title' : 'Item name'}<input required name="title" value={form.title} onChange={update} placeholder={isQuestion ? 'e.g. How do I ...?' : 'e.g. Blue student ID card'} className="mt-2 w-full rounded-xl border border-slate-200 bg-white p-3 dark:border-slate-700 dark:bg-slate-800" /></label>
-        {!isQuestion && <label className="block text-sm font-semibold">Where was it lost or found?<input required name="location" value={form.location} onChange={update} placeholder="e.g. Lab 302, third floor" className="mt-2 w-full rounded-xl border border-slate-200 bg-white p-3 dark:border-slate-700 dark:bg-slate-800" /></label>}
-        {!isQuestion && <label className="block text-sm font-semibold">Photo <span className="font-normal text-slate-500">(optional, under 900 KB)</span><input type="file" accept="image/*" onChange={selectImage} className="mt-2 block w-full text-sm" />{imageError && <p className="mt-1 text-sm text-rose-600">{imageError}</p>}{form.image && <img src={form.image} alt="Selected item preview" className="mt-3 h-36 w-48 rounded-xl object-cover" />}</label>}
-        {isQuestion && <label className="block text-sm font-semibold">Tags <span className="font-normal text-slate-500">(comma separated)</span><input name="tags" value={form.tags} onChange={update} placeholder="react, javascript" className="mt-2 w-full rounded-xl border border-slate-200 bg-white p-3 dark:border-slate-700 dark:bg-slate-800" /></label>}
-        <label className="block text-sm font-semibold">Description<textarea required name="description" value={form.description} onChange={update} rows="6" placeholder="Add enough detail so classmates or campus staff can help." className="mt-2 w-full rounded-xl border border-slate-200 bg-white p-3 dark:border-slate-700 dark:bg-slate-800" /></label>
-        <div className="flex justify-end gap-3"><button type="button" onClick={() => navigate(-1)} className="rounded-xl px-4 py-2 text-sm font-semibold">Cancel</button><button className="rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-bold text-white hover:bg-blue-700">Publish</button></div>
+    <div className="uw-page">
+      <Heading
+        title={question ? w("Ask a Question") : w("Report an item")}
+        description={
+          question
+            ? w("Share your question with the community and get help.")
+            : w("Help a lost item find its way back to its owner.")
+        }
+      />
+      <form
+        className="uw-columns uw-form"
+        onSubmit={submit}
+        aria-busy={state.isLoading}
+      >
+        <section className="uw-card uw-form">
+          <h2>{question ? w("Question details") : w("Item details")}</h2>
+          {error && (
+            <p role="alert" className="uw-error">
+              {w(error)}
+            </p>
+          )}
+          <label>
+            {question ? w("Question title") : w("Item name")}
+            <input
+              name="title"
+              required
+              minLength={question ? 10 : 1}
+              maxLength={300}
+              placeholder={
+                question
+                  ? w("What would you like help with?")
+                  : w("Describe the item")
+              }
+            />
+          </label>
+          {!question && (
+            <div className="uw-fields">
+              <label>
+                {w("Report type")}
+                <select
+                  name="itemType"
+                  defaultValue={
+                    searchParams.get("type") === "found" ? "found" : "lost"
+                  }
+                >
+                  <option value="lost">{w("Lost")}</option>
+                  <option value="found">{w("Found")}</option>
+                </select>
+              </label>
+              <label>
+                {w("Date")}
+                <input name="itemDate" type="date" required />
+              </label>
+              <label>
+                {w("Location")}
+                <input name="location" required />
+              </label>
+              <label>
+                {w("Scope")}
+                <select name="scope">
+                  <option value="istad">ISTAD</option>
+                  <option value="public">{w("Public")}</option>
+                </select>
+              </label>
+            </div>
+          )}
+          <label>
+            {w("Description")}
+            <textarea
+              name="description"
+              rows={9}
+              required
+              minLength={question ? 20 : 1}
+              placeholder={w(
+                "Include details that will help others understand.",
+              )}
+            />
+          </label>
+          {question ? (
+            <>
+              <label>
+                {w("Code snippet (optional)")}
+                <textarea
+                  name="codeSnippet"
+                  rows={5}
+                  maxLength={20000}
+                  spellCheck={false}
+                />
+              </label>
+              <label>
+                {w("Code language")}
+                <select name="codeLanguage">
+                  <option>javascript</option>
+                  <option>typescript</option>
+                  <option>python</option>
+                  <option>java</option>
+                  <option>html</option>
+                  <option>css</option>
+                  <option>sql</option>
+                  <option>text</option>
+                </select>
+              </label>
+              <label>
+                {w("Attach an image (optional, up to 5 MB)")}
+                <input
+                  type="file"
+                  name="image"
+                  accept="image/jpeg,image/png,image/webp,image/gif"
+                />
+              </label>
+            </>
+          ) : (
+            <>
+              <label>
+                {w("Identifying detail")}
+                <textarea
+                  name="hiddenDetail"
+                  rows={3}
+                  placeholder={w("A detail the owner would know")}
+                />
+              </label>
+              <label>
+                {w("Photo URL (optional)")}
+                <input
+                  name="photoUrl"
+                  type="url"
+                  placeholder="https://…"
+                  pattern="https?://.+"
+                />
+              </label>
+            </>
+          )}
+          <div className="uw-actions">
+            <Link
+              className="uw-button secondary"
+              to={`/dashboard/${question ? "questions" : "lost-found"}`}
+            >
+              {w("Cancel")}
+            </Link>
+            <button className="uw-button" disabled={state.isLoading}>
+              {state.isLoading
+                ? w("Publishing\u2026")
+                : question
+                  ? w("Post question")
+                  : w("Publish report")}
+            </button>
+          </div>
+        </section>
+        <aside className="uw-stack">
+          <section className="uw-card uw-form">
+            <h2>{question ? w("Tags") : w("Category")}</h2>
+            <QueryState query={tags}>
+              {question ? (
+                rows(tags.data).map((tag) => (
+                  <label
+                    key={tag.id}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
+                    <input
+                      style={{
+                        width: 18,
+                      }}
+                      type="checkbox"
+                      name="tagIds"
+                      value={tag.id}
+                    />
+                    {tag.tagName}
+                  </label>
+                ))
+              ) : (
+                <label>
+                  {w("Choose a category")}
+                  <select name="categoryId">
+                    <option value="">{w("Uncategorized")}</option>
+                    {rows(tags.data).map((item) => (
+                      <option key={item.id} value={item.id}>
+                        {item.name || item.categoryName}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              )}
+            </QueryState>
+          </section>
+          <section className="uw-card">
+            <h2>{w("Before you publish")}</h2>
+            <p className="uw-muted mt-3">
+              {w(
+                "Use a clear title, include relevant details, and avoid sharing private contact information.",
+              )}
+            </p>
+          </section>
+        </aside>
       </form>
-    </section>
+    </div>
   );
 }

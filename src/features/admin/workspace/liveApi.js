@@ -1,37 +1,12 @@
-import { FORUM_API_BASE_URL } from '@/config/forumApi';
-import { fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { baseApi } from '@/store/api/baseApi';
 import { managementRequest } from './managementRequests';
-import { auth } from '@/Components/Firebase/firebase';
+import { request } from '@/store/api/forumRequest';
 
 export const resourcePaths = {
   categories: '/lost-found/categories', locations: '/lost-found/locations', leaderboard: '/users/search?query=',
   users: '/users/search?query=', posts: '/posts', comments: '/comments/search?query=', tags: '/tags',
   'lost-found': '/lost-found/reports', notifications: '/notifications',
 };
-const rawRequest = fetchBaseQuery({
-  baseUrl: FORUM_API_BASE_URL,
-  timeout: 15000,
-  prepareHeaders: async (headers, { getState }) => {
-    const token = auth.currentUser ? await auth.currentUser.getIdToken() : getState().auth.accessToken;
-    if (token) headers.set('Authorization', `Bearer ${token}`);
-    return headers;
-  },
-});
-
-// Keep backend authorization failures visible without clearing the Firebase session.
-async function request(args, api, options) {
-  try {
-    let response = await rawRequest(args, api, options);
-    if (response.error?.status === 401 && auth.currentUser) {
-      await auth.currentUser.getIdToken(true);
-      response = await rawRequest(args, api, options);
-    }
-    return response;
-  } catch (error) {
-    return { error: { status: 'CUSTOM_ERROR', error: error.message || 'Unable to authenticate the API request.' } };
-  }
-}
 
 export function unpackList(data) {
   if (Array.isArray(data)) return { rows: data, total: null };
