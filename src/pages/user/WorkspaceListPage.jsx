@@ -1,3 +1,4 @@
+import LostFoundReportRow from "./LostFoundReportRow";
 import { useWorkspaceTranslation } from "@/locales/workspace/useWorkspaceTranslation";
 import { useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
@@ -201,7 +202,7 @@ export default function WorkspaceListPage({ page }) {
   const related = page === "claims" || page === "matches";
   const totalPages = query.data?.totalPages ?? query.data?.data?.totalPages;
   return (
-    <div className="uw-page">
+    <div className={`uw-page ${page === "lost-found" ? "uw-reports-page" : ""}`}>
       <Heading
         title={w(titles[page])}
         description={
@@ -305,7 +306,9 @@ export default function WorkspaceListPage({ page }) {
                 {items.length === 0 && (
                   <Empty>{w("No results to show.")}</Empty>
                 )}
-                {items.map((item) => (
+                {items.map((item) => page === "lost-found" ? (
+                  <LostFoundReportRow key={item.id} item={item} />
+                ) : (
                   <article className="uw-row" key={item.id}>
                     {item.photoUrl && (
                       <img
