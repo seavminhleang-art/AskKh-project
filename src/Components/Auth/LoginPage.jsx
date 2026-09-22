@@ -1,12 +1,10 @@
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import {
   useMemo,
   useState,
 } from "react";
 
-import {
-  useDispatch,
-} from "react-redux";
+
 
 import {
   Link,
@@ -21,13 +19,7 @@ import {
   Mail,
 } from "lucide-react";
 
-import {
-  browserLocalPersistence,
-  browserSessionPersistence,
-  sendPasswordResetEmail,
-  setPersistence,
-  signInWithEmailAndPassword,
-} from "firebase/auth";
+
 
 import {
   useForm,
@@ -41,25 +33,17 @@ import {
   z,
 } from "zod";
 
-import {
-  auth,
-} from "../Firebase/firebase.js";
+
 
 import {
   useLanguage,
 } from "../Language/LanguageContext.jsx";
 
-import {
-  loginSuccess,
-} from "../../features/auth/authSlice.js";
+import { useLoginMutation, useForgotPasswordMutation } from "../../features/auth/authApi";
+import { authCredentials } from "../../features/auth/authSession";
+import { authError } from "../../features/auth/authError";
 
-import GoogleComponent from "../oauth/GoogleComponent.jsx";
-import GithubComponent from "../oauth/GithubComponent.jsx";
 
-import {
-  AnimatedToastStack,
-  useAnimatedToastStack,
-} from "@/Components/motion/animated-toast-stack";
 
 import loginIllustration from "../../assets/Website/login-illustration.png";
 import LoadingSpinner from "../common/LoadingSpinner.jsx";
@@ -479,7 +463,8 @@ const createLoginSchema = (
 
 export default function LoginPage() {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const [login] = useLoginMutation();
+  const [forgotPassword] = useForgotPasswordMutation();
 
   const {
     language,
@@ -526,15 +511,7 @@ export default function LoginPage() {
     },
   });
 
-  const {
-    toasts,
-    showToast,
-    dismissToast,
-  } =
-    useAnimatedToastStack({
-      defaultDuration: 4200,
-      limit: 4,
-    });
+
 
   const [
     showPassword,
@@ -546,7 +523,7 @@ export default function LoginPage() {
     setResetLoading,
   ] = useState(false);
 
-  const [oauthLoading, setOauthLoading] = useState(false);
+
 
   const notifyError = (
     description,
@@ -554,163 +531,14 @@ export default function LoginPage() {
     toast.error(description, { toastId: "login-error" });
   };
 
-  const showLoginSuccess = async (
-    user,
-  ) => {
-    const tokenResult = await user.getIdTokenResult(true);
-    const accessToken = tokenResult.token;
-    const role = tokenResult.claims.admin === true ? "admin" : "student";
-
-    dispatch(
-      loginSuccess({
-        accessToken,
-        user: {
-          id: user.uid,
-          name: user.displayName || user.email?.split("@")[0] || "Scholar",
-          displayName: user.displayName || user.email?.split("@")[0] || "Scholar",
-          email: user.email,
-          avatar: user.photoURL || null,
-          role,
-        },
-      }),
-    );
-
-    showToast({
-      status:
-        "success",
-
-      title:
-        t.successTitle,
-
-      description:
-        `${t.welcome}${
-          user?.displayName
-            ? `, ${user.displayName}`
-            : ""
-        }!`,
-    });
-
-    navigate(role === "admin" ? "/admin/dashboard" : "/dashboard", { replace: true });
-  };
-
-  const showOauthLoginSuccess = async (user) => {
-    setOauthLoading(true);
+  const onSubmit = async (data) => {
     try {
-      await showLoginSuccess(user);
-    } finally {
-      setOauthLoading(false);
+      const result = await login({ email: data.email.trim().toLowerCase(), password: data.password, rememberMe: data.rememberMe }).unwrap();
+      toast.success(t.successTitle, { toastId: "login-success" });
+      navigate(authCredentials(result).user.role === "admin" ? "/admin/dashboard" : "/dashboard", { replace: true });
+    } catch (error) {
+      notifyError(authError(error, t.loginFailed));
     }
-  };
-
-  const getFirebaseErrorMessage =
-    (error) => {
-      switch (
-        error.code
-      ) {
-        case "auth/invalid-email":
-          return t.invalidEmail;
-
-        case "auth/user-disabled":
-          return t.disabled;
-
-        case "auth/invalid-credential":
-        case "auth/user-not-found":
-        case "auth/wrong-password":
-          return t.wrongCredentials;
-
-        case "auth/network-request-failed":
-          return t.network;
-
-        case "auth/too-many-requests":
-          return t.tooMany;
-
-        default:
-          return t.loginFailed;
-      }
-    };
-
-  const onSubmit =
-    async (data) => {
-      try {
-        await setPersistence(
-          auth,
-
-          data.rememberMe
-            ? browserLocalPersistence
-            : browserSessionPersistence,
-        );
-
-        const result =
-          await signInWithEmailAndPassword(
-            auth,
-            data.email
-              .trim()
-              .toLowerCase(),
-            data.password,
-          );
-
-        await showLoginSuccess(
-          result.user,
-        );
-      } catch (error) {
-        notifyError(
-          getFirebaseErrorMessage(
-            error,
-          ),
-        );
-      }
-    };
-
-  const handleOAuthError = (
-    error,
-    provider,
-  ) => {
-    console.error(
-      `${provider} authentication error:`,
-      error,
-    );
-
-    if (
-      error.code ===
-      "auth/popup-blocked"
-    ) {
-      notifyError(
-        t.popupBlocked,
-      );
-
-      return;
-    }
-
-    if (
-      error.code ===
-      "auth/account-exists-with-different-credential"
-    ) {
-      notifyError(
-        t.accountExists,
-      );
-
-      return;
-    }
-
-    if (
-      provider ===
-        "GitHub" &&
-      error.code ===
-        "auth/operation-not-allowed"
-    ) {
-      notifyError(
-        t.githubDisabled,
-      );
-
-      return;
-    }
-
-    notifyError(
-      provider ===
-        "Google"
-        ? t.googleFailed
-        : t.githubFailed,
-    );
   };
 
   const handleForgotPassword =
@@ -723,16 +551,7 @@ export default function LoginPage() {
           .toLowerCase();
 
       if (!email) {
-        showToast({
-          status:
-            "info",
-
-          title:
-            t.infoTitle,
-
-          description:
-            t.enterEmailBeforeReset,
-        });
+        toast.info(t.enterEmailBeforeReset);
 
         return;
       }
@@ -762,53 +581,11 @@ export default function LoginPage() {
           true,
         );
 
-        await sendPasswordResetEmail(
-          auth,
-          email,
-        );
+        await forgotPassword({ email }).unwrap();
 
-        showToast({
-          status:
-            "success",
-
-          title:
-            t.resetTitle,
-
-          description:
-            t.resetSent,
-        });
+        toast.success(t.resetSent);
       } catch (error) {
-        console.error(
-          "Password reset error:",
-          error,
-        );
-
-        switch (
-          error.code
-        ) {
-          case "auth/invalid-email":
-            notifyError(
-              t.invalidEmail,
-            );
-            break;
-
-          case "auth/too-many-requests":
-            notifyError(
-              t.tooMany,
-            );
-            break;
-
-          case "auth/network-request-failed":
-            notifyError(
-              t.network,
-            );
-            break;
-
-          default:
-            notifyError(
-              t.resetFailed,
-            );
-        }
+        notifyError(authError(error, t.resetFailed));
       } finally {
         setResetLoading(
           false,
@@ -818,19 +595,9 @@ export default function LoginPage() {
 
   return (
     <>
-      <ToastContainer position="top-right" autoClose={4200} limit={1} />
-      {(isSubmitting || oauthLoading) && <LoadingSpinner title="Signing in to NEXA" />}
-      <AnimatedToastStack
-        toasts={
-          toasts
-        }
-        onDismiss={
-          dismissToast
-        }
-        position="top-right"
-        fixed
-        maxVisible={4}
-      />
+
+      {isSubmitting && <LoadingSpinner title="Signing in to NEXA" />}
+
 
       <main
         className={`auth-page ${
@@ -1059,54 +826,6 @@ export default function LoginPage() {
                   ? t.loggingIn
                   : t.login}
               </button>
-
-              <div className="auth-divider">
-                <span />
-
-                <p>
-                  {
-                    t.continueWith
-                  }
-                </p>
-
-                <span />
-              </div>
-
-              <div className="social-buttons">
-                <GoogleComponent
-                  label={
-                    t.google
-                  }
-                  onSuccess={
-                    showOauthLoginSuccess
-                  }
-                  onError={(
-                    error,
-                  ) =>
-                    handleOAuthError(
-                      error,
-                      "Google",
-                    )
-                  }
-                />
-
-                <GithubComponent
-                  label={
-                    t.github
-                  }
-                  onSuccess={
-                    showOauthLoginSuccess
-                  }
-                  onError={(
-                    error,
-                  ) =>
-                    handleOAuthError(
-                      error,
-                      "GitHub",
-                    )
-                  }
-                />
-              </div>
 
               <p className="auth-switch-text">
                 {

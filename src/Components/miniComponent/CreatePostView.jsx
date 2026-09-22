@@ -119,7 +119,7 @@ const CreatePostView = ({ onAddPost, onCancel, darkMode: propDarkMode }) => {
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
                   placeholder={t('create.placeholderContent')}
-                  className={`w-full p-3 text-sm focus:outline-none transition-colors ${
+                  className={`w-full p-3 text-[18px] leading-relaxed focus:outline-none transition-colors ${
                     darkMode ? "bg-zinc-900 text-slate-100 placeholder-zinc-500" : "bg-white text-gray-900 placeholder-gray-400"
                   }`}
                 ></textarea>

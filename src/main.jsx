@@ -1,3 +1,4 @@
+import { ToastContainer } from "react-toastify";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -119,6 +120,7 @@ ReactDOM.createRoot(root).render(
           <LanguageProvider>
             <Preloader>
               <RouterProvider router={router} />
+              <ToastContainer position="top-right" autoClose={4200} limit={3} />
             </Preloader>
           </LanguageProvider>
         </ThemeProvider>

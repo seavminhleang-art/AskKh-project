@@ -1,3 +1,4 @@
+import { getRefreshToken } from './authSession';
 import { createSlice } from '@reduxjs/toolkit';
 
 const getStoredItem = (key) => {
@@ -10,7 +11,7 @@ const getStoredItem = (key) => {
 };
 
 const storedUser = getStoredItem('nexa_user');
-const storedRefreshToken = localStorage.getItem('nexa_refresh_token');
+const storedRefreshToken = getRefreshToken();
 
 // SECURITY: accessToken is stored EXCLUSIVELY in Redux memory (RAM).
 // It is NEVER written to localStorage to protect against XSS token exfiltration.
@@ -42,9 +43,11 @@ export const authSlice = createSlice({
       if (refreshToken !== undefined) {
         state.refreshToken = refreshToken;
         if (refreshToken) {
-          localStorage.setItem('nexa_refresh_token', refreshToken);
+          const storage = sessionStorage.getItem('nexa_session_only') === 'true' ? sessionStorage : localStorage;
+          storage.setItem('nexa_refresh_token', refreshToken);
         } else {
           localStorage.removeItem('nexa_refresh_token');
+          sessionStorage.removeItem('nexa_refresh_token');
         }
       }
 
@@ -95,6 +98,7 @@ export const authSlice = createSlice({
 
       localStorage.removeItem('nexa_user');
       localStorage.removeItem('nexa_refresh_token');
+          sessionStorage.removeItem('nexa_refresh_token');
       localStorage.removeItem('nexa_token'); // Ensure legacy token is cleaned
     },
 

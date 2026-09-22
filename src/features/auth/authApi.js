@@ -1,3 +1,4 @@
+import { authCredentials } from './authSession';
 import { baseApi } from '../../store/api/baseApi';
 import { setCredentials, logout as logoutAction } from './authSlice';
 
@@ -14,23 +15,16 @@ export const authApi = baseApi.injectEndpoints({
       query: (credentials) => ({
         url: '/auth/login',
         method: 'POST',
-        body: credentials,
+        body: { email: credentials.email, password: credentials.password },
       }),
       async onQueryStarted(args, { dispatch, queryFulfilled }) {
         try {
           const { data } = await queryFulfilled;
           if (data && data.accessToken) {
-            dispatch(
-              setCredentials({
-                accessToken: data.accessToken,
-                refreshToken: data.refreshToken,
-                user: {
-                  id: data.userId,
-                  displayName: data.displayName,
-                  email: data.email,
-                },
-              })
-            );
+            localStorage.removeItem('nexa_refresh_token');
+            sessionStorage.removeItem('nexa_refresh_token');
+            sessionStorage.setItem('nexa_session_only', String(!args.rememberMe));
+            dispatch(setCredentials(authCredentials(data)));
           }
         } catch {
           // Handled by component error state
@@ -54,6 +48,8 @@ export const authApi = baseApi.injectEndpoints({
       async onQueryStarted(args, { dispatch, queryFulfilled }) {
         try {
           await queryFulfilled;
+        } catch {
+          // Local logout still completes if the server is unavailable.
         } finally {
           dispatch(logoutAction());
         }

@@ -14,8 +14,8 @@ import {
 } from "../../features/workspace/workspaceModel";
 import { Heading, QueryState, Empty, Badge, QuickLinks } from "./WorkspaceUI";
 const titles = {
-  questions: "Q & A Community",
-  "lost-found": "Lost & Found",
+  questions: "My Questions",
+  "lost-found": "My Lost & Found Reports",
   claims: "My Claims",
   matches: "Smart Matches",
   notifications: "Notifications",
@@ -160,10 +160,10 @@ export default function WorkspaceListPage({ page }) {
   const [error, setError] = useState("");
   const resource =
     page === "questions"
-      ? "posts"
+      ? "my-posts"
       : page === "notifications"
         ? "notifications"
-        : "reports";
+        : "my-reports";
   const query = useWorkspaceDataQuery({
     resource,
     page: pageNumber,
@@ -212,7 +212,7 @@ export default function WorkspaceListPage({ page }) {
               ? w(
                   "Stay updated on your questions, claims, and community activity.",
                 )
-              : w("Find answers, share knowledge, and help your community.")
+              : w("Manage your own contributions and tasks.")
         }
       >
         {page === "questions" || page === "lost-found" ? (
@@ -291,7 +291,7 @@ export default function WorkspaceListPage({ page }) {
                   >
                     <option value="all">
                       {w(
-                        page === "notifications" ? "All updates" : "All posts",
+                        page === "notifications" ? "All updates" : "My contributions",
                       )}
                     </option>
                     <option

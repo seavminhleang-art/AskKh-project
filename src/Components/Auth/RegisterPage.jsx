@@ -1,3 +1,4 @@
+import { toast } from "react-toastify";
 import {
   useMemo,
   useState,
@@ -16,11 +17,7 @@ import {
   Mail,
 } from "lucide-react";
 
-import {
-  createUserWithEmailAndPassword,
-  signOut,
-  updateProfile,
-} from "firebase/auth";
+
 
 import {
   useForm,
@@ -34,26 +31,25 @@ import {
   z,
 } from "zod";
 
-import {
-  auth,
-} from "../Firebase/firebase.js";
+
 
 import {
   useLanguage,
 } from "../Language/LanguageContext.jsx";
 
-import GoogleComponent from "../oauth/GoogleComponent.jsx";
-import GithubComponent from "../oauth/GithubComponent.jsx";
+import { useRegisterMutation } from "../../features/auth/authApi";
+import { authError } from "../../features/auth/authError";
 
-import {
-  AnimatedToastStack,
-  useAnimatedToastStack,
-} from "@/Components/motion/animated-toast-stack";
+
 
 import registerIllustration from "../../assets/Website/register-illustration.png";
 
 const translations = {
   km: {
+    noWhitespace: "មិនអនុញ្ញាតឱ្យមានចន្លោះទេ។",
+    invalidName: "សូមបញ្ចូលឈ្មោះត្រឹមត្រូវដោយគ្មានចន្លោះ។",
+    passwordTooLong: "ពាក្យសម្ងាត់មិនអាចលើសពី 100 តួអក្សរទេ។",
+    displayNameTooLong: "ឈ្មោះពេញមិនអាចលើសពី 100 តួអក្សរទេ។",
     back:
       "ត្រឡប់ទៅគេហទំព័រ",
 
@@ -227,6 +223,10 @@ const translations = {
   },
 
   en: {
+    noWhitespace: "Spaces are not allowed.",
+    invalidName: "Enter a valid name.",
+    passwordTooLong: "Password must be at most 100 characters.",
+    displayNameTooLong: "Full name must be at most 100 characters.",
     back:
       "Back to website",
 
@@ -405,7 +405,7 @@ const createEmailSchema = (
 ) =>
   z
     .string()
-    .trim()
+    .regex(/^\S*$/, t.noWhitespace)
     .min(
       1,
       t.emailRequired,
@@ -549,7 +549,8 @@ const createRegisterSchema = (
     .object({
       firstName: z
         .string()
-        .trim()
+        .regex(/^\S*$/, t.noWhitespace)
+        .refine(value => !value || /^[\p{L}\p{M}]+(?:[\x27’-][\p{L}\p{M}]+)*$/u.test(value), t.invalidName)
         .min(
           1,
           t.firstRequired,
@@ -565,7 +566,8 @@ const createRegisterSchema = (
 
       lastName: z
         .string()
-        .trim()
+        .regex(/^\S*$/, t.noWhitespace)
+        .refine(value => !value || /^[\p{L}\p{M}]+(?:[\x27’-][\p{L}\p{M}]+)*$/u.test(value), t.invalidName)
         .min(
           1,
           t.lastRequired,
@@ -586,6 +588,8 @@ const createRegisterSchema = (
 
       password: z
         .string()
+        .regex(/^\S*$/, t.noWhitespace)
+        .max(100, t.passwordTooLong)
         .min(
           1,
           t.passwordRequired,
@@ -610,6 +614,7 @@ const createRegisterSchema = (
       confirmPassword:
         z
           .string()
+          .regex(/^\S*$/, t.noWhitespace)
           .min(
             1,
             t.confirmRequired,
@@ -630,6 +635,7 @@ const createRegisterSchema = (
             },
           ),
     })
+    .refine(data => `${data.firstName} ${data.lastName}`.length <= 100, { message: t.displayNameTooLong, path: ["lastName"] })
     .refine(
       (data) =>
         data.password ===
@@ -645,6 +651,7 @@ const createRegisterSchema = (
     );
 
 export default function RegisterPage() {
+  const [registerAccount] = useRegisterMutation();
   const navigate =
     useNavigate();
 
@@ -669,6 +676,7 @@ export default function RegisterPage() {
 
   const {
     register,
+    setValue,
     handleSubmit,
     formState: {
       errors,
@@ -695,15 +703,7 @@ export default function RegisterPage() {
     },
   });
 
-  const {
-    toasts,
-    showToast,
-    dismissToast,
-  } =
-    useAnimatedToastStack({
-      defaultDuration: 4200,
-      limit: 4,
-    });
+
 
   const [
     showPassword,
@@ -718,187 +718,47 @@ export default function RegisterPage() {
   const notifyError = (
     description,
   ) => {
-    showToast({
-      status:
-        "error",
+    toast.error(description, { toastId: "register-error" });
+  };
 
-      title:
-        t.errorTitle,
-
-      description,
-    });
+  const registrationFields = new Set(["firstName", "lastName", "email", "password", "confirmPassword"]);
+  const blockSpace = (event) => {
+    if (registrationFields.has(event.target.name) && event.key === " ") {
+      event.preventDefault();
+    }
+  };
+  const removeWhitespace = (event) => {
+    const input = event.target;
+    if (!registrationFields.has(input.name) || !/\s/u.test(input.value)) return;
+    const cursor = input.selectionStart;
+    const position = cursor == null ? null : input.value.slice(0, cursor).replace(/\s/gu, "").length;
+    const value = input.value.replace(/\s/gu, "");
+    input.value = value;
+    setValue(input.name, value, { shouldDirty: true, shouldValidate: true });
+    if (position != null && input.type !== "email") input.setSelectionRange(position, position);
   };
 
   const onSubmit =
     async (data) => {
       try {
-        const result =
-          await createUserWithEmailAndPassword(
-            auth,
-            data.email
-              .trim()
-              .toLowerCase(),
-            data.password,
-          );
+        const result = await registerAccount({
+          displayName: `${data.firstName.trim()} ${data.lastName.trim()}`,
+          email: data.email.trim().toLowerCase(),
+          password: data.password,
+          confirmPassword: data.confirmPassword,
+        }).unwrap();
 
-        await updateProfile(
-          result.user,
-          {
-            displayName:
-              `${data.firstName.trim()} ${data.lastName.trim()}`,
-          },
-        );
+        toast.success(result.message || "Account created. Check your email to verify your account before signing in.", { toastId: "register-success", autoClose: 6000 });
 
-        await signOut(
-          auth,
-        );
-
-        showToast({
-          status:
-            "success",
-
-          title:
-            t.successTitle,
-
-          description:
-            t.accountCreated,
-
-          duration:
-            3000,
-        });
-
-        window.setTimeout(
-          () => {
-            navigate(
-              "/login",
-            );
-          },
-          1500,
-        );
+        navigate("/login", { replace: true });
       } catch (error) {
-        console.error(
-          "Registration error:",
-          error,
-        );
-
-        switch (
-          error.code
-        ) {
-          case "auth/email-already-in-use":
-            notifyError(
-              t.emailExists,
-            );
-            break;
-
-          case "auth/invalid-email":
-            notifyError(
-              t.invalidEmail,
-            );
-            break;
-
-          case "auth/network-request-failed":
-            notifyError(
-              t.network,
-            );
-            break;
-
-          case "auth/too-many-requests":
-            notifyError(
-              t.tooMany,
-            );
-            break;
-
-          default:
-            notifyError(
-              t.registerFailed,
-            );
-        }
+        notifyError(authError(error, t.registerFailed));
       }
     };
 
-  const handleOAuthError = (
-    error,
-    provider,
-  ) => {
-    console.error(
-      `${provider} authentication error:`,
-      error,
-    );
-
-    if (
-      error.code ===
-      "auth/popup-blocked"
-    ) {
-      notifyError(
-        t.popupBlocked,
-      );
-
-      return;
-    }
-
-    if (
-      error.code ===
-      "auth/account-exists-with-different-credential"
-    ) {
-      notifyError(
-        t.accountExists,
-      );
-
-      return;
-    }
-
-    if (
-      provider ===
-        "GitHub" &&
-      error.code ===
-        "auth/operation-not-allowed"
-    ) {
-      notifyError(
-        t.githubDisabled,
-      );
-
-      return;
-    }
-
-    notifyError(
-      provider ===
-        "Google"
-        ? t.googleFailed
-        : t.githubFailed,
-    );
-  };
-
-  const handleOAuthSuccess = (
-    provider,
-  ) => {
-    showToast({
-      status:
-        "success",
-
-      title:
-        t.successTitle,
-
-      description:
-        provider ===
-        "Google"
-          ? t.googleSuccess
-          : t.githubSuccess,
-    });
-  };
-
   return (
     <>
-      <AnimatedToastStack
-        toasts={
-          toasts
-        }
-        onDismiss={
-          dismissToast
-        }
-        position="top-right"
-        fixed
-        maxVisible={4}
-      />
+
 
       <main
         className={`auth-page register-page ${
@@ -960,6 +820,8 @@ export default function RegisterPage() {
 
             <form
               className="auth-form register-form"
+              onKeyDownCapture={blockSpace}
+              onInputCapture={removeWhitespace}
               onSubmit={handleSubmit(
                 onSubmit,
                 (validationErrors) => {
@@ -1009,7 +871,7 @@ export default function RegisterPage() {
                   </div>
 
                   {errors.firstName && (
-                    <p className="mt-1.5 text-sm font-medium text-red-500">
+                    <p className="auth-field-error mt-1.5 text-sm font-medium text-red-500">
                       {
                         errors
                           .firstName
@@ -1056,7 +918,7 @@ export default function RegisterPage() {
                   </div>
 
                   {errors.lastName && (
-                    <p className="mt-1.5 text-sm font-medium text-red-500">
+                    <p className="auth-field-error mt-1.5 text-sm font-medium text-red-500">
                       {
                         errors
                           .lastName
@@ -1111,7 +973,7 @@ export default function RegisterPage() {
                 </div>
 
                 {errors.email && (
-                  <p className="mt-1.5 text-sm font-medium text-red-500">
+                  <p className="auth-field-error mt-1.5 text-sm font-medium text-red-500">
                     {
                       errors
                         .email
@@ -1202,7 +1064,7 @@ export default function RegisterPage() {
                 </div>
 
                 {errors.password && (
-                  <p className="mt-1.5 text-sm font-medium text-red-500">
+                  <p className="auth-field-error mt-1.5 text-sm font-medium text-red-500">
                     {
                       errors
                         .password
@@ -1292,7 +1154,7 @@ export default function RegisterPage() {
                 </div>
 
                 {errors.confirmPassword && (
-                  <p className="mt-1.5 text-sm font-medium text-red-500">
+                  <p className="auth-field-error mt-1.5 text-sm font-medium text-red-500">
                     {
                       errors
                         .confirmPassword
@@ -1337,7 +1199,7 @@ export default function RegisterPage() {
                 </label>
 
                 {errors.agreeToTerms && (
-                  <p className="mt-1.5 text-sm font-medium text-red-500">
+                  <p className="auth-field-error mt-1.5 text-sm font-medium text-red-500">
                     {
                       errors
                         .agreeToTerms
@@ -1359,57 +1221,6 @@ export default function RegisterPage() {
                   : t.register}
               </button>
 
-              <div className="auth-divider">
-                <span />
-
-                <p>
-                  {
-                    t.signupWith
-                  }
-                </p>
-
-                <span />
-              </div>
-
-              <div className="social-buttons">
-                <GoogleComponent
-                  label={
-                    t.google
-                  }
-                  onSuccess={() =>
-                    handleOAuthSuccess(
-                      "Google",
-                    )
-                  }
-                  onError={(
-                    error,
-                  ) =>
-                    handleOAuthError(
-                      error,
-                      "Google",
-                    )
-                  }
-                />
-
-                <GithubComponent
-                  label={
-                    t.github
-                  }
-                  onSuccess={() =>
-                    handleOAuthSuccess(
-                      "GitHub",
-                    )
-                  }
-                  onError={(
-                    error,
-                  ) =>
-                    handleOAuthError(
-                      error,
-                      "GitHub",
-                    )
-                  }
-                />
-              </div>
             </form>
           </div>
         </section>

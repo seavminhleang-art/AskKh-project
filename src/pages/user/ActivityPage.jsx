@@ -1,222 +1,68 @@
-import { useWorkspaceTranslation } from "@/locales/workspace/useWorkspaceTranslation";
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import { History, FileText, MessageSquare, ShieldCheck, PackageCheck, CircleHelp, ChevronDown, PlusCircle, ChartNoAxesCombined, CalendarDays } from "lucide-react";
+import { useWorkspaceTranslation } from "@/locales/workspace/useWorkspaceTranslation";
 import { useWorkspaceDataQuery } from "../../features/workspace/workspaceApi";
-import { dateLabel, rows } from "../../features/workspace/workspaceModel";
-import { Heading, QueryState, Empty, QuickLinks, Badge } from "./WorkspaceUI";
-export default function DashboardPage({ activity = false }) {
+import { rows } from "../../features/workspace/workspaceModel";
+import { QueryState } from "./WorkspaceUI";
+import { monthlyActivity } from "./activityModel";
+import "./activity.css";
+const kinds = {
+  Posts: { icon: FileText, tone: "blue", verb: "Created post" },
+  Answers: { icon: CircleHelp, tone: "violet", verb: "Answered" },
+  Comments: { icon: MessageSquare, tone: "green", verb: "Commented" },
+};
+function ProgressChart({ data, available, w }) {
+  const max = Math.max(1, ...data.thisMonth, ...data.lastMonth);
+  const points = values => values.map((value, index) => `${12 + index * 55},${105 - value / max * 80}`).join(" ");
+  return <section className="activity-panel activity-chart"><div className="activity-panel-title"><h2>{w("Monthly Progress")}</h2><div className="activity-chart-legend"><span>{w("This")}</span><span>{w("Last")}</span></div></div>
+    {available ? <><svg viewBox="0 0 244 125" role="img" aria-label={w("Weekly contributions: this month {{current}}, last month {{previous}}", { current: data.thisMonth.join(', '), previous: data.lastMonth.join(', ') })}><title>{w("Contributions per week")}</title>{[25, 65, 105].map(y => <line key={y} x1="10" y1={y} x2="234" y2={y} stroke="currentColor" opacity=".1" />)}<polyline points={points(data.lastMonth)} fill="none" stroke="#bbc9e3" strokeWidth="2" strokeDasharray="4 4" /><polyline points={points(data.thisMonth)} fill="none" stroke="#3976ff" strokeWidth="2.5" strokeLinejoin="round" />{data.thisMonth.map((value, index) => <circle key={index} cx={12 + index * 55} cy={105 - value / max * 80} r="3.5" fill="#3976ff" stroke="var(--uw-card)" strokeWidth="2"><title>{w("Week {{week}}: {{count}} contributions", { week: index + 1, count: value })}</title></circle>)}</svg><div className="activity-chart-labels">{[1, 2, 3, 4, 5].map(week => <span key={week}>{w("W{{week}}", { week })}</span>)}</div></> : <div className="activity-unavailable">{w("Activity chart unavailable.")}</div>}
+    <small>{w("Posts, answers, and comments by week of month.")}</small>
+  </section>;
+}
+export default function ActivityPage() {
   const { w, locale } = useWorkspaceTranslation();
-  const profileQuery = useWorkspaceDataQuery({
-    resource: "profile",
-  });
-  const reportsQuery = useWorkspaceDataQuery({
-    resource: "reports",
-  });
-  const unreadQuery = useWorkspaceDataQuery({
-    resource: "unread",
-  });
+  const postsQuery = useWorkspaceDataQuery({ resource: "my-posts" });
+  const profileQuery = useWorkspaceDataQuery({ resource: "profile" });
+  const [filter, setFilter] = useState("All Activity");
+  const [limit, setLimit] = useState(8);
+  const posts = rows(postsQuery.data);
   const profile = profileQuery.data?.data ?? profileQuery.data;
-  const posts = profile?.questions || [];
-  const comments = profile?.comments || [];
-  const reports = rows(reportsQuery.data).filter(
-    (item) => profile?.id != null && String(item.userId) === String(profile.id),
-  );
+  const comments = Array.isArray(profile?.comments) ? profile.comments : [];
   const events = [
-    ...posts.map((item) => ({
-      ...item,
-      kind: item.postTypeId === 2 ? "Answer" : "Question",
-      date: item.creationDate,
-      path: `/dashboard/questions/${item.parentId || item.id}`,
-    })),
-    ...comments.map((item) => ({
-      ...item,
-      title: item.text || item.body || "Comment",
-      kind: "Comment",
-      date: item.creationDate,
-      path: item.postId ? `/dashboard/questions/${item.postId}` : null,
-    })),
-  ].sort((a, b) => new Date(b.date) - new Date(a.date));
-  const days = Array.from(
-    {
-      length: 7,
-    },
-    (_, index) => {
-      const date = new Date();
-      date.setDate(date.getDate() - 6 + index);
-      return {
-        label: date.toLocaleDateString(locale, {
-          weekday: "short",
-        }),
-        count: events.filter(
-          (item) =>
-            item.date &&
-            new Date(item.date).toDateString() === date.toDateString(),
-        ).length,
-      };
-    },
-  );
-  const max = Math.max(1, ...days.map((day) => day.count));
-  return (
-    <div className="uw-page">
-      <Heading
-        title={activity ? w("My Activity") : w("Dashboard Overview")}
-        description={
-          activity
-            ? w("Your questions, answers, and community contributions.")
-            : w("Welcome back. Here is your latest community activity.")
-        }
-      >
-        <Link className="uw-button" to="/dashboard/questions/new">
-          {w("Ask a question")}
-        </Link>
-      </Heading>
-      <QueryState query={profileQuery}>
-        {profile && (
-          <>
-            <div className="uw-stats">
-              {[
-                [
-                  "My questions",
-                  posts.filter((item) => item.postTypeId !== 2).length,
-                ],
-                ["Comments", comments.length],
-                [
-                  "My reports",
-                  reportsQuery.isError
-                    ? "—"
-                    : reportsQuery.isLoading
-                      ? "…"
-                      : reports.length,
-                ],
-                [
-                  "Unread notifications",
-                  unreadQuery.isError
-                    ? "—"
-                    : (unreadQuery.data?.unreadCount ?? "…"),
-                ],
-              ].map(([label, value]) => (
-                <div className="uw-card uw-stat" key={label}>
-                  <span className="uw-muted">{w(label)}</span>
-                  <strong>{value}</strong>
-                  <span className="uw-muted">
-                    {label === "Unread notifications"
-                      ? w("Account updates")
-                      : w("Your contributions")}
-                  </span>
-                </div>
-              ))}
-            </div>
-            <div className="uw-columns">
-              <div className="uw-stack">
-                {!activity && (
-                  <section className="uw-card">
-                    <h2>{w("Activity overview")}</h2>
-                    <p className="uw-muted">
-                      {w("Your contributions over the last seven days")}
-                    </p>
-                    <div
-                      className="uw-chart"
-                      role="img"
-                      aria-label={days
-                        .map(
-                          (day) => `${day.label}: ${day.count} contributions`,
-                        )
-                        .join(", ")}
-                    >
-                      {days.map((day) => (
-                        <div key={day.label}>
-                          <span>{day.count}</span>
-                          <i
-                            style={{
-                              height: `${(day.count / max) * 130}px`,
-                            }}
-                          />
-                          <span className="uw-muted">{day.label}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </section>
-                )}
-                <section className="uw-card">
-                  <h2>
-                    {activity
-                      ? w("Recent activity")
-                      : w("Recent contributions")}
-                  </h2>
-                  {!events.length && (
-                    <Empty>{w("Your contributions will appear here.")}</Empty>
-                  )}
-                  {events.slice(0, activity ? 50 : 6).map((item) => (
-                    <article className="uw-row" key={`${item.kind}-${item.id}`}>
-                      <div>
-                        <h2>
-                          {item.path ? (
-                            <Link to={item.path}>
-                              {item.title || w("Answer")}
-                            </Link>
-                          ) : (
-                            item.title
-                          )}
-                        </h2>
-                        <p>{dateLabel(item.date, locale)}</p>
-                      </div>
-                      <Badge>{w(item.kind)}</Badge>
-                    </article>
-                  ))}
-                </section>
-                {!activity && (
-                  <section className="uw-card">
-                    <h2>{w("Recent reports")}</h2>
-                    <QueryState query={reportsQuery}>
-                      {!reports.length ? (
-                        <Empty>
-                          {w("You have not reported any items yet.")}
-                        </Empty>
-                      ) : (
-                        reports.slice(0, 5).map((item) => (
-                          <article className="uw-row" key={item.id}>
-                            <div>
-                              <h2>
-                                <Link to="/dashboard/lost-found">
-                                  {item.title}
-                                </Link>
-                              </h2>
-                              <p>
-                                {item.locationLabel || item.freeTextLocation} ·{" "}
-                                {dateLabel(item.createdAt, locale)}
-                              </p>
-                            </div>
-                            <Badge>{item.status || item.itemType}</Badge>
-                          </article>
-                        ))
-                      )}
-                    </QueryState>
-                  </section>
-                )}
-              </div>
-              <div className="uw-stack">
-                <QuickLinks />
-                <section className="uw-card">
-                  <h2>{w("Contribution breakdown")}</h2>
-                  <div className="uw-links">
-                    <span>
-                      {posts.filter((item) => item.postTypeId !== 2).length}{" "}
-                      {w("questions")}
-                    </span>
-                    <span>
-                      {posts.filter((item) => item.postTypeId === 2).length}{" "}
-                      {w("answers")}
-                    </span>
-                    <span>
-                      {comments.length} {w("comments")}
-                    </span>
-                  </div>
-                </section>
-                {unreadQuery.isError && <QueryState query={unreadQuery} />}
-              </div>
-            </div>
-          </>
-        )}
-      </QueryState>
-    </div>
-  );
+    ...posts.map(item => ({ id: `post-${item.id}`, kind: item.postTypeId === 2 ? "Answers" : "Posts", title: item.title || w("Answer"), body: item.body, date: item.creationDate, path: `/dashboard/questions/${item.parentId || item.id}` })),
+    ...comments.map(item => ({ id: `comment-${item.id}`, kind: "Comments", title: item.postTitle || w("a question"), body: item.text || item.body, date: item.creationDate, path: item.postId ? `/dashboard/questions/${item.postId}` : null })),
+  ].sort((a, b) => (Date.parse(b.date) || 0) - (Date.parse(a.date) || 0));
+  const metrics = monthlyActivity(events);
+  const ready = postsQuery.isSuccess && profileQuery.isSuccess;
+  const formatDate = value => value && !Number.isNaN(Date.parse(value)) ? new Date(value).toLocaleString(locale, { month: "short", day: "numeric", year: "numeric", hour: "2-digit", minute: "2-digit" }) : w("Date unavailable");
+  const countFor = (kind, query) => query.isError ? "—" : !query.isSuccess ? "…" : events.filter(item => item.kind === kind).length;
+  const stats = [["Posts Created", countFor("Posts", postsQuery), FileText, "blue", "Posts"], ["Items Found", "—", PackageCheck, "green"], ["Items Lost", "—", CircleHelp, "orange"], ["Comments", countFor("Comments", profileQuery), MessageSquare, "violet", "Comments"], ["Claims Submitted", "—", ShieldCheck, "purple"]];
+  const visible = events.filter(event => filter === "All Activity" || event.kind === filter);
+  const unsupported = ["Claims", "Matches", "Reports"].includes(filter);
+  const activeQuery = filter === "Comments" ? profileQuery : postsQuery;
+  function changeFilter(value) { setFilter(value); setLimit(8); }
+  return <div className="uw-page activity-page">
+    <header className="activity-header"><h1><History size={24} />{w("My Activity")}</h1><p>{w("Track your contributions and activities on the platform.")}</p></header>
+    <div className="activity-stats">{stats.map(([label, count, Icon, tone, kind]) => {
+      const current = metrics.current.filter(event => event.kind === kind).length;
+      const previous = metrics.previous.filter(event => event.kind === kind).length;
+      return <section className={`activity-stat tone-${tone}`} key={label}><div><span>{w(label)}</span><i><Icon size={16} /></i></div><strong>{count}</strong><small>{!kind ? w("Unavailable") : !ready ? w("Your contributions") : previous ? w("{{change}}% from last month", { change: `${current >= previous ? '+' : ''}${Math.round((current - previous) / previous * 100)}` }) : w("{{count}} this month", { count: current })}</small></section>;
+    })}</div>
+    <div className="activity-layout"><section className="activity-panel activity-feed">
+      <nav className="activity-filters" aria-label={w("Filter activity")}>{["All Activity", "Posts", "Answers", "Comments", "Claims", "Matches", "Reports"].map(tab => <button type="button" key={tab} aria-pressed={filter === tab} onClick={() => changeFilter(tab)}>{w(tab)}</button>)}</nav>
+      {unsupported ? <div className="activity-empty"><History size={30} /><h2>{w("Personal activity unavailable")}</h2><p>{w("Your {{kind}} history is not available yet.", { kind: w(filter).toLowerCase() })}</p></div> : <QueryState query={activeQuery}>
+        {filter === "All Activity" && profileQuery.isError && <div className="activity-inline-error">{w("Comments could not be loaded.")} <button onClick={profileQuery.refetch}>{w("Retry")}</button></div>}
+        {!visible.length ? <div className="activity-empty"><PlusCircle size={30} /><h2>{w("Your story starts here")}</h2><p>{w("Your contributions will appear here as you take part.")}</p><Link to="/dashboard/questions/new">{w("Ask a question")}</Link></div> : <div className="activity-entries">{visible.slice(0, limit).map(event => {
+          const { icon: Icon, tone, verb } = kinds[event.kind];
+          return <article className={`activity-entry tone-${tone}`} key={event.id}><span className="activity-entry-icon"><Icon size={18} /></span><div className="activity-entry-copy"><h2>{w(verb)}: {event.path ? <Link to={event.path}>{event.title}</Link> : event.title}</h2><p>{event.body}</p><time dateTime={event.date || undefined}>{formatDate(event.date)}</time></div><span className="activity-entry-badge">{w(event.kind)}</span></article>;
+        })}</div>}
+        {visible.length > limit && <button className="activity-load" onClick={() => setLimit(value => value + 8)}>{w("Load More Activities")}<ChevronDown size={14} /></button>}
+      </QueryState>}
+    </section><aside className="activity-sidebar">
+      <section className="activity-panel"><div className="activity-panel-title"><h2>{w("Activity Overview")}</h2><span className="activity-period">{w("This Month")}</span></div><div className="activity-breakdown">{[["Posts Created", "Posts", "blue"], ["Answers Given", "Answers", "violet"], ["Comments", "Comments", "green"], ["Items Found", null, "green"], ["Items Lost", null, "orange"], ["Claims Submitted", null, "purple"], ["Matches Found", null, "blue"], ["Reports Made", null, "rose"]].map(([label, kind, tone]) => <div className={`tone-${tone}`} key={label}><span><i />{w(label)}</span><strong>{kind && ready ? metrics.current.filter(event => event.kind === kind).length : "—"}</strong></div>)}</div></section>
+      <ProgressChart data={metrics} available={ready} w={w} />
+      <section className="activity-panel"><div className="activity-panel-title"><h2>{w("Top Contributions")}</h2></div><div className="activity-highlights"><div><CalendarDays size={17} /><span>{w("Most active day")}</span><strong>{ready && metrics.bestDay ? metrics.bestDay[0] : "—"}</strong></div><div><FileText size={17} /><span>{w("Posts this month")}</span><strong>{ready ? metrics.current.filter(event => event.kind === "Posts").length : "—"}</strong></div><div><MessageSquare size={17} /><span>{w("Comments this month")}</span><strong>{ready ? metrics.current.filter(event => event.kind === "Comments").length : "—"}</strong></div><div><ChartNoAxesCombined size={17} /><span>{w("Contributions this month")}</span><strong>{ready ? metrics.current.length : "—"}</strong></div></div></section>
+    </aside></div>
+  </div>;
 }

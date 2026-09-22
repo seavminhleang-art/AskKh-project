@@ -68,7 +68,7 @@ export default function QuestionDetailPage() {
               description={`${post.ownerDisplayName || "Community member"} · ${dateLabel(post.creationDate, locale)}`}
             />
             <article className="uw-card uw-stack">
-              <p className="whitespace-pre-wrap">{post.body}</p>
+              <p className="whitespace-pre-wrap" style={{ fontSize: "18px", lineHeight: 1.6 }}>{post.body}</p>
               {post.codeSnippet && (
                 <pre className="overflow-auto rounded-lg bg-slate-950 p-4 text-sm text-slate-100">
                   <code>{post.codeSnippet}</code>

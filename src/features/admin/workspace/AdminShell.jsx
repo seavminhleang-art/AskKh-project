@@ -3,7 +3,7 @@ import { useWorkspaceTranslation } from "@/locales/workspace/useWorkspaceTransla
 import { useState } from "react";
 import { NavLink, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { signOut } from "firebase/auth";
+import { useLogoutApiMutation } from "@/features/auth/authApi";
 import {
   LayoutDashboard,
   FileText,
@@ -21,7 +21,6 @@ import {
   UserRoundPlus,
   X,
 } from "lucide-react";
-import { auth } from "@/Components/Firebase/firebase";
 import { logout } from "@/features/auth/authSlice";
 import { baseApi } from "@/store/api/baseApi";
 import "./admin.css";
@@ -54,6 +53,7 @@ export default function AdminShell() {
   const user = useSelector((s) => s.auth.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [logoutApi] = useLogoutApiMutation();
   const { pathname } = useLocation();
   const title =
     navigation.find(([key]) => pathname.includes(`/admin/${key}`))?.[1] ||
@@ -68,7 +68,7 @@ export default function AdminShell() {
   async function exit() {
     setLeaving(true);
     try {
-      await signOut(auth);
+      await logoutApi();
       dispatch(logout());
       dispatch(baseApi.util.resetApiState());
       navigate("/login", {

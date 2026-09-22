@@ -24,10 +24,10 @@ function Overview() {
     resource: "profile",
   });
   const forum = useWorkspaceDataQuery({
-    resource: "posts",
+    resource: "my-posts",
   });
   const reportsQuery = useWorkspaceDataQuery({
-    resource: "reports",
+    resource: "my-reports",
   });
   const profile = profileQuery.data?.data ?? profileQuery.data;
   const name =
@@ -35,13 +35,13 @@ function Overview() {
     storedUser?.displayName ||
     storedUser?.name ||
     "Member";
-  const posts = profile?.questions || [];
+  const posts = rows(forum.data);
   const reports = rows(reportsQuery.data).filter(
     (item) => profile?.id != null && String(item.userId) === String(profile.id),
   );
   const questions = rows(forum.data).filter((item) => item.postTypeId !== 2);
   const answers = rows(forum.data).filter((item) => item.postTypeId === 2);
-  const answered = new Set(answers.map((item) => item.parentId));
+
   const recent = [...questions]
     .sort((a, b) => new Date(b.creationDate) - new Date(a.creationDate))
     .slice(0, 3);
@@ -66,7 +66,7 @@ function Overview() {
     {
       label: "Questions Asked",
       value: count(
-        profileQuery,
+        forum,
         posts.filter((item) => item.postTypeId !== 2).length,
       ),
       Icon: HelpCircle,
@@ -77,7 +77,7 @@ function Overview() {
     {
       label: "Answers Given",
       value: count(
-        profileQuery,
+        forum,
         posts.filter((item) => item.postTypeId === 2).length,
       ),
       Icon: CheckCircle2,
@@ -134,7 +134,7 @@ function Overview() {
             )}{" "}
             <Badge>{w("Member")}</Badge>
           </h1>
-          <p>{w("Explore campus Q&A discussions and Lost & Found items.")}</p>
+          <p>{w("Manage your questions, answers, and personal tasks.")}</p>
         </div>
         <div className="uw-actions">
           <Link className="uw-button secondary" to="/dashboard/questions/new">
@@ -164,16 +164,17 @@ function Overview() {
           </section>
         ))}
       </div>
+      {reportsQuery.isError && <p className="uw-muted">{w("Your personal reports and updates are not available yet.")}</p>}
       <div className="uw-overview-grid">
         <div className="uw-stack">
           <section className="uw-card">
             <div className="uw-panel-heading">
               <HelpCircle size={18} />
               <div>
-                <h2>{w("Recent Forum")}</h2>
+                <h2>{w("My Recent Questions")}</h2>
                 <p>
                   {w(
-                    "Latest discussions and questions from the ISTAD community",
+                    "Your latest questions and contributions",
                   )}
                 </p>
               </div>
@@ -183,10 +184,7 @@ function Overview() {
               {[
                 ["Questions", questions.length],
                 ["Answers", answers.length],
-                [
-                  "Without answers in this feed",
-                  questions.filter((item) => !answered.has(item.id)).length,
-                ],
+
               ].map(([label, value]) => (
                 <div key={label}>
                   <span>{w(label)}</span>
@@ -234,8 +232,7 @@ function Overview() {
               </div>
               <Link to="/dashboard/activity">{w("View all")}</Link>
             </div>
-            <QueryState query={profileQuery}>
-              <QueryState query={reportsQuery}>
+            <QueryState query={forum}>
                 {activity.length ? (
                   activity.map((item) => (
                     <article className="uw-row" key={`${item.path}-${item.id}`}>
@@ -250,7 +247,6 @@ function Overview() {
                 ) : (
                   <Empty>{w("No activity yet.")}</Empty>
                 )}
-              </QueryState>
             </QueryState>
           </section>
         </div>

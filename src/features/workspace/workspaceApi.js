@@ -7,11 +7,21 @@ const workspaceApi = baseApi.injectEndpoints({
     workspaceData: builder.query({
       queryFn: async (args, api, options) => {
         try {
-          const result = await request(workspaceRequest(args), api, options);
+          if (["my-reports", "my-claims", "my-matches"].includes(args.resource)) {
+            return { error: { status: "CUSTOM_ERROR", error: "Your personal reports and updates are not available yet." } };
+          }
+          let requestArgs = args;
+          if (args.resource === "my-posts") {
+            const userId = api.getState().auth.user?.id;
+            if (userId == null) return { error: { status: "CUSTOM_ERROR", error: "Sign in to view your contributions." } };
+            requestArgs = { ...args, id: userId };
+          }
+          const result = await request(workspaceRequest(requestArgs), api, options);
           if (
             !result.error &&
             [
               "posts",
+              "my-posts",
               "reports",
               "tags",
               "categories",

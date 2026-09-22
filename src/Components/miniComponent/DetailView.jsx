@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, lazy, Suspense } from 'react';
 import { ArrowLeft, Send, Trash2 } from 'lucide-react';
 import { useOutletContext, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -7,11 +7,14 @@ import { useSelector } from 'react-redux';
 import { useGetCommentsByPostQuery, useCreateCommentMutation, useDeleteCommentMutation } from '../../features/comments/commentApi';
 import { rowsOf, errorMessage } from '../../features/qa/model';
 
+const CodeEditor = lazy(() => import("./CodeEditor"));
+
 const DetailView = ({ post, onBack, darkMode: propDarkMode }) => {
   const { t } = useTranslation();
   const context = useOutletContext();
   const darkMode = propDarkMode ?? context?.darkMode ?? false;
 
+  const [commentLanguage, setCommentLanguage] = useState("plaintext");
   const [commentText, setCommentText] = useState("");
 
   const { user, isAuthenticated } = useSelector(state => state.auth);
@@ -26,7 +29,7 @@ const DetailView = ({ post, onBack, darkMode: propDarkMode }) => {
     isOwnComment: userId != null && String(comment.userId) === String(userId) }));
   async function handleSendComment() {
     if (!isAuthenticated) { navigate('/login'); return; }
-    if (creation.isLoading || commentText.trim().length < 5) return;
+    if (creation.isLoading || (commentText.trim().length < 5 || commentText.trim().length > 500)) return;
     setError('');
     try { await createComment({ postId: post.id, text: commentText.trim() }).unwrap(); setCommentText(''); }
     catch (error) { setError(errorMessage(error)); }
@@ -78,7 +81,7 @@ const DetailView = ({ post, onBack, darkMode: propDarkMode }) => {
         }`}>
           {t('detail.description')}
         </h4>
-        <p className={`text-sm leading-relaxed ${darkMode ? "text-slate-300" : "text-gray-600"}`}>
+        <p className={`whitespace-pre-wrap break-words text-[18px] leading-relaxed ${darkMode ? "text-slate-300" : "text-gray-600"}`}>
           {post.content || t('detail.noDescription')}
         </p>
       </div>
@@ -95,26 +98,24 @@ const DetailView = ({ post, onBack, darkMode: propDarkMode }) => {
           {t('detail.commentsTitle')} ({sortedComments.length})
         </h3>
         <div className="relative">
-          <textarea
-            rows="3" minLength={5} maxLength={500}
-            value={commentText}
-            onChange={(e) => setCommentText(e.target.value)}
-            placeholder={t('detail.addCommentPlaceholder')}
-            className={`w-full rounded-xl p-3 pb-14 text-sm border focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors ${
-              darkMode
-                ? "bg-zinc-800/80 border-zinc-700 text-slate-100 placeholder-zinc-500"
-                : "bg-gray-50 border-gray-100 text-gray-900 placeholder-gray-400"
-            }`}
-          ></textarea>
+          <label className="mb-3 flex items-center gap-3 text-sm">
+            Editor language
+            <select value={commentLanguage} onChange={event => setCommentLanguage(event.target.value)}>
+              {['plaintext', 'javascript', 'typescript', 'python', 'java', 'html', 'css', 'sql'].map(language => <option key={language} value={language}>{language === 'plaintext' ? 'Plain text' : language}</option>)}
+            </select>
+          </label>
+          <Suspense fallback={<p role="status">Loading comment editor…</p>}>
+            <CodeEditor value={commentText} onChange={setCommentText} language={commentLanguage} darkMode={darkMode} ariaLabel="Your comment" readOnly={creation.isLoading} />
+          </Suspense>
           <button
             onClick={handleSendComment}
-            disabled={creation.isLoading || commentText.trim().length < 5}
-            className="disabled:opacity-50 disabled:cursor-not-allowed absolute bottom-3 right-3 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg text-sm font-medium flex items-center gap-1 transition-colors"
+            disabled={creation.isLoading || (commentText.trim().length < 5 || commentText.trim().length > 500)}
+            className="disabled:opacity-50 disabled:cursor-not-allowed mt-3 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg text-sm font-medium flex items-center gap-1 transition-colors"
           >
             <Send className="w-3 h-3" /> {t('detail.commentBtn')}
           </button>
         </div>
-        <p className="text-sm opacity-60">Comments must be 5–500 characters.</p>
+        <p className="text-sm opacity-60">{commentText.trim().length}/500 characters. Comments must be 5–500 characters.</p>
       </div>
 
       {/* Comment List (Sorted by Most Likes) */}
@@ -150,7 +151,7 @@ const DetailView = ({ post, onBack, darkMode: propDarkMode }) => {
                 )}
               </div>
 
-              <p className={`text-sm leading-relaxed ${darkMode ? "text-slate-300" : "text-gray-600"}`}>
+              <p className={`whitespace-pre-wrap break-words text-sm leading-relaxed ${darkMode ? "text-slate-300" : "text-gray-600"}`}>
                 {comment.text}
               </p>
 

@@ -18,8 +18,7 @@ import {
 import Avatar from "../ui/Avatar";
 import { useAppDispatch, useAppSelector } from "../../hooks/useAppStore";
 import { logout } from "../../store/slices/authSlice";
-import { auth } from "../Firebase/firebase";
-import { signOut } from "firebase/auth";
+import { useLogoutApiMutation } from "@/features/auth/authApi";
 import { baseApi } from "../../store/api/baseApi";
 import { useWorkspaceDataQuery } from "../../features/workspace/workspaceApi";
 import { cn } from "@/lib/utils";
@@ -28,6 +27,7 @@ export default function Sidebar({ mode = "user", mobile = false }) {
   const indicatorId = useId();
   const reduceMotion = useReducedMotion();
   const navigate = useNavigate();
+  const [logoutApi] = useLogoutApiMutation();
   const dispatch = useAppDispatch();
   const { user: storedUser, role } = useAppSelector((state) => state.auth);
   const profile = useWorkspaceDataQuery({
@@ -91,7 +91,7 @@ export default function Sidebar({ mode = "user", mobile = false }) {
   const navItems = mode === "admin" ? adminNavItems : userNavItems;
   const handleLogout = async () => {
     try {
-      if (auth.currentUser) await signOut(auth);
+      await logoutApi();
     } finally {
       dispatch(logout());
       dispatch(baseApi.util.resetApiState());

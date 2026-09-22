@@ -16,6 +16,7 @@ export function workspaceRequest({
   };
   const key = id == null ? "" : encodeURIComponent(id);
   if (action === "read") {
+    if (resource === "my-posts" && key) return `/posts/user/${key}`;
     if (paths[resource]) return paths[resource];
     if (resource === "notifications")
       return `/notifications?page=${page}&size=20`;
@@ -36,6 +37,8 @@ export function workspaceRequest({
     return { url: "/users/upload-image", method: "PUT", body };
   if (action === "create" && ["posts", "reports"].includes(resource))
     return { url: paths[resource], method: "POST", body };
+  if (action === "create" && resource === "image-upload")
+    return { url: "/upload/upload-single", method: "POST", body };
   if (action === "create" && resource === "post-images")
     return { url: "/posts/with-images", method: "POST", body };
   if (action === "create" && resource === "claims" && key)
