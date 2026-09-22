@@ -70,6 +70,11 @@ export function dateLabel(value, locale) {
   return Number.isNaN(date.getTime()) ? "—" : date.toLocaleDateString(locale);
 }
 export function message(error) {
+  const status = error?.originalStatus ?? error?.status;
+  if (status === 413) return 'The server rejected this file because it is too large. Please try a smaller image.';
+  if (error?.status === 'PARSING_ERROR') {
+    return `The server returned an unexpected response (HTTP ${status}). Please try again or contact support.`;
+  }
   if (error?.status === 'FETCH_ERROR') return 'Cannot connect to the server. Please check your connection and try again.';
   if (error?.status === 'TIMEOUT_ERROR') return 'The server took too long to respond. Please try again.';
   return (
@@ -78,4 +83,8 @@ export function message(error) {
     error?.message ||
     "Unable to complete the request. Please try again."
   );
+}
+
+export function ownReports(items, userId) {
+  return userId == null ? [] : items.filter(item => item.userId != null && String(item.userId) === String(userId));
 }

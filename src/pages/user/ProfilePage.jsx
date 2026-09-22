@@ -1,6 +1,7 @@
+import { prepareProfilePhoto } from "../../features/workspace/prepareProfilePhoto";
+import { profileImageUrl } from "../../features/workspace/profileImage";
 import { Link } from "react-router-dom";
 import { Sun, Moon, LockKeyhole, Palette, Settings2, Check, ArrowUpRight, Camera, Fingerprint, Mail, ShieldCheck, Sparkles, UserRound, CalendarDays, Save, Trophy, Eye, ThumbsUp } from "lucide-react";
-import "./profile.css";
 import { useWorkspaceTranslation } from "@/locales/workspace/useWorkspaceTranslation";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
@@ -17,6 +18,8 @@ function ProfileForm({ profile }) {
   const dispatch = useDispatch();
   const [save, state] = useWorkspaceSaveMutation();
   const [feedback, setFeedback] = useState(null);
+  const [failedPhoto, setFailedPhoto] = useState(null);
+  const [preparingPhoto, setPreparingPhoto] = useState(false);
   async function submit(event) {
     event.preventDefault();
     setFeedback(null);
@@ -50,6 +53,7 @@ function ProfileForm({ profile }) {
   }
   async function upload(event) {
     const file = event.target.files?.[0];
+    event.target.value = "";
     if (!file) return;
     setFeedback(null);
     if (
@@ -61,9 +65,10 @@ function ProfileForm({ profile }) {
       });
       return;
     }
-    const body = new FormData();
-    body.append("file", file);
+    setPreparingPhoto(true);
     try {
+      const body = new FormData();
+      body.append("file", await prepareProfilePhoto(file));
       await save({
         resource: "avatar",
         action: "save",
@@ -77,6 +82,8 @@ function ProfileForm({ profile }) {
       setFeedback({
         text: message(error),
       });
+    } finally {
+      setPreparingPhoto(false);
     }
   }
   return (
@@ -87,10 +94,10 @@ function ProfileForm({ profile }) {
       </div>
       <div className="profile-identity">
         <div className="profile-avatar-wrap">
-          {profile.profileImage ? <img className="profile-avatar" src={profile.profileImage} alt={w("Your profile")} /> : <span className="profile-avatar">{(profile.displayName || "U").slice(0, 2).toUpperCase()}</span>}
+          {profile.profileImage && failedPhoto !== profile.profileImage ? <img className="profile-avatar" src={profileImageUrl(profile.profileImage)} alt={w("Your profile")} onError={() => setFailedPhoto(profile.profileImage)} /> : <span className="profile-avatar">{(profile.displayName || "U").slice(0, 2).toUpperCase()}</span>}
           <label className="profile-camera" aria-label={w("Change profile photo")}>
             <Camera size={17} />
-            <input className="profile-file-input" type="file" accept="image/jpeg,image/png,image/webp" disabled={state.isLoading} onChange={upload} />
+            <input className="profile-file-input" type="file" accept="image/jpeg,image/png,image/webp" disabled={state.isLoading || preparingPhoto} onChange={upload} />
           </label>
         </div>
         <div className="profile-identity-copy">

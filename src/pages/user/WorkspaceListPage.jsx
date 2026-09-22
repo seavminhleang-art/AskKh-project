@@ -40,7 +40,7 @@ function ReportRelated({ page, reportId, userId }) {
   const items =
     page === "claims" ? ownClaims(rows(query.data), userId) : rows(query.data);
   return (
-    <QueryState query={query}>
+    <QueryState query={query} unavailableMessage={page === "matches" ? "Match Center is not available yet." : undefined}>
       {!items.length ? (
         <Empty>
           {w("No")}
@@ -243,7 +243,7 @@ export default function WorkspaceListPage({ page }) {
       )}
       <div className="uw-columns">
         <section className="uw-card">
-          <QueryState query={query}>
+          <QueryState query={query} unavailableMessage={page === "matches" ? "Match Center is not available yet." : undefined}>
             {related ? (
               <>
                 <label className="uw-form">

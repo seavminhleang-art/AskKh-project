@@ -13,12 +13,18 @@ export function Heading({ title, description, children }) {
     </header>
   );
 }
-export function QueryState({ query, children }) {
+export function QueryState({ query, children, unavailableMessage }) {
   const { w } = useWorkspaceTranslation();
   if (query.isLoading || query.isUninitialized)
     return (
       <div className="uw-card uw-empty" role="status">
         {w("Loading\u2026")}
+      </div>
+    );
+  if (query.isError && query.error?.code === "FEATURE_UNAVAILABLE")
+    return (
+      <div className="uw-card uw-empty" role="status">
+        <p>{w(unavailableMessage || message(query.error))}</p>
       </div>
     );
   if (query.isError)

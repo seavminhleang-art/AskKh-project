@@ -6,8 +6,6 @@ import { useWorkspaceTranslation } from "@/locales/workspace/useWorkspaceTransla
 import { useWorkspaceDataQuery, useWorkspaceSaveMutation } from "../../features/workspace/workspaceApi";
 import { rows, message } from "../../features/workspace/workspaceModel";
 import { Heading, QueryState } from "./WorkspaceUI";
-import "./create-question.css";
-import "./create-report.css";
 const TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 
 function ImagePreview({ file }) {

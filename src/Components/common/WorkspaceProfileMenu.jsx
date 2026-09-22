@@ -1,3 +1,4 @@
+import { profileImageUrl } from "../../features/workspace/profileImage";
 import { useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { ChevronDown, UserRound, Settings } from 'lucide-react';
@@ -8,7 +9,7 @@ export default function WorkspaceProfileMenu({ user, mode = 'user' }) {
   const ref = useRef(null);
   const { pathname } = useLocation();
   const name = user?.displayName || user?.name || w('My profile');
-  const photo = user?.profileImage || user?.avatar || user?.photoURL;
+  const photo = profileImageUrl(user?.profileImage || user?.avatar || user?.photoURL);
   const initials = name.trim().split(/\s+/).slice(0, 2).map(part => Array.from(part)[0]).join('').toUpperCase();
   useEffect(() => { if (ref.current) ref.current.open = false; }, [pathname]);
   useEffect(() => {

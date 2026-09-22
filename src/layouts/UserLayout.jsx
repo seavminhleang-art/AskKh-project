@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
 import Sidebar from "../Components/common/Sidebar";
 import WorkspaceTopbar from "./WorkspaceTopbar";
-import "../pages/user/workspace.css";
 
 export default function UserLayout({ mode = "user" }) {
   const [collapsed, setCollapsed] = useState(false);

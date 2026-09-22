@@ -1,14 +1,21 @@
 import { baseApi } from "../../store/api/baseApi";
 import { request } from "../../store/api/forumRequest";
-import { workspaceRequest, rows } from "./workspaceModel";
+import { workspaceRequest, rows, ownReports } from "./workspaceModel";
 
 const workspaceApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     workspaceData: builder.query({
       queryFn: async (args, api, options) => {
         try {
-          if (["my-reports", "my-claims", "my-matches"].includes(args.resource)) {
-            return { error: { status: "CUSTOM_ERROR", error: "Your personal reports and updates are not available yet." } };
+          if (args.resource === "my-reports") {
+            const userId = api.getState().auth.user?.id;
+            if (userId == null) return { error: { status: "CUSTOM_ERROR", error: "Sign in to view your contributions." } };
+            const result = await request(workspaceRequest({ resource: "reports" }), api, options);
+            if (result.error) return result;
+            return { data: ownReports(rows(result.data), userId) };
+          }
+          if (["my-claims", "my-matches"].includes(args.resource)) {
+            return { error: { status: "CUSTOM_ERROR", code: "FEATURE_UNAVAILABLE", error: "Your personal reports and updates are not available yet." } };
           }
           let requestArgs = args;
           if (args.resource === "my-posts") {
