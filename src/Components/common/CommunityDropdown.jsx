@@ -1,6 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import React, { useState, useRef, useEffect } from "react";
+import { NavLink, useLocation } from "react-router-dom";
+import { ChevronDown, ChevronUp } from "lucide-react";
 
 export default function CommunityDropdown({ isMobile = false, onNavigate }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -8,19 +8,22 @@ export default function CommunityDropdown({ isMobile = false, onNavigate }) {
   const location = useLocation();
 
   const isCommunityActive =
-    location.pathname.startsWith('/community') ||
-    location.pathname.startsWith('/questions') ||
-    location.pathname.startsWith('/lost-found');
+    location.pathname.startsWith("/community") ||
+    location.pathname.startsWith("/questions") ||
+    location.pathname.startsWith("/lost-found");
 
   // Handle click outside for mobile or keyboard
   useEffect(() => {
     function handleClickOutside(event) {
-      if (containerRef.current && !containerRef.current.contains(event.target)) {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(event.target)
+      ) {
         setIsOpen(false);
       }
     }
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   // Desktop hover handlers
@@ -49,10 +52,10 @@ export default function CommunityDropdown({ isMobile = false, onNavigate }) {
         <button
           type="button"
           onClick={handleClickToggle}
-          className={`flex items-center justify-between w-full px-4 py-3 rounded-xl text-[15px] font-medium transition-colors select-none ${
+          className={`flex items-center justify-between w-full px-4 py-3 rounded-xl text-[18px] font-medium transition-colors select-none ${
             isCommunityActive
-              ? 'text-[#155EEF] font-semibold bg-blue-50/70 dark:bg-blue-950/40'
-              : 'text-[#111827] dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800'
+              ? "text-[#155EEF] font-semibold bg-blue-50/70 dark:bg-blue-950/40"
+              : "text-[#111827] dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800"
           }`}
         >
           <span>Community</span>
@@ -71,8 +74,8 @@ export default function CommunityDropdown({ isMobile = false, onNavigate }) {
               className={({ isActive }) =>
                 `block px-4 py-3 rounded-xl text-sm font-medium transition-all ${
                   isActive
-                    ? 'bg-[#F5F8FF] text-[#155EEF] font-semibold dark:bg-blue-950/50 dark:text-blue-400'
-                    : 'text-[#475467] dark:text-slate-300 hover:bg-[#F5F8FF] hover:text-[#155EEF] dark:hover:bg-slate-800'
+                    ? "bg-[#F5F8FF] text-[#155EEF] font-semibold dark:bg-blue-950/50 dark:text-blue-400"
+                    : "text-[#475467] dark:text-slate-300 hover:bg-[#F5F8FF] hover:text-[#155EEF] dark:hover:bg-slate-800"
                 }`
               }
             >
@@ -84,8 +87,8 @@ export default function CommunityDropdown({ isMobile = false, onNavigate }) {
               className={({ isActive }) =>
                 `block px-4 py-3 rounded-xl text-sm font-medium transition-all ${
                   isActive
-                    ? 'bg-[#F5F8FF] text-[#155EEF] font-semibold dark:bg-blue-950/50 dark:text-blue-400'
-                    : 'text-[#475467] dark:text-slate-300 hover:bg-[#F5F8FF] hover:text-[#155EEF] dark:hover:bg-slate-800'
+                    ? "bg-[#F5F8FF] text-[#155EEF] font-semibold dark:bg-blue-950/50 dark:text-blue-400"
+                    : "text-[#475467] dark:text-slate-300 hover:bg-[#F5F8FF] hover:text-[#155EEF] dark:hover:bg-slate-800"
                 }`
               }
             >
@@ -108,10 +111,10 @@ export default function CommunityDropdown({ isMobile = false, onNavigate }) {
       <button
         type="button"
         onClick={handleClickToggle}
-        className={`flex items-center gap-1.5 px-3.5 py-2 text-[15px] font-medium transition-colors select-none cursor-pointer rounded-lg ${
+        className={`flex items-center gap-1.5 px-3.5 py-2 text-[18px] font-medium transition-colors select-none cursor-pointer rounded-lg ${
           isCommunityActive || isOpen
-            ? 'text-[#155EEF] font-semibold'
-            : 'text-[#111827] dark:text-slate-200 hover:text-[#155EEF] dark:hover:text-blue-400'
+            ? "text-[#155EEF] font-semibold"
+            : "text-[#111827] dark:text-slate-200 hover:text-[#155EEF] dark:hover:text-blue-400"
         }`}
       >
         <span>Community</span>
@@ -127,17 +130,15 @@ export default function CommunityDropdown({ isMobile = false, onNavigate }) {
 
       {/* Dropdown Menu */}
       {isOpen && (
-        <div
-          className="absolute top-full left-1/2 -translate-x-1/2 mt-1 w-[230px] bg-white dark:bg-slate-900 border border-[#E5E7EB] dark:border-slate-800 rounded-2xl shadow-xl shadow-black/5 p-2 z-50 animate-in fade-in slide-in-from-top-1 duration-150"
-        >
+        <div className="absolute top-full left-1/2 -translate-x-1/2 mt-1 w-[230px] bg-white dark:bg-slate-900 border border-[#E5E7EB] dark:border-slate-800 rounded-2xl shadow-xl shadow-black/5 p-2 z-50 animate-in fade-in slide-in-from-top-1 duration-150">
           <NavLink
             to="/community/questions"
             onClick={handleItemClick}
             className={({ isActive }) =>
               `block px-4 py-3 rounded-xl text-[14.5px] font-medium transition-colors ${
                 isActive
-                  ? 'bg-[#F5F8FF] text-[#155EEF] font-semibold dark:bg-blue-950/40 dark:text-blue-400'
-                  : 'text-[#111827] dark:text-slate-200 hover:bg-[#F5F8FF] hover:text-[#155EEF] dark:hover:bg-blue-950/40 dark:hover:text-blue-400'
+                  ? "bg-[#F5F8FF] text-[#155EEF] font-semibold dark:bg-blue-950/40 dark:text-blue-400"
+                  : "text-[#111827] dark:text-slate-200 hover:bg-[#F5F8FF] hover:text-[#155EEF] dark:hover:bg-blue-950/40 dark:hover:text-blue-400"
               }`
             }
           >
@@ -150,8 +151,8 @@ export default function CommunityDropdown({ isMobile = false, onNavigate }) {
             className={({ isActive }) =>
               `block px-4 py-3 rounded-xl text-[14.5px] font-medium transition-colors ${
                 isActive
-                  ? 'bg-[#F5F8FF] text-[#155EEF] font-semibold dark:bg-blue-950/40 dark:text-blue-400'
-                  : 'text-[#111827] dark:text-slate-200 hover:bg-[#F5F8FF] hover:text-[#155EEF] dark:hover:bg-blue-950/40 dark:hover:text-blue-400'
+                  ? "bg-[#F5F8FF] text-[#155EEF] font-semibold dark:bg-blue-950/40 dark:text-blue-400"
+                  : "text-[#111827] dark:text-slate-200 hover:bg-[#F5F8FF] hover:text-[#155EEF] dark:hover:bg-blue-950/40 dark:hover:text-blue-400"
               }`
             }
           >

@@ -16,6 +16,8 @@ import PrivacyPolicy from "./Components/Pages/Policy.jsx";
 
 import LoginPage from "./Components/Auth/LoginPage.jsx";
 import RegisterPage from "./Components/Auth/RegisterPage.jsx";
+import VerifyEmailPage from "./Components/Auth/VerifyEmailPage.jsx";
+import ResetPasswordPage from "./Components/Auth/ResetPasswordPage.jsx";
 import { LanguageProvider } from "./Components/Language/LanguageContext.jsx";
 import { ThemeProvider as LegacyThemeProvider } from "./Components/theme-provider.jsx";
 import { ThemeProvider } from "./context/ThemeContext.jsx";
@@ -58,6 +60,13 @@ function RootLayout() {
 const router = createBrowserRouter([
   { path: "/login", element: <LoginPage /> },
   { path: "/register", element: <RegisterPage /> },
+  { path: "/verify-email", element: <VerifyEmailPage /> },
+  { path: "/auth/verify-email", element: <VerifyEmailPage /> },
+  { path: "/verify", element: <VerifyEmailPage /> },
+  { path: "/reset-password", element: <ResetPasswordPage /> },
+  { path: "/auth/reset-password", element: <ResetPasswordPage /> },
+  { path: "/reset", element: <ResetPasswordPage /> },
+  { path: "/forgot-password", element: <ResetPasswordPage /> },
   {
     path: "/",
     element: <RootLayout />,

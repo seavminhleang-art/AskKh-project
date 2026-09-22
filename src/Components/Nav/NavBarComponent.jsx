@@ -1,19 +1,9 @@
-import {
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { Link, useLocation } from "react-router-dom";
 import { LayoutGroup, motion, useReducedMotion } from "framer-motion";
 
-import {
-  Bell,
-  ChevronDown,
-  Menu,
-  X,
-} from "lucide-react";
+import { Bell, ChevronDown, Menu, X } from "lucide-react";
 import { useLanguage } from "../Language/LanguageContext.jsx";
 import { ThemeToggle } from "../motion/theme-toggle.jsx";
 import { useTranslation } from "react-i18next";
@@ -21,68 +11,44 @@ import BrandLogo from "@/Components/common/BrandLogo";
 
 import LanguageFlag from "../common/LanguageFlag";
 
-
-export default function Navbar({
-  notificationCount = 0,
-}) {
-  const {
-    language,
-    toggleLanguage,
-    isKhmer,
-  } = useLanguage();
+export default function Navbar({ notificationCount = 0 }) {
+  const { language, toggleLanguage, isKhmer } = useLanguage();
   const { t } = useTranslation();
   const { pathname } = useLocation();
   const reducedMotion = useReducedMotion();
   const [hoveredItem, setHoveredItem] = useState(null);
 
-  const navItems = useMemo(() => [
-    { label: t("home"), to: "/" },
-    {
-      label: t("community"),
-      dropdown: [
-        { label: t("qaCommunity"), to: "/community/qa" },
-        { label: t("lostFoundCommunity"), to: "/community/lost-found" },
-      ],
-    },
-    { label: t("leaderboard"), to: "/leaderboard" },
-    { label: t("about"), to: "/about" },
-  ], [t]);
-
-  const [
-    activeItem,
-    setActiveItem,
-  ] = useState(
-    "Home",
+  const navItems = useMemo(
+    () => [
+      { label: t("home"), to: "/" },
+      {
+        label: t("community"),
+        dropdown: [
+          { label: t("qaCommunity"), to: "/community/qa" },
+          { label: t("lostFoundCommunity"), to: "/community/lost-found" },
+        ],
+      },
+      { label: t("leaderboard"), to: "/leaderboard" },
+      { label: t("about"), to: "/about" },
+    ],
+    [t],
   );
 
-  const [
-    communityOpen,
-    setCommunityOpen,
-  ] = useState(false);
+  const [activeItem, setActiveItem] = useState("Home");
 
-  const [
-    mobileOpen,
-    setMobileOpen,
-  ] = useState(false);
+  const [communityOpen, setCommunityOpen] = useState(false);
 
-  const [
-    mobileCommunityOpen,
-    setMobileCommunityOpen,
-  ] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
-  const [
-    badgeAnimate,
-    setBadgeAnimate,
-  ] = useState(false);
+  const [mobileCommunityOpen, setMobileCommunityOpen] = useState(false);
 
-  const communityRef =
-    useRef(null);
+  const [badgeAnimate, setBadgeAnimate] = useState(false);
 
-  const closeTimer =
-    useRef(null);
+  const communityRef = useRef(null);
 
-  const previousNotificationCount =
-    useRef(notificationCount);
+  const closeTimer = useRef(null);
+
+  const previousNotificationCount = useRef(notificationCount);
 
   useEffect(() => {
     const current = navItems.find((item) =>
@@ -97,29 +63,19 @@ export default function Navbar({
   }, [language, pathname, navItems]);
 
   useEffect(() => {
-    const handleClickOutside = (
-      event,
-    ) => {
+    const handleClickOutside = (event) => {
       if (
         communityRef.current &&
-        !communityRef.current.contains(
-          event.target,
-        )
+        !communityRef.current.contains(event.target)
       ) {
         setCommunityOpen(false);
       }
     };
 
-    document.addEventListener(
-      "mousedown",
-      handleClickOutside,
-    );
+    document.addEventListener("mousedown", handleClickOutside);
 
     return () => {
-      document.removeEventListener(
-        "mousedown",
-        handleClickOutside,
-      );
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
@@ -138,93 +94,70 @@ export default function Navbar({
   }, []);
 
   useEffect(() => {
-    if (
-      notificationCount >
-      previousNotificationCount.current
-    ) {
+    if (notificationCount > previousNotificationCount.current) {
       setBadgeAnimate(false);
 
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
-          setBadgeAnimate(
-            true,
-          );
+          setBadgeAnimate(true);
         });
       });
 
-      const timer =
-        window.setTimeout(
-          () => {
-            setBadgeAnimate(
-              false,
-            );
-          },
-          650,
-        );
+      const timer = window.setTimeout(() => {
+        setBadgeAnimate(false);
+      }, 650);
 
-      previousNotificationCount.current =
-        notificationCount;
+      previousNotificationCount.current = notificationCount;
 
       return () => {
-        window.clearTimeout(
-          timer,
-        );
+        window.clearTimeout(timer);
       };
     }
 
-    previousNotificationCount.current =
-      notificationCount;
+    previousNotificationCount.current = notificationCount;
   }, [notificationCount]);
 
-  const handleMouseEnter =
-    () => {
-      clearTimeout(
-        closeTimer.current,
-      );
+  const handleMouseEnter = () => {
+    clearTimeout(closeTimer.current);
 
-      setCommunityOpen(true);
-    };
+    setCommunityOpen(true);
+  };
 
-  const handleMouseLeave =
-    () => {
-      closeTimer.current =
-        setTimeout(() => {
-          setCommunityOpen(
-            false,
-          );
-        }, 150);
-    };
+  const handleMouseLeave = () => {
+    closeTimer.current = setTimeout(() => {
+      setCommunityOpen(false);
+    }, 150);
+  };
 
-  const handleNavClick = (
-    label,
-  ) => {
+  const handleNavClick = (label) => {
     setActiveItem(label);
 
     setCommunityOpen(false);
     setMobileOpen(false);
 
-    setMobileCommunityOpen(
-      false,
-    );
+    setMobileCommunityOpen(false);
   };
 
-  const linkClasses = (
-    label,
-  ) =>
-    `relative z-10 inline-flex items-center gap-1 rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary px-4 py-2.5 text-[15px] font-medium transition-colors duration-200 ${
+  const linkClasses = (label) =>
+    `relative z-10 inline-flex items-center gap-1 rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary px-4 py-2.5 text-[18px] font-medium transition-colors duration-200 ${
       activeItem === label
         ? "text-brand-primary font-semibold"
         : "text-gray-600 dark:text-gray-300 hover:text-brand-primary"
     }`;
 
-  const renderPill = (label) => (hoveredItem ?? activeItem) === label && (
-    <motion.span
-      layoutId="nav-pill"
-      aria-hidden="true"
-      className="pointer-events-none absolute inset-0 rounded-full bg-brand-primary-light dark:bg-slate-700"
-      transition={reducedMotion ? { duration: 0 } : { type: "spring", stiffness: 420, damping: 35 }}
-    />
-  );
+  const renderPill = (label) =>
+    (hoveredItem ?? activeItem) === label && (
+      <motion.span
+        layoutId="nav-pill"
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 rounded-full bg-brand-primary-light dark:bg-slate-700"
+        transition={
+          reducedMotion
+            ? { duration: 0 }
+            : { type: "spring", stiffness: 420, damping: 35 }
+        }
+      />
+    );
 
   return (
     <nav
@@ -238,37 +171,34 @@ export default function Navbar({
           className="flex items-center gap-2.5 shrink-0 no-underline"
           onClick={() => handleNavClick("Home")}
         >
-          <BrandLogo alt="NEXA" className="h-12 w-auto max-w-[160px] object-contain" />
+          <BrandLogo
+            alt="NEXA"
+            className="h-12 w-auto max-w-[160px] object-contain"
+          />
         </Link>
 
         {/* Desktop Navigation */}
         <LayoutGroup id="main-navigation">
-        <ul
-          className="m-0 hidden list-none items-center justify-center gap-1 rounded-full border border-gray-200 bg-gray-50/80 p-1.5 dark:border-gray-700 dark:bg-slate-900 xl:flex"
-          onMouseLeave={() => setHoveredItem(null)}
-          onBlur={(event) => {
-            if (!event.currentTarget.contains(event.relatedTarget)) setHoveredItem(null);
-          }}
-        >
-          {navItems.map(
-            (item) =>
+          <ul
+            className="m-0 hidden list-none items-center justify-center gap-1 rounded-full border border-gray-200 bg-gray-50/80 p-1.5 dark:border-gray-700 dark:bg-slate-900 xl:flex"
+            onMouseLeave={() => setHoveredItem(null)}
+            onBlur={(event) => {
+              if (!event.currentTarget.contains(event.relatedTarget))
+                setHoveredItem(null);
+            }}
+          >
+            {navItems.map((item) =>
               item.dropdown ? (
                 <li
-                  key={
-                    item.label
-                  }
-                  ref={
-                    communityRef
-                  }
+                  key={item.label}
+                  ref={communityRef}
                   className="relative"
                   onFocus={() => setHoveredItem(item.label)}
                   onMouseEnter={() => {
                     setHoveredItem(item.label);
                     handleMouseEnter();
                   }}
-                  onMouseLeave={
-                    handleMouseLeave
-                  }
+                  onMouseLeave={handleMouseLeave}
                 >
                   {renderPill(item.label)}
                   <button
@@ -276,24 +206,13 @@ export default function Navbar({
                     onKeyDown={(event) => {
                       if (event.key === "Escape") setCommunityOpen(false);
                     }}
-                    className={linkClasses(
-                      item.label,
-                    )}
+                    className={linkClasses(item.label)}
                     aria-haspopup="true"
-                    aria-expanded={
-                      communityOpen
-                    }
+                    aria-expanded={communityOpen}
                     onClick={() => {
-                      setActiveItem(
-                        item.label,
-                      );
+                      setActiveItem(item.label);
 
-                      setCommunityOpen(
-                        (
-                          previous,
-                        ) =>
-                          !previous,
-                      );
+                      setCommunityOpen((previous) => !previous);
                     }}
                   >
                     {item.label}
@@ -301,51 +220,54 @@ export default function Navbar({
                     <ChevronDown
                       size={16}
                       className={`transition-transform duration-200 ${
-                        communityOpen
-                          ? "rotate-180"
-                          : ""
+                        communityOpen ? "rotate-180" : ""
                       }`}
                     />
                   </button>
 
-                <div
-                  role="menu"
-                  className={`absolute top-[calc(100%+8px)] left-1/2 -translate-x-1/2 min-w-[240px] bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-2 flex flex-col gap-0.5 transition-all duration-200 ${
-                    communityOpen
-                      ? "opacity-100 visible translate-y-0 pointer-events-auto"
-                      : "opacity-0 invisible -translate-y-1.5 pointer-events-none"
-                  }`}
+                  <div
+                    role="menu"
+                    className={`absolute top-[calc(100%+8px)] left-1/2 -translate-x-1/2 min-w-[240px] bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-2 flex flex-col gap-0.5 transition-all duration-200 ${
+                      communityOpen
+                        ? "opacity-100 visible translate-y-0 pointer-events-auto"
+                        : "opacity-0 invisible -translate-y-1.5 pointer-events-none"
+                    }`}
+                  >
+                    {item.dropdown.map((sub) => (
+                      <Link
+                        key={sub.label}
+                        to={sub.to}
+                        role="menuitem"
+                        className="block px-3.5 py-2.5 rounded-lg text-sm font-medium text-gray-800 dark:text-gray-200 no-underline transition-colors duration-150 hover:bg-brand-secondary-light dark:hover:bg-gray-700 hover:text-brand-secondary"
+                        onClick={() => {
+                          setCommunityOpen(false);
+                          handleNavClick(item.label);
+                        }}
+                      >
+                        {sub.label}
+                      </Link>
+                    ))}
+                  </div>
+                </li>
+              ) : (
+                <li
+                  key={item.label}
+                  className="relative"
+                  onMouseEnter={() => setHoveredItem(item.label)}
+                  onFocus={() => setHoveredItem(item.label)}
                 >
-                  {item.dropdown.map((sub) => (
-                    <Link
-                      key={sub.label}
-                      to={sub.to}
-                      role="menuitem"
-                      className="block px-3.5 py-2.5 rounded-lg text-sm font-medium text-gray-800 dark:text-gray-200 no-underline transition-colors duration-150 hover:bg-brand-secondary-light dark:hover:bg-gray-700 hover:text-brand-secondary"
-                      onClick={() => {
-                        setCommunityOpen(false);
-                        handleNavClick(item.label);
-                      }}
-                    >
-                      {sub.label}
-                    </Link>
-                  ))}
-                </div>
-              </li>
-            ) : (
-              <li key={item.label} className="relative" onMouseEnter={() => setHoveredItem(item.label)} onFocus={() => setHoveredItem(item.label)}>
-                {renderPill(item.label)}
-                <Link
-                  to={item.to}
-                  className={linkClasses(item.label) + " no-underline"}
-                  onClick={() => handleNavClick(item.label)}
-                >
-                  {item.label}
-                </Link>
-              </li>
-            )
-          )}
-        </ul>
+                  {renderPill(item.label)}
+                  <Link
+                    to={item.to}
+                    className={linkClasses(item.label) + " no-underline"}
+                    onClick={() => handleNavClick(item.label)}
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ),
+            )}
+          </ul>
         </LayoutGroup>
 
         {/* Right side actions (desktop) */}
@@ -393,22 +315,9 @@ export default function Navbar({
           aria-label="Toggle menu"
           aria-expanded={mobileOpen}
           aria-controls="mobile-navigation"
-          onClick={() =>
-            setMobileOpen(
-              (
-                previous,
-              ) =>
-                !previous,
-            )
-          }
+          onClick={() => setMobileOpen((previous) => !previous)}
         >
-          {mobileOpen ? (
-            <X size={24} />
-          ) : (
-            <Menu
-              size={24}
-            />
-          )}
+          {mobileOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
 
@@ -425,7 +334,10 @@ export default function Navbar({
         <ul className="flex flex-col gap-1 list-none m-0 p-0">
           {navItems.map((item) =>
             item.dropdown ? (
-              <li key={item.label} className="border-b border-gray-200 dark:border-gray-700">
+              <li
+                key={item.label}
+                className="border-b border-gray-200 dark:border-gray-700"
+              >
                 <button
                   type="button"
                   className={`w-full flex items-center justify-between bg-transparent border-none text-base py-3.5 px-1 cursor-pointer ${
@@ -461,7 +373,10 @@ export default function Navbar({
                 </div>
               </li>
             ) : (
-              <li key={item.label} className="border-b border-gray-200 dark:border-gray-700">
+              <li
+                key={item.label}
+                className="border-b border-gray-200 dark:border-gray-700"
+              >
                 <Link
                   to={item.to}
                   className={`block py-3.5 px-1 no-underline text-base ${
@@ -474,7 +389,7 @@ export default function Navbar({
                   {item.label}
                 </Link>
               </li>
-            )
+            ),
           )}
         </ul>
 
@@ -511,11 +426,7 @@ export default function Navbar({
         {/* Mobile Get Started */}
         <Link
           to="/register"
-          onClick={() =>
-            setMobileOpen(
-              false,
-            )
-          }
+          onClick={() => setMobileOpen(false)}
           className="flex h-11 w-full items-center justify-center rounded-[10px] bg-brand-primary font-semibold !text-white no-underline hover:bg-brand-secondary hover:!text-white focus:!text-white active:!text-white visited:!text-white dark:!text-white"
         >
           {t("getStarted")}

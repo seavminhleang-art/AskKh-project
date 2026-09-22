@@ -26,7 +26,7 @@ function SidebarContent({ collapsed, onNavigate }) {
         </div>
         {!collapsed && (
           <>
-            <span className="truncate text-[15px] font-semibold text-gray-900 dark:text-white">
+            <span className="truncate text-[18px] font-semibold text-gray-900 dark:text-white">
               NEXA
             </span>
           </>
@@ -65,9 +65,7 @@ function SidebarContent({ collapsed, onNavigate }) {
         >
           <Avatar name={user?.displayName ?? user?.email} />
           {!collapsed && <span className="text-sm font-medium">Log out</span>}
-          {!collapsed && (
-            <LogOut className="ml-auto h-4 w-4 text-gray-400" />
-          )}
+          {!collapsed && <LogOut className="ml-auto h-4 w-4 text-gray-400" />}
         </button>
       </div>
     </>
@@ -88,7 +86,6 @@ export default function Sidebar() {
       >
         <SidebarContent collapsed={collapsed} />
       </aside>
-
 
       {mobileOpen && (
         <div className="fixed inset-0 z-40 flex md:hidden">

@@ -3,6 +3,7 @@ import showcaseTwoImage from "@/assets/Website/4dba6191ebd18650c52de2ed5fb47f7d.
 import showcaseThreeImage from "@/assets/Website/0534f7df0b08edc70592d10d4bd908c0.jpg";
 import showcaseBackground from "@/assets/Website/d54a0076d493ce9c0d95d99a16ecec15.jpg";
 import React from "react";
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 
@@ -100,9 +101,11 @@ export default function PlatformShowcase({ darkMode }) {
                 </p>
               </div>
             </div>
-            <motion.a whileHover={{ x: 5 }} href="#" className="text-[var(--home-primary-text)] font-semibold flex items-center gap-1">
-              {t("showcaseExploreMore")} →
-            </motion.a>
+            <Link to="/community/qa" className="text-[var(--home-primary-text)] font-semibold flex items-center gap-1 no-underline hover:underline">
+              <motion.span whileHover={{ x: 5 }} className="flex items-center gap-1">
+                {t("showcaseExploreMore")} →
+              </motion.span>
+            </Link>
           </div>
         </div>
       </motion.div>
