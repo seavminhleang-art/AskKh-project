@@ -1,3 +1,4 @@
+import SocialAuthButtons from "../oauth/SocialAuthButtons.jsx";
 import { toast } from "react-toastify";
 import {
   useMemo,
@@ -826,6 +827,8 @@ export default function LoginPage() {
                   ? t.loggingIn
                   : t.login}
               </button>
+
+              <SocialAuthButtons t={t} isKhmer={isKhmer} disabled={isSubmitting} />
 
               <p className="auth-switch-text">
                 {

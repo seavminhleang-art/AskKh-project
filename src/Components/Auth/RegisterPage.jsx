@@ -1,3 +1,4 @@
+import SocialAuthButtons from "../oauth/SocialAuthButtons.jsx";
 import { toast } from "react-toastify";
 import {
   useMemo,
@@ -1220,6 +1221,8 @@ export default function RegisterPage() {
                   ? t.creating
                   : t.register}
               </button>
+
+              <SocialAuthButtons t={t} isKhmer={isKhmer} disabled={isSubmitting} />
 
             </form>
           </div>
