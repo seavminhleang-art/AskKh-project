@@ -534,7 +534,7 @@ export default function LoginPage() {
 
   const onSubmit = async (data) => {
     try {
-      const result = await login({ email: data.email.trim().toLowerCase(), password: data.password, rememberMe: data.rememberMe }).unwrap();
+      const result = await login({ email: data.email.trim(), password: data.password, rememberMe: data.rememberMe }).unwrap();
       toast.success(t.successTitle, { toastId: "login-success" });
       navigate(authCredentials(result).user.role === "admin" ? "/admin/dashboard" : "/dashboard", { replace: true });
     } catch (error) {

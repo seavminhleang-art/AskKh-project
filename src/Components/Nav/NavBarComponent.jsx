@@ -124,16 +124,18 @@ export default function Navbar({
   }, []);
 
   useEffect(() => {
-    document.body.style.overflow =
-      mobileOpen
-        ? "hidden"
-        : "";
-
-    return () => {
-      document.body.style.overflow =
-        "";
+    const desktop = window.matchMedia("(min-width: 1280px)");
+    const closeOnDesktop = () => {
+      if (desktop.matches) {
+        setMobileOpen(false);
+        setMobileCommunityOpen(false);
+      }
     };
-  }, [mobileOpen]);
+
+    closeOnDesktop();
+    desktop.addEventListener("change", closeOnDesktop);
+    return () => desktop.removeEventListener("change", closeOnDesktop);
+  }, []);
 
   useEffect(() => {
     if (
@@ -414,10 +416,10 @@ export default function Navbar({
       <div
         id="mobile-navigation"
         inert={!mobileOpen}
-        className={`flex flex-col gap-4 overflow-hidden bg-white dark:bg-gray-900 text-foreground transition-all duration-300 xl:hidden ${
+        className={`flex flex-col gap-4 [&>*]:shrink-0 bg-white dark:bg-gray-900 text-foreground transition-all duration-300 xl:hidden ${
           mobileOpen
-            ? "max-h-[calc(100dvh-5rem)] overflow-y-auto px-5 py-5 border-t border-gray-200 dark:border-gray-700 rounded-b-2xl"
-            : "max-h-0 px-5 py-0 border-t border-transparent"
+            ? "max-h-[calc(100dvh-5rem)] overflow-x-hidden overflow-y-auto px-5 py-5 border-t border-gray-200 dark:border-gray-700 rounded-b-2xl"
+            : "max-h-0 overflow-hidden px-5 py-0 border-t border-transparent"
         }`}
       >
         <ul className="flex flex-col gap-1 list-none m-0 p-0">
