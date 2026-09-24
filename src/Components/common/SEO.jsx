@@ -5,8 +5,7 @@ const SITE_NAME = "NEXA";
 const DEFAULT_ORIGIN = "https://ask-kh-project.vercel.app";
 const DEFAULT_THUMBNAIL = `${DEFAULT_ORIGIN}/thumbnail.jpg`;
 const DEFAULT_LOGO = `${DEFAULT_ORIGIN}/nexa-orbit-logo.svg`;
-const DEFAULT_TITLE =
-  "NEXA — Cambodian Developer & Student Community";
+const DEFAULT_TITLE = "NEXA — Cambodian Developer & Student Community";
 const DEFAULT_DESCRIPTION =
   "NEXA is Cambodia's premier developer community for programming Q&A, technical collaboration, and campus Lost & Found recovery.";
 const DEFAULT_KEYWORDS =
@@ -23,7 +22,7 @@ export function usePageSEO({
   description = DEFAULT_DESCRIPTION,
   keywords = DEFAULT_KEYWORDS,
   image = DEFAULT_THUMBNAIL,
-  imageAlt = "NEXA — Network, Explore, eXchange, Assist",
+  imageAlt = "NEXA, NEXA — Network, Explore, eXchange, Assist",
   type = "website",
   noIndex = false,
   canonicalUrl = null,
