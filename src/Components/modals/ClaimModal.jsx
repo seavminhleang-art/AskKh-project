@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
-import { X, ShieldCheck, AlertCircle } from 'lucide-react';
-import Button from '../ui/Button';
-import Textarea from '../ui/Textarea';
-import Input from '../ui/Input';
-import { useCreateClaimMutation } from '../../store/api/apiSlice';
-import { toast } from 'sonner';
+import React, { useState } from "react";
+import { X, ShieldCheck, AlertCircle } from "lucide-react";
+import Button from "../ui/Button";
+import Textarea from "../ui/Textarea";
+import Input from "../ui/Input";
+import { useCreateClaimMutation } from "../../store/api/apiSlice";
+import { toast } from "sonner";
 
 export default function ClaimModal({ isOpen, onClose, item }) {
-  const [proofDescription, setProofDescription] = useState('');
-  const [proofPhoto, setProofPhoto] = useState('');
-  const [error, setError] = useState('');
+  const [proofDescription, setProofDescription] = useState("");
+  const [proofPhoto, setProofPhoto] = useState("");
+  const [error, setError] = useState("");
 
   const [createClaim, { isLoading }] = useCreateClaimMutation();
 
@@ -18,7 +18,9 @@ export default function ClaimModal({ isOpen, onClose, item }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!proofDescription.trim() || proofDescription.trim().length < 15) {
-      setError('Please provide specific details proving ownership (min 15 characters).');
+      setError(
+        "Please provide specific details proving ownership (min 15 characters).",
+      );
       return;
     }
 
@@ -31,14 +33,16 @@ export default function ClaimModal({ isOpen, onClose, item }) {
         proofPhoto: proofPhoto || undefined,
       }).unwrap();
 
-      toast.success('Ownership claim submitted! Campus Administration will review and notify you.');
+      toast.success(
+        "Ownership claim submitted! Campus Administration will review and notify you.",
+      );
       onClose();
     } catch {
-      toast.error('Failed to submit claim. Please try again.');
+      toast.error("Failed to submit claim. Please try again.");
     }
   };
 
-  const itemTitle = item.title || item.name || 'Campus Item';
+  const itemTitle = item.title || item.name || "Campus Item";
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in">
@@ -58,39 +62,44 @@ export default function ClaimModal({ isOpen, onClose, item }) {
             <h3 className="text-xl font-bold text-slate-900 dark:text-white">
               Claim Ownership
             </h3>
-            <p className="text-sm text-slate-500 dark:text-slate-400">
-              Item: <span className="font-semibold text-slate-800 dark:text-slate-200">{itemTitle}</span>
+            <p className="text-base text-slate-500 dark:text-slate-400">
+              Item:{" "}
+              <span className="font-semibold text-slate-800 dark:text-slate-200">
+                {itemTitle}
+              </span>
             </p>
           </div>
         </div>
 
-        <div className="p-3.5 rounded-2xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200/60 dark:border-blue-900/40 text-sm text-blue-800 dark:text-blue-300 leading-relaxed flex items-start gap-2.5">
+        <div className="p-3.5 rounded-2xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200/60 dark:border-blue-900/40 text-base text-blue-800 dark:text-blue-300 leading-relaxed flex items-start gap-2.5">
           <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
           <span>
-            To ensure secure return, describe the hidden detail only the authentic owner knows (e.g. serial numbers, passcode wallpaper, contents inside, purchase receipt).
+            To ensure secure return, describe the hidden detail only the
+            authentic owner knows (e.g. serial numbers, passcode wallpaper,
+            contents inside, purchase receipt).
           </span>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+            <label className="block text-base font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
               Proof of Ownership / Hidden Detail *
             </label>
             <Textarea
               value={proofDescription}
               onChange={(e) => {
                 setProofDescription(e.target.value);
-                if (error) setError('');
+                if (error) setError("");
               }}
               rows={4}
               placeholder="Describe unique marks, serial number, screen lock photo, specific contents, or invoice number..."
               error={error}
             />
-            {error && <p className="text-sm text-rose-500 mt-1">{error}</p>}
+            {error && <p className="text-base text-rose-500 mt-1">{error}</p>}
           </div>
 
           <div>
-            <label className="block text-sm font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+            <label className="block text-base font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
               Supporting Photo / ID Card URL (Optional)
             </label>
             <Input
@@ -101,10 +110,20 @@ export default function ClaimModal({ isOpen, onClose, item }) {
           </div>
 
           <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100 dark:border-slate-800">
-            <Button type="button" variant="outline" onClick={onClose} disabled={isLoading}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={onClose}
+              disabled={isLoading}
+            >
               Cancel
             </Button>
-            <Button type="submit" variant="default" isLoading={isLoading} className="rounded-xl">
+            <Button
+              type="submit"
+              variant="default"
+              isLoading={isLoading}
+              className="rounded-xl"
+            >
               Submit Claim Request
             </Button>
           </div>

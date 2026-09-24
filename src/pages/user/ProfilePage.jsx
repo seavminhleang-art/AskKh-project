@@ -1,10 +1,10 @@
 import { prepareProfilePhoto } from "../../features/workspace/prepareProfilePhoto";
-import { profileImageUrl } from "../../features/workspace/profileImage";
+import { profileImageUrl, resolveUserAvatar, setCachedAvatar, getCachedAvatar } from "../../features/workspace/profileImage";
 import { Link } from "react-router-dom";
-import { Sun, Moon, LockKeyhole, Palette, Settings2, Check, ArrowUpRight, Camera, Fingerprint, Mail, ShieldCheck, Sparkles, UserRound, CalendarDays, Save, Trophy, Eye, ThumbsUp } from "lucide-react";
+import { Sun, Moon, LockKeyhole, Palette, Settings2, Check, ArrowUpRight, Camera, Fingerprint, Mail, ShieldCheck, Sparkles, UserRound, CalendarDays, Save, Trophy, Eye, ThumbsUp, Loader2, Upload } from "lucide-react";
 import { useWorkspaceTranslation } from "@/locales/workspace/useWorkspaceTranslation";
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useState, useRef, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   useWorkspaceDataQuery,
   useWorkspaceSaveMutation,
@@ -12,14 +12,21 @@ import {
 import { updateUser } from "../../features/auth/authSlice";
 import { useTheme } from "../../context/ThemeContext";
 import { message } from "../../features/workspace/workspaceModel";
+import { baseApi } from "../../store/api/baseApi";
 import { Heading, QueryState } from "./WorkspaceUI";
-function ProfileForm({ profile }) {
+function ProfileForm({ profile, refetchProfile }) {
   const { w } = useWorkspaceTranslation();
   const dispatch = useDispatch();
+  // Read from Redux store — same source as the navbar — so both always stay in sync
+  const authUser = useSelector((state) => state.auth.user);
   const [save, state] = useWorkspaceSaveMutation();
   const [feedback, setFeedback] = useState(null);
+  const [photoFeedback, setPhotoFeedback] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
   const [failedPhoto, setFailedPhoto] = useState(null);
   const [preparingPhoto, setPreparingPhoto] = useState(false);
+  const fileInputRef = useRef(null);
+
   async function submit(event) {
     event.preventDefault();
     setFeedback(null);
@@ -51,41 +58,132 @@ function ProfileForm({ profile }) {
       });
     }
   }
+
   async function upload(event) {
     const file = event.target.files?.[0];
     event.target.value = "";
     if (!file) return;
-    setFeedback(null);
-    if (
-      !["image/jpeg", "image/png", "image/webp"].includes(file.type) ||
-      file.size > 5 * 1024 * 1024
-    ) {
-      setFeedback({
-        text: "Choose a JPG, PNG, or WebP under 5 MB.",
+    setPhotoFeedback(null);
+
+    const isImage = file.type.startsWith("image/") || /\.(jpe?g|png|webp|gif|bmp)$/i.test(file.name);
+    if (!isImage || file.size > 10 * 1024 * 1024) {
+      setPhotoFeedback({
+        ok: false,
+        text: "Choose a JPG, PNG, or WebP photo under 10 MB.",
       });
       return;
     }
+
+    // Convert to DataURL for instant local caching and persistent offline preview
+    const dataUrl = await new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.readAsDataURL(file);
+    });
+
+    setPreviewUrl(dataUrl);
+    setFailedPhoto(null);
     setPreparingPhoto(true);
+
     try {
-      const body = new FormData();
-      body.append("file", await prepareProfilePhoto(file));
-      await save({
-        resource: "avatar",
-        action: "save",
-        body,
-      }).unwrap();
-      setFeedback({
+      // Step 1: Upload file to media storage via POST /upload/upload-single
+      const uploadBody = new FormData();
+      uploadBody.append("file", file);
+      let uploadedFileName = null;
+
+      try {
+        const uploadRes = await save({
+          resource: "image-upload",
+          action: "create",
+          body: uploadBody,
+        }).unwrap();
+        uploadedFileName =
+          uploadRes?.name ||
+          uploadRes?.data?.name ||
+          uploadRes?.fileName ||
+          uploadRes?.data?.fileName ||
+          uploadRes?.uri ||
+          uploadRes?.data?.uri ||
+          uploadRes?.data?.url;
+      } catch (uploadErr) {
+        console.warn("POST /upload/upload-single failed:", uploadErr);
+      }
+
+      // Step 2: PUT /users/upload-image with the file (dedicated server profile image endpoint)
+      try {
+        const avatarBody = new FormData();
+        avatarBody.append("file", file);
+        const avatarRes = await save({
+          resource: "avatar",
+          action: "save",
+          body: avatarBody,
+        }).unwrap();
+        if (!uploadedFileName) {
+          uploadedFileName =
+            avatarRes?.data?.profileImage ||
+            avatarRes?.profileImage ||
+            avatarRes?.data?.name ||
+            avatarRes?.name ||
+            avatarRes?.data?.fileName ||
+            avatarRes?.fileName ||
+            avatarRes?.data?.uri ||
+            avatarRes?.uri;
+        }
+      } catch (avatarErr) {
+        console.warn("PUT /users/upload-image failed:", avatarErr);
+      }
+
+      const cleanName = uploadedFileName
+        ? uploadedFileName
+            .replace(/^https?:\/\/[^/]+/i, "")
+            .replace(/^\/__forum_api\/?/i, "")
+            .replace(/^\/api\/v1\/?/i, "")
+            .replace(/^\/?media\/?/i, "")
+            .replace(/^\/+/, "")
+        : null;
+
+      // Step 3: Persist photo to Redux & localStorage so it is never lost on navigation
+      setCachedAvatar(dataUrl, profile?.id || authUser?.id);
+      dispatch(
+        updateUser({
+          avatar: dataUrl,
+          profileImage: cleanName || dataUrl,
+          photoURL: dataUrl,
+        }),
+      );
+
+      // Step 4: Invalidate User cache & refetch profile from server
+      dispatch(baseApi.util.invalidateTags(["User"]));
+      if (refetchProfile) await refetchProfile();
+
+      setPhotoFeedback({
         ok: true,
-        text: "Profile photo saved.",
+        text: "Profile photo updated.",
       });
     } catch (error) {
-      setFeedback({
+      setPhotoFeedback({
+        ok: false,
         text: message(error),
       });
     } finally {
       setPreparingPhoto(false);
     }
   }
+
+  const isUploading = state.isLoading || preparingPhoto;
+  const cached = getCachedAvatar(profile?.id || authUser?.id);
+  const userCandidate = {
+    ...authUser,
+    ...profile,
+    profileImage: failedPhoto ? null : (profile?.profileImage || authUser?.profileImage),
+    avatar: previewUrl || authUser?.avatar || cached || profile?.avatar,
+  };
+  const currentPhotoSrc = previewUrl || resolveUserAvatar(userCandidate);
+
+  useEffect(() => {
+    setFailedPhoto(null);
+  }, [profile?.profileImage, authUser?.profileImage]);
+
   return (
     <section className="uw-card profile-editor">
       <div className="profile-banner">
@@ -93,12 +191,50 @@ function ProfileForm({ profile }) {
         <div className="profile-banner-art" aria-hidden="true"><i /><i /><i /></div>
       </div>
       <div className="profile-identity">
-        <div className="profile-avatar-wrap">
-          {profile.profileImage && failedPhoto !== profile.profileImage ? <img className="profile-avatar" src={profileImageUrl(profile.profileImage)} alt={w("Your profile")} onError={() => setFailedPhoto(profile.profileImage)} /> : <span className="profile-avatar">{(profile.displayName || "U").slice(0, 2).toUpperCase()}</span>}
-          <label className="profile-camera" aria-label={w("Change profile photo")}>
+        <div
+          className="profile-avatar-wrap"
+          onClick={() => !isUploading && fileInputRef.current?.click()}
+          title={w("Click to change profile photo")}
+        >
+          {currentPhotoSrc ? (
+            <img
+              className="profile-avatar"
+              src={currentPhotoSrc}
+              alt={w("Your profile")}
+              onError={() => {
+                if (!failedPhoto) setFailedPhoto(true);
+              }}
+            />
+          ) : (
+            <span className="profile-avatar">
+              {(profile.displayName || profile.name || "U").slice(0, 2).toUpperCase()}
+            </span>
+          )}
+          {isUploading && (
+            <div className="profile-avatar-loading">
+              <Loader2 className="animate-spin" size={24} />
+              <span>{w("Saving…")}</span>
+            </div>
+          )}
+          <button
+            type="button"
+            className="profile-camera"
+            aria-label={w("Change profile photo")}
+            onClick={(e) => {
+              e.stopPropagation();
+              fileInputRef.current?.click();
+            }}
+          >
             <Camera size={17} />
-            <input className="profile-file-input" type="file" accept="image/jpeg,image/png,image/webp" disabled={state.isLoading || preparingPhoto} onChange={upload} />
-          </label>
+          </button>
+          <input
+            ref={fileInputRef}
+            className="profile-file-input"
+            type="file"
+            accept="image/jpeg,image/png,image/webp,image/gif,image/*"
+            disabled={isUploading}
+            onChange={upload}
+          />
         </div>
         <div className="profile-identity-copy">
           <span className="profile-eyebrow">{w("MY PROFILE")}</span>
@@ -107,7 +243,30 @@ function ProfileForm({ profile }) {
         </div>
         <Link className="profile-activity-link" to="/dashboard/activity">{w("My activity")} <ArrowUpRight size={16} /></Link>
       </div>
-      <div className="profile-photo-note">{w("Make it yours. Choose a JPG, PNG, or WebP photo under 5 MB.")}</div>
+
+      <div className="profile-photo-note">
+        <span>{w("Make it yours. Choose a JPG, PNG, or WebP photo under 5 MB.")}</span>
+        <button
+          type="button"
+          className="profile-photo-btn"
+          disabled={isUploading}
+          onClick={() => fileInputRef.current?.click()}
+        >
+          <Upload size={13} /> {isUploading ? w("Uploading…") : w("Change photo")}
+        </button>
+      </div>
+
+      {photoFeedback && (
+        <div className="profile-photo-feedback">
+          <p
+            role={photoFeedback.ok ? "status" : "alert"}
+            className={photoFeedback.ok ? "uw-success" : "uw-error"}
+          >
+            {w(photoFeedback.text)}
+          </p>
+        </div>
+      )}
+
       <form className="uw-form" onSubmit={submit} aria-busy={state.isLoading}>
         <div className="profile-section-heading"><span className="profile-icon"><UserRound size={19} /></span><div><h2>{w("Personal information")}</h2><span>{w("A little about the person behind the contributions.")}</span></div></div>
         {feedback && (
@@ -244,7 +403,7 @@ function PasswordForm() {
     </form>
   );
 }
-function AccountSettings({ profile }) {
+function AccountSettings({ profile, refetchProfile }) {
   const { w } = useWorkspaceTranslation();
   const [section, setSection] = useState("personal");
   const { darkMode, setDarkMode } = useTheme();
@@ -259,7 +418,7 @@ function AccountSettings({ profile }) {
       <div className="settings-nav-note"><ShieldCheck size={22} /><strong>{w("A space that is yours")}</strong><span>{w("Keep your details current and choose how your workspace looks.")}</span></div>
     </aside>
     <div className="settings-content">
-      <div hidden={section !== "personal"}><ProfileForm key={profile.id} profile={profile} /></div>
+      <div hidden={section !== "personal"}><ProfileForm key={profile.id} profile={profile} refetchProfile={refetchProfile} /></div>
       <div hidden={section !== "security"}><PasswordForm /></div>
       <div hidden={section !== "appearance"}>
         <section className="uw-card settings-appearance">
@@ -279,10 +438,29 @@ function AccountSettings({ profile }) {
 
 export default function ProfilePage({ settings = false }) {
   const { w } = useWorkspaceTranslation();
+  const authUser = useSelector((state) => state.auth.user);
   const query = useWorkspaceDataQuery({
     resource: "profile",
   });
-  const profile = query.data?.data ?? query.data;
+  const apiProfile = query.data?.data ?? query.data;
+  const profile = apiProfile
+    ? {
+        ...authUser,
+        ...apiProfile,
+        displayName: apiProfile.displayName || authUser?.displayName || authUser?.name,
+        email: apiProfile.email || authUser?.email,
+        profileImage:
+          apiProfile.profileImage ||
+          apiProfile.avatar ||
+          apiProfile.avatarUrl ||
+          apiProfile.image ||
+          apiProfile.photo ||
+          apiProfile.imageUrl ||
+          authUser?.profileImage ||
+          authUser?.avatar ||
+          authUser?.photoURL,
+      }
+    : authUser;
   return (
     <div className="uw-page profile-page">
       <Heading
@@ -294,10 +472,10 @@ export default function ProfilePage({ settings = false }) {
         }
       />
       <QueryState query={query}>
-        {profile && (settings ? <AccountSettings profile={profile} /> : (
+        {profile && (settings ? <AccountSettings profile={profile} refetchProfile={query.refetch} /> : (
           <div className="profile-layout">
             <div className="uw-stack">
-              <ProfileForm key={profile.id} profile={profile} />
+              <ProfileForm key={profile.id || "profile"} profile={profile} refetchProfile={query.refetch} />
             </div>
             <aside className="profile-sidebar">
               <section className="uw-card profile-summary">

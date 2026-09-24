@@ -52,57 +52,84 @@ export default function PlatformShowcase({ darkMode }) {
           <div
             className="absolute inset-0 bg-cover bg-center transform hover:scale-105 transition duration-700"
             style={{
-              backgroundImage:
-                `url("${showcaseBackground}")`,
+              backgroundImage: `url("${showcaseBackground}")`,
             }}
           ></div>
-          <div className={`absolute inset-0 transition-opacity duration-300 ${darkMode ? "bg-zinc-950/60" : "bg-black/40"}`}></div>
+          <div
+            className={`absolute inset-0 transition-opacity duration-300 ${darkMode ? "bg-zinc-950/60" : "bg-black/40"}`}
+          ></div>
 
           <div className="relative z-10 text-center py-16 px-6">
-            <span className="inline-block bg-white/20 text-white text-sm font-semibold px-3 py-1 rounded-full mb-3 backdrop-blur-md">
+            <span className="inline-block bg-white/20 text-white text-base font-semibold px-3 py-1 rounded-full mb-3 backdrop-blur-md">
               {t("showcaseBadge")}
             </span>
-            <h2 className="text-2xl md:text-3xl font-bold mb-2 text-white">
+            <h2 className="text-4xl md:text-5xl font-bold mb-2 text-white">
               {t("showcaseTitle")}
             </h2>
-            <p className="text-white/80 max-w-2xl mx-auto leading-relaxed text-sm md:text-base">
+            <p className="text-white/80 max-w-2xl mx-auto leading-relaxed text-base md:text-base">
               {t("showcaseSubtitle")}
             </p>
           </div>
         </div>
 
         <div className="p-8">
-          <span className={`inline-block text-sm font-semibold px-3 py-1 rounded-full mb-3 ${
-            darkMode
-              ? "bg-zinc-800 text-[var(--home-primary-text)]"
-              : "bg-[var(--color-brand-primary-light)] text-[var(--home-primary-text)]"
-          }`}>
+          <span
+            className={`inline-block text-base font-semibold px-3 py-1 rounded-full mb-3 ${
+              darkMode
+                ? "bg-zinc-800 text-[var(--home-primary-text)]"
+                : "bg-[var(--color-brand-primary-light)] text-[var(--home-primary-text)]"
+            }`}
+          >
             {t("showcaseCoreFeatureTag")}
           </span>
-          <h3 className={`text-xl font-semibold mb-2 ${darkMode ? "text-slate-100" : "text-gray-900"}`}>
+          <h3
+            className={`text-xl font-semibold mb-2 ${darkMode ? "text-slate-100" : "text-gray-900"}`}
+          >
             {t("showcaseCoreHeading")}
           </h3>
-          <p className={`mb-6 text-sm leading-relaxed ${darkMode ? "text-slate-400" : "text-gray-600"}`}>
+          <p
+            className={`mb-6 text-base leading-relaxed ${darkMode ? "text-slate-400" : "text-gray-600"}`}
+          >
             {t("showcaseCoreDesc")}
           </p>
-          <div className={`flex justify-between items-center text-sm pt-4 border-t ${
-            darkMode ? "border-zinc-800 text-slate-400" : "border-gray-100 text-gray-600"
-          }`}>
+          <div
+            className={`flex justify-between items-center text-base pt-4 border-t ${
+              darkMode
+                ? "border-zinc-800 text-slate-400"
+                : "border-gray-100 text-gray-600"
+            }`}
+          >
             <div className="flex items-center gap-3">
-              <span className={`text-xl p-2 rounded-xl ${
-                darkMode ? "bg-zinc-800" : "bg-[var(--color-brand-primary-light)]"
-              }`}>👥</span>
+              <span
+                className={`text-xl p-2 rounded-xl ${
+                  darkMode
+                    ? "bg-zinc-800"
+                    : "bg-[var(--color-brand-primary-light)]"
+                }`}
+              >
+                👥
+              </span>
               <div>
-                <p className={`font-medium ${darkMode ? "text-slate-100" : "text-gray-900"}`}>
+                <p
+                  className={`font-medium ${darkMode ? "text-slate-100" : "text-gray-900"}`}
+                >
                   {t("showcaseTeamName")}
                 </p>
-                <p className={`text-sm ${darkMode ? "text-slate-300" : "text-gray-600"}`}>
+                <p
+                  className={`text-base ${darkMode ? "text-slate-300" : "text-gray-600"}`}
+                >
                   {t("brand")}
                 </p>
               </div>
             </div>
-            <Link to="/community/qa" className="text-[var(--home-primary-text)] font-semibold flex items-center gap-1 no-underline hover:underline">
-              <motion.span whileHover={{ x: 5 }} className="flex items-center gap-1">
+            <Link
+              to="/community/qa"
+              className="text-[var(--home-primary-text)] font-semibold flex items-center gap-1 no-underline hover:underline"
+            >
+              <motion.span
+                whileHover={{ x: 5 }}
+                className="flex items-center gap-1"
+              >
                 {t("showcaseExploreMore")} →
               </motion.span>
             </Link>
@@ -123,15 +150,23 @@ export default function PlatformShowcase({ darkMode }) {
             }`}
           >
             <div className="flex-1 pr-4">
-              <span className={`inline-block ${card.labelColor} text-sm font-semibold px-3 py-1 rounded-full mb-2`}>
+              <span
+                className={`inline-block ${card.labelColor} text-base font-semibold px-3 py-1 rounded-full mb-2`}
+              >
                 {card.label}
               </span>
-              <p className={`font-medium text-sm leading-snug ${darkMode ? "text-slate-200" : "text-gray-900"}`}>
+              <p
+                className={`font-medium text-base leading-snug ${darkMode ? "text-slate-200" : "text-gray-900"}`}
+              >
                 {card.text}
               </p>
             </div>
             <div className="w-28 h-20 flex-shrink-0 overflow-hidden rounded-2xl">
-              <img src={card.img} alt={card.label} className="w-full h-full object-cover transform hover:scale-110 transition duration-500" />
+              <img
+                src={card.img}
+                alt={card.label}
+                className="w-full h-full object-cover transform hover:scale-110 transition duration-500"
+              />
             </div>
           </motion.div>
         ))}

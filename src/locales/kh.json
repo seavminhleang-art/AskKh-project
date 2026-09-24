@@ -1,5 +1,5 @@
 {
-  "brand": "AskKh",
+  "brand": "NEXA",
   "home": "ទំព័រដើម",
   "community": "សហគមន៍",
   "qaCommunity": "សហគមន៍សួរ និងឆ្លើយ",
@@ -7,6 +7,9 @@
   "about": "អំពីយើង",
   "leaderboard": "តារាងពិន្ទុ",
   "getStarted": "ចាប់ផ្តើមឥឡូវនេះ",
+  "dashboard": "ផ្ទាំងគ្រប់គ្រង",
+  "profile": "ប្រវត្តិរូប",
+  "logout": "ចាកចេញ",
   "notificationLabel": "ការជូនដំណឹង",
   "themeLabel": "ប្តូរពណ៌ផ្ទៃ",
   "menuLabel": "ម៉ឺនុយ",
@@ -716,6 +719,6 @@
     },
     "contactTitle": "អាសយដ្ឋាន និងទំនាក់ទំនង",
     "organizedTitle": "រៀបចំ និងឧបត្ថម្ភដោយ",
-    "copyright": "រក្សាសិទ្ធិគ្រប់យ៉ាង © 2026 SastraCode"
+    "copyright": "រក្សាសិទ្ធិគ្រប់យ៉ាង © 2026 NEXA"
   }
 }

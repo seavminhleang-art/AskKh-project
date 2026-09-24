@@ -1,18 +1,34 @@
-import React, { useState } from 'react';
-import { Search, PlusCircle, User, Bell, Menu, X, ShieldAlert, Heart, Compass } from 'lucide-react';
+import React, { useState } from "react";
+import {
+  Search,
+  PlusCircle,
+  User,
+  Bell,
+  Menu,
+  X,
+  ShieldAlert,
+  Heart,
+  Compass,
+} from "lucide-react";
 
-export default function Navbar({ onOpenPostModal, onOpenAuthModal, currentTab, setCurrentTab, searchQuery, setSearchQuery }) {
+export default function Navbar({
+  onOpenPostModal,
+  onOpenAuthModal,
+  currentTab,
+  setCurrentTab,
+  searchQuery,
+  setSearchQuery,
+}) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
-          
           {/* Brand Logo */}
-          <div 
+          <div
             className="flex items-center gap-3 cursor-pointer group"
-            onClick={() => setCurrentTab('home')}
+            onClick={() => setCurrentTab("home")}
           >
             <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-lg shadow-blue-500/25 group-hover:scale-105 transition-transform">
               <ShieldAlert className="w-6 h-6" />
@@ -22,11 +38,13 @@ export default function Navbar({ onOpenPostModal, onOpenAuthModal, currentTab, s
                 <span className="text-xl font-bold bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent">
                   Ask & Found
                 </span>
-                <span className="px-2 py-0.5 text-sm font-bold bg-amber-100 text-amber-800 rounded-full border border-amber-200">
+                <span className="px-2 py-0.5 text-base font-bold bg-amber-100 text-amber-800 rounded-full border border-amber-200">
                   KH
                 </span>
               </div>
-              <p className="text-sm text-slate-500 font-medium">Reconnecting Cambodia</p>
+              <p className="text-base text-slate-500 font-medium">
+                Reconnecting Cambodia
+              </p>
             </div>
           </div>
 
@@ -38,7 +56,7 @@ export default function Navbar({ onOpenPostModal, onOpenAuthModal, currentTab, s
                 placeholder="Search lost IDs, phones, wallets, pets..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-11 pr-4 py-2.5 bg-slate-100/80 hover:bg-slate-100 focus:bg-white text-slate-800 placeholder-slate-400 rounded-full border border-transparent focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all text-sm outline-none"
+                className="w-full pl-11 pr-4 py-2.5 bg-slate-100/80 hover:bg-slate-100 focus:bg-white text-slate-800 placeholder-slate-400 rounded-full border border-transparent focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all text-base outline-none"
               />
               <Search className="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
             </div>
@@ -47,32 +65,32 @@ export default function Navbar({ onOpenPostModal, onOpenAuthModal, currentTab, s
           {/* Navigation Links (Desktop) */}
           <nav className="hidden lg:flex items-center gap-1">
             <button
-              onClick={() => setCurrentTab('home')}
-              className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
-                currentTab === 'home' 
-                  ? 'bg-blue-50 text-blue-600' 
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+              onClick={() => setCurrentTab("home")}
+              className={`px-4 py-2 rounded-full text-base font-semibold transition-colors ${
+                currentTab === "home"
+                  ? "bg-blue-50 text-blue-600"
+                  : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
               }`}
             >
               Home
             </button>
             <button
-              onClick={() => setCurrentTab('explore')}
-              className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors flex items-center gap-1.5 ${
-                currentTab === 'explore' 
-                  ? 'bg-blue-50 text-blue-600' 
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+              onClick={() => setCurrentTab("explore")}
+              className={`px-4 py-2 rounded-full text-base font-semibold transition-colors flex items-center gap-1.5 ${
+                currentTab === "explore"
+                  ? "bg-blue-50 text-blue-600"
+                  : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
               }`}
             >
               <Compass className="w-4 h-4" />
               Explore Items
             </button>
             <button
-              onClick={() => setCurrentTab('about')}
-              className={`px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
-                currentTab === 'about' 
-                  ? 'bg-blue-50 text-blue-600' 
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+              onClick={() => setCurrentTab("about")}
+              className={`px-4 py-2 rounded-full text-base font-semibold transition-colors ${
+                currentTab === "about"
+                  ? "bg-blue-50 text-blue-600"
+                  : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
               }`}
             >
               About Us
@@ -83,7 +101,7 @@ export default function Navbar({ onOpenPostModal, onOpenAuthModal, currentTab, s
           <div className="hidden sm:flex items-center gap-3">
             <button
               onClick={onOpenPostModal}
-              className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold text-sm rounded-full shadow-md shadow-blue-600/20 hover:shadow-lg hover:shadow-blue-600/30 transition-all transform active:scale-95"
+              className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold text-base rounded-full shadow-md shadow-blue-600/20 hover:shadow-lg hover:shadow-blue-600/30 transition-all transform active:scale-95"
             >
               <PlusCircle className="w-4 h-4" />
               Report Item
@@ -91,7 +109,7 @@ export default function Navbar({ onOpenPostModal, onOpenAuthModal, currentTab, s
 
             <button
               onClick={onOpenAuthModal}
-              className="flex items-center gap-2 px-4 py-2.5 text-slate-700 hover:bg-slate-100 rounded-full font-semibold text-sm transition-colors border border-slate-200"
+              className="flex items-center gap-2 px-4 py-2.5 text-slate-700 hover:bg-slate-100 rounded-full font-semibold text-base transition-colors border border-slate-200"
             >
               <User className="w-4 h-4 text-slate-500" />
               Sign In
@@ -111,10 +129,13 @@ export default function Navbar({ onOpenPostModal, onOpenAuthModal, currentTab, s
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="p-2 text-slate-600 hover:bg-slate-100 rounded-xl"
             >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {mobileMenuOpen ? (
+                <X className="w-6 h-6" />
+              ) : (
+                <Menu className="w-6 h-6" />
+              )}
             </button>
           </div>
-
         </div>
       </div>
 
@@ -127,39 +148,57 @@ export default function Navbar({ onOpenPostModal, onOpenAuthModal, currentTab, s
               placeholder="Search lost or found items..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 bg-slate-100 text-slate-800 placeholder-slate-400 rounded-full text-sm outline-none"
+              className="w-full pl-10 pr-4 py-2 bg-slate-100 text-slate-800 placeholder-slate-400 rounded-full text-base outline-none"
             />
             <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
           </div>
 
           <div className="flex flex-col gap-1 pt-2">
             <button
-              onClick={() => { setCurrentTab('home'); setMobileMenuOpen(false); }}
-              className={`px-4 py-2.5 rounded-xl font-medium text-left text-sm ${
-                currentTab === 'home' ? 'bg-blue-50 text-blue-600 font-semibold' : 'text-slate-700'
+              onClick={() => {
+                setCurrentTab("home");
+                setMobileMenuOpen(false);
+              }}
+              className={`px-4 py-2.5 rounded-xl font-medium text-left text-base ${
+                currentTab === "home"
+                  ? "bg-blue-50 text-blue-600 font-semibold"
+                  : "text-slate-700"
               }`}
             >
               Home
             </button>
             <button
-              onClick={() => { setCurrentTab('explore'); setMobileMenuOpen(false); }}
-              className={`px-4 py-2.5 rounded-xl font-medium text-left text-sm ${
-                currentTab === 'explore' ? 'bg-blue-50 text-blue-600 font-semibold' : 'text-slate-700'
+              onClick={() => {
+                setCurrentTab("explore");
+                setMobileMenuOpen(false);
+              }}
+              className={`px-4 py-2.5 rounded-xl font-medium text-left text-base ${
+                currentTab === "explore"
+                  ? "bg-blue-50 text-blue-600 font-semibold"
+                  : "text-slate-700"
               }`}
             >
               Explore Items
             </button>
             <button
-              onClick={() => { setCurrentTab('about'); setMobileMenuOpen(false); }}
-              className={`px-4 py-2.5 rounded-xl font-medium text-left text-sm ${
-                currentTab === 'about' ? 'bg-blue-50 text-blue-600 font-semibold' : 'text-slate-700'
+              onClick={() => {
+                setCurrentTab("about");
+                setMobileMenuOpen(false);
+              }}
+              className={`px-4 py-2.5 rounded-xl font-medium text-left text-base ${
+                currentTab === "about"
+                  ? "bg-blue-50 text-blue-600 font-semibold"
+                  : "text-slate-700"
               }`}
             >
               About Us
             </button>
             <button
-              onClick={() => { onOpenAuthModal(); setMobileMenuOpen(false); }}
-              className="px-4 py-2.5 rounded-xl font-medium text-left text-sm text-slate-700 border border-slate-200 flex items-center justify-between"
+              onClick={() => {
+                onOpenAuthModal();
+                setMobileMenuOpen(false);
+              }}
+              className="px-4 py-2.5 rounded-xl font-medium text-left text-base text-slate-700 border border-slate-200 flex items-center justify-between"
             >
               <span>Sign In / Register</span>
               <User className="w-4 h-4 text-slate-400" />

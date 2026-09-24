@@ -62,3 +62,16 @@ test("list parsing rejects malformed payloads instead of showing a false empty s
   assert.throws(() => rows({ unexpected: true }));
   assert.equal(dateLabel(null), "—");
 });
+
+test("media and profile images resolve to the standardized media uri", async () => {
+  const { formatMediaUrl, profileImageUrl, MEDIA_BASE_URI } = await import("../src/features/workspace/profileImage.js");
+  assert.equal(MEDIA_BASE_URI, "https://forum-istad-api.cheat.casa/api/v1/media/");
+  assert.equal(formatMediaUrl("239feece-654c.jpg"), "https://forum-istad-api.cheat.casa/api/v1/media/239feece-654c.jpg");
+  assert.equal(formatMediaUrl("http://localhost:8070/api/v1/239feece-654c.jpg"), "https://forum-istad-api.cheat.casa/api/v1/media/239feece-654c.jpg");
+  assert.equal(formatMediaUrl("https://forum-istad-api.cheat.casa/api/v1/media/239feece-654c.jpg"), "https://forum-istad-api.cheat.casa/api/v1/media/239feece-654c.jpg");
+  assert.equal(profileImageUrl("profile-images/user123.png"), "https://forum-istad-api.cheat.casa/api/v1/media/user123.png");
+  assert.equal(profileImageUrl("blob:http://localhost:5173/preview"), "blob:http://localhost:5173/preview");
+  assert.equal(profileImageUrl(null, "fallback.png"), "fallback.png");
+});
+
+

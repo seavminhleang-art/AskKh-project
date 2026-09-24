@@ -1,11 +1,17 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { ChevronRight, Home } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import React from "react";
+import { Link } from "react-router-dom";
+import { ChevronRight, Home } from "lucide-react";
+import { cn } from "@/lib/utils";
 
-export default function Breadcrumb({ items = [], className = '' }) {
+export default function Breadcrumb({ items = [], className = "" }) {
   return (
-    <nav className={cn('flex items-center text-sm text-slate-500 dark:text-slate-400 py-2', className)} aria-label="Breadcrumb">
+    <nav
+      className={cn(
+        "flex items-center text-base text-slate-500 dark:text-slate-400 py-2",
+        className,
+      )}
+      aria-label="Breadcrumb"
+    >
       <ol className="inline-flex items-center space-x-1 sm:space-x-2">
         <li className="inline-flex items-center">
           <Link

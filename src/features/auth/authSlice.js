@@ -62,10 +62,10 @@ export const authSlice = createSlice({
       }
 
       if (user !== undefined) {
-        state.user = user;
-        state.role = user?.role || 'student';
-        if (user) {
-          localStorage.setItem('nexa_user', JSON.stringify(user));
+        state.user = user ? (state.user ? { ...state.user, ...user } : user) : null;
+        state.role = state.user?.role || 'student';
+        if (state.user) {
+          localStorage.setItem('nexa_user', JSON.stringify(state.user));
         } else {
           localStorage.removeItem('nexa_user');
         }
@@ -113,11 +113,20 @@ export const authSlice = createSlice({
     },
 
     updateUser: (state, action) => {
-      state.user = { ...state.user, ...action.payload };
-      if (action.payload.role) {
+      const payload = { ...(action.payload || {}) };
+      if (!payload.profileImage && state.user?.profileImage) {
+        delete payload.profileImage;
+      }
+      if (!payload.avatar && state.user?.avatar) {
+        delete payload.avatar;
+      }
+      state.user = { ...state.user, ...payload };
+      if (action.payload?.role) {
         state.role = action.payload.role;
       }
-      localStorage.setItem('nexa_user', JSON.stringify(state.user));
+      if (state.user) {
+        localStorage.setItem('nexa_user', JSON.stringify(state.user));
+      }
     },
 
     updateProfile: (state, action) => {

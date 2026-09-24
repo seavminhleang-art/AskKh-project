@@ -102,7 +102,7 @@ export default function Navbar({ dashboardPath = "/dashboard" }) {
           {/* Mobile Utility & CTA */}
           <div className="pt-3 border-t border-[#E5E7EB] dark:border-slate-800 flex flex-col gap-3">
             <div className="flex items-center justify-between px-1">
-              <span className="text-sm font-semibold text-[#667085] dark:text-slate-400">
+              <span className="text-base font-semibold text-[#667085] dark:text-slate-400">
                 Language:
               </span>
               <LanguageSwitcher />

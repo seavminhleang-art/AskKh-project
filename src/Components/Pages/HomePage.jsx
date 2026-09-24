@@ -1,49 +1,75 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 import { useOutletContext } from "react-router-dom";
+
 import HeroSection from "../PagesComponent/HomeComponent/HeroSection";
-import HowSecureRecoveryWorks from "../PagesComponent/HomeComponent/HowSecureRecoveryWorks";
 import PlatformShowcase from "../PagesComponent/HomeComponent/PlatformShowcase";
 import PlatformArchitecture from "../PagesComponent/HomeComponent/PlatformArchitecture";
+import HowSecureRecoveryWorks from "../PagesComponent/HomeComponent/HowSecureRecoveryWorks";
 import TrendingDiscussions from "../PagesComponent/HomeComponent/TrendingDiscussions";
+import HowCommunityQAWorks from "../PagesComponent/HomeComponent/HowCommunityQAWorks";
 import RecentRecoveries from "../PagesComponent/HomeComponent/RecentRecoveries";
 import CommunityVoice from "../PagesComponent/HomeComponent/CommunityVoice";
 import FAQAndCTA from "../PagesComponent/HomeComponent/FAQAndCTA";
-import HowCommunityQAWorks from "../PagesComponent/HomeComponent/HowCommunityQAWorks"; // New Q&A Component
 
+import { usePageSEO } from "../common/SEO";
 
 export default function HomePage() {
-  // Grab darkMode from App.jsx via React Router context
+  // Get darkMode from App.jsx through React Router outlet context
   const { darkMode } = useOutletContext();
 
+  usePageSEO({
+    title: "AskKh | Cambodian Developer Community",
+    description: "Connect with Cambodian developers and students to explore technical solutions, share programming knowledge, and recover lost campus belongings on AskKh.",
+    keywords: "AskKh, Cambodian developers, ISTAD, programming forum, tech Q&A, Lost and Found Cambodia, software engineering",
+    canonicalUrl: "https://askkh.com/",
+  });
+
+  // --------------------------------------------------
+  // Custom cursor state
+  // --------------------------------------------------
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
 
-  const springConfig = { damping: 25, stiffness: 300 };
+  const springConfig = {
+    damping: 25,
+    stiffness: 300,
+  };
+
   const cursorXSpring = useSpring(cursorX, springConfig);
   const cursorYSpring = useSpring(cursorY, springConfig);
 
   const [cursorText, setCursorText] = useState("");
   const [isHovered, setIsHovered] = useState(false);
 
-  const handleMouseMove = (e) => {
-    cursorX.set(e.clientX);
-    cursorY.set(e.clientY);
+  // --------------------------------------------------
+  // Mouse movement
+  // --------------------------------------------------
+  const handleMouseMove = (event) => {
+    cursorX.set(event.clientX);
+    cursorY.set(event.clientY);
   };
 
-  return (
-    <div
-      onMouseMove={handleMouseMove}
-      className={`shared-theme shared-page relative px-4 sm:px-6 lg:px-10 xl:px-16 py-10 overflow-hidden font-sans cursor-default transition-colors duration-300 ${
-        darkMode ? "bg-[#121212] text-gray-100" : "bg-[#f5f5f5] text-gray-800"
-      }`}
-    >
-     
+  // --------------------------------------------------
+  // Theme classes
+  // --------------------------------------------------
+  const pageTheme = darkMode
+    ? "bg-[#121212] text-gray-100"
+    : "bg-[#f5f5f5] text-gray-800";
 
-      {/* Custom Mouse Follower Tooltip */}
+  return (
+    <main
+      onMouseMove={handleMouseMove}
+      className={`shared-theme shared-page relative min-h-screen px-4 py-10 overflow-hidden font-sans cursor-default transition-colors duration-300 sm:px-6 lg:px-10 xl:px-16 ${pageTheme}`}
+    >
+      {/* -----------------------------------------------
+          Custom Mouse Follower Tooltip
+      ------------------------------------------------ */}
       <motion.div
-        className={`hidden lg:flex fixed top-0 left-0 pointer-events-none z-50 flex items-center justify-center px-3 py-1.5 rounded-full backdrop-blur-md text-sm font-medium shadow-xl ${
-          darkMode ? "bg-gray-100/90 text-gray-900" : "bg-gray-900/90 text-white"
+        className={`hidden lg:flex fixed top-0 left-0 z-50 pointer-events-none items-center justify-center px-3 py-1.5 rounded-full backdrop-blur-md text-base font-medium shadow-xl ${
+          darkMode
+            ? "bg-gray-100/90 text-gray-900"
+            : "bg-gray-900/90 text-white"
         }`}
         style={{
           x: cursorXSpring,
@@ -51,25 +77,88 @@ export default function HomePage() {
           translateX: "-50%",
           translateY: "-150%",
         }}
-        initial={{ scale: 0, opacity: 0 }}
-        animate={{ scale: isHovered ? 1 : 0, opacity: isHovered ? 1 : 0 }}
-        transition={{ duration: 0.15 }}
+        initial={{
+          scale: 0,
+          opacity: 0,
+        }}
+        animate={{
+          scale: isHovered ? 1 : 0,
+          opacity: isHovered ? 1 : 0,
+        }}
+        transition={{
+          duration: 0.15,
+        }}
       >
-        <span className="w-2 h-2 rounded-full bg-[#f44336] mr-2 animate-pulse"></span>
+        <span className="w-2 h-2 mr-2 rounded-full bg-[#f44336] animate-pulse" />
+
         {cursorText || "Explore"}
       </motion.div>
 
-      <HeroSection setCursorText={setCursorText} setIsHovered={setIsHovered} darkMode={darkMode} />
-      
-      {/* Integrated Component */}
-      <PlatformShowcase setCursorText={setCursorText} setIsHovered={setIsHovered} darkMode={darkMode} />
-      <PlatformArchitecture setCursorText={setCursorText} setIsHovered={setIsHovered} darkMode={darkMode} />
-      <HowSecureRecoveryWorks setCursorText={setCursorText} setIsHovered={setIsHovered} darkMode={darkMode} />
-      <TrendingDiscussions setCursorText={setCursorText} setIsHovered={setIsHovered} darkMode={darkMode} />
-      <HowCommunityQAWorks setCursorText={setCursorText} setIsHovered={setIsHovered} darkMode={darkMode} />
-      <RecentRecoveries setCursorText={setCursorText} setIsHovered={setIsHovered} darkMode={darkMode} />
-      <CommunityVoice setCursorText={setCursorText} setIsHovered={setIsHovered} darkMode={darkMode} />
-      <FAQAndCTA setCursorText={setCursorText} setIsHovered={setIsHovered} darkMode={darkMode} />
-    </div>
+      {/* -----------------------------------------------
+          Hero
+      ------------------------------------------------ */}
+      <HeroSection
+        setCursorText={setCursorText}
+        setIsHovered={setIsHovered}
+        darkMode={darkMode}
+      />
+
+      {/* -----------------------------------------------
+          Platform
+      ------------------------------------------------ */}
+      <PlatformShowcase
+        setCursorText={setCursorText}
+        setIsHovered={setIsHovered}
+        darkMode={darkMode}
+      />
+
+      <PlatformArchitecture
+        setCursorText={setCursorText}
+        setIsHovered={setIsHovered}
+        darkMode={darkMode}
+      />
+
+      {/* -----------------------------------------------
+          Community & Recovery
+      ------------------------------------------------ */}
+      <HowSecureRecoveryWorks
+        setCursorText={setCursorText}
+        setIsHovered={setIsHovered}
+        darkMode={darkMode}
+      />
+
+      <TrendingDiscussions
+        setCursorText={setCursorText}
+        setIsHovered={setIsHovered}
+        darkMode={darkMode}
+      />
+
+      <HowCommunityQAWorks
+        setCursorText={setCursorText}
+        setIsHovered={setIsHovered}
+        darkMode={darkMode}
+      />
+
+      <RecentRecoveries
+        setCursorText={setCursorText}
+        setIsHovered={setIsHovered}
+        darkMode={darkMode}
+      />
+
+      <CommunityVoice
+        setCursorText={setCursorText}
+        setIsHovered={setIsHovered}
+        darkMode={darkMode}
+      />
+
+      {/* -----------------------------------------------
+          FAQ & Call To Action
+      ------------------------------------------------ */}
+      <FAQAndCTA
+        setCursorText={setCursorText}
+        setIsHovered={setIsHovered}
+        darkMode={darkMode}
+      />
+    </main>
   );
 }

@@ -1,0 +1,21 @@
+User-agent: *
+Allow: /
+Allow: /community/qa
+Allow: /community/lost-found
+Allow: /leaderboard
+Allow: /about
+Allow: /terms
+Allow: /privacy-policy
+Allow: /privacy
+
+# Disallow private user workspace & administrative areas from search indexation
+Disallow: /dashboard/
+Disallow: /admin/
+Disallow: /login
+Disallow: /register
+Disallow: /verify-email
+Disallow: /reset-password
+Disallow: /__forum_api/
+
+# Sitemap location
+Sitemap: https://askkh.com/sitemap.xml

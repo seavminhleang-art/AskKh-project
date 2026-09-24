@@ -21,7 +21,7 @@ function SidebarContent({ collapsed, onNavigate }) {
   return (
     <>
       <div className="flex h-16 shrink-0 items-center gap-2 border-b border-gray-100 px-4 dark:border-gray-700">
-        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gray-900 text-sm font-semibold text-white dark:bg-white dark:text-gray-900">
+        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-gray-900 text-base font-semibold text-white dark:bg-white dark:text-gray-900">
           N
         </div>
         {!collapsed && (
@@ -42,7 +42,7 @@ function SidebarContent({ collapsed, onNavigate }) {
                 end={item.end}
                 onClick={onNavigate}
                 className={({ isActive }) =>
-                  `flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
+                  `flex items-center gap-3 rounded-lg px-3 py-2.5 text-base font-medium transition-colors ${
                     isActive
                       ? "bg-blue-50 text-blue-600 dark:bg-gray-800 dark:text-blue-400"
                       : "text-gray-500 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-800"
@@ -64,7 +64,7 @@ function SidebarContent({ collapsed, onNavigate }) {
           className="flex w-full items-center gap-2.5 rounded-full bg-gray-50 px-2.5 py-2 text-gray-600 hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
         >
           <Avatar name={user?.displayName ?? user?.email} />
-          {!collapsed && <span className="text-sm font-medium">Log out</span>}
+          {!collapsed && <span className="text-base font-medium">Log out</span>}
           {!collapsed && <LogOut className="ml-auto h-4 w-4 text-gray-400" />}
         </button>
       </div>

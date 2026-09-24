@@ -1,5 +1,5 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import {
   MessageSquare,
   Sparkles,
@@ -7,13 +7,13 @@ import {
   Bell,
   Trash2,
   Clock,
-} from 'lucide-react';
-import Card from '../../Components/Admin/common/Card';
+} from "lucide-react";
+import Card from "../../Components/Admin/common/Card";
 import {
   useMarkNotificationReadMutation,
   useDeleteNotificationMutation,
-} from '../../store/api/apiSlice';
-import { toast } from 'sonner';
+} from "../../store/api/apiSlice";
+import { toast } from "sonner";
 
 export default function NotificationItem({ notification }) {
   const navigate = useNavigate();
@@ -22,12 +22,12 @@ export default function NotificationItem({ notification }) {
 
   const getIcon = () => {
     switch (notification.type) {
-      case 'question_answer':
-      case 'comment':
+      case "question_answer":
+      case "comment":
         return <MessageSquare className="w-5 h-5 text-blue-500" />;
-      case 'match_found':
+      case "match_found":
         return <Sparkles className="w-5 h-5 text-amber-500" />;
-      case 'claim_update':
+      case "claim_update":
         return <Bookmark className="w-5 h-5 text-emerald-500" />;
       default:
         return <Bell className="w-5 h-5 text-indigo-500" />;
@@ -46,7 +46,7 @@ export default function NotificationItem({ notification }) {
   const handleDelete = (e) => {
     e.stopPropagation();
     deleteNotif(notification.id);
-    toast.success('Notification removed');
+    toast.success("Notification removed");
   };
 
   return (
@@ -54,8 +54,8 @@ export default function NotificationItem({ notification }) {
       onClick={handleAction}
       className={`p-4 sm:p-5 transition-all cursor-pointer flex items-start gap-4 ${
         !notification.isRead
-          ? 'bg-blue-50/40 dark:bg-blue-950/20 border-blue-200/80 dark:border-blue-900/40'
-          : 'hover:bg-slate-50 dark:hover:bg-slate-800/50'
+          ? "bg-blue-50/40 dark:bg-blue-950/20 border-blue-200/80 dark:border-blue-900/40"
+          : "hover:bg-slate-50 dark:hover:bg-slate-800/50"
       }`}
       hover
     >
@@ -66,21 +66,24 @@ export default function NotificationItem({ notification }) {
       <div className="flex-1 min-w-0 space-y-1">
         <div className="flex items-center justify-between gap-2">
           <h4
-            className={`text-sm tracking-tight truncate ${
+            className={`text-base tracking-tight truncate ${
               !notification.isRead
-                ? 'font-bold text-slate-900 dark:text-white'
-                : 'font-medium text-slate-700 dark:text-slate-300'
+                ? "font-bold text-slate-900 dark:text-white"
+                : "font-medium text-slate-700 dark:text-slate-300"
             }`}
           >
             {notification.title}
           </h4>
-          <span className="text-sm text-slate-400 shrink-0 flex items-center gap-1">
+          <span className="text-base text-slate-400 shrink-0 flex items-center gap-1">
             <Clock className="w-3 h-3" />
-            {new Date(notification.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+            {new Date(notification.createdAt).toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
           </span>
         </div>
 
-        <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+        <p className="text-base text-slate-600 dark:text-slate-400 leading-relaxed">
           {notification.message}
         </p>
       </div>

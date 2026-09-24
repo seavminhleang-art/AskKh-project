@@ -14,7 +14,11 @@ import {
   KeyRound,
   Mail,
 } from "lucide-react";
-import { useResetPasswordMutation, useForgotPasswordMutation } from "../../features/auth/authApi";
+import {
+  useResetPasswordMutation,
+  useForgotPasswordMutation,
+} from "../../features/auth/authApi";
+import { authError } from "../../features/auth/authError";
 import { useLanguage } from "../Language/LanguageContext.jsx";
 import { useTheme } from "../../context/ThemeContext.jsx";
 import BrandLogo from "../common/BrandLogo.jsx";
@@ -33,10 +37,12 @@ const copy = {
     submitBtn: "Reset Password",
     resetting: "Updating password…",
     successTitle: "Password Reset Successful!",
-    successDesc: "Your password has been securely updated. You can now sign in with your new password.",
+    successDesc:
+      "Your password has been securely updated. You can now sign in with your new password.",
     signInBtn: "Continue to Sign In",
     errorTitle: "Reset Failed",
-    errorDesc: "The reset token is invalid, expired, or passwords did not match.",
+    errorDesc:
+      "The reset token is invalid, expired, or passwords did not match.",
     mismatchError: "Passwords do not match.",
     lengthError: "Password must be at least 8 characters.",
     tokenRequiredError: "Reset token is required.",
@@ -59,10 +65,12 @@ const copy = {
     submitBtn: "ផ្លាស់ប្តូរពាក្យសម្ងាត់",
     resetting: "កំពុងផ្លាស់ប្តូរ…",
     successTitle: "ផ្លាស់ប្តូរពាក្យសម្ងាត់ជោគជ័យ!",
-    successDesc: "ពាក្យសម្ងាត់របស់អ្នកត្រូវបានធ្វើបច្ចុប្បន្នភាពដោយជោគជ័យ។ អ្នកអាចចូលប្រើឥឡូវនេះបាន។",
+    successDesc:
+      "ពាក្យសម្ងាត់របស់អ្នកត្រូវបានធ្វើបច្ចុប្បន្នភាពដោយជោគជ័យ។ អ្នកអាចចូលប្រើឥឡូវនេះបាន។",
     signInBtn: "បន្តទៅកាន់ការចូលគណនី",
     errorTitle: "ការកំណត់ពាក្យសម្ងាត់មិនបានជោគជ័យ",
-    errorDesc: "លេខកូដសម្ងាត់មិនត្រឹមត្រូវ ផុតកំណត់ ឬពាក្យសម្ងាត់ទាំងពីរមិនត្រូវគ្នា។",
+    errorDesc:
+      "លេខកូដសម្ងាត់មិនត្រឹមត្រូវ ផុតកំណត់ ឬពាក្យសម្ងាត់ទាំងពីរមិនត្រូវគ្នា។",
     mismatchError: "ពាក្យសម្ងាត់ទាំងពីរមិនត្រូវគ្នាទេ។",
     lengthError: "ពាក្យសម្ងាត់ត្រូវមានយ៉ាងតិច ៨ តួអក្សរ។",
     tokenRequiredError: "តម្រូវឱ្យមានលេខកូដសម្ងាត់ (Token)។",
@@ -70,7 +78,8 @@ const copy = {
     requestEmailPlaceholder: "បញ្ចូលអ៊ីមែលដែលបានចុះឈ្មោះ",
     requestBtn: "ផ្ញើតំណភ្ជាប់កំណត់ឡើងវិញ",
     requesting: "កំពុងផ្ញើ…",
-    requestSuccess: "តំណភ្ជាប់សម្រាប់កំណត់ពាក្យសម្ងាត់ឡើងវិញត្រូវបានផ្ញើទៅកាន់អ៊ីមែលរបស់អ្នកហើយ!",
+    requestSuccess:
+      "តំណភ្ជាប់សម្រាប់កំណត់ពាក្យសម្ងាត់ឡើងវិញត្រូវបានផ្ញើទៅកាន់អ៊ីមែលរបស់អ្នកហើយ!",
   },
 };
 
@@ -93,7 +102,8 @@ export default function ResetPasswordPage() {
   const [forgotEmail, setForgotEmail] = useState("");
   const [forgotFeedback, setForgotFeedback] = useState(null);
 
-  const [resetPassword, { isLoading, isSuccess, isError, data, error }] = useResetPasswordMutation();
+  const [resetPassword, { isLoading, isSuccess, isError, data, error }] =
+    useResetPasswordMutation();
   const [forgotPassword, forgotState] = useForgotPasswordMutation();
 
   const activeToken = urlToken || tokenInput;
@@ -131,7 +141,10 @@ export default function ResetPasswordPage() {
   const handleRequestNewLink = async (e) => {
     e.preventDefault();
     if (!forgotEmail || !forgotEmail.includes("@")) {
-      setForgotFeedback({ ok: false, message: "Please enter a valid email address." });
+      setForgotFeedback({
+        ok: false,
+        message: "Please enter a valid email address.",
+      });
       return;
     }
     setForgotFeedback(null);
@@ -140,8 +153,10 @@ export default function ResetPasswordPage() {
       setForgotFeedback({ ok: true, message: t.requestSuccess });
       setForgotEmail("");
     } catch (err) {
-      const errMsg = err?.data?.message || err?.error || "Could not send reset link. Please try again.";
-      setForgotFeedback({ ok: false, message: errMsg });
+      setForgotFeedback({
+        ok: false,
+        message: authError(err, "Could not send reset link. Please try again."),
+      });
     }
   };
 
@@ -154,11 +169,14 @@ export default function ResetPasswordPage() {
       {/* Top Bar with Logo & Navigation */}
       <header className="w-full max-w-7xl mx-auto px-6 py-6 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2 group no-underline">
-          <BrandLogo alt="NEXA" className="h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-105" />
+          <BrandLogo
+            alt="NEXA"
+            className="h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+          />
         </Link>
         <Link
           to="/"
-          className={`inline-flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-full border transition-all duration-200 no-underline ${
+          className={`inline-flex items-center gap-2 text-base font-medium px-4 py-2 rounded-full border transition-all duration-200 no-underline ${
             darkMode
               ? "border-zinc-700 bg-zinc-900/80 text-gray-300 hover:bg-zinc-800 hover:text-white"
               : "border-gray-200 bg-white text-gray-600 hover:bg-gray-100 hover:text-gray-900"
@@ -196,13 +214,15 @@ export default function ResetPasswordPage() {
               </div>
 
               <div>
-                <span className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-500 mb-3 border border-emerald-500/20">
+                <span className="inline-flex items-center gap-1.5 text-base font-semibold px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-500 mb-3 border border-emerald-500/20">
                   <Sparkles size={13} /> {t.successTitle}
                 </span>
-                <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-emerald-500">
+                <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-emerald-500">
                   {t.successTitle}
                 </h1>
-                <p className={`mt-2 text-sm leading-relaxed ${darkMode ? "text-slate-300" : "text-gray-600"}`}>
+                <p
+                  className={`mt-2 text-base leading-relaxed ${darkMode ? "text-slate-300" : "text-gray-600"}`}
+                >
                   {data?.message || t.successDesc}
                 </p>
               </div>
@@ -227,16 +247,22 @@ export default function ResetPasswordPage() {
               </div>
 
               <div>
-                <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">{t.title}</h1>
-                <p className={`mt-2 text-sm leading-relaxed ${darkMode ? "text-slate-400" : "text-gray-500"}`}>
+                <h1 className="text-4xl sm:text-5xl font-bold tracking-tight">
+                  {t.title}
+                </h1>
+                <p
+                  className={`mt-2 text-base leading-relaxed ${darkMode ? "text-slate-400" : "text-gray-500"}`}
+                >
                   {t.subtitle}
                 </p>
               </div>
 
               {(validationError || isError) && (
-                <div className="p-3.5 rounded-xl bg-red-500/10 border border-red-500/20 text-red-500 text-xs font-medium text-left flex items-start gap-2">
+                <div className="p-3.5 rounded-xl bg-red-500/10 border border-red-500/20 text-red-500 text-base font-medium text-left flex items-start gap-2">
                   <XCircle size={16} className="shrink-0 mt-0.5" />
-                  <span>{validationError || error?.data?.message || error?.error || t.errorDesc}</span>
+                  <span>
+                    {validationError || authError(error, t.errorDesc)}
+                  </span>
                 </div>
               )}
 
@@ -244,18 +270,21 @@ export default function ResetPasswordPage() {
                 {/* Manual Token Input (Only if not already in URL) */}
                 {!urlToken && (
                   <div>
-                    <label className="block text-xs font-semibold mb-1.5 opacity-80">
+                    <label className="block text-base font-semibold mb-1.5 opacity-80">
                       {t.manualTokenLabel}
                     </label>
                     <div className="relative">
-                      <KeyRound size={17} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
+                      <KeyRound
+                        size={17}
+                        className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"
+                      />
                       <input
                         type="text"
                         value={tokenInput}
                         onChange={(e) => setTokenInput(e.target.value)}
                         placeholder={t.manualTokenPlaceholder}
                         required
-                        className={`w-full pl-10 pr-4 py-2.5 rounded-xl text-sm border focus:outline-none focus:ring-2 focus:ring-brand-primary font-mono text-xs transition-all ${
+                        className={`w-full pl-10 pr-4 py-2.5 rounded-xl text-base border focus:outline-none focus:ring-2 focus:ring-brand-primary font-mono text-base transition-all ${
                           darkMode
                             ? "bg-zinc-800/80 border-zinc-700 text-white placeholder-zinc-500"
                             : "bg-white border-gray-200 text-gray-800 placeholder-gray-400"
@@ -267,11 +296,14 @@ export default function ResetPasswordPage() {
 
                 {/* New Password */}
                 <div>
-                  <label className="block text-xs font-semibold mb-1.5 opacity-80">
+                  <label className="block text-base font-semibold mb-1.5 opacity-80">
                     {t.newPasswordLabel}
                   </label>
                   <div className="relative">
-                    <Lock size={17} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
+                    <Lock
+                      size={17}
+                      className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"
+                    />
                     <input
                       type={showPassword ? "text" : "password"}
                       value={newPassword}
@@ -279,7 +311,7 @@ export default function ResetPasswordPage() {
                       placeholder={t.newPasswordPlaceholder}
                       required
                       minLength={8}
-                      className={`w-full pl-10 pr-11 py-2.5 rounded-xl text-sm border focus:outline-none focus:ring-2 focus:ring-brand-primary transition-all ${
+                      className={`w-full pl-10 pr-11 py-2.5 rounded-xl text-base border focus:outline-none focus:ring-2 focus:ring-brand-primary transition-all ${
                         darkMode
                           ? "bg-zinc-800/80 border-zinc-700 text-white placeholder-zinc-500"
                           : "bg-white border-gray-200 text-gray-800 placeholder-gray-400"
@@ -297,11 +329,14 @@ export default function ResetPasswordPage() {
 
                 {/* Confirm Password */}
                 <div>
-                  <label className="block text-xs font-semibold mb-1.5 opacity-80">
+                  <label className="block text-base font-semibold mb-1.5 opacity-80">
                     {t.confirmPasswordLabel}
                   </label>
                   <div className="relative">
-                    <Lock size={17} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400" />
+                    <Lock
+                      size={17}
+                      className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"
+                    />
                     <input
                       type={showConfirm ? "text" : "password"}
                       value={confirmPassword}
@@ -309,7 +344,7 @@ export default function ResetPasswordPage() {
                       placeholder={t.confirmPasswordPlaceholder}
                       required
                       minLength={8}
-                      className={`w-full pl-10 pr-11 py-2.5 rounded-xl text-sm border focus:outline-none focus:ring-2 focus:ring-brand-primary transition-all ${
+                      className={`w-full pl-10 pr-11 py-2.5 rounded-xl text-base border focus:outline-none focus:ring-2 focus:ring-brand-primary transition-all ${
                         darkMode
                           ? "bg-zinc-800/80 border-zinc-700 text-white placeholder-zinc-500"
                           : "bg-white border-gray-200 text-gray-800 placeholder-gray-400"
@@ -330,16 +365,23 @@ export default function ResetPasswordPage() {
                   disabled={isLoading}
                   className="w-full flex items-center justify-center gap-2 bg-brand-primary hover:bg-brand-secondary text-white font-semibold py-3 px-6 rounded-xl transition-all duration-200 shadow-md disabled:opacity-50 cursor-pointer"
                 >
-                  <RefreshCw size={16} className={isLoading ? "animate-spin" : ""} />
+                  <RefreshCw
+                    size={16}
+                    className={isLoading ? "animate-spin" : ""}
+                  />
                   <span>{isLoading ? t.resetting : t.submitBtn}</span>
                 </button>
               </form>
 
               {/* Request New Link Drawer */}
-              <div className={`p-4 rounded-2xl border text-left space-y-3 ${
-                darkMode ? "bg-zinc-800/50 border-zinc-700/60" : "bg-slate-50 border-slate-200"
-              }`}>
-                <h4 className="text-xs font-semibold flex items-center gap-2">
+              <div
+                className={`p-4 rounded-2xl border text-left space-y-3 ${
+                  darkMode
+                    ? "bg-zinc-800/50 border-zinc-700/60"
+                    : "bg-slate-50 border-slate-200"
+                }`}
+              >
+                <h4 className="text-base font-semibold flex items-center gap-2">
                   <Mail size={14} className="text-brand-primary" />
                   <span>{t.requestNewPrompt}</span>
                 </h4>
@@ -350,7 +392,7 @@ export default function ResetPasswordPage() {
                     onChange={(e) => setForgotEmail(e.target.value)}
                     placeholder={t.requestEmailPlaceholder}
                     required
-                    className={`flex-1 px-3 py-2 rounded-lg text-xs border focus:outline-none focus:ring-2 focus:ring-brand-primary ${
+                    className={`flex-1 px-3 py-2 rounded-lg text-base border focus:outline-none focus:ring-2 focus:ring-brand-primary ${
                       darkMode
                         ? "bg-zinc-900 border-zinc-700 text-white placeholder-zinc-500"
                         : "bg-white border-gray-200 text-gray-800 placeholder-gray-400"
@@ -359,13 +401,15 @@ export default function ResetPasswordPage() {
                   <button
                     type="submit"
                     disabled={forgotState.isLoading}
-                    className="px-3 py-2 bg-slate-700 hover:bg-slate-800 text-white text-xs font-medium rounded-lg transition-colors duration-150 disabled:opacity-50 cursor-pointer"
+                    className="px-3 py-2 bg-slate-700 hover:bg-slate-800 text-white text-base font-medium rounded-lg transition-colors duration-150 disabled:opacity-50 cursor-pointer"
                   >
                     {forgotState.isLoading ? t.requesting : t.requestBtn}
                   </button>
                 </form>
                 {forgotFeedback && (
-                  <p className={`text-xs font-medium ${forgotFeedback.ok ? "text-emerald-500" : "text-red-500"}`}>
+                  <p
+                    className={`text-base font-medium ${forgotFeedback.ok ? "text-emerald-500" : "text-red-500"}`}
+                  >
                     {forgotFeedback.message}
                   </p>
                 )}
@@ -374,7 +418,7 @@ export default function ResetPasswordPage() {
               <div className="pt-2">
                 <Link
                   to="/login"
-                  className={`inline-flex items-center gap-2 text-sm font-medium hover:underline ${
+                  className={`inline-flex items-center gap-2 text-base font-medium hover:underline ${
                     darkMode ? "text-slate-300" : "text-gray-600"
                   }`}
                 >
@@ -388,7 +432,7 @@ export default function ResetPasswordPage() {
       </main>
 
       {/* Footer */}
-      <footer className="w-full text-center py-6 text-xs text-gray-400">
+      <footer className="w-full text-center py-6 text-base text-gray-400">
         &copy; {new Date().getFullYear()} NEXA. All rights reserved.
       </footer>
     </div>

@@ -462,10 +462,18 @@ const createLoginSchema = (
       .optional(),
   });
 
+import { usePageSEO } from "../common/SEO";
+
 export default function LoginPage() {
   const navigate = useNavigate();
   const [login] = useLoginMutation();
   const [forgotPassword] = useForgotPasswordMutation();
+
+  usePageSEO({
+    title: "Sign In | AskKh",
+    description: "Sign in to your AskKh account to access developer Q&A discussions and campus asset recovery.",
+    noIndex: true,
+  });
 
   const {
     language,

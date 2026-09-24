@@ -1,4 +1,4 @@
-.admin-live { --al-blue:#0050f3; color:#162033; background:#f7f8fa; min-height:100vh; display:flex; font-family:var(--font-brand); font-size:14px; color-scheme:light; }
+.admin-live { --al-blue:#0050f3; color:#162033; background:#f7f8fa; min-height:100vh; display:flex; font-family:inherit; font-size:14px; color-scheme:light; }
 .admin-live * { box-sizing:border-box; }
 .admin-live button,.admin-live a { -webkit-tap-highlight-color:transparent; }
 .admin-live button { cursor:pointer; }
@@ -182,7 +182,7 @@
 @media(max-width:600px) { .am-stats,.am-side { grid-template-columns:1fr; }.am-stats { gap:10px; }.am-stat { padding:16px; }.am-report { align-items:flex-start; flex-direction:column; }.am-queue h2 { flex-wrap:wrap; } }
 
 /* Shared workspace polish. */
-.admin-live { font-family:var(--font-brand); background:#f6f8fc; }
+.admin-live { font-family:inherit; background:#f6f8fc; }
 .al-sidebar { width:224px; border-radius:0; background:#fff; border-color:#e9edf5; transition:width .25s ease; }
 .al-brand { height:80px; padding:0 25px; }
 .al-wordmark { font-size:21px; }

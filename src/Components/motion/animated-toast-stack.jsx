@@ -1,9 +1,17 @@
-"use client";;
+"use client";
 // beui.dev/components/motion/animated-toast-stack
 
 import { AlertCircle, Bell, Check, Info, LoaderCircle, X } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { forwardRef, memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  forwardRef,
+  memo,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { createPortal } from "react-dom";
 import { EASE_OUT } from "@/lib/ease";
 import { cn } from "@/lib/utils";
@@ -16,7 +24,7 @@ const STACK_TRANSITION = {
 
 const CONTENT_TRANSITION = {
   duration: 0.28,
-  ease: EASE_OUT
+  ease: EASE_OUT,
 };
 
 const STATUS_ICON = {
@@ -59,11 +67,12 @@ function createToast(input, defaultDuration) {
 export function useAnimatedToastStack({
   initialToasts = [],
   defaultDuration = 4200,
-  limit
+  limit,
 } = {}) {
   const toastTimers = useRef(new Map());
   const [toasts, setToasts] = useState(() =>
-    initialToasts.map((toast) => createToast(toast, defaultDuration)));
+    initialToasts.map((toast) => createToast(toast, defaultDuration)),
+  );
 
   const dismissToast = useCallback((id) => {
     setToasts((current) => current.filter((toast) => toast.id !== id));
@@ -73,14 +82,17 @@ export function useAnimatedToastStack({
     setToasts([]);
   }, []);
 
-  const showToast = useCallback((input) => {
-    const toast = createToast(input, defaultDuration);
-    setToasts((current) => {
-      const next = [...current, toast];
-      return typeof limit === "number" ? next.slice(-limit) : next;
-    });
-    return toast.id;
-  }, [defaultDuration, limit]);
+  const showToast = useCallback(
+    (input) => {
+      const toast = createToast(input, defaultDuration);
+      setToasts((current) => {
+        const next = [...current, toast];
+        return typeof limit === "number" ? next.slice(-limit) : next;
+      });
+      return toast.id;
+    },
+    [defaultDuration, limit],
+  );
 
   const updateToast = useCallback((id, patch) => {
     setToasts((current) =>
@@ -90,9 +102,12 @@ export function useAnimatedToastStack({
               ...toast,
               ...patch,
               id,
-              createdAt: patch.duration === undefined ? toast.createdAt : Date.now(),
+              createdAt:
+                patch.duration === undefined ? toast.createdAt : Date.now(),
             }
-          : toast));
+          : toast,
+      ),
+    );
   }, []);
 
   useEffect(() => {
@@ -150,14 +165,17 @@ export function useAnimatedToastStack({
     };
   }, []);
 
-  return useMemo(() => ({
-    toasts,
-    showToast,
-    updateToast,
-    dismissToast,
-    clearToasts,
-    setToasts,
-  }), [clearToasts, dismissToast, showToast, toasts, updateToast]);
+  return useMemo(
+    () => ({
+      toasts,
+      showToast,
+      updateToast,
+      dismissToast,
+      clearToasts,
+      setToasts,
+    }),
+    [clearToasts, dismissToast, showToast, toasts, updateToast],
+  );
 }
 
 export function AnimatedToastStack({
@@ -172,7 +190,7 @@ export function AnimatedToastStack({
   className,
   classNames,
   icons,
-  renderToast
+  renderToast,
 }) {
   const [portalTarget, setPortalTarget] = useState(null);
   const visibleToasts = toasts.slice(-maxVisible);
@@ -195,8 +213,9 @@ export function AnimatedToastStack({
         resolvedPlacement === "absolute" && "absolute z-20",
         resolvedPlacement !== "static" && POSITION_CLASS[position],
         classNames?.root,
-        className
-      )}>
+        className,
+      )}
+    >
       <AnimatePresence initial={false} mode="popLayout">
         {visibleToasts.map((toast, index) => (
           <ToastItem
@@ -206,7 +225,8 @@ export function AnimatedToastStack({
             onDismiss={onDismiss}
             classNames={classNames}
             icons={icons}
-            renderToast={renderToast} />
+            renderToast={renderToast}
+          />
         ))}
       </AnimatePresence>
     </ol>
@@ -223,169 +243,182 @@ export function AnimatedToastStack({
   return stack;
 }
 
-const ToastItem = memo(forwardRef(function ToastItem({
-  toast,
-  index,
-  onDismiss,
-  classNames,
-  icons,
-  renderToast
-}, ref) {
-  const reduce = useReducedMotion();
-  const status = toast.status ?? "neutral";
-  const Icon = STATUS_ICON[status];
-  const iconNode = icons?.[status] ?? toast.icon ?? <Icon className="h-3.5 w-3.5" />;
-  const canDismiss = toast.dismissible !== false && Boolean(onDismiss);
+const ToastItem = memo(
+  forwardRef(function ToastItem(
+    { toast, index, onDismiss, classNames, icons, renderToast },
+    ref,
+  ) {
+    const reduce = useReducedMotion();
+    const status = toast.status ?? "neutral";
+    const Icon = STATUS_ICON[status];
+    const iconNode = icons?.[status] ?? toast.icon ?? (
+      <Icon className="h-3.5 w-3.5" />
+    );
+    const canDismiss = toast.dismissible !== false && Boolean(onDismiss);
 
-  return (
-    <motion.li
-      ref={ref}
-      layout={!reduce}
-      initial={
-        reduce
-          ? { opacity: 0 }
-          : { opacity: 0, y: 20, scale: 0.94, filter: "blur(4px)" }
-      }
-      animate={
-        reduce
-          ? { opacity: 1 }
-          : { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }
-      }
-      exit={
-        reduce
-          ? { opacity: 0 }
-          : {
-              opacity: 0,
-              y: -20,
-              scale: 0.94,
-              filter: "blur(4px)",
-            }
-      }
-      transition={reduce ? { duration: 0.15 } : STACK_TRANSITION}
-      drag={canDismiss && !reduce ? "x" : false}
-      dragConstraints={{ left: 0, right: 0 }}
-      dragElastic={0.18}
-      onDragEnd={(_, info) => {
-        if (!canDismiss || !onDismiss) return;
-        if (Math.abs(info.offset.x) > 72 || Math.abs(info.velocity.x) > 520) {
-          onDismiss(toast.id);
+    return (
+      <motion.li
+        ref={ref}
+        layout={!reduce}
+        initial={
+          reduce
+            ? { opacity: 0 }
+            : { opacity: 0, y: 20, scale: 0.94, filter: "blur(4px)" }
         }
-      }}
-      className={cn("pointer-events-auto relative will-change-transform", classNames?.item)}
-      style={{ zIndex: 20 - index }}>
-      <div
+        animate={
+          reduce
+            ? { opacity: 1 }
+            : { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }
+        }
+        exit={
+          reduce
+            ? { opacity: 0 }
+            : {
+                opacity: 0,
+                y: -20,
+                scale: 0.94,
+                filter: "blur(4px)",
+              }
+        }
+        transition={reduce ? { duration: 0.15 } : STACK_TRANSITION}
+        drag={canDismiss && !reduce ? "x" : false}
+        dragConstraints={{ left: 0, right: 0 }}
+        dragElastic={0.18}
+        onDragEnd={(_, info) => {
+          if (!canDismiss || !onDismiss) return;
+          if (Math.abs(info.offset.x) > 72 || Math.abs(info.velocity.x) > 520) {
+            onDismiss(toast.id);
+          }
+        }}
         className={cn(
-          "relative overflow-hidden rounded-2xl border border-border bg-card/95 p-3 shadow-2xl backdrop-blur-xl",
-          classNames?.surface
-        )}>
-        {renderToast ? (
-          renderToast(toast)
-        ) : (
-          <div className="flex items-start gap-3">
-            <motion.span
-              layout={!reduce}
-              className={cn(
-                "mt-0.5 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full",
-                STATUS_CLASS[status],
-                classNames?.iconWrap
-              )}>
-              <AnimatePresence mode="popLayout" initial={false}>
-                <motion.span
-                  key={status}
-                  initial={
-                    reduce
-                      ? { opacity: 0 }
-                      : { opacity: 0, y: 8, scale: 0.8, filter: "blur(6px)" }
-                  }
-                  animate={
-                    reduce
-                      ? { opacity: 1 }
-                      : { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }
-                  }
-                  exit={
-                    reduce
-                      ? { opacity: 0 }
-                      : { opacity: 0, y: -8, scale: 0.9, filter: "blur(6px)" }
-                  }
-                  transition={CONTENT_TRANSITION}
-                  className="inline-flex">
-                  {status === "loading" ? (
-                    <span className="inline-flex animate-spin">{iconNode}</span>
-                  ) : (
-                    iconNode
-                  )}
-                </motion.span>
-              </AnimatePresence>
-            </motion.span>
+          "pointer-events-auto relative will-change-transform",
+          classNames?.item,
+        )}
+        style={{ zIndex: 20 - index }}
+      >
+        <div
+          className={cn(
+            "relative overflow-hidden rounded-2xl border border-border bg-card/95 p-3 shadow-2xl backdrop-blur-xl",
+            classNames?.surface,
+          )}
+        >
+          {renderToast ? (
+            renderToast(toast)
+          ) : (
+            <div className="flex items-start gap-3">
+              <motion.span
+                layout={!reduce}
+                className={cn(
+                  "mt-0.5 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full",
+                  STATUS_CLASS[status],
+                  classNames?.iconWrap,
+                )}
+              >
+                <AnimatePresence mode="popLayout" initial={false}>
+                  <motion.span
+                    key={status}
+                    initial={
+                      reduce
+                        ? { opacity: 0 }
+                        : { opacity: 0, y: 8, scale: 0.8, filter: "blur(6px)" }
+                    }
+                    animate={
+                      reduce
+                        ? { opacity: 1 }
+                        : { opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }
+                    }
+                    exit={
+                      reduce
+                        ? { opacity: 0 }
+                        : { opacity: 0, y: -8, scale: 0.9, filter: "blur(6px)" }
+                    }
+                    transition={CONTENT_TRANSITION}
+                    className="inline-flex"
+                  >
+                    {status === "loading" ? (
+                      <span className="inline-flex animate-spin">
+                        {iconNode}
+                      </span>
+                    ) : (
+                      iconNode
+                    )}
+                  </motion.span>
+                </AnimatePresence>
+              </motion.span>
 
-            <div className={cn("min-w-0 flex-1", classNames?.content)}>
-              <AnimatePresence mode="popLayout" initial={false}>
-                <motion.div
-                  key={`${toast.id}-${status}-${String(toast.title)}`}
-                  initial={
-                    reduce
-                      ? { opacity: 0 }
-                      : { opacity: 0, y: 8, filter: "blur(6px)" }
-                  }
-                  animate={
-                    reduce
-                      ? { opacity: 1 }
-                      : { opacity: 1, y: 0, filter: "blur(0px)" }
-                  }
-                  exit={
-                    reduce
-                      ? { opacity: 0 }
-                      : { opacity: 0, y: -8, filter: "blur(6px)" }
-                  }
-                  transition={CONTENT_TRANSITION}>
-                  <p
-                    className={cn(
-                      "truncate text-sm font-medium leading-5 text-foreground",
-                      classNames?.title
-                    )}>
-                    {toast.title}
-                  </p>
-                  {toast.description ? (
+              <div className={cn("min-w-0 flex-1", classNames?.content)}>
+                <AnimatePresence mode="popLayout" initial={false}>
+                  <motion.div
+                    key={`${toast.id}-${status}-${String(toast.title)}`}
+                    initial={
+                      reduce
+                        ? { opacity: 0 }
+                        : { opacity: 0, y: 8, filter: "blur(6px)" }
+                    }
+                    animate={
+                      reduce
+                        ? { opacity: 1 }
+                        : { opacity: 1, y: 0, filter: "blur(0px)" }
+                    }
+                    exit={
+                      reduce
+                        ? { opacity: 0 }
+                        : { opacity: 0, y: -8, filter: "blur(6px)" }
+                    }
+                    transition={CONTENT_TRANSITION}
+                  >
                     <p
                       className={cn(
-                        "mt-0.5 line-clamp-2 text-sm leading-4 text-muted-foreground",
-                        classNames?.description
-                      )}>
-                      {toast.description}
+                        "truncate text-base font-medium leading-5 text-foreground",
+                        classNames?.title,
+                      )}
+                    >
+                      {toast.title}
                     </p>
-                  ) : null}
-                </motion.div>
-              </AnimatePresence>
+                    {toast.description ? (
+                      <p
+                        className={cn(
+                          "mt-0.5 line-clamp-2 text-base leading-4 text-muted-foreground",
+                          classNames?.description,
+                        )}
+                      >
+                        {toast.description}
+                      </p>
+                    ) : null}
+                  </motion.div>
+                </AnimatePresence>
 
-              {toast.action ? (
+                {toast.action ? (
+                  <button
+                    type="button"
+                    onClick={() => toast.action?.onClick(toast)}
+                    className={cn(
+                      "mt-2 inline-flex h-7 items-center rounded-full bg-primary/[0.06] px-3 text-base font-medium text-foreground transition-colors hover:bg-primary/[0.1]",
+                      classNames?.action,
+                    )}
+                  >
+                    {toast.action.label}
+                  </button>
+                ) : null}
+              </div>
+
+              {canDismiss ? (
                 <button
                   type="button"
-                  onClick={() => toast.action?.onClick(toast)}
+                  onClick={() => onDismiss?.(toast.id)}
+                  aria-label="Dismiss toast"
                   className={cn(
-                    "mt-2 inline-flex h-7 items-center rounded-full bg-primary/[0.06] px-3 text-sm font-medium text-foreground transition-colors hover:bg-primary/[0.1]",
-                    classNames?.action
-                  )}>
-                  {toast.action.label}
+                    "inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-primary/[0.06] hover:text-foreground",
+                    classNames?.close,
+                  )}
+                >
+                  <X className="h-3.5 w-3.5" />
                 </button>
               ) : null}
             </div>
-
-            {canDismiss ? (
-              <button
-                type="button"
-                onClick={() => onDismiss?.(toast.id)}
-                aria-label="Dismiss toast"
-                className={cn(
-                  "inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-primary/[0.06] hover:text-foreground",
-                  classNames?.close
-                )}>
-                <X className="h-3.5 w-3.5" />
-              </button>
-            ) : null}
-          </div>
-        )}
-
-      </div>
-    </motion.li>
-  );
-}));
+          )}
+        </div>
+      </motion.li>
+    );
+  }),
+);

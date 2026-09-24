@@ -1,86 +1,179 @@
-import React from "react";
+import React, { useEffect, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useTheme } from "../../context/ThemeContext.jsx";
 import ScrollReveal from "../Animations/ScrollReveal.jsx";
 
-function SectionBlock({ num, title, paragraphs = [], list, outro = [] }) {
+// ==================================================
+// Bullet List
+// ==================================================
+
+function BulletList({ items = [] }) {
   return (
-    <div id={`section-${num}`} className="scroll-mt-24">
+    <ul className="mb-3 space-y-2">
+      {items.map((item, index) => (
+        <li
+          key={index}
+          className="flex items-start gap-2 text-[var(--text-muted)]"
+        >
+          <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-primary" />
+          <span>{item}</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+// ==================================================
+// Terms Section
+// ==================================================
+
+function SectionBlock({ num, title, paragraphs = [], list = [], outro = [] }) {
+  return (
+    <article id={`section-${num}`} className="scroll-mt-24">
       <div className="flex items-start gap-4">
-        <span className="shrink-0 w-9 h-9 rounded-full bg-brand-primary text-white text-sm font-bold flex items-center justify-center">
+        {/* Section Number */}
+        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-primary text-base font-bold text-white">
           {num}
         </span>
-        <div className="flex-1">
-          <h2 className="text-xl font-bold text-[var(--text-main)] mb-3">{title}</h2>
-          {paragraphs.map((p, i) => (
-            <p key={i} className="text-[var(--text-muted)] leading-relaxed mb-3">
-              {p}
+
+        {/* Section Content */}
+        <div className="min-w-0 flex-1">
+          <h2 className="mb-3 text-3xl font-bold text-[var(--text-main)]">
+            {title}
+          </h2>
+
+          {/* Paragraphs */}
+          {paragraphs.map((paragraph, index) => (
+            <p
+              key={index}
+              className="mb-3 leading-relaxed text-[var(--text-muted)]"
+            >
+              {paragraph}
             </p>
           ))}
-          {list && (
-            <ul className="space-y-2 mb-3">
-              {list.map((item, i) => (
-                <li key={i} className="flex items-start gap-2 text-[var(--text-muted)]">
-                  <span className="mt-2 w-1.5 h-1.5 rounded-full bg-brand-primary shrink-0" />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          )}
-          {outro.map((p, i) => (
-            <p key={i} className="text-[var(--text-muted)] leading-relaxed mb-3">
-              {p}
+
+          {/* List */}
+          {list.length > 0 && <BulletList items={list} />}
+
+          {/* Outro Paragraphs */}
+          {outro.map((paragraph, index) => (
+            <p
+              key={index}
+              className="mb-3 leading-relaxed text-[var(--text-muted)]"
+            >
+              {paragraph}
             </p>
           ))}
         </div>
       </div>
-    </div>
+    </article>
   );
 }
+
+import { usePageSEO } from "../common/SEO";
+
+// ==================================================
+// Terms & Conditions Page
+// ==================================================
 
 export default function TermsAndConditions() {
   const { t } = useTranslation();
   const { darkMode } = useTheme();
 
-  const sections = Object.entries(t("termsPage.sections", { returnObjects: true })).map(([num, data]) => ({
-    num: parseInt(num),
-    title: data.title,
-    paragraphs: data.paragraphs,
-    list: data.list,
-    outro: data.outro
-  }));
+  usePageSEO({
+    title: "Terms & Conditions | AskKh",
+    description: "Read the AskKh Terms & Conditions to understand community guidelines, user responsibilities, and service rules.",
+    keywords: "AskKh terms, terms and conditions, community guidelines Cambodia, user agreement",
+    canonicalUrl: "https://askkh.com/terms",
+  });
+
+  // ==================================================
+  // Transform Translation Data
+  // ==================================================
+
+  const sections = useMemo(() => {
+    const termsSections = t("termsPage.sections", {
+      returnObjects: true,
+    });
+
+    if (!termsSections || typeof termsSections !== "object") {
+      return [];
+    }
+
+    return Object.entries(termsSections)
+      .map(([num, data]) => ({
+        num: Number(num),
+        title: data?.title ?? "",
+        paragraphs: Array.isArray(data?.paragraphs) ? data.paragraphs : [],
+        list: Array.isArray(data?.list) ? data.list : [],
+        outro: Array.isArray(data?.outro) ? data.outro : [],
+      }))
+      .sort((a, b) => a.num - b.num);
+  }, [t]);
+
+  // ==================================================
+  // Theme
+  // ==================================================
+
+  const heroTheme = darkMode ? "bg-zinc-900" : "bg-brand-primary-light";
+
+  // ==================================================
+  // Render
+  // ==================================================
 
   return (
-    <div className="site-content bg-[var(--bg-main)] text-[var(--text-main)] antialiased transition-colors duration-300">
-      <section className={`${darkMode ? "bg-zinc-900" : "bg-brand-primary-light"} transition-colors duration-300`}>
-        <div className="max-w-4xl mx-auto px-6 py-16 text-center">
+    <main className="site-content min-h-screen bg-[var(--bg-main)] text-[var(--text-main)] antialiased transition-colors duration-300">
+      {/* ==================================================
+          Hero / Header
+      ================================================== */}
+
+      <section className={`${heroTheme} transition-colors duration-300`}>
+        <div className="mx-auto max-w-4xl px-6 py-16 text-center">
           <ScrollReveal animation="fadeInUp">
-            <span className="text-brand-primary text-sm font-semibold uppercase tracking-wide">
+            <span className="text-base font-semibold uppercase tracking-wide text-brand-primary">
               {t("termsPage.legalLabel")}
             </span>
-            <h1 className="text-3xl md:text-4xl font-bold text-[var(--text-main)] mt-2">
+
+            <h1 className="mt-2 text-5xl font-bold text-[var(--text-main)] md:text-5xl">
               {t("termsPage.title")}
             </h1>
-            <p className="text-[var(--text-muted)] mt-3">{t("termsPage.lastUpdated")}</p>
+
+            <p className="mt-3 text-[var(--text-muted)]">
+              {t("termsPage.lastUpdated")}
+            </p>
           </ScrollReveal>
         </div>
       </section>
-      <section className="max-w-4xl mx-auto px-6 py-12">
+
+      {/* ==================================================
+          Introduction
+      ================================================== */}
+
+      <section className="mx-auto max-w-4xl px-6 py-12">
         <ScrollReveal animation="fadeInUp">
-          <p className="text-[var(--text-muted)] leading-relaxed">
+          <p className="leading-relaxed text-[var(--text-muted)]">
             {t("termsPage.intro")}
           </p>
         </ScrollReveal>
       </section>
-      <section className="max-w-4xl mx-auto px-6 pb-20">
+
+      {/* ==================================================
+          Terms Sections
+      ================================================== */}
+
+      <section className="mx-auto max-w-4xl px-6 pb-20">
         <div className="space-y-10">
-          {sections.map((s, index) => (
-            <ScrollReveal key={s.num} animation="fadeInUp" delay={index * 50}>
-              <SectionBlock {...s} />
+          {sections.map((section, index) => (
+            <ScrollReveal
+              key={section.num}
+              animation="fadeInUp"
+              delay={index * 50}
+            >
+              <SectionBlock {...section} />
             </ScrollReveal>
           ))}
         </div>
       </section>
-    </div>
+    </main>
   );
 }

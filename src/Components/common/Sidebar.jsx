@@ -4,6 +4,7 @@ import React, { useId } from "react";
 import { LayoutGroup, motion, useReducedMotion } from "framer-motion";
 import { NavLink, useNavigate } from "react-router-dom";
 import {
+  Home,
   LayoutDashboard,
   Settings,
   Bookmark,
@@ -21,6 +22,7 @@ import { logout } from "../../store/slices/authSlice";
 import { useLogoutApiMutation } from "@/features/auth/authApi";
 import { baseApi } from "../../store/api/baseApi";
 import { useWorkspaceDataQuery } from "../../features/workspace/workspaceApi";
+import { profileImageUrl, resolveUserAvatar } from "../../features/workspace/profileImage";
 import { cn } from "@/lib/utils";
 export default function Sidebar({ mode = "user", mobile = false }) {
   const { w } = useWorkspaceTranslation();
@@ -33,8 +35,25 @@ export default function Sidebar({ mode = "user", mobile = false }) {
   const profile = useWorkspaceDataQuery({
     resource: "profile",
   });
-  const user = profile.data?.data ?? profile.data ?? storedUser;
+  const apiUser = profile.data?.data ?? profile.data;
+  const user = {
+    ...storedUser,
+    ...(apiUser || {}),
+    profileImage:
+      apiUser?.profileImage ||
+      apiUser?.avatar ||
+      apiUser?.photoURL ||
+      apiUser?.image ||
+      storedUser?.profileImage ||
+      storedUser?.avatar ||
+      storedUser?.photoURL,
+  };
   const userNavItems = [
+    {
+      label: "Home",
+      path: "/",
+      icon: Home,
+    },
     {
       label: "Dashboard",
       path: "/dashboard",
@@ -83,6 +102,11 @@ export default function Sidebar({ mode = "user", mobile = false }) {
   ];
   const adminNavItems = [
     {
+      label: "Home",
+      path: "/",
+      icon: Home,
+    },
+    {
       label: "Dashboard",
       path: "/admin/dashboard",
       icon: LayoutDashboard,
@@ -100,12 +124,12 @@ export default function Sidebar({ mode = "user", mobile = false }) {
   };
   if (mode === "user") {
     const groups = [
-      ["Overview", userNavItems.slice(0, 2)],
+      ["Overview", userNavItems.slice(0, 3)],
       [
         "Ask & Help",
         [
           {
-            ...userNavItems[2],
+            ...userNavItems[3],
             label: "Q & A",
           },
         ],
@@ -113,51 +137,66 @@ export default function Sidebar({ mode = "user", mobile = false }) {
       [
         "Lost & Found",
         [
-          userNavItems[3],
+          userNavItems[4],
           {
-            ...userNavItems[4],
+            ...userNavItems[5],
             label: "Match Center",
           },
-          userNavItems[5],
+          userNavItems[6],
         ],
       ],
-      ["Workspace", userNavItems.slice(6)],
+      ["Workspace", userNavItems.slice(7)],
     ];
     return (
       <aside className={`uw-sidebar ${mobile ? "is-mobile" : ""}`}>
         {!mobile && (
-          <NavLink to="/dashboard" className="uw-brand">
-            <BrandLogo alt="NEXA" style={{ width: 168, height: 56, objectFit: "contain" }} />
+          <NavLink to="/" className="uw-brand" title={w("Home")}>
+            <BrandLogo
+              alt="NEXA"
+              style={{ width: 168, height: 56, objectFit: "contain" }}
+            />
           </NavLink>
         )}
         <LayoutGroup id={indicatorId}>
-        <nav aria-label={w("Workspace")}>
-          {groups.map(([label, items]) => (
-            <section key={label}>
-              <h2>{w(label)}</h2>
-              {items.map(({ path, label, icon: Icon }) => (
-                <NavLink
-                  key={path}
-                  to={path}
-                  end={path === "/dashboard"}
-                  className={({ isActive }) => (isActive ? "active" : "")}
-                >
-                  {({ isActive }) => <>
-                    {isActive && <motion.span
-                      className="uw-nav-indicator"
-                      layoutId="active-navigation"
-                      aria-hidden="true"
-                      initial={false}
-                      transition={reduceMotion ? { duration: 0 } : { type: "spring", stiffness: 420, damping: 36 }}
-                    />}
-                    <Icon size={17} strokeWidth={1.5} />
-                    <span className="uw-nav-label">{w(label)}</span>
-                  </>}
-                </NavLink>
-              ))}
-            </section>
-          ))}
-        </nav>
+          <nav aria-label={w("Workspace")}>
+            {groups.map(([label, items]) => (
+              <section key={label}>
+                <h2>{w(label)}</h2>
+                {items.map(({ path, label, icon: Icon }) => (
+                  <NavLink
+                    key={path}
+                    to={path}
+                    end={path === "/dashboard"}
+                    className={({ isActive }) => (isActive ? "active" : "")}
+                  >
+                    {({ isActive }) => (
+                      <>
+                        {isActive && (
+                          <motion.span
+                            className="uw-nav-indicator"
+                            layoutId="active-navigation"
+                            aria-hidden="true"
+                            initial={false}
+                            transition={
+                              reduceMotion
+                                ? { duration: 0 }
+                                : {
+                                    type: "spring",
+                                    stiffness: 420,
+                                    damping: 36,
+                                  }
+                            }
+                          />
+                        )}
+                        <Icon size={17} strokeWidth={1.5} />
+                        <span className="uw-nav-label">{w(label)}</span>
+                      </>
+                    )}
+                  </NavLink>
+                ))}
+              </section>
+            ))}
+          </nav>
         </LayoutGroup>
         <button className="uw-signout" onClick={handleLogout}>
           <LogOut size={17} />
@@ -182,10 +221,10 @@ export default function Sidebar({ mode = "user", mobile = false }) {
           <div className="flex items-center gap-3 px-2 pt-2">
             <span className="admin-brand-mark">N</span>
             <div>
-              <p className="text-sm font-black tracking-wide text-white">
+              <p className="text-base font-black tracking-wide text-white">
                 NEXA
               </p>
-              <p className="text-sm font-bold uppercase tracking-[.18em] text-indigo-400">
+              <p className="text-base font-bold uppercase tracking-[.18em] text-indigo-400">
                 {w("Administration")}
               </p>
             </div>
@@ -203,14 +242,14 @@ export default function Sidebar({ mode = "user", mobile = false }) {
             )}
           >
             <Avatar
-              src={user.profileImage || user.avatar}
+              src={resolveUserAvatar(user)}
               name={user.displayName || user.name}
               size="md"
             />
             <div className="min-w-0 flex-1">
               <p
                 className={cn(
-                  "text-sm font-bold truncate",
+                  "text-base font-bold truncate",
                   mode === "admin"
                     ? "text-white"
                     : "text-slate-900 dark:text-white",
@@ -221,7 +260,7 @@ export default function Sidebar({ mode = "user", mobile = false }) {
               <div className="flex items-center gap-1.5 mt-0.5">
                 <span
                   className={cn(
-                    "px-2 py-0.5 rounded-full text-sm font-extrabold uppercase",
+                    "px-2 py-0.5 rounded-full text-base font-extrabold uppercase",
                     mode === "admin"
                       ? "bg-rose-500/15 text-rose-600 dark:text-rose-400"
                       : "bg-blue-500/15 text-blue-600 dark:text-blue-400",
@@ -229,7 +268,7 @@ export default function Sidebar({ mode = "user", mobile = false }) {
                 >
                   {role}
                 </span>
-                <span className="text-sm text-slate-500 dark:text-slate-400 font-medium">
+                <span className="text-base text-slate-500 dark:text-slate-400 font-medium">
                   {user.reputation != null
                     ? w("{{value0}} pts", {
                         value0: user.reputation,
@@ -245,7 +284,7 @@ export default function Sidebar({ mode = "user", mobile = false }) {
         <div>
           <p
             className={cn(
-              "px-3 text-sm font-extrabold uppercase tracking-wider mb-2",
+              "px-3 text-base font-extrabold uppercase tracking-wider mb-2",
               mode === "admin"
                 ? "text-slate-400"
                 : "text-slate-400 dark:text-slate-500",
@@ -269,7 +308,7 @@ export default function Sidebar({ mode = "user", mobile = false }) {
                   }
                   className={({ isActive }) =>
                     cn(
-                      "flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition-all select-none",
+                      "flex items-center justify-between px-3.5 py-2.5 rounded-xl text-base font-semibold transition-all select-none",
                       isActive
                         ? mode === "admin"
                           ? "admin-nav-active font-bold"
@@ -285,7 +324,7 @@ export default function Sidebar({ mode = "user", mobile = false }) {
                     <span>{item.label}</span>
                   </div>
                   {item.badge && (
-                    <span className="px-2 py-0.5 rounded-full text-sm font-bold bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300">
+                    <span className="px-2 py-0.5 rounded-full text-base font-bold bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300">
                       {item.badge}
                     </span>
                   )}
@@ -300,7 +339,7 @@ export default function Sidebar({ mode = "user", mobile = false }) {
       <div className="space-y-2 pt-4 border-t border-slate-100 dark:border-slate-800/80">
         <button
           onClick={handleLogout}
-          className="flex w-full items-center gap-2 px-3.5 py-2 text-sm font-semibold text-slate-500 hover:text-rose-600 dark:hover:text-rose-400 transition-colors cursor-pointer"
+          className="flex w-full items-center gap-2 px-3.5 py-2 text-base font-semibold text-slate-500 hover:text-rose-600 dark:hover:text-rose-400 transition-colors cursor-pointer"
         >
           <LogOut className="w-4 h-4" />
           <span>{w("Sign Out")}</span>

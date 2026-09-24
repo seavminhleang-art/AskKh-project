@@ -32,15 +32,28 @@ export default function WorkspaceTopbar({
   const profile = useWorkspaceDataQuery({
     resource: "profile",
   });
-  const user = profile.data?.data ?? profile.data ?? storedUser;
+  const apiUser = profile.data?.data ?? profile.data;
+  const user = {
+    ...storedUser,
+    ...(apiUser || {}),
+    profileImage:
+      apiUser?.profileImage ||
+      apiUser?.avatar ||
+      apiUser?.photoURL ||
+      apiUser?.image ||
+      storedUser?.profileImage ||
+      storedUser?.avatar ||
+      storedUser?.photoURL,
+  };
   const unread = useWorkspaceDataQuery({
     resource: "unread",
   });
   return (
     <header className="uw-topbar">
       <Link
-        to={mode === "admin" ? "/admin/dashboard" : "/dashboard"}
+        to="/"
         className="flex items-center gap-2 md:hidden"
+        title={w("Home")}
       >
         <span className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-600 text-white">
           <LayoutDashboard size={21} />
@@ -69,11 +82,11 @@ export default function WorkspaceTopbar({
           name="search"
           aria-label={w("Search community questions")}
           placeholder={w("Search community questions\u2026")}
-          className="min-w-0 flex-1 bg-transparent text-sm outline-none"
+          className="min-w-0 flex-1 bg-transparent text-base outline-none"
         />
       </form>
       <div className="workspace-topbar-actions">
-                <button
+        <button
           className="workspace-icon-button"
           aria-label={darkMode ? w("Use light theme") : w("Use dark theme")}
           onClick={toggleTheme}
@@ -100,13 +113,13 @@ export default function WorkspaceTopbar({
         <WorkspaceProfileMenu user={user} mode={mode} />
         <button
           type="button"
-          className="md:hidden"
+          className="workspace-icon-button md:hidden"
           aria-label={w("Toggle workspace navigation")}
           aria-expanded={menuOpen}
           aria-controls="workspace-mobile-menu"
           onClick={() => setMenuOpen(!menuOpen)}
         >
-          {menuOpen ? <X size={22} /> : <Menu size={22} />}
+          {menuOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
       </div>
       {menuOpen && (

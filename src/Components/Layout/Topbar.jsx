@@ -13,10 +13,7 @@ import {
   Sun,
 } from "lucide-react";
 import Avatar from "../common/Avatar";
-import {
-  openMobileSidebar,
-  toggleSidebar,
-} from "../../features/ui/uiSlice";
+import { openMobileSidebar, toggleSidebar } from "../../features/ui/uiSlice";
 import { logout, selectCurrentUser } from "../../features/auth/authSlice";
 
 // ---- i18n --------------------------------------------------------------
@@ -92,9 +89,7 @@ export default function Topbar() {
   const navigate = useNavigate();
   const crumbs = useBreadcrumb();
   const user = useSelector(selectCurrentUser);
-  const sidebarCollapsed = useSelector(
-    (state) => state.ui.sidebarCollapsed
-  );
+  const sidebarCollapsed = useSelector((state) => state.ui.sidebarCollapsed);
 
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
@@ -128,11 +123,9 @@ export default function Topbar() {
       }
     }
 
-
     document.addEventListener("mousedown", handleClickOutside);
 
-    return () =>
-      document.removeEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   // Global "/" shortcut focuses the search box, unless the person is
@@ -174,9 +167,7 @@ export default function Topbar() {
         <button
           type="button"
           onClick={() => dispatch(toggleSidebar())}
-          aria-label={
-            sidebarCollapsed ? t.expandSidebar : t.collapseSidebar
-          }
+          aria-label={sidebarCollapsed ? t.expandSidebar : t.collapseSidebar}
           className="hidden rounded-md p-2 text-gray-500 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 md:block"
         >
           {sidebarCollapsed ? (
@@ -197,11 +188,8 @@ export default function Topbar() {
         </button>
 
         {/* Breadcrumb */}
-        <nav
-          aria-label="Breadcrumb"
-          className="hidden min-w-0 md:block"
-        >
-          <ol className="flex items-center gap-1 truncate text-sm text-gray-500 dark:text-gray-400">
+        <nav aria-label="Breadcrumb" className="hidden min-w-0 md:block">
+          <ol className="flex items-center gap-1 truncate text-base text-gray-500 dark:text-gray-400">
             {crumbs.length === 0 && (
               <li className="font-medium text-gray-900 dark:text-white">
                 {t.dashboard}
@@ -209,14 +197,9 @@ export default function Topbar() {
             )}
 
             {crumbs.map((crumb, index) => (
-              <li
-                key={crumb.path}
-                className="flex items-center gap-1"
-              >
+              <li key={crumb.path} className="flex items-center gap-1">
                 {index > 0 && (
-                  <span className="text-gray-300 dark:text-gray-600">
-                    /
-                  </span>
+                  <span className="text-gray-300 dark:text-gray-600">/</span>
                 )}
 
                 {index === crumbs.length - 1 ? (
@@ -238,17 +221,16 @@ export default function Topbar() {
       </div>
 
       {/* Search */}
-      <div className="flex min-w-0 flex-1 items-center gap-2 rounded-full bg-gray-100 px-4 py-2.5 text-sm text-gray-400 dark:bg-gray-800 dark:text-gray-500">
+      <div className="flex min-w-0 flex-1 items-center gap-2 rounded-full bg-gray-100 px-4 py-2.5 text-base text-gray-400 dark:bg-gray-800 dark:text-gray-500">
         <Search className="h-4 w-4 shrink-0" />
 
         <input
           ref={searchRef}
           type="search"
           placeholder={t.search}
-          className="w-full bg-transparent text-sm text-gray-700 outline-none placeholder:text-gray-400 dark:text-white dark:placeholder:text-gray-500"
+          className="w-full bg-transparent text-base text-gray-700 outline-none placeholder:text-gray-400 dark:text-white dark:placeholder:text-gray-500"
         />
       </div>
-
 
       {/* Right side */}
       <div className="flex items-center gap-2">
@@ -258,7 +240,7 @@ export default function Topbar() {
           onClick={toggleLang}
           aria-label={t.switchLanguage}
           title={t.switchLanguage}
-          className="flex items-center gap-1 rounded-md p-2 text-sm font-medium text-gray-500 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
+          className="flex items-center gap-1 rounded-md p-2 text-base font-medium text-gray-500 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
         >
           <Languages className="h-5 w-5" />
           <span className="hidden sm:inline">
@@ -313,7 +295,7 @@ export default function Topbar() {
               <Link
                 to="/users/me"
                 role="menuitem"
-                className="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-gray-700"
+                className="block px-3 py-2 text-base text-gray-700 hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-gray-700"
                 onClick={() => setMenuOpen(false)}
               >
                 {t.profile}
@@ -322,7 +304,7 @@ export default function Topbar() {
               <Link
                 to="/settings"
                 role="menuitem"
-                className="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-gray-700"
+                className="block px-3 py-2 text-base text-gray-700 hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-gray-700"
                 onClick={() => setMenuOpen(false)}
               >
                 {t.settings}
@@ -332,7 +314,7 @@ export default function Topbar() {
                 type="button"
                 role="menuitem"
                 onClick={handleLogout}
-                className="block w-full px-3 py-2 text-left text-sm text-brand-secondary hover:bg-brand-secondary-light dark:hover:bg-gray-700"
+                className="block w-full px-3 py-2 text-left text-base text-brand-secondary hover:bg-brand-secondary-light dark:hover:bg-gray-700"
               >
                 {t.logout}
               </button>

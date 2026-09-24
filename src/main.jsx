@@ -12,8 +12,6 @@ import TermsAndConditions from "./Components/Pages/TermAndConditions.jsx";
 import PrivacyPolicy from "./Components/Pages/Policy.jsx";
 
 
-
-
 import LoginPage from "./Components/Auth/LoginPage.jsx";
 import RegisterPage from "./Components/Auth/RegisterPage.jsx";
 import VerifyEmailPage from "./Components/Auth/VerifyEmailPage.jsx";

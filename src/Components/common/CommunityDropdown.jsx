@@ -72,7 +72,7 @@ export default function CommunityDropdown({ isMobile = false, onNavigate }) {
               to="/community/questions"
               onClick={handleItemClick}
               className={({ isActive }) =>
-                `block px-4 py-3 rounded-xl text-sm font-medium transition-all ${
+                `block px-4 py-3 rounded-xl text-base font-medium transition-all ${
                   isActive
                     ? "bg-[#F5F8FF] text-[#155EEF] font-semibold dark:bg-blue-950/50 dark:text-blue-400"
                     : "text-[#475467] dark:text-slate-300 hover:bg-[#F5F8FF] hover:text-[#155EEF] dark:hover:bg-slate-800"
@@ -85,7 +85,7 @@ export default function CommunityDropdown({ isMobile = false, onNavigate }) {
               to="/community/lost-found"
               onClick={handleItemClick}
               className={({ isActive }) =>
-                `block px-4 py-3 rounded-xl text-sm font-medium transition-all ${
+                `block px-4 py-3 rounded-xl text-base font-medium transition-all ${
                   isActive
                     ? "bg-[#F5F8FF] text-[#155EEF] font-semibold dark:bg-blue-950/50 dark:text-blue-400"
                     : "text-[#475467] dark:text-slate-300 hover:bg-[#F5F8FF] hover:text-[#155EEF] dark:hover:bg-slate-800"

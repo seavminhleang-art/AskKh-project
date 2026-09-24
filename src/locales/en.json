@@ -7,6 +7,9 @@
   "about": "About",
   "leaderboard": "Leaderboard",
   "getStarted": "Get Started",
+  "dashboard": "Dashboard",
+  "profile": "Profile",
+  "logout": "Log out",
   "notificationLabel": "Notifications",
   "themeLabel": "Toggle Theme",
   "menuLabel": "Menu",
@@ -718,6 +721,6 @@
     },
     "contactTitle": "ADDRESS & CONTACT",
     "organizedTitle": "ORGANIZED AND SPONSORS",
-    "copyright": "© 2026 SastraCode. All rights reserved."
+    "copyright": "© 2026 NEXA. All rights reserved."
   }
 }

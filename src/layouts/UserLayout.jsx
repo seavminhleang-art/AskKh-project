@@ -2,9 +2,16 @@ import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
 import Sidebar from "../Components/common/Sidebar";
 import WorkspaceTopbar from "./WorkspaceTopbar";
+import { usePageSEO } from "../Components/common/SEO";
 
 export default function UserLayout({ mode = "user" }) {
   const [collapsed, setCollapsed] = useState(false);
+
+  usePageSEO({
+    title: mode === "admin" ? "Admin Workspace | AskKh" : "User Dashboard | AskKh",
+    description: "Manage your personal questions, answers, lost & found reports, and notifications on AskKh.",
+    noIndex: true,
+  });
   if (mode === "admin") {
     return (
       <div className="admin-workspace min-h-screen flex text-slate-100">

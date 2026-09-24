@@ -25,12 +25,19 @@ export function workspaceRequest({
     if (resource === "post" && key) return `/posts/${key}`;
     if (resource === "answers" && key) return `/posts/answers/${key}`;
   }
-  if (action === "save" && resource === "profile")
+  if (action === "save" && resource === "profile") {
+    const saveBody = {};
+    // Only include fields that are actually provided
+    if (body.username !== undefined) saveBody.username = body.username;
+    if (body.bio !== undefined) saveBody.bio = body.bio;
+    if (body.profileImage !== undefined) saveBody.profileImage = body.profileImage;
+    if (body.avatar !== undefined) saveBody.avatar = body.avatar;
     return {
       url: "/users/update-user",
       method: "PUT",
-      body: { username: body.username, bio: body.bio },
+      body: saveBody,
     };
+  }
   if (action === "save" && resource === "password")
     return { url: "/users/update-password", method: "PUT", body };
   if (action === "save" && resource === "avatar")

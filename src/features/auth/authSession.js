@@ -11,9 +11,34 @@ export function authCredentials(data, refreshToken = data.refreshToken) {
   // These claims only control navigation; the server must enforce authorization.
   const roles = [claims.role, ...(Array.isArray(claims.roles) ? claims.roles : [])];
   const role = roles.some(value => ['admin', 'role_admin'].includes(String(value).toLowerCase())) ? 'admin' : 'student';
+
+  let existingUser = null;
+  try {
+    const stored = localStorage.getItem('nexa_user');
+    if (stored) existingUser = JSON.parse(stored);
+  } catch { /* Ignore storage parsing error */ }
+
+  const profileImage =
+    data.profileImage ||
+    data.avatar ||
+    data.image ||
+    claims.profileImage ||
+    claims.avatar ||
+    existingUser?.profileImage ||
+    existingUser?.avatar ||
+    null;
+
   return {
     accessToken: data.accessToken,
     refreshToken,
-    user: { id: data.userId, displayName: data.displayName, email: data.email, role },
+    user: {
+      ...(existingUser || {}),
+      id: data.userId ?? data.id ?? existingUser?.id,
+      displayName: data.displayName || data.name || data.username || existingUser?.displayName || 'Member',
+      email: data.email || existingUser?.email,
+      role: data.role || role,
+      profileImage,
+    },
   };
 }
+

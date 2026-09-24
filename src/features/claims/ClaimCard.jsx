@@ -1,19 +1,19 @@
-import React from 'react';
-import { ShieldCheck, MapPin, Calendar, FileText, User } from 'lucide-react';
-import Card from '../../Components/Admin/common/Card';
-import StatusBadge from '../../Components/ui/StatusBadge';
-import Avatar from '../../Components/ui/Avatar';
+import React from "react";
+import { ShieldCheck, MapPin, Calendar, FileText, User } from "lucide-react";
+import Card from "../../Components/Admin/common/Card";
+import StatusBadge from "../../Components/ui/StatusBadge";
+import Avatar from "../../Components/ui/Avatar";
 
 export default function ClaimCard({ claim }) {
   return (
     <Card className="p-6 transition-all" hover>
       <div className="flex flex-wrap items-start justify-between gap-4 mb-4 pb-3 border-b border-slate-100 dark:border-slate-800">
         <div>
-          <span className="text-sm font-extrabold uppercase tracking-wider text-slate-400">
+          <span className="text-base font-extrabold uppercase tracking-wider text-slate-400">
             Claim ID: #{claim.id}
           </span>
           <h4 className="text-base font-bold text-slate-900 dark:text-white mt-0.5">
-            {claim.item?.name || 'Claimed Belonging'}
+            {claim.item?.name || "Claimed Belonging"}
           </h4>
         </div>
         <StatusBadge status={claim.status} />
@@ -28,30 +28,41 @@ export default function ClaimCard({ claim }) {
           />
         )}
         <div className="md:col-span-2 space-y-2">
-          <div className="text-sm font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
+          <div className="text-base font-semibold text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
             <FileText className="w-3.5 h-3.5 text-blue-500" />
             <span>Ownership Verification Details:</span>
           </div>
-          <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl border border-slate-200/60 dark:border-slate-800">
+          <p className="text-base text-slate-700 dark:text-slate-300 leading-relaxed bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl border border-slate-200/60 dark:border-slate-800">
             {claim.proofDescription}
           </p>
 
           {claim.adminNotes && (
-            <div className="text-sm text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/30 p-2.5 rounded-xl border border-amber-200 dark:border-amber-900/40">
+            <div className="text-base text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-950/30 p-2.5 rounded-xl border border-amber-200 dark:border-amber-900/40">
               <strong>Admin Note:</strong> {claim.adminNotes}
             </div>
           )}
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-100 dark:border-slate-800 text-sm text-slate-500 dark:text-slate-400">
+      <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-100 dark:border-slate-800 text-base text-slate-500 dark:text-slate-400">
         <div className="flex items-center gap-2">
-          <Avatar src={claim.claimant?.avatar} name={claim.claimant?.name} size="xs" />
-          <span>Claimant: <strong className="text-slate-700 dark:text-slate-300">{claim.claimant?.name}</strong></span>
+          <Avatar
+            src={claim.claimant?.avatar}
+            name={claim.claimant?.name}
+            size="xs"
+          />
+          <span>
+            Claimant:{" "}
+            <strong className="text-slate-700 dark:text-slate-300">
+              {claim.claimant?.name}
+            </strong>
+          </span>
         </div>
         <div className="flex items-center gap-1.5">
           <Calendar className="w-3.5 h-3.5" />
-          <span>Submitted on {new Date(claim.createdAt).toLocaleDateString()}</span>
+          <span>
+            Submitted on {new Date(claim.createdAt).toLocaleDateString()}
+          </span>
         </div>
       </div>
     </Card>
