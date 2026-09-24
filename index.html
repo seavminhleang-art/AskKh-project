@@ -1,48 +1,176 @@
 <!doctype html>
-<html lang="km">
+<html lang="en" prefix="og: https://ogp.me/ns# fb: https://ogp.me/ns/fb#">
   <head>
     <meta charset="UTF-8" />
-
-    <link
-      rel="icon"
-      type="image/png"
-      href="/src/assets/Website/nexa-logo.png"
-    />
-
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=5.0"
     />
-    <meta name="theme-color" content="#102A56" />
 
+    <!-- Primary SEO Meta Tags -->
+    <title>NEXA — Network, Explore, eXchange, Assist | Cambodian Tech Community</title>
+    <meta name="title" content="NEXA — Network, Explore, eXchange, Assist | Cambodian Tech Community" />
     <meta
       name="description"
-      content="NEXA — The premier Cambodian developer and student community platform for technical Q&A collaboration and campus Lost & Found recovery."
+      content="NEXA is Cambodia's premier developer and student platform for technical Q&amp;A collaboration, programming assistance, knowledge exchange, and campus Lost &amp; Found recovery."
     />
-
     <meta
       name="keywords"
-      content="NEXA, NEXA — Network, Explore, eXchange, Assist. Cambodian developers, ISTAD, programming Q&A, Lost and Found, Cambodia tech community"
+      content="NEXA, NEXA Cambodia, AskKh, Cambodian Developers, Cambodia Tech Community, ISTAD, Programming Q&amp;A, Lost and Found Cambodia, Code Collaboration, Web Development, Phnom Penh Tech"
     />
+    <meta name="author" content="NEXA" />
+    <meta name="publisher" content="NEXA Community" />
+    <meta name="application-name" content="NEXA" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
 
+    <!-- Canonical & Language Alternates -->
+    <link rel="canonical" href="https://nexa-projects-168.vercel.app/" />
+    <link rel="alternate" hreflang="x-default" href="https://nexa-projects-168.vercel.app/" />
+    <link rel="alternate" hreflang="en" href="https://nexa-projects-168.vercel.app/" />
+    <link rel="alternate" hreflang="km" href="https://nexa-projects-168.vercel.app/" />
+
+    <!-- Brand Icons & PWA Manifest -->
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="/nexa-orbit-logo.svg"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/nexa-logo.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/nexa-orbit-logo.svg"
+    />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#102A56" />
+    <meta name="apple-mobile-web-app-title" content="NEXA" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="mobile-web-app-capable" content="yes" />
+
+    <!-- Open Graph / Facebook / Instagram / Telegram / WhatsApp / LinkedIn -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="NEXA" />
+    <meta property="og:url" content="https://nexa-projects-168.vercel.app/" />
     <meta
       property="og:title"
       content="NEXA — Network, Explore, eXchange, Assist."
     />
-
     <meta
       property="og:description"
-      content="Connect with fellow developers, ask questions, share answers, and track campus lost and found items on NEXA."
+      content="Cambodia's developer and student platform for technical Q&amp;A collaboration, programming assistance, and campus Lost &amp; Found recovery."
     />
-
     <meta
       property="og:image"
-      content="/src/assets/Website/thumbnail.jpg"
+      content="https://nexa-projects-168.vercel.app/thumbnail.jpg"
+    />
+    <meta
+      property="og:image:secure_url"
+      content="https://nexa-projects-168.vercel.app/thumbnail.jpg"
+    />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="NEXA — Network, Explore, eXchange, Assist"
+    />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale:alternate" content="km_KH" />
+
+    <!-- Twitter / X & Telegram Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://nexa-projects-168.vercel.app/" />
+    <meta
+      name="twitter:title"
+      content="NEXA — Network, Explore, eXchange, Assist."
+    />
+    <meta
+      name="twitter:description"
+      content="Cambodia's developer and student platform for technical Q&amp;A collaboration, programming assistance, and campus Lost &amp; Found recovery."
+    />
+    <meta
+      name="twitter:image"
+      content="https://nexa-projects-168.vercel.app/thumbnail.jpg"
+    />
+    <meta
+      name="twitter:image:alt"
+      content="NEXA Platform - Cambodian Tech &amp; Lost and Found Community"
     />
 
-    <meta property="og:type" content="website" />
+    <!-- Telegram & Messenger Specific Rich Link Tags -->
+    <meta name="telegram:channel" content="@nexa_community" />
 
-    <title>NEXA — Network, Explore, eXchange, Assist.</title>
+    <!-- JSON-LD Structured Data for Google / Schema.org -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": "https://nexa-projects-168.vercel.app/#website",
+          "url": "https://nexa-projects-168.vercel.app/",
+          "name": "NEXA",
+          "alternateName": ["AskKh", "NEXA Community", "NEXA Cambodia"],
+          "description": "The premier Cambodian developer and student community platform for technical Q&A collaboration and campus Lost & Found recovery.",
+          "publisher": {
+            "@id": "https://nexa-projects-168.vercel.app/#organization"
+          },
+          "inLanguage": ["en-US", "km-KH"],
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": {
+              "@type": "EntryPoint",
+              "urlTemplate": "https://nexa-projects-168.vercel.app/community/qa?search={search_term_string}"
+            },
+            "query-input": "required name=search_term_string"
+          }
+        },
+        {
+          "@type": "Organization",
+          "@id": "https://nexa-projects-168.vercel.app/#organization",
+          "name": "NEXA",
+          "url": "https://nexa-projects-168.vercel.app/",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://nexa-projects-168.vercel.app/nexa-orbit-logo.svg",
+            "caption": "NEXA Logo"
+          },
+          "image": "https://nexa-projects-168.vercel.app/thumbnail.jpg",
+          "sameAs": [
+            "https://facebook.com",
+            "https://t.me",
+            "https://instagram.com",
+            "https://github.com"
+          ]
+        },
+        {
+          "@type": "WebPage",
+          "@id": "https://nexa-projects-168.vercel.app/#webpage",
+          "url": "https://nexa-projects-168.vercel.app/",
+          "name": "NEXA — Network, Explore, eXchange, Assist | Cambodian Tech Community",
+          "isPartOf": {
+            "@id": "https://nexa-projects-168.vercel.app/#website"
+          },
+          "about": {
+            "@id": "https://nexa-projects-168.vercel.app/#organization"
+          },
+          "description": "Join NEXA to ask coding questions, find answers, share developer experiences, and report or recover lost items on campus in Cambodia.",
+          "inLanguage": "en-US",
+          "primaryImageOfPage": {
+            "@type": "ImageObject",
+            "url": "https://nexa-projects-168.vercel.app/thumbnail.jpg"
+          }
+        }
+      ]
+    }
+    </script>
   </head>
 
   <body>

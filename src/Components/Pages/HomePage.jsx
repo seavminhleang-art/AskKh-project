@@ -19,10 +19,10 @@ export default function HomePage() {
   const { darkMode } = useOutletContext();
 
   usePageSEO({
-    title: "AskKh | Cambodian Developer Community",
-    description: "Connect with Cambodian developers and students to explore technical solutions, share programming knowledge, and recover lost campus belongings on AskKh.",
-    keywords: "AskKh, Cambodian developers, ISTAD, programming forum, tech Q&A, Lost and Found Cambodia, software engineering",
-    canonicalUrl: "https://askkh.com/",
+    title: "NEXA — Network, Explore, eXchange, Assist | Cambodian Tech Community",
+    description: "NEXA is Cambodia's premier developer and student platform for technical Q&A collaboration, programming assistance, knowledge exchange, and campus Lost & Found recovery.",
+    keywords: "NEXA, NEXA Cambodia, Cambodian Developers, Cambodia Tech Community, ISTAD, Programming Q&A, Lost and Found Cambodia, Code Collaboration, Web Development, Phnom Penh Tech",
+    canonicalUrl: "https://nexa-projects-168.vercel.app/",
   });
 
   // --------------------------------------------------

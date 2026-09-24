@@ -20,6 +20,7 @@ import { useLanguage } from "../Language/LanguageContext.jsx";
 import { useTheme } from "../../context/ThemeContext.jsx";
 import BrandLogo from "../common/BrandLogo.jsx";
 import LoadingSpinner from "../common/LoadingSpinner.jsx";
+import { usePageSEO } from "../common/SEO.jsx";
 
 const copy = {
   en: {
@@ -84,6 +85,12 @@ export default function VerifyEmailPage() {
   const navigate = useNavigate();
 
   const t = isKhmer ? copy.km : copy.en;
+
+  usePageSEO({
+    title: "Verify Email | NEXA",
+    description: "Verify your email address to activate your NEXA developer account.",
+    noIndex: true,
+  });
 
   const [verifyEmail, { isLoading, isSuccess, isError, data, error }] =
     useVerifyEmailMutation();

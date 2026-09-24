@@ -11,6 +11,7 @@ import {
   message,
 } from "../../features/workspace/workspaceModel";
 import { Heading, QueryState, Empty, Badge } from "./WorkspaceUI";
+import { usePageSEO } from "../../Components/common/SEO";
 export default function QuestionDetailPage() {
   const { w, locale } = useWorkspaceTranslation();
   const { id } = useParams();
@@ -26,6 +27,12 @@ export default function QuestionDetailPage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const post = query.data?.data ?? query.data;
+
+  usePageSEO({
+    title: post?.title ? `${post.title} | NEXA Questions` : "Question Details | NEXA",
+    description: post?.body ? post.body.slice(0, 160) : "View question details and community answers on NEXA.",
+    noIndex: true,
+  });
   async function submit(event) {
     event.preventDefault();
     const form = event.currentTarget;

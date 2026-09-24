@@ -8,14 +8,44 @@ Allow: /terms
 Allow: /privacy-policy
 Allow: /privacy
 
+# Social and Search Engine Bots
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: TelegramBot
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: WhatsApp
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
 # Disallow private user workspace & administrative areas from search indexation
 Disallow: /dashboard/
 Disallow: /admin/
 Disallow: /login
 Disallow: /register
 Disallow: /verify-email
+Disallow: /auth/verify-email
+Disallow: /verify
 Disallow: /reset-password
+Disallow: /auth/reset-password
+Disallow: /reset
+Disallow: /forgot-password
 Disallow: /__forum_api/
 
 # Sitemap location
-Sitemap: https://askkh.com/sitemap.xml
+Sitemap: https://nexa-projects-168.vercel.app/sitemap.xml

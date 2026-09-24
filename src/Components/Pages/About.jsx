@@ -398,10 +398,10 @@ export default function AboutNexa() {
   const { darkMode } = useTheme();
 
   usePageSEO({
-    title: "About AskKh",
-    description: "Learn about AskKh — Cambodia's premier developer community. Discover our mission, vision, campus asset recovery platform, and development team.",
-    keywords: "About AskKh, Cambodian developer platform, ISTAD mentors, student developers Cambodia, tech community",
-    canonicalUrl: "https://askkh.com/about",
+    title: "About Us | NEXA — Cambodian Developer Ecosystem",
+    description: "Learn about NEXA (Network, Explore, eXchange, Assist) — Cambodia's premier developer and student platform. Discover our mission, vision, campus asset recovery, and team.",
+    keywords: "About NEXA, Cambodian developer platform, ISTAD mentors, student developers Cambodia, tech community Phnom Penh",
+    canonicalUrl: "https://nexa-projects-168.vercel.app/about",
   });
 
   return (

@@ -22,6 +22,7 @@ import { authError } from "../../features/auth/authError";
 import { useLanguage } from "../Language/LanguageContext.jsx";
 import { useTheme } from "../../context/ThemeContext.jsx";
 import BrandLogo from "../common/BrandLogo.jsx";
+import { usePageSEO } from "../common/SEO.jsx";
 
 const copy = {
   en: {
@@ -91,6 +92,12 @@ export default function ResetPasswordPage() {
   const navigate = useNavigate();
 
   const t = isKhmer ? copy.km : copy.en;
+
+  usePageSEO({
+    title: "Reset Password | NEXA",
+    description: "Reset your NEXA account password securely.",
+    noIndex: true,
+  });
 
   const [tokenInput, setTokenInput] = useState(urlToken);
   const [newPassword, setNewPassword] = useState("");

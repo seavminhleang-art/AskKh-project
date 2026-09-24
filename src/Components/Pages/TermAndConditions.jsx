@@ -81,10 +81,10 @@ export default function TermsAndConditions() {
   const { darkMode } = useTheme();
 
   usePageSEO({
-    title: "Terms & Conditions | AskKh",
-    description: "Read the AskKh Terms & Conditions to understand community guidelines, user responsibilities, and service rules.",
-    keywords: "AskKh terms, terms and conditions, community guidelines Cambodia, user agreement",
-    canonicalUrl: "https://askkh.com/terms",
+    title: "Terms & Conditions | NEXA",
+    description: "Read the NEXA Terms & Conditions to understand community guidelines, user responsibilities, and service rules.",
+    keywords: "NEXA terms, terms and conditions, community guidelines Cambodia, user agreement",
+    canonicalUrl: "https://nexa-projects-168.vercel.app/terms",
   });
 
   // ==================================================

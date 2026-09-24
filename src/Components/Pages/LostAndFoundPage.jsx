@@ -13,10 +13,10 @@ export default function LostAndFoundPage() {
   const { darkMode } = useOutletContext();
 
   usePageSEO({
-    title: "AskKh Lost & Found",
-    description: "Report missing items, track found belongings across campus, and verify ownership through AskKh Lost & Found.",
-    keywords: "AskKh Lost and Found, campus lost belongings, recover lost items, ISTAD, found items Cambodia",
-    canonicalUrl: "https://askkh.com/community/lost-found",
+    title: "Campus Lost & Found | NEXA",
+    description: "Report missing items, track found belongings across university campuses, and verify ownership securely through NEXA Lost & Found.",
+    keywords: "NEXA Lost and Found, campus lost belongings, recover lost items Cambodia, ISTAD campus lost found, student item recovery",
+    canonicalUrl: "https://nexa-projects-168.vercel.app/community/lost-found",
   });
 
   // --------------------------------------------------

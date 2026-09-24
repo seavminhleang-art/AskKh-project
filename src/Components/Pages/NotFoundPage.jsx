@@ -2,6 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { Link, useOutletContext } from "react-router-dom"; // 1. Import useOutletContext
+import { usePageSEO } from "../common/SEO";
 
 /* Illustrated background, built the same way HeroScanBackground is:
    a standalone component that takes darkMode and derives every color
@@ -365,6 +366,12 @@ export default function NotFoundPage({
   const outletContext = useOutletContext();
   const darkMode =
     propDarkMode !== undefined ? propDarkMode : outletContext?.darkMode;
+
+  usePageSEO({
+    title: "Page Not Found | 404",
+    description: "The page you are looking for cannot be found on NEXA.",
+    noIndex: true,
+  });
 
   return (
     <motion.section

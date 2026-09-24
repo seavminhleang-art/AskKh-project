@@ -11,10 +11,10 @@ export default function LeaderboardPage() {
   const isDarkMode = resolvedTheme === "dark";
 
   usePageSEO({
-    title: "AskKh Leaderboard | Top Contributors",
-    description: "Discover top question solvers, helpful contributors, and campus asset heroes on the AskKh community leaderboard.",
-    keywords: "AskKh leaderboard, top developers, coding ranking, student achievements, ISTAD leaderboard",
-    canonicalUrl: "https://askkh.com/leaderboard",
+    title: "Leaderboard | Top Contributors | NEXA",
+    description: "Discover top question solvers, helpful developers, and campus asset recovery heroes on the NEXA community leaderboard.",
+    keywords: "NEXA leaderboard, top developers Cambodia, coding ranking, student achievements, ISTAD leaderboard",
+    canonicalUrl: "https://nexa-projects-168.vercel.app/leaderboard",
   });
 
   return (

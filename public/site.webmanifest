@@ -1,0 +1,23 @@
+{
+  "name": "NEXA — Network, Explore, eXchange, Assist",
+  "short_name": "NEXA",
+  "description": "The premier Cambodian developer and student community platform for technical Q&A and campus Lost & Found recovery.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0B1528",
+  "theme_color": "#102A56",
+  "icons": [
+    {
+      "src": "/nexa-orbit-logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/nexa-logo.png",
+      "sizes": "192x192 512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

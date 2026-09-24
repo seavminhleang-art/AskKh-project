@@ -103,10 +103,10 @@ export default function PrivacyPolicy() {
   const { darkMode } = useTheme();
 
   usePageSEO({
-    title: "Privacy Policy | AskKh",
-    description: "Read the AskKh Privacy Policy to learn how we protect, store, and manage member information across our developer and campus platform.",
-    keywords: "AskKh privacy, privacy policy Cambodia, data security, developer community privacy",
-    canonicalUrl: "https://askkh.com/privacy-policy",
+    title: "Privacy Policy | NEXA",
+    description: "Read the NEXA Privacy Policy to learn how we protect, store, and manage member information across our developer and campus platform.",
+    keywords: "NEXA privacy, privacy policy Cambodia, data security, developer community privacy",
+    canonicalUrl: "https://nexa-projects-168.vercel.app/privacy-policy",
   });
 
   // ==================================================

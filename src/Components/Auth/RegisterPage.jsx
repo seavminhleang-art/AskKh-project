@@ -413,8 +413,8 @@ export default function RegisterPage() {
   const navigate = useNavigate();
 
   usePageSEO({
-    title: "Create an Account | AskKh",
-    description: "Join the AskKh developer community to ask programming questions, share knowledge, and recover lost campus belongings.",
+    title: "Create an Account | NEXA",
+    description: "Join the NEXA developer community to ask programming questions, share knowledge, and recover lost campus belongings.",
     noIndex: true,
   });
 

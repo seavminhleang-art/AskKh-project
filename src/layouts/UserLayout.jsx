@@ -8,8 +8,8 @@ export default function UserLayout({ mode = "user" }) {
   const [collapsed, setCollapsed] = useState(false);
 
   usePageSEO({
-    title: mode === "admin" ? "Admin Workspace | AskKh" : "User Dashboard | AskKh",
-    description: "Manage your personal questions, answers, lost & found reports, and notifications on AskKh.",
+    title: mode === "admin" ? "Admin Workspace | NEXA" : "User Dashboard | NEXA",
+    description: "Manage your personal questions, answers, lost & found reports, and notifications on NEXA.",
     noIndex: true,
   });
   if (mode === "admin") {

@@ -470,8 +470,8 @@ export default function LoginPage() {
   const [forgotPassword] = useForgotPasswordMutation();
 
   usePageSEO({
-    title: "Sign In | AskKh",
-    description: "Sign in to your AskKh account to access developer Q&A discussions and campus asset recovery.",
+    title: "Sign In | NEXA",
+    description: "Sign in to your NEXA account to access developer Q&A discussions and campus asset recovery.",
     noIndex: true,
   });
 
