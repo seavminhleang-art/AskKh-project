@@ -1,17 +1,18 @@
 {
-"buildCommand": "npm run build",
-"outputDirectory": "dist",
-"framework": "vite",
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "framework": "vite",
   "rewrites": [
-    { "source": "/__forum_api/:path*", "destination": "/api/forum/:path*" },
+    { "source": "/__forum_api/(.*)", "destination": "/api/forum" },
+    { "source": "/api/forum/(.*)", "destination": "/api/forum" },
     { "source": "/(.*)", "destination": "/index.html" }
   ],
-"headers": [
+  "headers": [
     {
-    "source": "/(.*)",
-    "headers": [
+      "source": "/(.*)",
+      "headers": [
         { "key": "Cross-Origin-Opener-Policy", "value": "same-origin-allow-popups" }
-    ]
+      ]
     }
-]
+  ]
 }

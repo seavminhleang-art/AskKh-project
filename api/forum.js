@@ -15,10 +15,21 @@ export default async function handler(request) {
   }
 
   const url = new URL(request.url);
-  const targetPath = url.pathname
+  
+  // Extract path from request.url or Vercel matched path header
+  const matchedPath = request.headers.get('x-matched-path') || url.pathname;
+  
+  let targetPath = matchedPath
     .replace(/^\/api\/forum/, '')
     .replace(/^\/__forum_api/, '');
-  const targetUrl = `https://forum-istad-api.cheat.casa/api/v1${targetPath}${url.search}`;
+
+  if (!targetPath.startsWith('/')) {
+    targetPath = '/' + targetPath;
+  }
+
+  const backendBase = process.env.VITE_BASE_FORUM_LOST_URL || process.env.VITE_API_BASE_URL || 'https://forum-istad-api.cheat.casa/api/v1';
+  const cleanBase = backendBase.replace(/\/+$/, '');
+  const targetUrl = `${cleanBase}${targetPath}${url.search}`;
 
   const headers = new Headers();
   for (const [key, value] of request.headers.entries()) {
@@ -36,7 +47,6 @@ export default async function handler(request) {
 
   if (!['GET', 'HEAD'].includes(request.method.toUpperCase())) {
     init.body = request.body;
-    // Edge runtime requires duplex when streaming body
     init.duplex = 'half';
   }
 

@@ -4,6 +4,9 @@ export function authError(error, fallback = 'Something went wrong. Please try ag
     if (error.toLowerCase().includes('cors')) {
       return 'The server rejected this request due to CORS policy. Please ensure the backend allows requests from this domain.';
     }
+    if (error.includes('SMTPSendFailedException') || error.includes('sending limit exceeded') || error.includes('mail.smtp')) {
+      return 'The email verification service is temporarily at its daily limit. Please contact the administrator or try again in a few hours.';
+    }
     if (error.startsWith('SyntaxError:')) {
       return fallback;
     }
@@ -14,6 +17,9 @@ export function authError(error, fallback = 'Something went wrong. Please try ag
   if (typeof error.data === 'string') {
     if (error.data.toLowerCase().includes('cors')) {
       return 'The server rejected this request due to CORS policy. Please ensure the backend allows requests from this domain.';
+    }
+    if (error.data.includes('SMTPSendFailedException') || error.data.includes('sending limit exceeded') || error.data.includes('mail.smtp')) {
+      return 'The email verification service is temporarily at its daily limit. Please contact the administrator or try again in a few hours.';
     }
     if (error.data.trim().startsWith('<') || error.data.startsWith('SyntaxError:')) {
       return fallback;
@@ -26,6 +32,9 @@ export function authError(error, fallback = 'Something went wrong. Please try ag
   if (typeof msg === 'string') {
     if (msg.toLowerCase().includes('cors')) {
       return 'The server rejected this request due to CORS policy. Please ensure the backend allows requests from this domain.';
+    }
+    if (msg.includes('SMTPSendFailedException') || msg.includes('sending limit exceeded') || msg.includes('mail.smtp')) {
+      return 'The email verification service is temporarily at its daily limit. Please contact the administrator or try again in a few hours.';
     }
     if (msg.startsWith('SyntaxError:')) {
       return fallback;
