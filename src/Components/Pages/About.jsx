@@ -399,9 +399,11 @@ export default function AboutNexa() {
 
   usePageSEO({
     title: "About Us | NEXA — Cambodian Developer Ecosystem",
-    description: "Learn about NEXA (Network, Explore, eXchange, Assist) — Cambodia's premier developer and student platform. Discover our mission, vision, campus asset recovery, and team.",
-    keywords: "About NEXA, Cambodian developer platform, ISTAD mentors, student developers Cambodia, tech community Phnom Penh",
-    canonicalUrl: "https://nexa-projects-168.vercel.app/about",
+    description:
+      "Learn about NEXA (Network, Explore, eXchange, Assist) — Cambodia's premier developer and student platform. Discover our mission, vision, campus asset recovery, and team.",
+    keywords:
+      "About NEXA, Cambodian developer platform, ISTAD mentors, student developers Cambodia, tech community Phnom Penh",
+    canonicalUrl: "https://ask-kh-project.vercel.app/about",
   });
 
   return (
@@ -498,9 +500,7 @@ export default function AboutNexa() {
                   {t(`${feature.key}.title`)}
                 </h3>
 
-                <p className="text-18px mt-2">
-                  {t(`${feature.key}.desc`)}
-                </p>
+                <p className="text-18px mt-2">{t(`${feature.key}.desc`)}</p>
               </div>
             </ScrollReveal>
           ))}
@@ -545,9 +545,7 @@ export default function AboutNexa() {
                 ))
               ) : (
                 <li>
-                  <span className="text-18px">
-                    {t(missionPointsKey)}
-                  </span>
+                  <span className="text-18px">{t(missionPointsKey)}</span>
                 </li>
               )}
             </ul>
@@ -584,9 +582,7 @@ export default function AboutNexa() {
                   ))
                 ) : (
                   <li>
-                    <span className="text-18px">
-                      {t(visionPointsKey)}
-                    </span>
+                    <span className="text-18px">{t(visionPointsKey)}</span>
                   </li>
                 )}
               </ul>

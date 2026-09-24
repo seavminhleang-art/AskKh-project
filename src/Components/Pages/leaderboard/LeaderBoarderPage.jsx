@@ -1,4 +1,3 @@
-
 import LeaderBoardComponent from "./LeaderBoardComponent";
 import { useTheme } from "../../theme-provider";
 import { useLanguage } from "../../Language/LanguageContext";
@@ -12,15 +11,12 @@ export default function LeaderboardPage() {
 
   usePageSEO({
     title: "Leaderboard | Top Contributors | NEXA",
-    description: "Discover top question solvers, helpful developers, and campus asset recovery heroes on the NEXA community leaderboard.",
-    keywords: "NEXA leaderboard, top developers Cambodia, coding ranking, student achievements, ISTAD leaderboard",
-    canonicalUrl: "https://nexa-projects-168.vercel.app/leaderboard",
+    description:
+      "Discover top question solvers, helpful developers, and campus asset recovery heroes on the NEXA community leaderboard.",
+    keywords:
+      "NEXA leaderboard, top developers Cambodia, coding ranking, student achievements, ISTAD leaderboard",
+    canonicalUrl: "https://ask-kh-project.vercel.app/leaderboard",
   });
 
-  return (
-    <LeaderBoardComponent
-      dark={isDarkMode}
-      lang={language}
-    />
-  );
+  return <LeaderBoardComponent dark={isDarkMode} lang={language} />;
 }

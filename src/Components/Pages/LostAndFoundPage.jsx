@@ -14,9 +14,11 @@ export default function LostAndFoundPage() {
 
   usePageSEO({
     title: "Campus Lost & Found | NEXA",
-    description: "Report missing items, track found belongings across university campuses, and verify ownership securely through NEXA Lost & Found.",
-    keywords: "NEXA Lost and Found, campus lost belongings, recover lost items Cambodia, ISTAD campus lost found, student item recovery",
-    canonicalUrl: "https://nexa-projects-168.vercel.app/community/lost-found",
+    description:
+      "Report missing items, track found belongings across university campuses, and verify ownership securely through NEXA Lost & Found.",
+    keywords:
+      "NEXA Lost and Found, campus lost belongings, recover lost items Cambodia, ISTAD campus lost found, student item recovery",
+    canonicalUrl: "https://ask-kh-project.vercel.app/community/lost-found",
   });
 
   // --------------------------------------------------

@@ -48,4 +48,4 @@ Disallow: /forgot-password
 Disallow: /__forum_api/
 
 # Sitemap location
-Sitemap: https://nexa-projects-168.vercel.app/sitemap.xml
+Sitemap: https://ask-kh-project.vercel.app/sitemap.xml

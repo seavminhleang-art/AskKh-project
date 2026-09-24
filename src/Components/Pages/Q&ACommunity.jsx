@@ -51,9 +51,11 @@ export default function QACommunity({
 }) {
   usePageSEO({
     title: "Developer Q&A Community | NEXA",
-    description: "Browse, ask, and answer programming questions with Cambodia's developer community. Find solutions for React, Spring Boot, Java, Python, and more on NEXA.",
-    keywords: "NEXA Q&A, developer community Cambodia, programming solutions, coding questions, React Cambodia, Spring Boot, ISTAD developers",
-    canonicalUrl: "https://nexa-projects-168.vercel.app/community/qa",
+    description:
+      "Browse, ask, and answer programming questions with Cambodia's developer community. Find solutions for React, Spring Boot, Java, Python, and more on NEXA.",
+    keywords:
+      "NEXA Q&A, developer community Cambodia, programming solutions, coding questions, React Cambodia, Spring Boot, ISTAD developers",
+    canonicalUrl: "https://ask-kh-project.vercel.app/community/qa",
   });
   // ==================================================
   // Context & Language

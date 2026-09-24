@@ -11,10 +11,7 @@ function BulletList({ items = [] }) {
   return (
     <ul className="mb-3 space-y-2">
       {items.map((item, index) => (
-        <li
-          key={index}
-          className="flex items-start gap-2 text-[18px]"
-        >
+        <li key={index} className="flex items-start gap-2 text-[18px]">
           <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-primary" />
           <span>{item}</span>
         </li>
@@ -45,16 +42,11 @@ function SectionBlock({
 
         {/* Section Content */}
         <div className="min-w-0 flex-1">
-          <h2 className="mb-3 text-4xl font-bold text-2xl">
-            {title}
-          </h2>
+          <h2 className="mb-3 text-4xl font-bold text-2xl">{title}</h2>
 
           {/* Paragraphs */}
           {paragraphs.map((paragraph, index) => (
-            <p
-              key={index}
-              className="mb-3 leading-relaxed text-[18px]"
-            >
+            <p key={index} className="mb-3 leading-relaxed text-[18px]">
               {paragraph}
             </p>
           ))}
@@ -104,9 +96,11 @@ export default function PrivacyPolicy() {
 
   usePageSEO({
     title: "Privacy Policy | NEXA",
-    description: "Read the NEXA Privacy Policy to learn how we protect, store, and manage member information across our developer and campus platform.",
-    keywords: "NEXA privacy, privacy policy Cambodia, data security, developer community privacy",
-    canonicalUrl: "https://nexa-projects-168.vercel.app/privacy-policy",
+    description:
+      "Read the NEXA Privacy Policy to learn how we protect, store, and manage member information across our developer and campus platform.",
+    keywords:
+      "NEXA privacy, privacy policy Cambodia, data security, developer community privacy",
+    canonicalUrl: "https://ask-kh-project.vercel.app/privacy-policy",
   });
 
   // ==================================================
