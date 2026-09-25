@@ -1,3 +1,4 @@
+import { isQuestionPost, isAnswerPost } from "../../config/postTypes.js";
 import { baseApi } from '../../store/api/baseApi';
 
 /**
@@ -20,8 +21,8 @@ export const achievementsApi = baseApi.injectEndpoints({
           const currentUserId = queryApi.getState()?.auth?.user?.id;
 
           const userPosts = currentUserId ? posts.filter((p) => p.ownerId === currentUserId) : posts;
-          const questionsCount = userPosts.filter((p) => p.postTypeId === 1 || !p.parentId).length;
-          const answersCount = userPosts.filter((p) => p.postTypeId === 2 || p.parentId).length;
+          const questionsCount = userPosts.filter((p) => isQuestionPost(p)).length;
+          const answersCount = userPosts.filter((p) => isAnswerPost(p)).length;
           const reportsCount = reports.length;
 
           const achievements = [

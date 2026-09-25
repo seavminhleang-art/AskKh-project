@@ -5,7 +5,7 @@
  *  - Static public pages (home, community/qa, lost-found, leaderboard, about, etc.)
  *  - Dynamic public question pages (/questions/:id/:slug) fetched from the NEXA API
  *
- * Question pages are included only if postTypeId === 1 (questions, not answers).
+ * Question pages include top-level type 3 questions and legacy type 1.
  * Private/dashboard/admin pages are NEVER included.
  *
  * Cache: 1 hour (max-age=3600) to keep question list fresh without hammering the API.
@@ -13,6 +13,7 @@
 
 const SITE_ORIGIN = "https://ask-kh-project.vercel.app";
 const API_BASE = "https://forum-istad-api.cheat.casa/api/v1";
+const QUESTION_TYPE_ID = 3;
 const TODAY = new Date().toISOString().slice(0, 10);
 
 /** Static pages that are always in the sitemap */
@@ -96,9 +97,9 @@ async function fetchQuestions() {
     let posts = Array.isArray(data)
       ? data
       : data?.content ?? data?.items ?? data?.results ?? [];
-    // Only include actual questions (postTypeId === 1), not answers (postTypeId === 2)
+    // Exclude replies even when they share the question type.
     return posts.filter(
-      (p) => p.id && (p.postTypeId === 1 || p.postTypeId == null)
+      (p) => p.id && p.parentId == null && (Number(p.postTypeId) === QUESTION_TYPE_ID || Number(p.postTypeId) === 1 || p.postTypeId == null)
     );
   } catch {
     return [];

@@ -1,3 +1,4 @@
+import { formatMediaUrl } from "../workspace/profileImage.js";
 export function rowsOf(value) {
   const data = value?.data ?? value;
   if (Array.isArray(data)) return data;
@@ -15,7 +16,7 @@ export function errorMessage(error) {
 export function mapPost(post, userId) {
   const date = new Date(post.creationDate ?? post.createdAt);
   return { ...post, content: post.body ?? '', tags: (post.tagResponses ?? []).map(tag => tag.tagName),
-    author: { name: post.ownerDisplayName || 'Community member', avatar: post.ownerAvatarUrl, time: Number.isNaN(date.getTime()) ? '' : date.toLocaleDateString() },
-    views: post.viewCount ?? 0, likes: post.score ?? 0, comments: post.comments ?? [], image: post.imageUrls?.[0],
+    author: { name: post.ownerDisplayName || 'Community member', avatar: formatMediaUrl(post.ownerAvatarUrl), time: Number.isNaN(date.getTime()) ? '' : date.toLocaleDateString() },
+    views: post.viewCount ?? 0, likes: post.score ?? 0, comments: post.comments ?? [], image: formatMediaUrl(post.imageUrls?.[0]),
     isOwnPost: userId != null && String(post.ownerId) === String(userId) };
 }

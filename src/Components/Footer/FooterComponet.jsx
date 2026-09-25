@@ -44,7 +44,7 @@ export default function FooterComponent() {
       />
 
       <div className="relative mx-auto max-w-7xl px-6 pb-8 pt-14">
-        <div className="grid grid-cols-1 items-start gap-10 sm:grid-cols-2 lg:grid-cols-5">
+        <div className="grid grid-cols-1 items-start gap-10 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-[repeat(4,minmax(0,1fr))_max-content]">
           {/* Brand */}
           <div className="lg:col-span-1">
             <div className="flex items-center gap-2 mb-1">
@@ -131,8 +131,8 @@ export default function FooterComponent() {
           </div>
 
           {/* Sponsor */}
-          <div className="self-start">
-            <h3 className="text-slate-900 dark:text-white font-semibold text-lg tracking-wide mb-4">
+          <div className="self-start xl:pl-3">
+            <h3 className="whitespace-nowrap text-slate-900 dark:text-white font-semibold text-lg tracking-wide mb-4">
               {t("footer.organizedTitle")}
             </h3>
 
@@ -152,7 +152,7 @@ export default function FooterComponent() {
             <img
               src={istadLogo}
               alt="ISTAD logo"
-              className="block h-auto w-full object-contain"
+              className="ml-3 block h-auto w-[210px] max-w-[calc(100%-0.75rem)] object-contain"
               style={{ filter: darkMode ? undefined : "url(#istad-footer-light-lettering)" }}
             />
           </div>

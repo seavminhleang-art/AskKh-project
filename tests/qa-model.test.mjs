@@ -27,3 +27,8 @@ test('authentication and validation errors are actionable', () => {
   assert.match(errorMessage({ status: 401 }), /sign in/);
   assert.equal(errorMessage({ data: { message: 'Title is too short' } }), 'Title is too short');
 });
+
+test('existing post images use the public media URL instead of localhost', () => {
+  assert.equal(mapPost({ imageUrls: ['http://localhost:8070/api/v1/photo.jpg'] }).image, 'https://forum-istad-api.cheat.casa/api/v1/media/photo.jpg');
+  assert.equal(mapPost({ imageUrls: ['https://example.com/photo.jpg'] }).image, 'https://example.com/photo.jpg');
+});

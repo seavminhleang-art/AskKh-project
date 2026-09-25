@@ -46,8 +46,6 @@ export function workspaceRequest({
     return { url: paths[resource], method: "POST", body };
   if (action === "create" && resource === "image-upload")
     return { url: "/upload/upload-single", method: "POST", body };
-  if (action === "create" && resource === "post-images")
-    return { url: "/posts/with-images", method: "POST", body };
   if (action === "create" && resource === "claims" && key)
     return { url: `/lost-found/reports/${key}/claims`, method: "POST", body };
   if (resource === "notifications" && action === "read-all")

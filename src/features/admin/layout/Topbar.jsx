@@ -4,7 +4,7 @@ import { Menu, Bell, ChevronRight } from "lucide-react";
 import Avatar from "@/Components/Admin/common/Avatar";
 import Dropdown, { DropdownItem } from "@/Components/Admin/common/Dropdown";
 import { setSidebarMobileOpen } from "@/redux/slices/uiSlice";
-import { logout } from "@/redux/slices/authSlice";
+import { useLogoutApiMutation } from "@/features/auth/authApi";
 import { useNotifications } from "@/features/notifications/useNotifications";
 import { User, Settings, LogOut } from "lucide-react";
 
@@ -17,6 +17,7 @@ function useBreadcrumb() {
 
 export default function Topbar() {
   const dispatch = useDispatch();
+  const [logoutApi] = useLogoutApiMutation();
   const navigate = useNavigate();
   const admin = useSelector((s) => s.auth.admin) || { name: "Admin User" };
   const { title, segments } = useBreadcrumb();
@@ -82,8 +83,8 @@ export default function Topbar() {
         <DropdownItem
           icon={LogOut}
           danger
-          onClick={() => {
-            dispatch(logout());
+          onClick={async () => {
+            await logoutApi();
             navigate("/login");
           }}
         >

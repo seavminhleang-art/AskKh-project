@@ -1,10 +1,12 @@
+import TextEditor from "../editor/TextEditor";
+import { QUESTION_POST_TYPE_ID } from "../../config/postTypes.js";
 import React, { lazy, Suspense, useEffect, useRef, useState } from "react";
-import { Upload, X } from "lucide-react";
+import { Upload } from "lucide-react";
 import { useOutletContext } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-import { useGetTagsQuery } from "../../features/tags/tagApi";
-import { rowsOf, errorMessage } from "../../features/qa/model";
+import HashtagPicker from "../../features/tags/HashtagPicker";
+import { errorMessage } from "../../features/qa/model";
 const CodeEditor = lazy(() => import("./CodeEditor"));
 
 const CreatePostView = ({ onAddPost, onCancel, darkMode: propDarkMode }) => {
@@ -15,7 +17,7 @@ const CreatePostView = ({ onAddPost, onCancel, darkMode: propDarkMode }) => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [tags, setTags] = useState([]);
-  const [tagInput, setTagInput] = useState("");
+  const [tagBusy, setTagBusy] = useState(false);
   const [imageFile, setImageFile] = useState(null);
   const [coverImage, setCoverImage] = useState(null);
   const [codeSnippet, setCodeSnippet] = useState("");
@@ -23,8 +25,6 @@ const CreatePostView = ({ onAddPost, onCancel, darkMode: propDarkMode }) => {
   const [showCode, setShowCode] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
-  const tagQuery = useGetTagsQuery();
-  const availableTags = rowsOf(tagQuery.data);
   const previewUrl = useRef(null);
   useEffect(
     () => () => {
@@ -32,31 +32,6 @@ const CreatePostView = ({ onAddPost, onCancel, darkMode: propDarkMode }) => {
     },
     [],
   );
-
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter" || e.key === ",") {
-      e.preventDefault();
-      addTag();
-    }
-  };
-
-  const addTag = () => {
-    const formattedTag = tagInput.trim().replace(/^#/, "").toLowerCase();
-    if (
-      !availableTags.some((tag) => tag.tagName.toLowerCase() === formattedTag)
-    ) {
-      setError("Choose an existing tag from the suggestions.");
-      return;
-    }
-    if (formattedTag && !tags.includes(formattedTag)) {
-      setTags([...tags, formattedTag]);
-      setTagInput("");
-    }
-  };
-
-  const removeTag = (tagToRemove) => {
-    setTags(tags.filter((t) => t !== tagToRemove));
-  };
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
@@ -79,7 +54,7 @@ const CreatePostView = ({ onAddPost, onCancel, darkMode: propDarkMode }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (submitting) return;
+    if (submitting || tagBusy) return;
     if (title.trim().length < 10 || content.trim().length < 20) {
       setError(
         "Use at least 10 characters for the title and 20 for the description.",
@@ -96,14 +71,8 @@ const CreatePostView = ({ onAddPost, onCancel, darkMode: propDarkMode }) => {
       await onAddPost({
         title: title.trim(),
         body: content.trim(),
-        postTypeId: 1,
-        tagIds: tags
-          .map(
-            (name) =>
-              availableTags.find((tag) => tag.tagName.toLowerCase() === name)
-                ?.id,
-          )
-          .filter((id) => id != null),
+        postTypeId: QUESTION_POST_TYPE_ID,
+        tagIds: tags.map(tag => tag.id),
         codeSnippet: showCode ? codeSnippet : null,
         codeLanguage: showCode && codeSnippet ? codeLanguage : null,
         imageUrls: [],
@@ -170,7 +139,7 @@ const CreatePostView = ({ onAddPost, onCancel, darkMode: propDarkMode }) => {
             </div>
 
             <div>
-              <label
+              <label htmlFor="community-description"
                 className={`block text-base font-semibold mb-1 ${darkMode ? "text-slate-300" : "text-gray-700"}`}
               >
                 {t("create.contentLabel")}
@@ -178,19 +147,7 @@ const CreatePostView = ({ onAddPost, onCancel, darkMode: propDarkMode }) => {
               <div
                 className={`border rounded-xl overflow-hidden ${darkMode ? "border-zinc-700" : "border-gray-200"}`}
               >
-                <textarea
-                  rows="6"
-                  required
-                  minLength={20}
-                  value={content}
-                  onChange={(e) => setContent(e.target.value)}
-                  placeholder={t("create.placeholderContent")}
-                  className={`w-full p-3 text-[18px] leading-relaxed focus:outline-none transition-colors ${
-                    darkMode
-                      ? "bg-zinc-900 text-slate-100 placeholder-zinc-500"
-                      : "bg-white text-gray-900 placeholder-gray-400"
-                  }`}
-                ></textarea>
+                <TextEditor id="community-description" value={content} onChange={setContent} disabled={submitting} placeholder={t("create.placeholderContent")} />
               </div>
             </div>
           </div>
@@ -295,7 +252,7 @@ const CreatePostView = ({ onAddPost, onCancel, darkMode: propDarkMode }) => {
           <div className="flex items-center space-x-3">
             <button
               type="submit"
-              disabled={submitting}
+              disabled={submitting || tagBusy}
               className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-2 rounded-xl text-base transition-colors"
             >
               {submitting ? "Publishing…" : t("create.addBlog")}
@@ -303,7 +260,7 @@ const CreatePostView = ({ onAddPost, onCancel, darkMode: propDarkMode }) => {
             <button
               type="button"
               onClick={onCancel}
-              disabled={submitting}
+              disabled={submitting || tagBusy}
               className={`font-medium px-6 py-2 rounded-xl text-base transition-colors border ${
                 darkMode
                   ? "bg-red-950/40 text-red-400 hover:bg-red-900/50 border-red-900/30"
@@ -328,64 +285,7 @@ const CreatePostView = ({ onAddPost, onCancel, darkMode: propDarkMode }) => {
               {t("create.tags")}
             </h3>
 
-            <div className="flex gap-2">
-              <input
-                type="text"
-                list="qa-tags"
-                value={tagInput}
-                onChange={(e) => setTagInput(e.target.value)}
-                onKeyDown={handleKeyDown}
-                placeholder={t("create.tagsPlaceholder")}
-                className={`min-w-0 flex-1 rounded-xl px-3 py-2 text-base border focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors ${
-                  darkMode
-                    ? "bg-zinc-800/80 border-zinc-700 text-slate-100 placeholder-zinc-500"
-                    : "bg-white border-gray-200 text-gray-900 placeholder-gray-400"
-                }`}
-              />
-              <button
-                type="button"
-                onClick={addTag}
-                className="bg-blue-600 text-white text-base px-3 py-2 rounded-xl hover:bg-blue-700 transition-colors font-medium shrink-0"
-              >
-                {t("create.tags")}
-              </button>
-            </div>
-
-            <datalist id="qa-tags">
-              {availableTags.map((tag) => (
-                <option key={tag.id} value={tag.tagName} />
-              ))}
-            </datalist>
-            {tagQuery.isError && (
-              <p role="alert" className="text-base">
-                Could not load tags.{" "}
-                <button type="button" onClick={tagQuery.refetch}>
-                  Retry
-                </button>
-              </p>
-            )}
-            {/* Render Tag Chips */}
-            <div className="flex flex-wrap gap-2 pt-2">
-              {tags.map((tagItem, idx) => (
-                <span
-                  key={idx}
-                  className={`inline-flex items-center gap-1.5 px-3 py-1 text-base font-medium rounded-full border ${
-                    darkMode
-                      ? "bg-blue-950/50 text-blue-400 border-blue-900/50"
-                      : "bg-blue-50 text-blue-600 border-blue-100"
-                  }`}
-                >
-                  #{tagItem}
-                  <button
-                    type="button"
-                    onClick={() => removeTag(tagItem)}
-                    className={`transition-colors ${darkMode ? "hover:text-blue-200" : "hover:text-blue-800"}`}
-                  >
-                    <X className="w-3 h-3" />
-                  </button>
-                </span>
-              ))}
-            </div>
+            <HashtagPicker value={tags} onChange={setTags} disabled={submitting} onBusyChange={setTagBusy} />
           </div>
         </div>
       </form>

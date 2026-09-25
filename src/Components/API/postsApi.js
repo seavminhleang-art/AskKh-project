@@ -77,16 +77,6 @@ export const postsApi = baseApi.injectEndpoints({
             invalidatesTags: [{ type: "Post", id: "LIST" }],
         }),
 
-        // POST /posts/with-images  (multipart)
-        createPostWithImages: builder.mutation({
-            query: (formData) => ({
-                url: "/posts/with-images",
-                method: "POST",
-                body: formData,
-            }),
-            invalidatesTags: [{ type: "Post", id: "LIST" }],
-        }),
-
         // PUT /posts/{postId}  body: PostRequest
         updatePost: builder.mutation({
             query: ({ postId, ...body }) => ({
@@ -127,7 +117,6 @@ export const {
     useGetPostsByUserQuery,
     useGetPostAnswersQuery,
     useCreatePostMutation,
-    useCreatePostWithImagesMutation,
     useUpdatePostMutation,
     useDeletePostMutation,
 } = postsApi;

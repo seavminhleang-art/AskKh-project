@@ -1,3 +1,4 @@
+import FormattedText from "../editor/FormattedText.jsx";
 import React, { useState, lazy, Suspense } from "react";
 import { ArrowLeft, Send, Trash2 } from "lucide-react";
 import { useOutletContext, useNavigate } from "react-router-dom";
@@ -118,11 +119,7 @@ const DetailView = ({ post, onBack, darkMode: propDarkMode }) => {
         >
           {t("detail.description")}
         </h4>
-        <p
-          className={`whitespace-pre-wrap break-words text-[18px] leading-relaxed ${darkMode ? "text-slate-300" : "text-gray-600"}`}
-        >
-          {post.content || t("detail.noDescription")}
-        </p>
+        <FormattedText>{post.content || t("detail.noDescription")}</FormattedText>
       </div>
 
       {post.image && (

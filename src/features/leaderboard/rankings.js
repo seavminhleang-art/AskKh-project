@@ -1,3 +1,4 @@
+import { isAnswerPost } from "../../config/postTypes.js";
 export function rankContributors(posts, period = 'all', now = new Date()) {
   const start = new Date(now);
   if (period === 'month') start.setDate(1);
@@ -23,7 +24,7 @@ export function rankContributors(posts, period = 'all', now = new Date()) {
       if (user) {
         user.upvotes += score(post.score);
         user.solutions++;
-        if (post.postTypeId === 2) user.answers++;
+        if (isAnswerPost(post)) user.answers++;
         for (const tag of post.tagResponses || []) if (tag.tagName) user.tags.set(tag.tagName, (user.tags.get(tag.tagName) || 0) + 1);
       }
     }

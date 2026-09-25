@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import Avatar from "@/Components/Admin/common/Avatar";
 import { toggleSidebar, setSidebarMobileOpen } from "@/redux/slices/uiSlice";
-import { logout } from "@/redux/slices/authSlice";
+import { useLogoutApiMutation } from "@/features/auth/authApi";
 
 const nav = [
   { to: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -35,6 +35,7 @@ const nav = [
 
 export default function Sidebar() {
   const dispatch = useDispatch();
+  const [logoutApi] = useLogoutApiMutation();
   const collapsed = useSelector((s) => s.ui.sidebarCollapsed);
   const mobileOpen = useSelector((s) => s.ui.sidebarMobileOpen);
   const admin = useSelector((s) => s.auth.admin) || {
@@ -105,7 +106,7 @@ export default function Sidebar() {
           )}
           {!collapsed && (
             <button
-              onClick={() => dispatch(logout())}
+              onClick={() => logoutApi()}
               className="text-gray-400 hover:text-brand-secondary transition-colors"
               aria-label="Logout"
             >

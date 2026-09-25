@@ -1,3 +1,6 @@
+import { formatMediaUrl } from "../../features/workspace/profileImage.js";
+import FormattedText from "../../Components/editor/FormattedText.jsx";
+import { ANSWER_POST_TYPE_ID } from "../../config/postTypes.js";
 import { useWorkspaceTranslation } from "@/locales/workspace/useWorkspaceTranslation";
 import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
@@ -50,7 +53,7 @@ export default function QuestionDetailPage() {
         body: {
           title: "Community answer",
           body,
-          postTypeId: 2,
+          postTypeId: ANSWER_POST_TYPE_ID,
           parentId: Number(id),
           tagIds: [],
           imageUrls: [],
@@ -75,12 +78,7 @@ export default function QuestionDetailPage() {
               description={`${post.ownerDisplayName || "Community member"} · ${dateLabel(post.creationDate, locale)}`}
             />
             <article className="uw-card uw-stack">
-              <p
-                className="whitespace-pre-wrap"
-                style={{ fontSize: "18px", lineHeight: 1.6 }}
-              >
-                {post.body}
-              </p>
+              <FormattedText>{post.body}</FormattedText>
               {post.codeSnippet && (
                 <pre className="overflow-auto rounded-lg bg-slate-950 p-4 text-base text-slate-100">
                   <code>{post.codeSnippet}</code>
@@ -89,7 +87,7 @@ export default function QuestionDetailPage() {
               {post.imageUrls?.map((url) => (
                 <img
                   key={url}
-                  src={url}
+                  src={formatMediaUrl(url)}
                   alt={w("Question attachment")}
                   className="max-h-96 max-w-full rounded-lg object-contain"
                 />

@@ -1,3 +1,4 @@
+import { isAnswerPost } from "../../config/postTypes.js";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { History, FileText, MessageSquare, ShieldCheck, PackageCheck, CircleHelp, ChevronDown, PlusCircle, ChartNoAxesCombined, CalendarDays } from "lucide-react";
@@ -33,7 +34,7 @@ export default function ActivityPage() {
   const comments = Array.isArray(profile?.comments) ? profile.comments : [];
   const events = [
     ...reports.map(item => ({ id: `report-${item.id}`, kind: "Reports", itemType: item.itemType?.toUpperCase(), title: item.title, body: item.description, date: item.createdAt, path: "/dashboard/lost-found" })),
-    ...posts.map(item => ({ id: `post-${item.id}`, kind: item.postTypeId === 2 ? "Answers" : "Posts", title: item.title || w("Answer"), body: item.body, date: item.creationDate, path: `/dashboard/questions/${item.parentId || item.id}` })),
+    ...posts.map(item => ({ id: `post-${item.id}`, kind: isAnswerPost(item) ? "Answers" : "Posts", title: item.title || w("Answer"), body: item.body, date: item.creationDate, path: `/dashboard/questions/${item.parentId || item.id}` })),
     ...comments.map(item => ({ id: `comment-${item.id}`, kind: "Comments", title: item.postTitle || w("a question"), body: item.text || item.body, date: item.creationDate, path: item.postId ? `/dashboard/questions/${item.postId}` : null })),
   ].sort((a, b) => (Date.parse(b.date) || 0) - (Date.parse(a.date) || 0));
   const metrics = monthlyActivity(events);

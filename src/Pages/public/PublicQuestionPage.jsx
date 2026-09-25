@@ -1,3 +1,5 @@
+import { formatMediaUrl } from "../../features/workspace/profileImage.js";
+import FormattedText from "../../Components/editor/FormattedText.jsx";
 /**
  * PublicQuestionPage
  *
@@ -280,12 +282,7 @@ export default function PublicQuestionPage() {
           </div>
 
           {/* Body */}
-          <div
-            itemProp="text"
-            className="text-base text-gray-800 dark:text-slate-200 leading-relaxed whitespace-pre-wrap"
-          >
-            {post.body}
-          </div>
+          <FormattedText>{post.body}</FormattedText>
 
           {/* Code snippet */}
           {post.codeSnippet && (
@@ -300,7 +297,7 @@ export default function PublicQuestionPage() {
               {post.imageUrls.map((url) => (
                 <img
                   key={url}
-                  src={url}
+                  src={formatMediaUrl(url)}
                   alt="Question attachment"
                   className="max-h-80 max-w-full rounded-xl object-contain border border-gray-100 dark:border-zinc-800"
                 />

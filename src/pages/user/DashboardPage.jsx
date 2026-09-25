@@ -1,3 +1,4 @@
+import { isQuestionPost, isAnswerPost } from "../../config/postTypes.js";
 import { useWorkspaceTranslation } from "@/locales/workspace/useWorkspaceTranslation";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -39,8 +40,8 @@ function Overview() {
   const reports = rows(reportsQuery.data).filter(
     (item) => profile?.id != null && String(item.userId) === String(profile.id),
   );
-  const questions = rows(forum.data).filter((item) => item.postTypeId !== 2);
-  const answers = rows(forum.data).filter((item) => item.postTypeId === 2);
+  const questions = rows(forum.data).filter((item) => isQuestionPost(item));
+  const answers = rows(forum.data).filter((item) => isAnswerPost(item));
 
   const recent = [...questions]
     .sort((a, b) => new Date(b.creationDate) - new Date(a.creationDate))
@@ -67,7 +68,7 @@ function Overview() {
       label: "Questions Asked",
       value: count(
         forum,
-        posts.filter((item) => item.postTypeId !== 2).length,
+        posts.filter((item) => isQuestionPost(item)).length,
       ),
       Icon: HelpCircle,
       tone: "blue",
@@ -78,7 +79,7 @@ function Overview() {
       label: "Answers Given",
       value: count(
         forum,
-        posts.filter((item) => item.postTypeId === 2).length,
+        posts.filter((item) => isAnswerPost(item)).length,
       ),
       Icon: CheckCircle2,
       tone: "green",

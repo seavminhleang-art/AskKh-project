@@ -19,7 +19,6 @@ import {
   useGetPostsQuery,
   useGetPostByIdQuery,
   useCreatePostMutation,
-  useCreatePostWithImagesMutation,
 } from "../../features/posts/postApi";
 
 import {
@@ -32,6 +31,9 @@ import {
   useVotePostMutation,
   useDeleteVoteMutation,
 } from "../../features/votes/voteApi";
+
+import { useUploadSingleMutation, useUploadMultipleMutation } from "../../features/upload/uploadApi";
+import { uploadQuestionImages } from "../../features/qa/uploadQuestionImages";
 
 // Helpers
 import {
@@ -117,7 +119,8 @@ export default function QACommunity({
   // ==================================================
 
   const [createPost] = useCreatePostMutation();
-  const [createWithImages] = useCreatePostWithImagesMutation();
+  const [uploadSingle] = useUploadSingleMutation();
+  const [uploadMultiple] = useUploadMultipleMutation();
 
   const [addBookmark] = useAddBookmarkMutation();
   const [removeBookmark] = useRemoveBookmarkMutation();
@@ -163,7 +166,6 @@ export default function QACommunity({
   // ==================================================
 
   const posts = rowsOf(feed.data)
-    .filter((post) => post.postTypeId !== 2)
     .map((post) => {
       const mappedPost = mapPost(post, userId);
       const voteKey = `${userId}:${mappedPost.id}`;
@@ -276,22 +278,10 @@ export default function QACommunity({
       throw new Error("Please sign in before publishing.");
     }
 
-    if (imageFile) {
-      const form = new FormData();
-
-      form.append(
-        "post",
-        new Blob([JSON.stringify(body)], {
-          type: "application/json",
-        }),
-      );
-
-      form.append("images", imageFile);
-
-      await createWithImages(form).unwrap();
-    } else {
-      await createPost(body).unwrap();
-    }
+    const imageUrls = imageFile
+      ? await uploadQuestionImages([imageFile], uploadSingle, uploadMultiple)
+      : body.imageUrls ?? [];
+    await createPost({ ...body, imageUrls }).unwrap();
 
     setIsCreatingPost(false);
     setActiveTab("newest");

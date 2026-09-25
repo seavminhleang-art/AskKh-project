@@ -1,8 +1,9 @@
+import { useLogoutApiMutation } from "../../features/auth/authApi";
 import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { LayoutDashboard, Trophy, X, LogOut } from "lucide-react";
 import { closeMobileSidebar } from "../../features/ui/uiSlice";
-import { logout, selectCurrentUser } from "../../features/auth/authSlice";
+import { selectCurrentUser } from "../../features/auth/authSlice";
 import Avatar from "../common/Avatar";
 
 const NAV_ITEMS = [
@@ -11,11 +12,13 @@ const NAV_ITEMS = [
 ];
 
 function SidebarContent({ collapsed, onNavigate }) {
-  const dispatch = useDispatch();
   const user = useSelector(selectCurrentUser);
 
-  function handleLogout() {
-    dispatch(logout());
+  const [logoutApi, { isLoading: loggingOut }] = useLogoutApiMutation();
+
+  async function handleLogout() {
+    if (loggingOut) return;
+    await logoutApi();
   }
 
   return (
@@ -61,6 +64,7 @@ function SidebarContent({ collapsed, onNavigate }) {
         <button
           type="button"
           onClick={handleLogout}
+                disabled={loggingOut}
           className="flex w-full items-center gap-2.5 rounded-full bg-gray-50 px-2.5 py-2 text-gray-600 hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
         >
           <Avatar name={user?.displayName ?? user?.email} />

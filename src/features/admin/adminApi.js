@@ -1,3 +1,4 @@
+import { isQuestionPost, isAnswerPost } from "../../config/postTypes.js";
 import { baseApi } from '../../store/api/baseApi';
 
 /**
@@ -18,8 +19,8 @@ export const adminApi = baseApi.injectEndpoints({
           const posts = Array.isArray(postsRes.data) ? postsRes.data : [];
           const reports = Array.isArray(reportsRes.data) ? reportsRes.data : [];
 
-          const questions = posts.filter((p) => p.postTypeId === 1 || !p.parentId);
-          const answers = posts.filter((p) => p.postTypeId === 2 || p.parentId);
+          const questions = posts.filter((p) => isQuestionPost(p));
+          const answers = posts.filter((p) => isAnswerPost(p));
           const resolvedReports = reports.filter((r) => r.status === 'RESOLVED' || r.status === 'CLAIMED');
 
           const analytics = {

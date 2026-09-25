@@ -1,3 +1,4 @@
+import { ANSWER_POST_TYPE_ID } from "../../config/postTypes.js";
 import { baseApi } from '../../store/api/baseApi';
 
 export const postApi = baseApi.injectEndpoints({
@@ -42,14 +43,6 @@ export const postApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: [{ type: 'Post', id: 'LIST' }],
     }),
-    createPostWithImages: builder.mutation({
-      query: (formData) => ({
-        url: '/posts/with-images',
-        method: 'POST',
-        body: formData,
-      }),
-      invalidatesTags: [{ type: 'Post', id: 'LIST' }],
-    }),
     createAnswer: builder.mutation({
       query: ({ parentId, body, codeSnippet, codeLanguage, imageUrls }) => ({
         url: '/posts',
@@ -59,7 +52,7 @@ export const postApi = baseApi.injectEndpoints({
           body,
           codeSnippet: codeSnippet || null,
           codeLanguage: codeLanguage || null,
-          postTypeId: 2, // 2 indicates Answer
+          postTypeId: ANSWER_POST_TYPE_ID,
           parentId,
           tagIds: [],
           imageUrls: imageUrls || [],
@@ -126,7 +119,6 @@ export const {
   useGetPostByIdQuery,
   useGetAnswersQuery,
   useCreatePostMutation,
-  useCreatePostWithImagesMutation,
   useCreateAnswerMutation,
   useUpdatePostMutation,
   useDeletePostMutation,

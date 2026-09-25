@@ -11,7 +11,6 @@ export default function TrendingDiscussions({ darkMode }) {
   const { data: postsData } = useGetPostsQuery();
 
   const apiPosts = rowsOf(postsData)
-    .filter((p) => p.postTypeId !== 2)
     .slice(0, 3)
     .map((p) => mapPost(p));
 

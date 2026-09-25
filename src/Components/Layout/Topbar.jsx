@@ -1,3 +1,4 @@
+import { useLogoutApiMutation } from "../../features/auth/authApi";
 import { useState, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate, Link } from "react-router-dom";
@@ -14,7 +15,7 @@ import {
 } from "lucide-react";
 import Avatar from "../common/Avatar";
 import { openMobileSidebar, toggleSidebar } from "../../features/ui/uiSlice";
-import { logout, selectCurrentUser } from "../../features/auth/authSlice";
+import { selectCurrentUser } from "../../features/auth/authSlice";
 
 // ---- i18n --------------------------------------------------------------
 // Swap this for your real i18n solution (react-i18next, etc.) if you have
@@ -146,8 +147,11 @@ export default function Topbar() {
     return () => document.removeEventListener("keydown", handleShortcut);
   }, []);
 
-  function handleLogout() {
-    dispatch(logout());
+  const [logoutApi, { isLoading: loggingOut }] = useLogoutApiMutation();
+
+  async function handleLogout() {
+    if (loggingOut) return;
+    await logoutApi();
     navigate("/leaderboard");
   }
 
@@ -314,6 +318,7 @@ export default function Topbar() {
                 type="button"
                 role="menuitem"
                 onClick={handleLogout}
+                disabled={loggingOut}
                 className="block w-full px-3 py-2 text-left text-base text-brand-secondary hover:bg-brand-secondary-light dark:hover:bg-gray-700"
               >
                 {t.logout}

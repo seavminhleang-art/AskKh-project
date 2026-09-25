@@ -2,6 +2,10 @@ import { baseApi } from '../../store/api/baseApi';
 
 export const tagApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
+    createTag: builder.mutation({
+      query: (tagName) => ({ url: "/tags", method: "POST", body: { tagName } }),
+      invalidatesTags: (_result, error) => error ? [] : ["Tag"],
+    }),
     getTags: builder.query({
       query: () => '/tags',
       providesTags: ['Tag'],
@@ -23,6 +27,7 @@ export const tagApi = baseApi.injectEndpoints({
 });
 
 export const {
+  useCreateTagMutation,
   useGetTagsQuery,
   useGetPopularTagsQuery,
   useGetTopTagsQuery,

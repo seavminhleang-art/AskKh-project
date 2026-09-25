@@ -175,7 +175,6 @@ export default function WorkspaceListPage({ page }) {
   const [save, state] = useWorkspaceSaveMutation();
   const all = rows(query.data);
   const items = all.filter((item) => {
-    if (page === "questions" && item.postTypeId === 2) return false;
     if (
       filter === "mine" &&
       (profile?.id == null ||
