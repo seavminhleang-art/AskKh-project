@@ -802,9 +802,8 @@ export default function LoginPage() {
                   <span className="custom-checkbox" />
 
                   <span className="checkbox-text">
-                    {
-                      t.remember
-                    }
+                    {t.remember}
+                    <span className="text-red-500 font-bold ml-1" style={{ color: "#ef4444", fontWeight: "bold", marginLeft: "4px" }}>*</span>
                   </span>
                 </label>
 
