@@ -46,7 +46,7 @@ const THEME = {
   border: "var(--border-color)",
   rowBorder: "var(--border-color)",
   rowHover: "var(--bg-secondary)",
-  heading: "var(--text-main)",
+  heading: "var(--home-primary-text)",
 };
 
 const FONT_STACK =
@@ -338,7 +338,7 @@ function ForumHeader({ t, c, lang }) {
       >
         {c.title}
 
-        <span style={{ color: t.primary }}>.</span>
+        <span style={{ color: t.secondary }}>.</span>
       </h1>
 
       <p className="mt-3 text-lg leading-relaxed" style={{ color: t.muted }}>
@@ -539,7 +539,7 @@ function ChampionsSection({
           <Crown size={14} className="text-amber-500 fill-amber-500" />
           <span>{c.podiumEyebrow}</span>
         </div>
-        <h2 className="text-5xl sm:text-5xl lg:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+        <h2 className="text-5xl sm:text-5xl lg:text-5xl font-extrabold tracking-tight text-[var(--home-secondary-text)]">
           {c.podiumTitle}
         </h2>
       </div>

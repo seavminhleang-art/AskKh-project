@@ -134,10 +134,10 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
           <ShieldCheck size={14} /> {t("feedBadge")}
         </span>
         <h1
-          className={`text-5xl md:text-5xl font-bold mb-2 ${darkMode ? "text-white" : "text-gray-900"}`}
+          className="text-5xl md:text-5xl font-bold mb-2 text-[var(--home-primary-text)]"
         >
           {t("feedHeroTitle1")}{" "}
-          <span className="text-[var(--color-brand-primary,#3b82f6)]">
+          <span className="text-[var(--home-secondary-text)]">
             {t("feedHeroTitle2")}
           </span>
         </h1>
@@ -149,7 +149,7 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
 
         <div className="mt-8">
           <h2
-            className={`text-xl md:text-5xl font-bold ${darkMode ? "text-white" : "text-gray-900"}`}
+            className="text-xl md:text-5xl font-bold text-[var(--home-primary-text)]"
           >
             {t("feedActiveRecoveryTitle")}
           </h2>
