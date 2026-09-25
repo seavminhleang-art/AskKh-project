@@ -297,6 +297,7 @@ html.dark .shared-theme .placeholder-zinc-500::placeholder { color: var(--text-m
 .checkbox-label { display: inline-flex; align-items: center; gap: .5rem; color: #64748b; font-size: .875rem; cursor: pointer; }
 .checkbox-label input { position: absolute; opacity: 0; }
 .custom-checkbox { position: relative; flex-shrink: 0; width: 1rem; height: 1rem; border: 1px solid #94a3b8; border-radius: .25rem; background: #fff; }
+.required-star { color: #ef4444; font-weight: 700; margin-left: 0.25rem; }
 .checkbox-label input:checked + .custom-checkbox { border-color: var(--color-brand-primary); background: var(--color-brand-primary); }
 .checkbox-label input:checked + .custom-checkbox::after { content: ""; position: absolute; left: 4px; top: 1px; width: 5px; height: 9px; border: solid #fff; border-width: 0 2px 2px 0; transform: rotate(45deg); }
 .forgot-password { border: 0; padding: 0; background: transparent; color: var(--color-brand-primary); font: inherit; font-size: .875rem; font-weight: 600; cursor: pointer; }
@@ -309,11 +310,116 @@ html.dark .shared-theme .placeholder-zinc-500::placeholder { color: var(--text-m
 .social-buttons { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .75rem; }
 .auth-switch-text { margin: .3rem 0 0; text-align: center; }
 
-html.dark .auth-page, html.dark .auth-form-section { background: #020617; }
-html.dark .auth-visual-section { background: linear-gradient(135deg, #101b35, #020617); }
-html.dark .auth-heading h1, html.dark .input-wrapper input { color: #f8fafc; }
-html.dark .form-group label, html.dark .checkbox-label { color: #cbd5e1; }
-html.dark .input-wrapper, html.dark .custom-checkbox { border-color: #334155; background: #1e293b; }
+html.dark .auth-page, 
+html.dark .auth-form-section,
+html.dark .register-page { 
+  background: #020617; 
+  color: #f8fafc;
+}
+
+html.dark .auth-visual-section { 
+  background: linear-gradient(135deg, #0f172a, #020617); 
+}
+
+html.dark .auth-heading h1 { color: #f8fafc; }
+html.dark .auth-heading p,
+html.dark .auth-switch-text { color: #94a3b8; }
+
+html.dark .auth-heading a,
+html.dark .auth-switch-text a,
+html.dark .checkbox-text a,
+html.dark .forgot-password,
+html.dark .back-button {
+  color: #60a5fa;
+}
+
+html.dark .auth-heading a:hover,
+html.dark .auth-switch-text a:hover,
+html.dark .checkbox-text a:hover,
+html.dark .forgot-password:hover,
+html.dark .back-button:hover {
+  color: #93c5fd;
+}
+
+html.dark .back-button {
+  background: rgba(30, 41, 59, 0.6);
+  padding: 0.4rem 0.85rem;
+  border-radius: 0.6rem;
+  border: 1px solid rgba(51, 65, 85, 0.7);
+}
+
+html.dark .form-group label, 
+html.dark .checkbox-label { 
+  color: #cbd5e1; 
+}
+
+html.dark .input-wrapper { 
+  border-color: #334155; 
+  background: #1e293b; 
+}
+
+html.dark .input-wrapper:focus-within {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+}
+
+html.dark .input-wrapper input { 
+  color: #f8fafc !important; 
+  background: transparent; 
+}
+
+html.dark .input-wrapper input::placeholder {
+  color: #94a3b8;
+  opacity: 1;
+}
+
+html.dark .input-icon,
+html.dark .password-toggle {
+  color: #94a3b8;
+}
+
+html.dark .password-toggle:hover {
+  color: #f1f5f9;
+}
+
+html.dark .custom-checkbox {
+  border-color: #475569;
+  background: #1e293b;
+}
+
+html.dark .checkbox-label input:checked + .custom-checkbox {
+  border-color: #3b82f6;
+  background: #3b82f6;
+}
+
+html.dark .auth-divider {
+  color: #94a3b8;
+}
+
+html.dark .auth-divider span {
+  background: #334155;
+}
+
+/* Webkit Autofill Overrides */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+  -webkit-text-fill-color: #172033 !important;
+  caret-color: #172033;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+html.dark input:-webkit-autofill,
+html.dark input:-webkit-autofill:hover,
+html.dark input:-webkit-autofill:focus,
+html.dark input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px #1e293b inset !important;
+  -webkit-text-fill-color: #f8fafc !important;
+  caret-color: #f8fafc;
+  transition: background-color 5000s ease-in-out 0s;
+}
 
 /* Registration layout */
 .register-page {
@@ -384,7 +490,14 @@ html.dark .input-wrapper, html.dark .custom-checkbox { border-color: #334155; ba
   outline-offset: 4px;
 }
 html.dark .register-page .auth-visual-section { border-color: #273449; }
-html.dark .register-page .auth-illustration { mix-blend-mode: normal; border-radius: 1.5rem; }
+html.dark .auth-illustration-wrapper {
+  background: #0f172a;
+  border: 1px solid #1e293b;
+  border-radius: 1.5rem;
+  padding: 1.25rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.4);
+}
+html.dark .auth-illustration { mix-blend-mode: normal; border-radius: 1rem; }
 html.dark .auth-page .social-button { background: #1e293b; color: #e2e8f0; border-color: #334155; }
 html.dark .auth-page .social-button:hover:not(:disabled) { background: #273449; }
 html.dark .register-page > .back-button:hover { background: #1e293b; }

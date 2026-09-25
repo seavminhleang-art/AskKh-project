@@ -737,6 +737,7 @@ export default function RegisterPage() {
                   <span className="checkbox-text">
                     {t.agree} <Link to="/terms">{t.terms}</Link> {t.and}{" "}
                     <Link to="/privacy">{t.privacy}</Link>
+                    <span className="required-star">*</span>
                   </span>
                 </label>
 

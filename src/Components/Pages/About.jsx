@@ -425,7 +425,7 @@ export default function AboutNexa() {
 
             <div className="w-14 h-1 bg-brand-primary rounded-full mt-4 mb-6" />
 
-            <p className="text-18px leading-relaxed max-w-md">
+            <p className="text-lg leading-relaxed max-w-md">
               {t("aboutPage.description")}
             </p>
 
@@ -465,7 +465,7 @@ export default function AboutNexa() {
               />
             </h2>
 
-            <p className="text-18px mt-4 leading-relaxed">
+            <p className="text-lg mt-4 leading-relaxed">
               {t("aboutPage.whyChooseDesc")}
             </p>
           </ScrollReveal>
@@ -496,11 +496,11 @@ export default function AboutNexa() {
                   </svg>
                 </div>
 
-                <h3 className="font-semibold text-[var(--text-main)]">
+                <h3 className="font-semibold text-[var(--text-main)] text-2xl">
                   {t(`${feature.key}.title`)}
                 </h3>
 
-                <p className="text-18px mt-2">{t(`${feature.key}.desc`)}</p>
+                <p className="text-lg mt-2">{t(`${feature.key}.desc`)}</p>
               </div>
             </ScrollReveal>
           ))}
@@ -530,7 +530,7 @@ export default function AboutNexa() {
               {t("aboutPage.missionTitle")}
             </h2>
 
-            <p className="text-18px leading-relaxed mb-6">
+            <p className="text-lg leading-relaxed mb-6">
               {t("aboutPage.missionDesc")}
             </p>
 
@@ -540,12 +540,12 @@ export default function AboutNexa() {
                   <li key={point} className="flex items-start gap-3">
                     <CheckIcon />
 
-                    <span className="text-18px">{point}</span>
+                    <span className="text-lg">{point}</span>
                   </li>
                 ))
               ) : (
                 <li>
-                  <span className="text-18px">{t(missionPointsKey)}</span>
+                  <span className="text-lg">{t(missionPointsKey)}</span>
                 </li>
               )}
             </ul>
@@ -567,7 +567,7 @@ export default function AboutNexa() {
                 {t("aboutPage.visionTitle")}
               </h2>
 
-              <p className="text-18px leading-relaxed mb-6">
+              <p className="text-lg leading-relaxed mb-6">
                 {t("aboutPage.visionDesc")}
               </p>
 
@@ -577,12 +577,12 @@ export default function AboutNexa() {
                     <li key={point} className="flex items-start gap-3">
                       <CheckIcon />
 
-                      <span className="text-18px">{point}</span>
+                      <span className="text-lg">{point}</span>
                     </li>
                   ))
                 ) : (
                   <li>
-                    <span className="text-18px">{t(visionPointsKey)}</span>
+                    <span className="text-lg">{t(visionPointsKey)}</span>
                   </li>
                 )}
               </ul>

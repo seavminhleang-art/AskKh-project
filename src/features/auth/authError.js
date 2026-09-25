@@ -53,6 +53,10 @@ export function authError(error, fallback = 'Something went wrong. Please try ag
     return error.error;
   }
 
+  if (error.status === 401 || error.originalStatus === 401) {
+    return 'Invalid email or password. Please check your credentials and try again.';
+  }
+
   if (error.status === 'FETCH_ERROR' || error.status === 'TIMEOUT_ERROR') {
     return 'Unable to reach the server. Please check your internet connection and try again.';
   }
