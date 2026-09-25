@@ -1,6 +1,6 @@
 import React from "react";
 import { HelpCircle } from "lucide-react";
-import Button from "../ui/Button";
+import Button from "../ui/button";
 
 export default function EmptyState({
   icon: Icon = HelpCircle,

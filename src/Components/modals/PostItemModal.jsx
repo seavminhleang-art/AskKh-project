@@ -10,7 +10,7 @@ import {
   Image as ImageIcon,
   Loader2,
 } from "lucide-react";
-import Button from "../ui/Button";
+import Button from "../ui/button";
 import Input from "../ui/Input";
 import Textarea from "../ui/Textarea";
 import Select from "../ui/Select";

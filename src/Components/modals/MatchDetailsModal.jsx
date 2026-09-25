@@ -8,7 +8,7 @@ import {
   CheckCircle2,
   ArrowRight,
 } from "lucide-react";
-import Button from "../ui/Button";
+import Button from "../ui/button";
 import StatusBadge from "../ui/StatusBadge";
 import { useUpdateMatchStatusMutation } from "../../store/api/apiSlice";
 import { toast } from "sonner";

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { X, ShieldCheck, AlertCircle } from "lucide-react";
-import Button from "../ui/Button";
+import Button from "../ui/button";
 import Textarea from "../ui/Textarea";
 import Input from "../ui/Input";
 import { useCreateClaimMutation } from "../../store/api/apiSlice";
