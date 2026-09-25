@@ -31,7 +31,7 @@ export default function FooterComponent() {
 
   return (
     <footer
-      className="site-footer relative overflow-hidden border-t border-slate-200 bg-slate-50 text-slate-700 transition-colors duration-300 dark:border-slate-800 dark:bg-zinc-950 dark:text-gray-300"
+      className="site-footer relative overflow-hidden border-t border-slate-200 bg-white text-slate-700 transition-colors duration-300 dark:border-slate-800 dark:bg-zinc-950 dark:text-gray-300"
     >
       {/* subtle vertical stripe background, matches reference */}
       <div
@@ -136,10 +136,24 @@ export default function FooterComponent() {
               {t("footer.organizedTitle")}
             </h3>
 
+            {/* Recolor only the wordmark to the right of the circular emblem. */}
+            <svg width="0" height="0" className="absolute" aria-hidden="true" focusable="false">
+              <defs>
+                <filter id="istad-footer-light-lettering" x="0" y="0" width="100%" height="100%" primitiveUnits="objectBoundingBox" colorInterpolationFilters="sRGB">
+                  <feFlood x="0.38" y="0" width="0.62" height="1" floodColor="var(--color-brand-primary)" result="letterColor" />
+                  <feComposite in="letterColor" in2="SourceAlpha" operator="in" result="letters" />
+                  <feMerge>
+                    <feMergeNode in="SourceGraphic" />
+                    <feMergeNode in="letters" />
+                  </feMerge>
+                </filter>
+              </defs>
+            </svg>
             <img
               src={istadLogo}
               alt="ISTAD logo"
-              className="block h-auto w-auto max-w-full object-contain"
+              className="block h-auto w-full object-contain"
+              style={{ filter: darkMode ? undefined : "url(#istad-footer-light-lettering)" }}
             />
           </div>
         </div>
