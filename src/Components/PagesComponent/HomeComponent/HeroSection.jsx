@@ -31,7 +31,7 @@ export default function HeroSection({ darkMode }) {
       <h1 className="relative text-5xl md:text-5xl font-bold text-[var(--home-primary-text)] mb-2">
         {t("heroTitle1")}
       </h1>
-      <h2 className="relative text-4xl md:text-5xl font-semibold text-[var(--home-secondary-text)] mb-4">
+      <h2 className="relative text-5xl md:text-5xl font-semibold text-[var(--home-secondary-text)] mb-4">
         {t("heroTitle2")}
       </h2>
 

@@ -605,7 +605,7 @@ export default function AboutNexa() {
 
       <section className="max-w-6xl mx-auto px-6 py-20">
         <ScrollReveal animation="fadeInUp">
-          <h2 className="text-center text-4xl font-bold text-[var(--text-main)] mb-14">
+          <h2 className="text-center text-5xl font-bold text-[var(--text-main)] mb-14">
             <Trans
               t={t}
               i18nKey="aboutPage.mentorsTitle"
@@ -628,7 +628,7 @@ export default function AboutNexa() {
       <section className="bg-[var(--bg-secondary)] transition-colors duration-300">
         <div className="max-w-6xl mx-auto px-6 py-20">
           <ScrollReveal animation="fadeInUp">
-            <h2 className="text-center text-4xl font-bold text-[var(--text-main)] mb-14">
+            <h2 className="text-center text-5xl font-bold text-[var(--text-main)] mb-14">
               <Trans
                 t={t}
                 i18nKey="aboutPage.teamTitle"

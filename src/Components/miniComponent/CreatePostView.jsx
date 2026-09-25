@@ -123,7 +123,7 @@ const CreatePostView = ({ onAddPost, onCancel, darkMode: propDarkMode }) => {
       }`}
     >
       <h1
-        className={`text-4xl font-bold ${darkMode ? "text-white" : "text-gray-900"}`}
+        className={`text-5xl font-bold ${darkMode ? "text-white" : "text-gray-900"}`}
       >
         {t("create.title")}
       </h1>

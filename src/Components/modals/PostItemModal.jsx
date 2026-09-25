@@ -138,7 +138,7 @@ export default function PostItemModal({
         </button>
 
         <div className="mb-6">
-          <h2 className="text-4xl font-black text-slate-900 dark:text-white tracking-tight">
+          <h2 className="text-5xl font-black text-slate-900 dark:text-white tracking-tight">
             Report Campus Belongings
           </h2>
           <p className="text-base text-slate-500 dark:text-slate-400 mt-1">

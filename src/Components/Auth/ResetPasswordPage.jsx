@@ -224,7 +224,7 @@ export default function ResetPasswordPage() {
                 <span className="inline-flex items-center gap-1.5 text-base font-semibold px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-500 mb-3 border border-emerald-500/20">
                   <Sparkles size={13} /> {t.successTitle}
                 </span>
-                <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-emerald-500">
+                <h1 className="text-5xl sm:text-5xl font-bold tracking-tight text-emerald-500">
                   {t.successTitle}
                 </h1>
                 <p
@@ -254,7 +254,7 @@ export default function ResetPasswordPage() {
               </div>
 
               <div>
-                <h1 className="text-4xl sm:text-5xl font-bold tracking-tight">
+                <h1 className="text-5xl sm:text-5xl font-bold tracking-tight">
                   {t.title}
                 </h1>
                 <p

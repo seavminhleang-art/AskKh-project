@@ -539,7 +539,7 @@ function ChampionsSection({
           <Crown size={14} className="text-amber-500 fill-amber-500" />
           <span>{c.podiumEyebrow}</span>
         </div>
-        <h2 className="text-4xl sm:text-5xl lg:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+        <h2 className="text-5xl sm:text-5xl lg:text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white">
           {c.podiumTitle}
         </h2>
       </div>
@@ -568,7 +568,7 @@ function ChampionsSection({
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <span className="w-full h-full flex items-center justify-center font-bold text-4xl text-slate-600">
+                <span className="w-full h-full flex items-center justify-center font-bold text-5xl text-slate-600">
                   {podium2.name.slice(0, 2).toUpperCase()}
                 </span>
               )}
@@ -751,7 +751,7 @@ function ChampionsSection({
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <span className="w-full h-full flex items-center justify-center font-bold text-4xl text-slate-600">
+                <span className="w-full h-full flex items-center justify-center font-bold text-5xl text-slate-600">
                   {podium3.name.slice(0, 2).toUpperCase()}
                 </span>
               )}
@@ -1341,7 +1341,7 @@ export default function LeaderBoardComponent({
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <span className="w-full h-full flex items-center justify-center font-bold text-4xl text-slate-600">
+                <span className="w-full h-full flex items-center justify-center font-bold text-5xl text-slate-600">
                   {selectedHonor.name.slice(0, 2).toUpperCase()}
                 </span>
               )}
@@ -1354,7 +1354,7 @@ export default function LeaderBoardComponent({
               </span>
             </div>
 
-            <h3 className="text-4xl font-black text-slate-900 dark:text-white">
+            <h3 className="text-5xl font-black text-slate-900 dark:text-white">
               {selectedHonor.name}
             </h3>
             {selectedHonor.khmerName && (

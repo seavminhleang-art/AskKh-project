@@ -132,7 +132,7 @@ export default function FAQAndCTA({ darkMode }) {
 
         <div className="relative z-10 max-w-4xl mx-auto">
           {/* Forced white text color */}
-          <h2 className="text-4xl sm:text-5xl font-bold mb-4 tracking-tight max-w-3xl mx-auto leading-normal sm:leading-snug text-white">
+          <h2 className="text-5xl sm:text-5xl font-bold mb-4 tracking-tight max-w-3xl mx-auto leading-normal sm:leading-snug text-white">
             {t("ctaTitle")}
           </h2>
           {/* Forced light gray subtitle color */}

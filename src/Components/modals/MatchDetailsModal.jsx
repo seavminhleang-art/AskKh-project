@@ -54,7 +54,7 @@ export default function MatchDetailsModal({ isOpen, onClose, match }) {
               <Sparkles className="w-3.5 h-3.5" />
               <span>Smart Match Engine Analysis</span>
             </div>
-            <h2 className="text-4xl font-black text-slate-900 dark:text-white">
+            <h2 className="text-5xl font-black text-slate-900 dark:text-white">
               {match.matchScore}% Match Confidence
             </h2>
           </div>

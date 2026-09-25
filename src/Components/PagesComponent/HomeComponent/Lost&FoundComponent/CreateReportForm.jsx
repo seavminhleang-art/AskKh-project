@@ -60,7 +60,7 @@ export default function CreateReportForm({ onCancel, darkMode }) {
     <main
       className={`max-w-4xl mx-auto rounded-3xl p-6 ${darkMode ? "bg-zinc-900 text-white" : "bg-white text-gray-900"}`}
     >
-      <h1 className="text-4xl font-bold mb-6">{t("feedReportBtn")}</h1>
+      <h1 className="text-5xl font-bold mb-6">{t("feedReportBtn")}</h1>
       {!authenticated ? (
         <div>
           <Link to="/login">Sign in to report an item</Link>

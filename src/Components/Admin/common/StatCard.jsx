@@ -36,7 +36,7 @@ export default function StatCard({
       <div className="flex items-start justify-between">
         <div>
           <p className="text-base text-gray-500">{title}</p>
-          <p className="mt-1.5 text-4xl font-semibold text-gray-900">
+          <p className="mt-1.5 text-5xl font-semibold text-gray-900">
             {displayValue}
           </p>
         </div>

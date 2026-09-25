@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { publicQuestionPath } from "../../utils/slug";
 import {
   ThumbsUp,
   MessageSquare,
@@ -84,7 +85,7 @@ export default function QuestionCard({ question }) {
           </div>
 
           <Link
-            to={`/community/questions/${question.id}`}
+            to={publicQuestionPath(question.id, question.title)}
             className="block group"
           >
             <h3 className="text-lg sm:text-lg font-bold text-slate-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors leading-snug">

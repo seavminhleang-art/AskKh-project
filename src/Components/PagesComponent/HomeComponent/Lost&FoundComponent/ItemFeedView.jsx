@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Pagination from "@/Components/common/Pagination";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import {
@@ -64,6 +65,24 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All Categories");
   const [sortBy, setSortBy] = useState("Newest");
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const handleTabChange = (key) => {
+    setActiveTab(key);
+    setCurrentPage(1);
+  };
+  const handleCategoryChange = (name) => {
+    setSelectedCategory(name);
+    setCurrentPage(1);
+  };
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+    setCurrentPage(1);
+  };
+  const handleSortChange = (e) => {
+    setSortBy(e.target.value);
+    setCurrentPage(1);
+  };
 
   const filteredItems = items
     .filter((item) => {
@@ -95,6 +114,13 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
           (Date.parse(b.createdAt || b.itemDate) || 0)),
     );
 
+  const ITEMS_PER_PAGE = 6;
+  const totalPages = Math.ceil(filteredItems.length / ITEMS_PER_PAGE);
+  const paginatedItems = filteredItems.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE,
+  );
+
   return (
     <section className="mb-20 relative z-10 font-[family-name:var(--font-brand)]">
       <div className="relative text-center py-12 md:py-16 px-6 mb-8">
@@ -108,7 +134,7 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
           <ShieldCheck size={14} /> {t("feedBadge")}
         </span>
         <h1
-          className={`text-4xl md:text-5xl font-bold mb-2 ${darkMode ? "text-white" : "text-gray-900"}`}
+          className={`text-5xl md:text-5xl font-bold mb-2 ${darkMode ? "text-white" : "text-gray-900"}`}
         >
           {t("feedHeroTitle1")}{" "}
           <span className="text-[var(--color-brand-primary,#3b82f6)]">
@@ -123,7 +149,7 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
 
         <div className="mt-8">
           <h2
-            className={`text-xl md:text-4xl font-bold ${darkMode ? "text-white" : "text-gray-900"}`}
+            className={`text-xl md:text-5xl font-bold ${darkMode ? "text-white" : "text-gray-900"}`}
           >
             {t("feedActiveRecoveryTitle")}
           </h2>
@@ -168,7 +194,7 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
           ].map((tab) => (
             <button
               key={tab.key}
-              onClick={() => setActiveTab(tab.key)}
+              onClick={() => handleTabChange(tab.key)}
               className={`pb-3 text-base font-semibold relative transition-all duration-200 cursor-pointer hover:opacity-100 ${
                 activeTab === tab.key
                   ? "text-[var(--color-brand-primary,#3b82f6)] font-bold"
@@ -191,7 +217,7 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
               type="text"
               placeholder={t("feedSearchPlaceholder")}
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={handleSearchChange}
               className={`w-full rounded-2xl pl-9 pr-4 py-2.5 text-base transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--color-brand-primary,#3b82f6)]/40 hover:border-[var(--color-brand-primary,#3b82f6)]/50 ${
                 darkMode
                   ? "bg-zinc-900/90 border border-zinc-800 text-slate-100 placeholder-zinc-500"
@@ -207,7 +233,7 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
           <div className="flex items-center gap-2 flex-wrap">
             <select
               value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
+              onChange={(e) => handleCategoryChange(e.target.value)}
               className={`rounded-2xl px-3.5 py-2.5 text-base outline-none cursor-pointer font-medium transition-all duration-200 hover:border-[var(--color-brand-primary,#3b82f6)]/50 ${
                 darkMode
                   ? "bg-zinc-900/90 border border-zinc-800 text-slate-200"
@@ -231,7 +257,7 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
 
             <select
               value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
+              onChange={handleSortChange}
               className={`rounded-2xl px-3.5 py-2.5 text-base outline-none cursor-pointer font-medium transition-all duration-200 hover:border-[var(--color-brand-primary,#3b82f6)]/50 ${
                 darkMode
                   ? "bg-zinc-900/90 border border-zinc-800 text-slate-200"
@@ -277,114 +303,121 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
                 {t("feedNoItemsFound")}
               </div>
             ) : (
-              filteredItems.map((item) => (
-                <motion.div
-                  key={item.id}
-                  whileHover={{ scale: 1.01, y: -4 }}
-                  transition={{ duration: 0.2, ease: "easeOut" }}
-                  className={`backdrop-blur-md rounded-3xl p-5 transition-all duration-300 flex flex-col md:flex-row gap-6 relative group ${
-                    darkMode
-                      ? "bg-zinc-900/90 text-slate-100"
-                      : "bg-white/95 text-gray-800"
-                  }`}
-                >
-                  <div className="absolute top-4 left-4 z-10">
-                    <span
-                      className={`inline-block text-base font-semibold px-3 py-1 rounded-full uppercase tracking-wider transition-transform duration-200 group-hover:scale-105 ${
-                        item.type === "LOST"
-                          ? darkMode
-                            ? "bg-red-950/80 text-red-400 border border-red-800"
-                            : "bg-red-50 text-red-600 font-bold"
-                          : darkMode
-                            ? "bg-amber-950/80 text-amber-400 border border-amber-800"
-                            : "bg-amber-50 text-amber-600 font-bold"
-                      }`}
-                    >
-                      {item.type === "LOST"
-                        ? t("recStatusLost")
-                        : t("recStatusFound")}
-                    </span>
-                  </div>
-
-                  <div
-                    className={`w-full md:w-56 h-48 rounded-2xl overflow-hidden flex-shrink-0 flex items-center justify-center p-2 ${
-                      darkMode ? "bg-zinc-950/60" : "bg-gray-50"
+              <>
+                {paginatedItems.map((item) => (
+                  <motion.div
+                    key={item.id}
+                    whileHover={{ scale: 1.01, y: -4 }}
+                    transition={{ duration: 0.2, ease: "easeOut" }}
+                    className={`backdrop-blur-md rounded-3xl p-5 transition-all duration-300 flex flex-col md:flex-row gap-6 relative group ${
+                      darkMode
+                        ? "bg-zinc-900/90 text-slate-100"
+                        : "bg-white/95 text-gray-800"
                     }`}
                   >
-                    {item.image && (
-                      <img
-                        src={item.image}
-                        alt={item.title}
-                        onError={(e) => {
-                          e.currentTarget.onerror = null;
-                          e.currentTarget.style.display = "none";
-                        }}
-                        className="w-full h-full object-contain transform group-hover:scale-110 transition duration-500 ease-out"
-                      />
-                    )}
-                  </div>
-
-                  <div className="flex-1 flex flex-col justify-between pt-6 md:pt-0">
-                    <div>
-                      <div className="flex items-center gap-4 text-base text-gray-400 mb-2">
-                        <span className="flex items-center gap-1 text-red-500 font-medium">
-                          <MapPin size={13} /> {item.location}
-                        </span>
-                        <span className="flex items-center gap-1">
-                          <Clock size={13} /> {item.timeAgo}
-                        </span>
-                      </div>
-                      <h3
-                        className={`text-lg font-bold mb-2 transition-colors duration-200 group-hover:text-[var(--color-brand-primary,#3b82f6)] ${darkMode ? "text-slate-100" : "text-gray-900"}`}
+                    <div className="absolute top-4 left-4 z-10">
+                      <span
+                        className={`inline-block text-base font-semibold px-3 py-1 rounded-full uppercase tracking-wider transition-transform duration-200 group-hover:scale-105 ${
+                          item.type === "LOST"
+                            ? darkMode
+                              ? "bg-red-950/80 text-red-400 border border-red-800"
+                              : "bg-red-50 text-red-600 font-bold"
+                            : darkMode
+                              ? "bg-amber-950/80 text-amber-400 border border-amber-800"
+                              : "bg-amber-50 text-amber-600 font-bold"
+                        }`}
                       >
-                        {item.title}
-                      </h3>
-                      <p
-                        className={`text-base leading-relaxed line-clamp-3 ${darkMode ? "text-slate-400" : "text-gray-600"}`}
-                      >
-                        {item.description}
-                      </p>
+                        {item.type === "LOST"
+                          ? t("recStatusLost")
+                          : t("recStatusFound")}
+                      </span>
                     </div>
 
                     <div
-                      className={`flex flex-wrap gap-3 items-center justify-between pt-4 mt-2 border-t ${
-                        darkMode
-                          ? "border-zinc-800 text-slate-400"
-                          : "border-gray-100 text-gray-600"
+                      className={`w-full md:w-56 h-48 rounded-2xl overflow-hidden flex-shrink-0 flex items-center justify-center p-2 ${
+                        darkMode ? "bg-zinc-950/60" : "bg-gray-50"
                       }`}
                     >
-                      <div className="flex items-center gap-2.5">
-                        {item.avatar && (
-                          <img
-                            src={item.avatar}
-                            alt={item.reporter}
-                            className="w-7 h-7 rounded-full object-cover ring-2 ring-transparent group-hover:ring-[var(--color-brand-primary,#3b82f6)]/50 transition-all duration-200"
-                          />
-                        )}
-                        <span
-                          className={`text-base font-medium ${darkMode ? "text-slate-300" : "text-gray-700"}`}
+                      {item.image && (
+                        <img
+                          src={item.image}
+                          alt={item.title}
+                          onError={(e) => {
+                            e.currentTarget.onerror = null;
+                            e.currentTarget.style.display = "none";
+                          }}
+                          className="w-full h-full object-contain transform group-hover:scale-110 transition duration-500 ease-out"
+                        />
+                      )}
+                    </div>
+
+                    <div className="flex-1 flex flex-col justify-between pt-6 md:pt-0">
+                      <div>
+                        <div className="flex items-center gap-4 text-base text-gray-400 mb-2">
+                          <span className="flex items-center gap-1 text-red-500 font-medium">
+                            <MapPin size={13} /> {item.location}
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <Clock size={13} /> {item.timeAgo}
+                          </span>
+                        </div>
+                        <h3
+                          className={`text-lg font-bold mb-2 transition-colors duration-200 group-hover:text-[var(--color-brand-primary,#3b82f6)] ${darkMode ? "text-slate-100" : "text-gray-900"}`}
                         >
-                          {item.reporter}
-                        </span>
+                          {item.title}
+                        </h3>
+                        <p
+                          className={`text-base leading-relaxed line-clamp-3 ${darkMode ? "text-slate-400" : "text-gray-600"}`}
+                        >
+                          {item.description}
+                        </p>
                       </div>
-                      <motion.button
-                        onClick={() => setSelectedReport(item)}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        className={`text-base font-semibold px-4 py-2 rounded-xl transition-all duration-200 cursor-pointer ${
+
+                      <div
+                        className={`flex flex-wrap gap-3 items-center justify-between pt-4 mt-2 border-t ${
                           darkMode
-                            ? "bg-emerald-950/80 text-emerald-400 border border-emerald-800 hover:bg-emerald-900 hover:border-emerald-600"
-                            : "bg-emerald-50 text-[var(--color-brand-accent,#10b981)] hover:bg-emerald-100"
+                            ? "border-zinc-800 text-slate-400"
+                            : "border-gray-100 text-gray-600"
                         }`}
                       >
-                        {item.type === "FOUND"
-                          ? t("recVerifyBtn")
-                          : "View details"}
-                      </motion.button>
+                        <div className="flex items-center gap-2.5">
+                          {item.avatar && (
+                            <img
+                              src={item.avatar}
+                              alt={item.reporter}
+                              className="w-7 h-7 rounded-full object-cover ring-2 ring-transparent group-hover:ring-[var(--color-brand-primary,#3b82f6)]/50 transition-all duration-200"
+                            />
+                          )}
+                          <span
+                            className={`text-base font-medium ${darkMode ? "text-slate-300" : "text-gray-700"}`}
+                          >
+                            {item.reporter}
+                          </span>
+                        </div>
+                        <motion.button
+                          onClick={() => setSelectedReport(item)}
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          className={`text-base font-semibold px-4 py-2 rounded-xl transition-all duration-200 cursor-pointer ${
+                            darkMode
+                              ? "bg-emerald-950/80 text-emerald-400 border border-emerald-800 hover:bg-emerald-900 hover:border-emerald-600"
+                              : "bg-emerald-50 text-[var(--color-brand-accent,#10b981)] hover:bg-emerald-100"
+                          }`}
+                        >
+                          {item.type === "FOUND"
+                            ? t("recVerifyBtn")
+                            : "View details"}
+                        </motion.button>
+                      </div>
                     </div>
-                  </div>
-                </motion.div>
-              ))
+                  </motion.div>
+                ))}
+                <Pagination
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                  onPageChange={setCurrentPage}
+                />
+              </>
             )}
           </div>
 
@@ -410,13 +443,13 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
                 {categories.map((cat, idx) => (
                   <motion.li
                     key={idx}
-                    onClick={() => setSelectedCategory(cat.name)}
+                    onClick={() => handleCategoryChange(cat.name)}
                     role="button"
                     tabIndex={0}
                     onKeyDown={(event) => {
                       if (event.key === "Enter" || event.key === " ") {
                         event.preventDefault();
-                        setSelectedCategory(cat.name);
+                        handleCategoryChange(cat.name);
                       }
                     }}
                     whileHover={{ x: 4 }}

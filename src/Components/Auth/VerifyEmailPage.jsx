@@ -88,7 +88,8 @@ export default function VerifyEmailPage() {
 
   usePageSEO({
     title: "Verify Email | NEXA",
-    description: "Verify your email address to activate your NEXA developer account.",
+    description:
+      "Verify your email address to activate your NEXA developer account.",
     noIndex: true,
   });
 
@@ -181,7 +182,7 @@ export default function VerifyEmailPage() {
                   <LoadingSpinner className="w-8 h-8 text-blue-600 animate-spin" />
                 </div>
               </div>
-              <h1 className="text-4xl font-bold tracking-tight">
+              <h1 className="text-5xl font-bold tracking-tight">
                 {t.verifyingTitle}
               </h1>
               <p
@@ -210,7 +211,7 @@ export default function VerifyEmailPage() {
                 <span className="inline-flex items-center gap-1.5 text-base font-semibold px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-500 mb-3 border border-emerald-500/20">
                   <Sparkles size={13} /> {data?.email || "Account Verified"}
                 </span>
-                <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-emerald-500">
+                <h1 className="text-5xl sm:text-5xl font-bold tracking-tight text-emerald-500">
                   {t.successTitle}
                 </h1>
                 <p
@@ -247,7 +248,7 @@ export default function VerifyEmailPage() {
               </div>
 
               <div>
-                <h1 className="text-4xl font-bold tracking-tight text-red-500">
+                <h1 className="text-5xl font-bold tracking-tight text-red-500">
                   {t.errorTitle}
                 </h1>
                 <p
@@ -333,7 +334,7 @@ export default function VerifyEmailPage() {
               </div>
 
               <div>
-                <h1 className="text-4xl font-bold tracking-tight">
+                <h1 className="text-5xl font-bold tracking-tight">
                   {t.noTokenTitle}
                 </h1>
                 <p

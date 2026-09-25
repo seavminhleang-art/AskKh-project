@@ -7,6 +7,7 @@ import SidebarLeft from "../miniComponent/SidebarLeft";
 import PostCard from "../miniComponent/PostCard";
 import CreatePostView from "../miniComponent/CreatePostView";
 import DetailView from "../miniComponent/DetailView";
+import Pagination from "../common/Pagination";
 
 // Language
 import { useLanguage } from "../Language/LanguageContext.jsx";
@@ -86,6 +87,7 @@ export default function QACommunity({
   const [selectedTag, setSelectedTag] = useState(null);
   const [selectedPostId, setSelectedPostId] = useState(null);
   const [isCreatingPost, setIsCreatingPost] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
 
   // ==================================================
   // Error & Interaction State
@@ -296,7 +298,7 @@ export default function QACommunity({
   };
 
   // ==================================================
-  // Displayed Posts
+  // Displayed Posts & Pagination
   // ==================================================
 
   const displayedPosts =
@@ -309,6 +311,13 @@ export default function QACommunity({
             .sort(
               (a, b) => new Date(b.creationDate) - new Date(a.creationDate),
             );
+
+  const POSTS_PER_PAGE = 5;
+  const totalPages = Math.ceil(displayedPosts.length / POSTS_PER_PAGE);
+  const paginatedPosts = displayedPosts.slice(
+    (currentPage - 1) * POSTS_PER_PAGE,
+    currentPage * POSTS_PER_PAGE,
+  );
 
   // ==================================================
   // Selected Post
@@ -329,6 +338,7 @@ export default function QACommunity({
     setSelectedTag(null);
     setIsCreatingPost(false);
     setSelectedPostId(null);
+    setCurrentPage(1);
   };
 
   const handleTagSelect = (tag) => {
@@ -336,6 +346,7 @@ export default function QACommunity({
     setActiveTab("newest");
     setSelectedPostId(null);
     setIsCreatingPost(false);
+    setCurrentPage(1);
   };
 
   const openCreatePost = () => {
@@ -455,6 +466,7 @@ export default function QACommunity({
             setActiveTab={handleTabChange}
             onSelectTag={handleTagSelect}
             savedCount={bookmarkedPostIds.length}
+            posts={posts}
           />
 
           {/* ========================================
@@ -518,7 +530,10 @@ export default function QACommunity({
               {selectedTag && (
                 <button
                   className="text-base text-blue-500 hover:underline"
-                  onClick={() => setSelectedTag(null)}
+                  onClick={() => {
+                    setSelectedTag(null);
+                    setCurrentPage(1);
+                  }}
                 >
                   #{selectedTag} · Clear filter
                 </button>
@@ -547,18 +562,25 @@ export default function QACommunity({
                   {t.post.noPosts}
                 </div>
               ) : (
-                displayedPosts.map((post) => (
-                  <PostCard
-                    key={post.id}
-                    {...post}
-                    darkMode={darkMode}
-                    language={currentLang}
-                    isBookmarked={bookmarkedPostIds.includes(post.id)}
-                    onToggleBookmark={toggleBookmark}
-                    onSelectPost={handleSelectPost}
-                    onToggleLike={handleToggleLike}
+                <>
+                  {paginatedPosts.map((post) => (
+                    <PostCard
+                      key={post.id}
+                      {...post}
+                      darkMode={darkMode}
+                      language={currentLang}
+                      isBookmarked={bookmarkedPostIds.includes(post.id)}
+                      onToggleBookmark={toggleBookmark}
+                      onSelectPost={handleSelectPost}
+                      onToggleLike={handleToggleLike}
+                    />
+                  ))}
+                  <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={setCurrentPage}
                   />
-                ))
+                </>
               )}
             </div>
           )}

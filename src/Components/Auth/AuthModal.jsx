@@ -60,7 +60,7 @@ export default function AuthModal({ isOpen, onClose }) {
                   <div className="w-12 h-12 rounded-2xl bg-blue-600 text-white flex items-center justify-center mx-auto mb-3 shadow-lg shadow-blue-500/25">
                     <ShieldAlert className="w-6 h-6" />
                   </div>
-                  <h2 className="text-4xl font-extrabold text-slate-900">
+                  <h2 className="text-5xl font-extrabold text-slate-900">
                     {tab === "signin" ? "Welcome Back" : "Create Account"}
                   </h2>
                   <p className="text-slate-500 text-base mt-1">

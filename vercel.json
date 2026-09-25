@@ -3,6 +3,7 @@
   "outputDirectory": "dist",
   "framework": "vite",
   "rewrites": [
+    { "source": "/sitemap.xml", "destination": "/api/sitemap" },
     { "source": "/__forum_api/(.*)", "destination": "/api/forum" },
     { "source": "/api/forum/(.*)", "destination": "/api/forum" },
     { "source": "/(.*)", "destination": "/index.html" }

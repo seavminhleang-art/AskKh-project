@@ -42,7 +42,7 @@ function SectionBlock({
 
         {/* Section Content */}
         <div className="min-w-0 flex-1">
-          <h2 className="mb-3 text-4xl font-bold text-2xl">{title}</h2>
+          <h2 className="mb-3 text-5xl font-bold text-2xl">{title}</h2>
 
           {/* Paragraphs */}
           {paragraphs.map((paragraph, index) => (

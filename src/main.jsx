@@ -24,6 +24,7 @@ import DashboardPage from "./pages/user/DashboardPage.jsx";
 import WorkspaceListPage from "./pages/user/WorkspaceListPage.jsx";
 import ProfilePage from './pages/user/ProfilePage.jsx';
 import QuestionDetailPage from './pages/user/QuestionDetailPage.jsx';
+import PublicQuestionPage from './Pages/public/PublicQuestionPage.jsx';
 import UserPostPage from "./pages/user/UserPostPage.jsx";
 import AdminDashboardPage from "./features/admin/workspace/Dashboard.jsx";
 import AdminShell from "./features/admin/workspace/AdminShell.jsx";
@@ -78,6 +79,9 @@ const router = createBrowserRouter([
       // Keep the URL used by the registration page working as well.
       { path: "privacy", element: <PrivacyPolicy /> },
       { path: "leaderboard", element: <LeaderboardPage /> },
+      // Public question pages — no auth required, fully indexed by search engines
+      { path: "questions/:id", element: <PublicQuestionPage /> },
+      { path: "questions/:id/:slug", element: <PublicQuestionPage /> },
       { path: "*", element: <HomePage /> },
     ],
   },

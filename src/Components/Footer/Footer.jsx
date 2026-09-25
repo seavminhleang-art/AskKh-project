@@ -21,7 +21,7 @@ export default function Footer() {
               <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-500/20">
                 <ShieldAlert className="w-5 h-5" />
               </div>
-              <span className="text-4xl font-bold text-white tracking-tight">
+              <span className="text-5xl font-bold text-white tracking-tight">
                 Ask & Found
               </span>
             </div>

@@ -47,7 +47,7 @@ export default function Dashboard() {
     <div className="admin-dashboard w-full">
       <div className="mb-8">
         <p className="admin-eyebrow mb-2">Core / Dashboard</p>
-        <h1 className="text-4xl sm:text-5xl font-bold tracking-tight text-white">
+        <h1 className="text-5xl sm:text-5xl font-bold tracking-tight text-white">
           Dashboard
         </h1>
         <p className="mt-2 text-base text-slate-400">

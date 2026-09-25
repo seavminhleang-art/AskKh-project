@@ -11,6 +11,7 @@ const SidebarLeft = ({
   activeTab,
   setActiveTab,
   savedCount,
+  posts = [],
   darkMode: propDarkMode,
 }) => {
   const { t } = useTranslation();
@@ -18,11 +19,53 @@ const SidebarLeft = ({
   const darkMode = propDarkMode ?? context?.darkMode ?? false;
 
   const query = useGetPopularTagsQuery();
-  const tags = rowsOf(query.data)
+
+  const tagCountsFromPosts = React.useMemo(() => {
+    const counts = {};
+    (posts || []).forEach((post) => {
+      const tagList =
+        post.tags ||
+        (post.tagResponses ? post.tagResponses.map((t) => t.tagName) : []);
+      tagList.forEach((tag) => {
+        if (tag) {
+          counts[tag] = (counts[tag] || 0) + 1;
+        }
+      });
+    });
+    return counts;
+  }, [posts]);
+
+  const rawTags = rowsOf(query.data);
+
+  const tagsList = [];
+  if (rawTags.length > 0) {
+    rawTags.forEach((tag) => {
+      const tagName = tag.tagName || tag.name || (typeof tag === "string" ? tag : "");
+      if (!tagName) return;
+      const count = tagCountsFromPosts[tagName] ?? tag.count ?? 0;
+      tagsList.push({
+        name: tagName,
+        countValue: count,
+        count: `${count} ${count === 1 ? "post" : "posts"}`,
+      });
+    });
+  }
+
+  Object.entries(tagCountsFromPosts).forEach(([tagName, count]) => {
+    if (!tagsList.some((t) => t.name === tagName)) {
+      tagsList.push({
+        name: tagName,
+        countValue: count,
+        count: `${count} ${count === 1 ? "post" : "posts"}`,
+      });
+    }
+  });
+
+  const tags = tagsList
+    .sort((a, b) => b.countValue - a.countValue)
     .slice(0, 8)
     .map((tag) => ({
-      name: tag.tagName,
-      count: `${tag.count ?? 0} posts`,
+      ...tag,
       icon: Hash,
     }));
 

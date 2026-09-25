@@ -31,7 +31,7 @@ export default function StatCard({
           <p className="text-base font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
             {title}
           </p>
-          <h4 className="text-4xl sm:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+          <h4 className="text-5xl sm:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight">
             {value}
           </h4>
         </div>

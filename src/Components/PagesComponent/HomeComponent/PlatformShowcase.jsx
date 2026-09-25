@@ -63,7 +63,7 @@ export default function PlatformShowcase({ darkMode }) {
             <span className="inline-block bg-white/20 text-white text-base font-semibold px-3 py-1 rounded-full mb-3 backdrop-blur-md">
               {t("showcaseBadge")}
             </span>
-            <h2 className="text-4xl md:text-5xl font-bold mb-2 text-white">
+            <h2 className="text-5xl md:text-5xl font-bold mb-2 text-white">
               {t("showcaseTitle")}
             </h2>
             <p className="text-white/80 max-w-2xl mx-auto leading-relaxed text-base md:text-base">
