@@ -9,7 +9,6 @@ import {
 import {
   rows,
   dateLabel,
-  ownClaims,
   message,
 } from "../../features/workspace/workspaceModel";
 import { Heading, QueryState, Empty, Badge, QuickLinks } from "./WorkspaceUI";
@@ -21,8 +20,10 @@ const titles = {
   matches: "Smart Matches",
   notifications: "Notifications",
 };
-function ReportRelated({ page, reportId, userId }) {
+function ReportRelated({ page, reportId }) {
   const { w, locale } = useWorkspaceTranslation();
+  const [save, saveState] = useWorkspaceSaveMutation();
+  const [actionError, setActionError] = useState("");
   const query = useWorkspaceDataQuery(
     {
       resource: page,
@@ -38,14 +39,30 @@ function ReportRelated({ page, reportId, userId }) {
         {w("Select a report to view")} {page}.
       </Empty>
     );
-  const items =
-    page === "claims" ? ownClaims(rows(query.data), userId) : rows(query.data);
+  const items = rows(query.data);
+  async function update(action, item) {
+    setActionError("");
+    try {
+      await save({ resource: page, action, id: item.id }).unwrap();
+    } catch (error) {
+      setActionError(message(error));
+    }
+  }
+  async function updateMatch(item, status) {
+    setActionError("");
+    try {
+      await save({ resource: "matches", action: "update-status", id: item.id, body: { status } }).unwrap();
+    } catch (error) {
+      setActionError(message(error));
+    }
+  }
   return (
     <QueryState query={query} unavailableMessage={page === "matches" ? "Match Center is not available yet." : undefined}>
+      {actionError && <p role="alert" className="uw-error">{w(actionError)}</p>}
       {!items.length ? (
         <Empty>
           {w("No")}
-          {page === "claims" ? w("claims from your account") : w("matches")}
+          {page === "claims" ? w("claims for this report") : w("matches")}
           {w("for this report.")}
         </Empty>
       ) : (
@@ -80,7 +97,21 @@ function ReportRelated({ page, reportId, userId }) {
                 </p>
               )}
             </div>
-            <Badge>{w(item.status)}</Badge>
+            <div className="uw-stack">
+              <Badge>{w(item.status)}</Badge>
+              {page === "claims" && !["APPROVED", "REJECTED", "COMPLETED"].includes(String(item.status).toUpperCase()) && (
+                <div className="uw-actions">
+                  <button className="uw-button" disabled={saveState.isLoading} onClick={() => update("approve", item)}>{w("Approve")}</button>
+                  <button className="uw-button secondary" disabled={saveState.isLoading} onClick={() => update("reject", item)}>{w("Reject")}</button>
+                </div>
+              )}
+              {page === "matches" && !["CONFIRMED", "REJECTED"].includes(String(item.status).toUpperCase()) && (
+                <div className="uw-actions">
+                  <button className="uw-button" disabled={saveState.isLoading} onClick={() => updateMatch(item, "CONFIRMED")}>{w("Confirm match")}</button>
+                  <button className="uw-button secondary" disabled={saveState.isLoading} onClick={() => updateMatch(item, "REJECTED")}>{w("Reject match")}</button>
+                </div>
+              )}
+            </div>
           </article>
         ))
       )}
@@ -280,7 +311,6 @@ export default function WorkspaceListPage({ page }) {
                     <ReportRelated
                       page={page}
                       reportId={reportId}
-                      userId={profile?.id}
                     />
                   </QueryState>
                 ) : (

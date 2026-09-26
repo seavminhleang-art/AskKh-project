@@ -44,10 +44,21 @@ export function workspaceRequest({
     return { url: "/users/upload-image", method: "PUT", body };
   if (action === "create" && ["posts", "reports"].includes(resource))
     return { url: paths[resource], method: "POST", body };
+  if (resource === "reports" && action === "update" && key)
+    return { url: `${paths.reports}/${key}`, method: "PUT", body };
+  if (resource === "reports" && action === "delete" && key)
+    return { url: `${paths.reports}/${key}`, method: "DELETE" };
   if (action === "create" && resource === "image-upload")
     return { url: "/upload/upload-single", method: "POST", body };
   if (action === "create" && resource === "claims" && key)
     return { url: `/lost-found/reports/${key}/claims`, method: "POST", body };
+  if (resource === "claims" && ["approve", "reject"].includes(action) && key)
+    return { url: `/lost-found/claims/${key}/${action}`, method: "PATCH" };
+  if (resource === "matches" && action === "update-status" && key)
+    return {
+      url: `/lost-found/matches/${key}?status=${encodeURIComponent(body.status)}`,
+      method: "PATCH",
+    };
   if (resource === "notifications" && action === "read-all")
     return { url: "/notifications/read-all", method: "PATCH" };
   if (resource === "notifications" && action === "mark-read" && key)

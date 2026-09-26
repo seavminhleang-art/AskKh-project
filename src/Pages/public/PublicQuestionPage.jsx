@@ -236,7 +236,7 @@ export default function PublicQuestionPage() {
         <article
           itemScope
           itemType="https://schema.org/Question"
-          className="bg-white dark:bg-zinc-900 rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 dark:border-zinc-800 mb-6"
+          className="bg-white dark:bg-zinc-900 rounded-2xl p-6 sm:p-8 shadow-sm mb-6"
         >
           {/* Tags */}
           {tags.length > 0 && (
@@ -325,7 +325,7 @@ export default function PublicQuestionPage() {
               key={answer.id ?? idx}
               itemScope
               itemType="https://schema.org/Answer"
-              className="bg-white dark:bg-zinc-900 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-zinc-800 mb-4"
+              className="bg-white dark:bg-zinc-900 rounded-2xl p-6 shadow-sm mb-4"
             >
               <div className="flex items-start gap-4">
                 {/* Vote count */}
@@ -380,7 +380,7 @@ export default function PublicQuestionPage() {
           ))}
 
           {/* CTA to join & answer */}
-          <div className="mt-6 rounded-2xl bg-blue-50 dark:bg-blue-950/30 border border-blue-100 dark:border-blue-900 p-6 text-center">
+          <div className="mt-6 rounded-2xl bg-blue-50 dark:bg-blue-950/30 p-6 text-center">
             <p className="text-base text-gray-700 dark:text-slate-300 mb-3">
               Know the answer? Join NEXA and help the community!
             </p>

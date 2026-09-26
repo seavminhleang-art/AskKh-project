@@ -10,6 +10,15 @@ import { useWorkspaceDataQuery } from "@/features/workspace/workspaceApi";
 import { rows, dateLabel } from "@/features/workspace/workspaceModel";
 import { formatMediaUrl } from "@/features/workspace/profileImage";
 
+function memberLabel(item) {
+  const scope = String(item.scope || item.visibility || item.reportScope || "")
+    .trim()
+    .toLowerCase();
+  if (scope === "istad") return "ISTAD Member";
+  if (scope === "public") return "Public Member";
+  return "Campus Member";
+}
+
 export default function RecentRecoveries({ darkMode }) {
   const { t, i18n } = useTranslation();
   const reportsQuery = useWorkspaceDataQuery({ resource: "reports" });
@@ -40,6 +49,7 @@ export default function RecentRecoveries({ darkMode }) {
 
       return {
         id: item.id,
+        scope: item.scope || item.visibility || item.reportScope,
         status: isLost ? t("recStatusLost") : t("recStatusFound"),
         statusBg: isLost
           ? "bg-[var(--color-brand-secondary)] text-white"
@@ -48,7 +58,7 @@ export default function RecentRecoveries({ darkMode }) {
         desc: item.description || "Reported on campus via NEXA.",
         location: loc,
         date: dateLabel(item.createdAt || item.itemDate, i18n.language),
-        author: item.reporterName || item.user?.username || "Campus Member",
+        author: item.reporterName || item.user?.username || memberLabel(item),
         avatar:
           item.user?.profileImageUrl ||
           `https://randomuser.me/api/portraits/men/${22 + idx * 10}.jpg`,

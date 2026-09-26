@@ -547,7 +547,7 @@ function ChampionsSection({
       {/* 3-Column Podium Grid: #2 Silver (Left), #1 Champion (Center), #3 Bronze (Right) */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 items-end max-w-6xl mx-auto">
         {/* CARD 1: #2 Silver */}
-        <div className="bg-white dark:bg-zinc-900/95 border border-slate-200 dark:border-zinc-800 rounded-3xl p-6 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col items-center text-center relative">
+        <div className="bg-white dark:bg-zinc-900/95 rounded-3xl p-6 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col items-center text-center relative">
           {/* Rank Badge */}
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-base font-semibold bg-slate-100 dark:bg-zinc-800 text-slate-600 dark:text-slate-300 border border-slate-200/80 dark:border-zinc-700">
             <Shield size={13} className="text-slate-400" />
@@ -590,7 +590,7 @@ function ChampionsSection({
           </p>
 
           {/* Score Box */}
-          <div className="w-full bg-slate-50/80 dark:bg-zinc-800/60 border border-slate-200/60 dark:border-zinc-700/60 py-2.5 px-4 rounded-xl flex items-center justify-between mt-4">
+          <div className="w-full bg-slate-50/80 dark:bg-zinc-800/60 py-2.5 px-4 rounded-xl flex items-center justify-between mt-4">
             <span className="text-base text-slate-400 dark:text-slate-500 font-medium">
               {c.score}
             </span>
@@ -630,7 +630,7 @@ function ChampionsSection({
         </div>
 
         {/* CARD 2: #1 CHAMPION (Elevated, Prominent Gold Border & Warm Glow) */}
-        <div className="bg-amber-50/40 dark:bg-amber-950/20 border-2 border-amber-300 dark:border-amber-500/70 rounded-3xl p-6 sm:p-7 shadow-xl shadow-amber-500/5 hover:shadow-2xl transition-all duration-300 flex flex-col items-center text-center relative md:-translate-y-4 z-10">
+        <div className="bg-amber-50/40 dark:bg-amber-950/20 rounded-3xl p-6 sm:p-7 shadow-xl shadow-amber-500/5 hover:shadow-2xl transition-all duration-300 flex flex-col items-center text-center relative md:-translate-y-4 z-10">
           {/* Rank Badge */}
           <span className="inline-flex items-center gap-1.5 px-4 py-1 rounded-full text-base font-bold bg-amber-400 text-amber-950 shadow-xs">
             <Crown size={13} className="fill-amber-950 text-amber-950" />
@@ -730,7 +730,7 @@ function ChampionsSection({
         </div>
 
         {/* CARD 3: #3 Bronze */}
-        <div className="bg-white dark:bg-zinc-900/95 border border-slate-200 dark:border-zinc-800 rounded-3xl p-6 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col items-center text-center relative">
+        <div className="bg-white dark:bg-zinc-900/95 rounded-3xl p-6 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col items-center text-center relative">
           {/* Rank Badge */}
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-base font-semibold bg-amber-100/70 text-amber-800 dark:bg-amber-950/60 dark:text-amber-400 border border-amber-200/80 dark:border-amber-800/40">
             <Shield size={13} className="text-amber-600" />
@@ -773,7 +773,7 @@ function ChampionsSection({
           </p>
 
           {/* Score Box */}
-          <div className="w-full bg-slate-50/80 dark:bg-zinc-800/60 border border-slate-200/60 dark:border-zinc-700/60 py-2.5 px-4 rounded-xl flex items-center justify-between mt-4">
+          <div className="w-full bg-slate-50/80 dark:bg-zinc-800/60 py-2.5 px-4 rounded-xl flex items-center justify-between mt-4">
             <span className="text-base text-slate-400 dark:text-slate-500 font-medium">
               {c.score}
             </span>

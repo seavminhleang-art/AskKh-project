@@ -82,7 +82,7 @@ export default function WorkspaceTopbar({
           name="search"
           aria-label={w("Search community questions")}
           placeholder={w("Search community questions\u2026")}
-          className="min-w-0 flex-1 bg-transparent text-base outline-none"
+          className="min-w-0 flex-1 bg-transparent text-sm outline-none"
         />
       </form>
       <div className="workspace-topbar-actions">

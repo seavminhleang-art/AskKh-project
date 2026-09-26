@@ -17,6 +17,15 @@ import { rows, message, dateLabel } from "@/features/workspace/workspaceModel";
 import { formatMediaUrl } from "@/features/workspace/profileImage";
 import ReportDetails from "./ReportDetails";
 
+function memberLabel(item) {
+  const scope = String(item.scope || item.visibility || item.reportScope || "")
+    .trim()
+    .toLowerCase();
+  if (scope === "istad") return "ISTAD Member";
+  if (scope === "public") return "Public Member";
+  return "Campus Member";
+}
+
 export default function ItemFeedView({ onOpenReport, darkMode }) {
   const { t } = useTranslation();
   const reports = useWorkspaceDataQuery({ resource: "reports" });
@@ -28,6 +37,7 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
   const categoryRows = rows(categoryQuery.data);
   const items = rows(reports.data).map((item) => ({
     ...item,
+    scope: item.scope || item.visibility || item.reportScope,
     type: String(item.itemType || "").toUpperCase(),
     title: item.title || "",
     description: item.description || "",
@@ -45,7 +55,10 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
         )[0] ||
       "—",
     timeAgo: dateLabel(item.createdAt || item.itemDate),
-    reporter: item.reporterName || item.user?.username || "",
+    reporter:
+      item.reporterName ||
+      item.user?.username ||
+      memberLabel(item),
     avatar: item.user?.profileImageUrl,
     image: item.photoUrl ? formatMediaUrl(item.photoUrl) : null,
   }));

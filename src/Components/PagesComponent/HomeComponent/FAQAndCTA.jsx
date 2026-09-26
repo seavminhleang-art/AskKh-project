@@ -123,7 +123,7 @@ export default function FAQAndCTA({ darkMode }) {
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
         }}
-        className={`relative rounded-3xl overflow-hidden py-16 px-6 sm:px-12 text-center shadow-xl mx-4 sm:mx-6 max-w-7xl lg:mx-auto border transition-colors duration-300 ${
+        className={`relative rounded-3xl overflow-hidden py-16 px-6 sm:px-12 text-center shadow-xl mx-4 sm:mx-6 max-w-7xl lg:mx-auto transition-colors duration-300 ${
           darkMode ? "border-zinc-800" : "border-gray-800"
         }`}
       >

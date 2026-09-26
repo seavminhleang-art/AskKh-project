@@ -26,7 +26,7 @@ export default function Login() {
     <div className="min-h-screen flex items-center justify-center bg-[#F7F8FA] px-4">
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-sm bg-white rounded-xl border border-gray-100  p-6 animate-fade-slide"
+        className="w-full max-w-sm bg-white rounded-xl p-6 animate-fade-slide"
       >
         <div className="w-10 h-10 rounded-lg bg-brand-primary text-white flex items-center justify-center font-bold mb-4">
           A
