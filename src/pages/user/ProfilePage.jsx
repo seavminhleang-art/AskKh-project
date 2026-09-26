@@ -1,7 +1,8 @@
 import { prepareProfilePhoto } from "../../features/workspace/prepareProfilePhoto";
 import { profileImageUrl, resolveUserAvatar, setCachedAvatar, getCachedAvatar } from "../../features/workspace/profileImage";
+import { isQuestionPost, isAnswerPost } from "../../config/postTypes.js";
 import { Link } from "react-router-dom";
-import { Sun, Moon, LockKeyhole, Palette, Settings2, Check, ArrowUpRight, Camera, Fingerprint, Mail, ShieldCheck, Sparkles, UserRound, CalendarDays, Save, Trophy, Eye, ThumbsUp, Loader2, Upload } from "lucide-react";
+import { Sun, Moon, LockKeyhole, Palette, Settings2, Check, ArrowUpRight, Camera, Fingerprint, Mail, ShieldCheck, Sparkles, UserRound, CalendarDays, Save, Trophy, Eye, ThumbsUp, Loader2, Upload, HelpCircle, CheckCircle2, FileQuestion, PackageCheck } from "lucide-react";
 import { useWorkspaceTranslation } from "@/locales/workspace/useWorkspaceTranslation";
 import { useState, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,7 +12,7 @@ import {
 } from "../../features/workspace/workspaceApi";
 import { updateUser } from "../../features/auth/authSlice";
 import { useTheme } from "../../context/ThemeContext";
-import { message } from "../../features/workspace/workspaceModel";
+import { message, rows } from "../../features/workspace/workspaceModel";
 import { baseApi } from "../../store/api/baseApi";
 import { Heading, QueryState } from "./WorkspaceUI";
 function ProfileForm({ profile, refetchProfile }) {
@@ -48,6 +49,8 @@ function ProfileForm({ profile, refetchProfile }) {
           bio,
         }),
       );
+      dispatch(baseApi.util.invalidateTags(["User"]));
+      if (refetchProfile) await refetchProfile();
       setFeedback({
         ok: true,
         text: "Profile saved.",
@@ -439,15 +442,25 @@ function AccountSettings({ profile, refetchProfile }) {
 export default function ProfilePage({ settings = false }) {
   const { w } = useWorkspaceTranslation();
   const authUser = useSelector((state) => state.auth.user);
-  const query = useWorkspaceDataQuery({
+  const profileQuery = useWorkspaceDataQuery({
     resource: "profile",
   });
-  const apiProfile = query.data?.data ?? query.data;
+  const forum = useWorkspaceDataQuery({
+    resource: "my-posts",
+  });
+  const reportsQuery = useWorkspaceDataQuery({
+    resource: "my-reports",
+  });
+  const apiProfile = profileQuery.data?.data ?? profileQuery.data;
   const profile = apiProfile
     ? {
         ...authUser,
         ...apiProfile,
-        displayName: apiProfile.displayName || authUser?.displayName || authUser?.name,
+        displayName:
+          apiProfile.displayName ||
+          authUser?.displayName ||
+          authUser?.name ||
+          "Member",
         email: apiProfile.email || authUser?.email,
         profileImage:
           apiProfile.profileImage ||
@@ -461,6 +474,50 @@ export default function ProfilePage({ settings = false }) {
           authUser?.photoURL,
       }
     : authUser;
+
+  const posts = rows(forum.data);
+  const reports = rows(reportsQuery.data).filter(
+    (item) => profile?.id != null && String(item.userId) === String(profile.id),
+  );
+  const questions = posts.filter((item) => isQuestionPost(item));
+  const answers = posts.filter((item) => isAnswerPost(item));
+  const count = (q, value) => (q.isError ? "—" : q.isLoading ? "…" : value);
+
+  const stats = [
+    {
+      label: "Questions Asked",
+      value: count(forum, questions.length),
+      Icon: HelpCircle,
+    },
+    {
+      label: "Answers Given",
+      value: count(forum, answers.length),
+      Icon: CheckCircle2,
+    },
+    {
+      label: "Lost Reports",
+      value: profile
+        ? count(
+            reportsQuery,
+            reports.filter((item) => item.itemType?.toLowerCase() === "lost")
+              .length,
+          )
+        : "—",
+      Icon: FileQuestion,
+    },
+    {
+      label: "Found Reports",
+      value: profile
+        ? count(
+            reportsQuery,
+            reports.filter((item) => item.itemType?.toLowerCase() === "found")
+              .length,
+          )
+        : "—",
+      Icon: PackageCheck,
+    },
+  ];
+
   return (
     <div className="uw-page profile-page">
       <Heading
@@ -471,11 +528,11 @@ export default function ProfilePage({ settings = false }) {
             : w("Your space to introduce yourself and make it yours.")
         }
       />
-      <QueryState query={query}>
-        {profile && (settings ? <AccountSettings profile={profile} refetchProfile={query.refetch} /> : (
+      <QueryState query={profileQuery}>
+        {profile && (settings ? <AccountSettings profile={profile} refetchProfile={profileQuery.refetch} /> : (
           <div className="profile-layout">
             <div className="uw-stack">
-              <ProfileForm key={profile.id || "profile"} profile={profile} refetchProfile={query.refetch} />
+              <ProfileForm key={profile.id || "profile"} profile={profile} refetchProfile={profileQuery.refetch} />
             </div>
             <aside className="profile-sidebar">
               <section className="uw-card profile-summary">
@@ -486,7 +543,15 @@ export default function ProfilePage({ settings = false }) {
               </section>
               <section className="uw-card profile-contributions">
                 <div className="profile-section-heading"><span className="profile-icon"><Trophy size={19} /></span><h2>{w("Your impact")}</h2></div>
-                {[[Trophy, "Reputation", profile.reputation], [Eye, "Profile views", profile.views], [ThumbsUp, "Upvotes", profile.upVotes]].map(([Icon, label, value]) => <div className="profile-metric" key={label}><span><Icon size={16} />{w(label)}</span><strong>{value == null ? "—" : Number(value).toLocaleString()}</strong></div>)}
+                {stats.map(({ Icon, label, value }) => (
+                  <div className="profile-metric" key={label}>
+                    <span>
+                      <Icon size={16} />
+                      {w(label)}
+                    </span>
+                    <strong>{value}</strong>
+                  </div>
+                ))}
                 <Link to="/dashboard/activity">{w("Explore your activity")} <ArrowUpRight size={16} /></Link>
               </section>
               <section className="profile-security-card">

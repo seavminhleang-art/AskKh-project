@@ -85,7 +85,7 @@ export default function Navbar({
 
   const storedUser = useSelector((state) => state.auth.user);
   const isAuthenticated = useSelector(
-    (state) => !!state.auth.accessToken || !!state.auth.isAuthenticated,
+    (state) => !!state.auth.accessToken,
   );
   const { data: currentUserData } = useGetMeQuery(undefined, {
     skip: !isAuthenticated,
@@ -196,6 +196,7 @@ export default function Navbar({
 
   const userName = authUser?.displayName || authUser?.name || t("dashboard", "Dashboard");
   const userPhoto = resolveUserAvatar(authUser);
+  const user = authUser;
   const userInitials = (userName || "U")
     .trim()
     .split(/\s+/)
@@ -206,7 +207,7 @@ export default function Navbar({
 
   useEffect(() => {
     setPhotoFailed(false);
-  }, [userPhoto]);
+  }, [user?.profileImage, user?.avatar, userPhoto]);
 
   const handleProfileMouseEnter = () => {
     clearTimeout(profileCloseTimer.current);
@@ -785,16 +786,16 @@ export default function Navbar({
                   <p className="font-semibold text-base text-gray-900 dark:text-white truncate">
                     {userName}
                   </p>
-                  {authUser?.email && (
+                  {user?.email && (
                     <p className="text-xs text-gray-500 dark:text-gray-400 truncate mt-0.5">
-                      {authUser.email}
+                      {user.email}
                     </p>
                   )}
                 </div>
 
                 {/* Option 1: Dashboard */}
                 <Link
-                  to={authUser?.role === "admin" ? "/admin/dashboard" : "/dashboard"}
+                  to={user?.role === "admin" ? "/admin/dashboard" : "/dashboard"}
                   role="menuitem"
                   className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-brand-primary-light dark:hover:bg-gray-800 hover:text-brand-primary transition-colors no-underline"
                   onClick={() => setProfileOpen(false)}
@@ -805,7 +806,7 @@ export default function Navbar({
 
                 {/* Option 2: Profile */}
                 <Link
-                  to={authUser?.role === "admin" ? "/admin/settings" : "/dashboard/profile"}
+                  to={user?.role === "admin" ? "/admin/settings" : "/dashboard/profile"}
                   role="menuitem"
                   className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-brand-primary-light dark:hover:bg-gray-800 hover:text-brand-primary transition-colors no-underline"
                   onClick={() => setProfileOpen(false)}
@@ -1017,9 +1018,9 @@ export default function Navbar({
                 <p className="font-semibold text-base text-gray-900 dark:text-white truncate">
                   {userName}
                 </p>
-                {authUser?.email && (
+                {user?.email && (
                   <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
-                    {authUser.email}
+                    {user.email}
                   </p>
                 )}
               </div>
@@ -1027,7 +1028,7 @@ export default function Navbar({
 
             <div className="grid grid-cols-2 gap-2">
               <Link
-                to={authUser?.role === "admin" ? "/admin/dashboard" : "/dashboard"}
+                to={user?.role === "admin" ? "/admin/dashboard" : "/dashboard"}
                 onClick={() => setMobileOpen(false)}
                 className="flex items-center justify-center gap-2 h-10 rounded-xl bg-brand-primary text-white font-medium text-base no-underline hover:bg-brand-secondary transition-colors"
               >
@@ -1035,7 +1036,7 @@ export default function Navbar({
                 <span>{t("dashboard", "Dashboard")}</span>
               </Link>
               <Link
-                to={authUser?.role === "admin" ? "/admin/settings" : "/dashboard/profile"}
+                to={user?.role === "admin" ? "/admin/settings" : "/dashboard/profile"}
                 onClick={() => setMobileOpen(false)}
                 className="flex items-center justify-center gap-2 h-10 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 font-medium text-base no-underline hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
               >
