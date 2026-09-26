@@ -34,42 +34,8 @@ import {
 import { logout } from "../../store/slices/authSlice";
 import { useLogoutApiMutation } from "../../features/auth/authApi";
 import { baseApi } from "../../store/api/baseApi";
-import { profileImageUrl } from "../../features/workspace/profileImage";
-import { notificationTarget } from "../../features/notifications/notificationTarget";
-
-let notificationAudioContext;
-function armNotificationSound() {
-  try {
-    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-    if (!AudioContextClass) return;
-    notificationAudioContext ??= new AudioContextClass();
-    if (notificationAudioContext.state === "suspended") {
-      notificationAudioContext.resume().catch(() => {});
-    }
-  } catch {
-    // Audio is optional; keep notifications working when the browser blocks it.
-  }
-}
-
-function playNotificationSound() {
-  if (!notificationAudioContext || notificationAudioContext.state !== "running") return;
-  const context = notificationAudioContext;
-  const now = context.currentTime;
-  [880, 1175].forEach((frequency, index) => {
-    const start = now + index * 0.13;
-    const oscillator = context.createOscillator();
-    const gain = context.createGain();
-    oscillator.type = "sine";
-    oscillator.frequency.setValueAtTime(frequency, start);
-    gain.gain.setValueAtTime(0.0001, start);
-    gain.gain.exponentialRampToValueAtTime(0.12, start + 0.015);
-    gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.18);
-    oscillator.connect(gain);
-    gain.connect(context.destination);
-    oscillator.start(start);
-    oscillator.stop(start + 0.19);
-  });
-}
+import { profileImageUrl, resolveUserAvatar } from "../../features/workspace/profileImage";
+import { useWorkspaceDataQuery } from "../../features/workspace/workspaceApi";
 
 export default function Navbar({
   notificationCount: propNotificationCount = 0,
@@ -83,7 +49,7 @@ export default function Navbar({
 
   const authUser = useSelector((state) => state.auth.user);
   const isAuthenticated = useSelector(
-    (state) => !!state.auth.accessToken || !!state.auth.isAuthenticated,
+    (state) => !!state.auth.accessToken,
   );
 
   const { data: unreadData, isSuccess: unreadCountLoaded } = useGetUnreadCountQuery(undefined, {
@@ -187,10 +153,31 @@ export default function Navbar({
     }
   }, [notificationSoundEnabled]);
 
-  const userName = authUser?.displayName || authUser?.name || t("dashboard", "Dashboard");
-  const userPhoto = profileImageUrl(
-    authUser?.profileImage || authUser?.avatar || authUser?.photoURL,
+  const profileQuery = useWorkspaceDataQuery(
+    { resource: "profile" },
+    { skip: !isAuthenticated },
   );
+  const apiUser = profileQuery.data?.data ?? profileQuery.data;
+  const user = {
+    ...authUser,
+    ...(apiUser || {}),
+    displayName:
+      apiUser?.displayName ||
+      authUser?.displayName ||
+      authUser?.name ||
+      t("dashboard", "Dashboard"),
+    profileImage:
+      apiUser?.profileImage ||
+      apiUser?.avatar ||
+      apiUser?.photoURL ||
+      apiUser?.image ||
+      authUser?.profileImage ||
+      authUser?.avatar ||
+      authUser?.photoURL,
+  };
+
+  const userName = user.displayName;
+  const userPhoto = resolveUserAvatar(user);
   const userInitials = (userName || "U")
     .trim()
     .split(/\s+/)
@@ -198,6 +185,10 @@ export default function Navbar({
     .map((part) => Array.from(part)[0])
     .join("")
     .toUpperCase();
+
+  useEffect(() => {
+    setPhotoFailed(false);
+  }, [user?.profileImage, user?.avatar, userPhoto]);
 
   const handleProfileMouseEnter = () => {
     clearTimeout(profileCloseTimer.current);
@@ -775,16 +766,16 @@ export default function Navbar({
                   <p className="font-semibold text-base text-gray-900 dark:text-white truncate">
                     {userName}
                   </p>
-                  {authUser?.email && (
+                  {user?.email && (
                     <p className="text-xs text-gray-500 dark:text-gray-400 truncate mt-0.5">
-                      {authUser.email}
+                      {user.email}
                     </p>
                   )}
                 </div>
 
                 {/* Option 1: Dashboard */}
                 <Link
-                  to={authUser?.role === "admin" ? "/admin/dashboard" : "/dashboard"}
+                  to={user?.role === "admin" ? "/admin/dashboard" : "/dashboard"}
                   role="menuitem"
                   className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-brand-primary-light dark:hover:bg-gray-800 hover:text-brand-primary transition-colors no-underline"
                   onClick={() => setProfileOpen(false)}
@@ -795,7 +786,7 @@ export default function Navbar({
 
                 {/* Option 2: Profile */}
                 <Link
-                  to={authUser?.role === "admin" ? "/admin/settings" : "/dashboard/profile"}
+                  to={user?.role === "admin" ? "/admin/settings" : "/dashboard/profile"}
                   role="menuitem"
                   className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-brand-primary-light dark:hover:bg-gray-800 hover:text-brand-primary transition-colors no-underline"
                   onClick={() => setProfileOpen(false)}
@@ -1007,9 +998,9 @@ export default function Navbar({
                 <p className="font-semibold text-base text-gray-900 dark:text-white truncate">
                   {userName}
                 </p>
-                {authUser?.email && (
+                {user?.email && (
                   <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
-                    {authUser.email}
+                    {user.email}
                   </p>
                 )}
               </div>
@@ -1017,7 +1008,7 @@ export default function Navbar({
 
             <div className="grid grid-cols-2 gap-2">
               <Link
-                to={authUser?.role === "admin" ? "/admin/dashboard" : "/dashboard"}
+                to={user?.role === "admin" ? "/admin/dashboard" : "/dashboard"}
                 onClick={() => setMobileOpen(false)}
                 className="flex items-center justify-center gap-2 h-10 rounded-xl bg-brand-primary text-white font-medium text-base no-underline hover:bg-brand-secondary transition-colors"
               >
@@ -1025,7 +1016,7 @@ export default function Navbar({
                 <span>{t("dashboard", "Dashboard")}</span>
               </Link>
               <Link
-                to={authUser?.role === "admin" ? "/admin/settings" : "/dashboard/profile"}
+                to={user?.role === "admin" ? "/admin/settings" : "/dashboard/profile"}
                 onClick={() => setMobileOpen(false)}
                 className="flex items-center justify-center gap-2 h-10 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 font-medium text-base no-underline hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
               >
