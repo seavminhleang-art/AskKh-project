@@ -16,27 +16,31 @@ export function rankContributors(posts, period = 'all', now = new Date()) {
     return users.get(String(id));
   };
   const score = value => Number.isFinite(value) ? value : 0;
+  for (const post of posts) {
+    if (!post || typeof post !== 'object' || !included(post)) continue;
+    const user = getUser(post.ownerId, post.ownerDisplayName);
+    if (!user) continue;
+    // Questions and answers are both posts in this API. Rank by their scores.
+    user.upvotes += score(post.score);
+    user.solutions++;
+    if (isAnswerPost(post)) user.answers++;
+    for (const tag of post.tagResponses || []) if (tag.tagName) user.tags.set(tag.tagName, (user.tags.get(tag.tagName) || 0) + 1);
+  }
+
+  // Comments are shown as a helpfulness metric, but do not change vote ranking.
   const seenComments = new Set();
   for (const post of posts) {
     if (!post || typeof post !== 'object') continue;
-    if (included(post)) {
-      const user = getUser(post.ownerId, post.ownerDisplayName);
-      if (user) {
-        user.upvotes += score(post.score);
-        user.solutions++;
-        if (isAnswerPost(post)) user.answers++;
-        for (const tag of post.tagResponses || []) if (tag.tagName) user.tags.set(tag.tagName, (user.tags.get(tag.tagName) || 0) + 1);
-      }
-    }
     for (const comment of Array.isArray(post.comments) ? post.comments : []) {
       if (!comment || typeof comment !== 'object') continue;
       if (comment.id != null && seenComments.has(String(comment.id))) continue;
       if (comment.id != null) seenComments.add(String(comment.id));
       if (!included(comment)) continue;
-      const user = getUser(comment.userId, comment.userDisplayName);
-      if (user) { user.helpful++; user.upvotes += score(comment.score); }
+      const user = users.get(String(comment.userId));
+      if (user) user.helpful++;
     }
   }
+
   return [...users.values()].sort((a, b) => b.upvotes - a.upvotes || String(a.id).localeCompare(String(b.id), undefined, { numeric: true })).map((user, index, sorted) => ({
     ...user,
     rank: sorted.findIndex(other => other.upvotes === user.upvotes) + 1,

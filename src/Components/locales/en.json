@@ -22,7 +22,7 @@
   },
   "post": {
     "views": "Views",
-    "likes": "Likes",
+    "likes": "Vote score",
     "comments": "Comments",
     "delete": "Delete Post",
     "placeholderInput": "What's on your mind?",
@@ -30,8 +30,8 @@
     "noPosts": "No posts found.",
     "addBookmark": "Save bookmark",
     "removeBookmark": "Remove bookmark",
-    "like": "Like post",
-    "unlike": "Unlike post"
+    "vote": "Upvote post",
+    "unvote": "Remove upvote"
   },
   "create": {
     "title": "Create New Post",

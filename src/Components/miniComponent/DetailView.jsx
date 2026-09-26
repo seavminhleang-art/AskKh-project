@@ -1,5 +1,5 @@
 import FormattedText from "../editor/FormattedText.jsx";
-import React, { useState, lazy, Suspense } from "react";
+import React, { useState } from "react";
 import { ArrowLeft, Send, Trash2 } from "lucide-react";
 import { useOutletContext, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -12,14 +12,11 @@ import {
 } from "../../features/comments/commentApi";
 import { rowsOf, errorMessage } from "../../features/qa/model";
 
-const CodeEditor = lazy(() => import("./CodeEditor"));
-
 const DetailView = ({ post, onBack, darkMode: propDarkMode }) => {
   const { t } = useTranslation();
   const context = useOutletContext();
   const darkMode = propDarkMode ?? context?.darkMode ?? false;
 
-  const [commentLanguage, setCommentLanguage] = useState("plaintext");
   const [commentText, setCommentText] = useState("");
 
   const { user, isAuthenticated } = useSelector((state) => state.auth);
@@ -168,55 +165,40 @@ const DetailView = ({ post, onBack, darkMode: propDarkMode }) => {
         >
           {t("detail.commentsTitle")} ({sortedComments.length})
         </h3>
-        <div className="relative">
-          <label className="mb-3 flex items-center gap-3 text-base">
-            Editor language
-            <select
-              value={commentLanguage}
-              onChange={(event) => setCommentLanguage(event.target.value)}
-            >
-              {[
-                "plaintext",
-                "javascript",
-                "typescript",
-                "python",
-                "java",
-                "html",
-                "css",
-                "sql",
-              ].map((language) => (
-                <option key={language} value={language}>
-                  {language === "plaintext" ? "Plain text" : language}
-                </option>
-              ))}
-            </select>
-          </label>
-          <Suspense fallback={<p role="status">Loading comment editor…</p>}>
-            <CodeEditor
-              value={commentText}
-              onChange={setCommentText}
-              language={commentLanguage}
-              darkMode={darkMode}
-              ariaLabel="Your comment"
-              readOnly={creation.isLoading}
-            />
-          </Suspense>
-          <button
-            onClick={handleSendComment}
-            disabled={
-              creation.isLoading ||
-              commentText.trim().length < 5 ||
-              commentText.trim().length > 500
+        <div className="space-y-3">
+          <textarea
+            value={commentText}
+            onChange={(event) => setCommentText(event.target.value)}
+            maxLength={500}
+            rows={4}
+            placeholder={t("detail.addCommentPlaceholder")}
+            aria-label={t("detail.addCommentPlaceholder")}
+            disabled={creation.isLoading}
+            className={
+              "w-full min-h-28 resize-y rounded-xl border px-4 py-3 text-base leading-relaxed outline-none transition-colors focus:ring-2 focus:ring-blue-500/30 " +
+              (darkMode
+                ? "border-zinc-700 bg-zinc-800 text-slate-100 placeholder-zinc-500 focus:border-blue-500"
+                : "border-gray-200 bg-gray-50 text-gray-900 placeholder-gray-400 focus:border-blue-500")
             }
-            className="disabled:opacity-50 disabled:cursor-not-allowed mt-3 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-lg text-base font-medium flex items-center gap-1 transition-colors"
-          >
-            <Send className="w-3 h-3" /> {t("detail.commentBtn")}
-          </button>
+          />
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <p className="text-sm opacity-60">
+              {commentText.trim().length}/500 characters · Comments must be 5–500
+              characters.
+            </p>
+            <button
+              onClick={handleSendComment}
+              disabled={
+                creation.isLoading ||
+                commentText.trim().length < 5 ||
+                commentText.trim().length > 500
+              }
+              className="disabled:opacity-50 disabled:cursor-not-allowed bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-base font-medium flex items-center gap-2 transition-colors"
+            >
+              <Send className="w-4 h-4" /> {t("detail.commentBtn")}
+            </button>
+          </div>
         </div>
-        <p className="text-base opacity-60">
-          {commentText.trim().length}/500 characters. Comments must be 5–500
-          characters.
-        </p>
       </div>
 
       {/* Comment List (Sorted by Most Likes) */}

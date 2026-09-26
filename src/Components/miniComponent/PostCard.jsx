@@ -1,5 +1,5 @@
 import React from "react";
-import { Bookmark, Eye, Heart, MessageSquare } from "lucide-react";
+import { Bookmark, Eye, ThumbsUp, MessageSquare } from "lucide-react";
 import { useOutletContext } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
@@ -10,14 +10,14 @@ const PostCard = ({
   tags,
   author,
   views,
-  likes,
+  likes: voteScore,
   comments,
   image,
   isBookmarked,
-  isLiked,
+  isLiked: isVoted,
   onToggleBookmark,
   onSelectPost,
-  onToggleLike,
+  onToggleLike: onToggleVote,
   darkMode: propDarkMode,
 }) => {
   const { t } = useTranslation();
@@ -131,7 +131,7 @@ const PostCard = ({
               </div>
             </div>
 
-            {/* Interactive Views, Likes, Comments */}
+            {/* Interactive Views, Votes, Comments */}
             <div
               className={`flex items-center space-x-3 text-base ${darkMode ? "text-zinc-400" : "text-gray-500"}`}
             >
@@ -144,17 +144,18 @@ const PostCard = ({
               </button>
 
               <button
-                onClick={() => onToggleLike(id)}
-                aria-pressed={Boolean(isLiked)}
-                aria-label={t(isLiked ? "post.unlike" : "post.like")}
+                onClick={() => onToggleVote(id)}
+                aria-pressed={Boolean(isVoted)}
+                aria-label={t(isVoted ? "post.unvote" : "post.vote")}
+                title={t(isVoted ? "post.unvote" : "post.vote")}
                 className={`flex items-center gap-1 transition-colors ${
-                  isLiked ? "text-rose-500 font-bold" : "hover:text-rose-500"
+                  isVoted ? "text-blue-600 font-bold" : "hover:text-blue-600"
                 }`}
               >
-                <Heart
-                  className={`w-3.5 h-3.5 ${isLiked ? "fill-rose-500 text-rose-500" : ""}`}
+                <ThumbsUp
+                  className={`w-3.5 h-3.5 ${isVoted ? "fill-blue-500 text-blue-500" : ""}`}
                 />
-                {Number(likes).toLocaleString()}
+                {Number(voteScore).toLocaleString()}
               </button>
 
               <button
