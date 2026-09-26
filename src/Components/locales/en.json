@@ -59,7 +59,12 @@
     "imageSizeError": "Choose a non-empty image up to 5 MB.",
     "imageReadError": "Unable to read this image. Please try again.",
     "imageLoading": "Loading image…",
-    "removeImage": "Remove image"
+    "removeImage": "Remove image",
+    "codeSnippet": "Code snippet",
+    "codeLanguage": "Code language",
+    "codePlaceholder": "Paste your code snippet here...",
+    "loadingCodeEditor": "Loading code editor…",
+    "characters": "characters"
   },
   "sidebarRight": {
     "peopleYouKnow": "People You Know",

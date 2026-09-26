@@ -59,7 +59,12 @@
     "imageSizeError": "សូមជ្រើសរើសរូបភាពដែលមិនទទេ និងមានទំហំមិនលើសពី 5 MB។",
     "imageReadError": "មិនអាចអានរូបភាពនេះបានទេ។ សូមព្យាយាមម្តងទៀត។",
     "imageLoading": "កំពុងផ្ទុករូបភាព…",
-    "removeImage": "លុបរូបភាព"
+    "removeImage": "លុបរូបភាព",
+    "codeSnippet": "អត្ថបទកូដ",
+    "codeLanguage": "ភាសាកូដ",
+    "codePlaceholder": "បិទភ្ជាប់អត្ថបទកូដនៅទីនេះ...",
+    "loadingCodeEditor": "កំពុងផ្ទុកកម្មវិធីកែសម្រួលកូដ…",
+    "characters": "តួអក្សរ"
   },
   "sidebarRight": {
     "peopleYouKnow": "មនុស្សដែលអ្នកអាចស្គាល់",

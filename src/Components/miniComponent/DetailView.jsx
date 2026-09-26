@@ -1,6 +1,6 @@
 import FormattedText from "../editor/FormattedText.jsx";
-import React, { useState } from "react";
-import { ArrowLeft, Send, Trash2 } from "lucide-react";
+import React, { lazy, Suspense, useState } from "react";
+import { ArrowLeft, Code2, Send, Trash2 } from "lucide-react";
 import { useOutletContext, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
@@ -12,12 +12,17 @@ import {
 } from "../../features/comments/commentApi";
 import { rowsOf, errorMessage } from "../../features/qa/model";
 
+const CodeEditor = lazy(() => import("./CodeEditor"));
+
 const DetailView = ({ post, onBack, darkMode: propDarkMode }) => {
   const { t } = useTranslation();
   const context = useOutletContext();
   const darkMode = propDarkMode ?? context?.darkMode ?? false;
 
   const [commentText, setCommentText] = useState("");
+  const [commentCode, setCommentCode] = useState("");
+  const [commentLanguage, setCommentLanguage] = useState("javascript");
+  const [showCommentCode, setShowCommentCode] = useState(false);
 
   const { user, isAuthenticated } = useSelector((state) => state.auth);
   const navigate = useNavigate();
@@ -38,24 +43,23 @@ const DetailView = ({ post, onBack, darkMode: propDarkMode }) => {
     },
     isOwnComment: userId != null && String(comment.userId) === String(userId),
   }));
+  const codeBlock = showCommentCode && commentCode.trim()
+    ? `\n\n\`\`\`${commentLanguage}\n${commentCode.trim()}\n\`\`\``
+    : "";
+  const commentLength = commentText.trim().length + codeBlock.length;
   async function handleSendComment() {
     if (!isAuthenticated) {
       navigate("/login");
       return;
     }
-    if (
-      creation.isLoading ||
-      commentText.trim().length < 5 ||
-      commentText.trim().length > 500
-    )
-      return;
+    const text = `${commentText.trim()}${codeBlock}`;
+    if (creation.isLoading || commentLength < 5 || commentLength > 500) return;
     setError("");
     try {
-      await createComment({
-        postId: post.id,
-        text: commentText.trim(),
-      }).unwrap();
+      await createComment({ postId: post.id, text }).unwrap();
       setCommentText("");
+      setCommentCode("");
+      setShowCommentCode(false);
     } catch (error) {
       setError(errorMessage(error));
     }
@@ -181,17 +185,56 @@ const DetailView = ({ post, onBack, darkMode: propDarkMode }) => {
                 : "border-gray-200 bg-gray-50 text-gray-900 placeholder-gray-400 focus:border-blue-500")
             }
           />
+          <button
+            type="button"
+            aria-pressed={showCommentCode}
+            onClick={() => setShowCommentCode((visible) => !visible)}
+            disabled={creation.isLoading}
+            className="inline-flex items-center gap-2 rounded-lg border border-gray-200 px-3 py-2 text-base hover:bg-gray-100"
+          >
+            <Code2 className="h-4 w-4" /> {t("detail.codeSnippet")}
+          </button>
+          {showCommentCode && (
+            <div className="space-y-2">
+              <label className="block text-base">
+                {t("detail.codeLanguage")}
+                <select
+                  value={commentLanguage}
+                  onChange={(event) => setCommentLanguage(event.target.value)}
+                  disabled={creation.isLoading}
+                  className="ml-2 rounded border px-2 py-1"
+                >
+                  {["javascript", "typescript", "python", "java", "html", "css", "sql", "plaintext"].map((language) => (
+                    <option key={language} value={language}>{language}</option>
+                  ))}
+                </select>
+              </label>
+              <div className={`overflow-hidden rounded-xl border ${darkMode ? "border-zinc-700" : "border-gray-200"}`}>
+                <Suspense fallback={<p className="p-4 text-base">{t("detail.loadingCodeEditor")}</p>}>
+                  <CodeEditor
+                    value={commentCode}
+                    onChange={setCommentCode}
+                    language={commentLanguage}
+                    darkMode={darkMode}
+                    ariaLabel={t("detail.codePlaceholder")}
+                    readOnly={creation.isLoading}
+                  />
+                </Suspense>
+              </div>
+              <p className="text-sm opacity-60">{commentCode.length.toLocaleString()} / {Math.max(0, 500 - commentText.trim().length)} {t("detail.characters")}</p>
+            </div>
+          )}
           <div className="flex flex-wrap items-center justify-between gap-3">
             <p className="text-sm opacity-60">
-              {commentText.trim().length}/500 characters · Comments must be 5–500
+              {commentLength}/500 characters · Comments must be 5–500
               characters.
             </p>
             <button
               onClick={handleSendComment}
               disabled={
                 creation.isLoading ||
-                commentText.trim().length < 5 ||
-                commentText.trim().length > 500
+                commentLength < 5 ||
+                commentLength > 500
               }
               className="disabled:opacity-50 disabled:cursor-not-allowed bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-base font-medium flex items-center gap-2 transition-colors"
             >
@@ -243,11 +286,9 @@ const DetailView = ({ post, onBack, darkMode: propDarkMode }) => {
                 )}
               </div>
 
-              <p
-                className={`whitespace-pre-wrap break-words text-base leading-relaxed ${darkMode ? "text-slate-300" : "text-gray-600"}`}
-              >
-                {comment.text}
-              </p>
+              <div className={`break-words text-base leading-relaxed ${darkMode ? "text-slate-300" : "text-gray-600"}`}>
+                <FormattedText>{comment.text}</FormattedText>
+              </div>
             </div>
           ))}
         </div>

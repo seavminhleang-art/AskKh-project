@@ -23,6 +23,9 @@ export default function CodeEditor({
         scrollBeyondLastLine: false,
         tabSize: 2,
         wordWrap: "on",
+        quickSuggestions: true,
+        suggestOnTriggerCharacters: true,
+        acceptSuggestionOnEnter: "on",
         ariaLabel,
         readOnly,
       }}
