@@ -10,6 +10,7 @@ import Preloader from "./Components/Animations/Preloader.jsx";
 
 import TermsAndConditions from "./Components/Pages/TermAndConditions.jsx";
 import PrivacyPolicy from "./Components/Pages/Policy.jsx";
+import NotFoundPage from "./Components/Pages/NotFoundPage.jsx";
 
 
 import LoginPage from "./Components/Auth/LoginPage.jsx";
@@ -82,7 +83,7 @@ const router = createBrowserRouter([
       // Public question pages — no auth required, fully indexed by search engines
       { path: "questions/:id", element: <PublicQuestionPage /> },
       { path: "questions/:id/:slug", element: <PublicQuestionPage /> },
-      { path: "*", element: <HomePage /> },
+      { path: "*", element: <NotFoundPage /> },
     ],
   },
   {

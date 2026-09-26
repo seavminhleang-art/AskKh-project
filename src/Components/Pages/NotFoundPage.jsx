@@ -389,15 +389,25 @@ export default function NotFoundPage({
       >
         <NotFoundIllustration darkMode={darkMode} />
 
-        {/* spacer so the heading/copy/button sit below the illustrated 404 art */}
+        {/* Keep the message clear of the floating illustration above. */}
         <div className="relative" style={{ height: "360px" }} />
 
+        <p className="relative mb-3 text-sm font-bold uppercase tracking-[0.24em] text-cyan-600 dark:text-cyan-300">
+          {t("notFoundEyebrow", "NEXA · PAGE NOT FOUND")}
+        </p>
+        <h1
+          className={`relative mx-auto mb-4 max-w-2xl text-3xl font-extrabold tracking-tight sm:text-4xl ${
+            darkMode ? "text-white" : "text-slate-900"
+          }`}
+        >
+          {t("notFoundTitle", "This page drifted out of orbit.")}
+        </h1>
         <p
-          className={`relative max-w-xl mx-auto mb-6 leading-relaxed ${
+          className={`relative max-w-xl mx-auto mb-7 leading-relaxed ${
             darkMode ? "text-slate-300" : "text-[#333333]"
           }`}
         >
-          {t("notFoundDescription", "It looks like you're lost...")}
+          {t("notFoundDescription", "The page you’re looking for isn’t here. Let’s get you back to NEXA.")}
         </p>
 
         <Link to="/">
