@@ -2071,3 +2071,119 @@ pre, code, .prose pre, .prose code, .code-block, pre code {
 .formatted-text pre { overflow-x: auto; padding: 12px; background: #94a3b815; border-radius: 8px; white-space: pre; }
 .formatted-text code { font-family: monospace; background: #94a3b815; border-radius: 4px; padding: .1em .25em; }
 .formatted-text > :last-child { margin-bottom: 0; }
+
+/* Modern report management cards and in-app delete confirmation. */
+.uw-reports-page { gap: 24px; }
+.uw-reports-page .uw-heading h1 { font-size: clamp(25px, 3vw, 32px); letter-spacing: -.035em; }
+.uw-reports-page .uw-heading p { font-size: 15px; }
+.uw-reports-list { padding: 22px; border-radius: 22px; box-shadow: 0 12px 34px rgba(16, 42, 86, .06); }
+.uw-reports-page .uw-toolbar { margin-bottom: 16px; }
+.uw-reports-page .uw-toolbar input,
+.uw-reports-page .uw-toolbar select { min-height: 48px; border-radius: 14px; background: color-mix(in srgb, var(--uw-card) 96%, #eff6ff); }
+.uw-report-row { grid-template-columns: 84px minmax(220px, 1fr) minmax(150px, 190px) auto; gap: 18px; padding: 18px; margin-top: 12px; border-radius: 18px; box-shadow: 0 3px 12px rgba(16, 42, 86, .025); transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease; }
+.uw-report-row:hover { transform: translateY(-2px); border-color: color-mix(in srgb, #3b82f6 25%, var(--uw-line)); box-shadow: 0 12px 28px rgba(16, 42, 86, .08); }
+.uw-report-photo { width: 84px; height: 84px; border-radius: 15px; background: linear-gradient(145deg, #eff6ff, #f8fafc); }
+.dark .uw-report-photo, html.dark .uw-report-photo { background: linear-gradient(145deg, #1e293b, #0f172a); }
+.uw-report-description h2 { font-size: 16px; line-height: 1.35; margin: 7px 0 5px; }
+.uw-report-description p { font-size: 13px; line-height: 1.55; }
+.uw-report-labels { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; }
+.uw-report-type, .uw-report-scope { border-radius: 999px; padding: 4px 9px; font-size: 11px; font-weight: 700; line-height: 1.2; }
+.uw-report-scope.istad { color: #1d4ed8; background: #eff6ff; }
+.uw-report-scope.public { color: #7c3aed; background: #f5f3ff; }
+.dark .uw-report-scope.istad, html.dark .uw-report-scope.istad { color: #bfdbfe; background: #1e3a5f; }
+.dark .uw-report-scope.public, html.dark .uw-report-scope.public { color: #ddd6fe; background: #3b2860; }
+.uw-report-meta { display: grid; gap: 7px; font-size: 12px; line-height: 1.4; }
+.uw-report-meta span { align-items: flex-start; }
+.uw-report-meta svg { margin-top: 1px; }
+.uw-report-actions { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 8px; }
+.uw-report-actions .uw-button { min-height: 42px; padding: 9px 15px; border-radius: 13px; font-size: 12px; }
+.uw-report-actions .uw-report-details { padding-inline: 16px; }
+.uw-report-actions .danger { color: #be123c; border-color: #fecdd3; }
+.uw-report-actions .danger:hover { color: #fff; background: #e11d48; border-color: #e11d48; }
+.dark .uw-report-actions .danger, html.dark .uw-report-actions .danger { color: #fda4af; border-color: #713242; }
+.dark .uw-report-actions .danger:hover, html.dark .uw-report-actions .danger:hover { color: #fff; background: #be123c; }
+
+/* Keep dashboard typography and secondary text aligned with workspace pages. */
+.uw-overview .uw-welcome h1 { font-size: 24px; line-height: 1.35; letter-spacing: -.02em; }
+.uw-overview .uw-panel-heading h2,
+.uw-overview .uw-summary-heading h2 { font-size: 16px; line-height: 1.45; font-weight: 600; }
+.uw-overview .uw-welcome p,
+.uw-overview .uw-panel-heading p,
+.uw-overview .uw-summary .uw-muted,
+.uw-overview .uw-shortcuts p,
+.uw-overview .uw-match-prompt p,
+.uw-overview .uw-forum-counts > div > span {
+  color: var(--uw-muted);
+  font-size: 14px;
+  line-height: 1.5;
+  opacity: 1;
+}
+.uw-overview .uw-row p { color: var(--uw-muted); font-size: 13px; line-height: 1.5; opacity: 1; }
+.uw-overview .uw-summary footer { color: var(--uw-muted); font-size: 13px; line-height: 1.5; opacity: 1; }
+@media (max-width: 760px) {
+  .uw-overview .uw-welcome h1 { font-size: 20px; }
+}
+
+.uw-report-edit { margin: 14px 0 0; padding: 24px; border: 1px solid var(--uw-line); border-radius: 20px; background: var(--uw-card); box-shadow: 0 12px 30px rgba(16, 42, 86, .06); }
+.uw-report-edit-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; margin-bottom: 22px; padding-bottom: 18px; border-bottom: 1px solid var(--uw-line); }
+.uw-report-edit-heading h3 { color: var(--text-main); font-size: 20px; line-height: 1.25; font-weight: 750; letter-spacing: -.025em; }
+.uw-report-edit-heading p { margin-top: 5px; color: var(--uw-muted); font-size: 13px; }
+.uw-report-edit-cancel { display: inline-flex; align-items: center; justify-content: center; min-height: 38px; padding: 8px 13px; border: 1px solid var(--uw-line); border-radius: 11px; color: var(--text-main); background: var(--uw-card); font-size: 13px; font-weight: 600; cursor: pointer; transition: background .15s ease, border-color .15s ease; }
+.uw-report-edit-cancel:hover { background: var(--bg-secondary); border-color: #94a3b8; }
+.uw-report-edit-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.uw-report-edit-grid > label { display: grid; align-content: start; gap: 7px; min-width: 0; color: var(--text-main); font-size: 13px; font-weight: 650; }
+.uw-report-edit-grid input, .uw-report-edit-grid select, .uw-report-edit-grid textarea { display: block; width: 100%; min-width: 0; min-height: 44px; padding: 10px 12px; border: 1px solid var(--uw-line); border-radius: 12px; outline: none; color: var(--text-main); background: var(--uw-card); font: inherit; font-size: 14px; font-weight: 450; transition: border-color .15s ease, box-shadow .15s ease, background .15s ease; }
+.uw-report-edit-grid textarea { min-height: 110px; line-height: 1.55; resize: vertical; }
+.uw-report-edit-grid input:focus, .uw-report-edit-grid select:focus, .uw-report-edit-grid textarea:focus { border-color: #3b82f6; box-shadow: 0 0 0 4px rgba(59, 130, 246, .12); }
+.uw-report-edit-grid input::placeholder, .uw-report-edit-grid textarea::placeholder { color: #94a3b8; }
+.uw-report-edit-wide { grid-column: 1 / -1; }
+.uw-report-edit-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--uw-line); }
+.uw-report-edit-actions .uw-button { min-height: 44px; border-radius: 13px; }
+.uw-report-edit[aria-busy="true"] { opacity: .76; }
+.uw-confirm-backdrop { position: fixed; inset: 0; z-index: 1200; display: grid; place-items: center; padding: 20px; background: rgba(15, 23, 42, .58); backdrop-filter: blur(8px); animation: uw-confirm-fade .16s ease-out; }
+.uw-confirm-dialog { width: min(100%, 440px); padding: 28px; border: 1px solid var(--uw-line, #e2e8f0); border-radius: 24px; background: var(--uw-card, #fff); color: var(--text-main, #0f172a); box-shadow: 0 28px 90px rgba(2, 6, 23, .28); animation: uw-confirm-rise .2s ease-out; }
+.uw-confirm-icon { display: grid; place-items: center; width: 48px; height: 48px; margin-bottom: 17px; border-radius: 16px; color: #e11d48; background: #fff1f2; }
+.dark .uw-confirm-icon, html.dark .uw-confirm-icon { color: #fda4af; background: #4c1d2b; }
+.uw-confirm-dialog h2 { margin: 0 0 8px; font-size: 20px; font-weight: 750; letter-spacing: -.02em; }
+.uw-confirm-dialog > p { color: var(--uw-muted, #64748b); font-size: 14px; line-height: 1.6; }
+.uw-confirm-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px; }
+.uw-confirm-actions .uw-button { min-height: 42px; border-radius: 12px; }
+.uw-confirm-delete { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 16px; border: 1px solid #e11d48; border-radius: 999px; color: #fff; background: #e11d48; font-size: 13px; font-weight: 700; cursor: pointer; }
+.uw-confirm-delete:hover { background: #be123c; }
+.uw-confirm-error { margin-top: 14px; padding: 10px 12px; border: 1px solid #fecdd3; border-radius: 12px; color: #be123c; background: #fff1f2; font-size: 13px; }
+.uw-confirm-spinner { width: 14px; height: 14px; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: uw-confirm-spin .7s linear infinite; }
+@keyframes uw-confirm-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes uw-confirm-rise { from { opacity: 0; transform: translateY(8px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes uw-confirm-spin { to { transform: rotate(360deg); } }
+@media (max-width: 1100px) {
+  .uw-report-row { grid-template-columns: 76px minmax(0, 1fr); gap: 14px; }
+  .uw-report-photo { width: 76px; height: 76px; }
+  .uw-report-meta { grid-column: 2; display: flex; flex-wrap: wrap; gap: 8px 18px; }
+  .uw-report-actions { grid-column: 2; justify-content: flex-start; }
+}
+@media (max-width: 560px) {
+  .uw-reports-list { padding: 14px; border-radius: 18px; }
+  .uw-reports-page .uw-heading { align-items: stretch; }
+  .uw-reports-page .uw-heading > :last-child { width: 100%; }
+  .uw-reports-page .uw-toolbar { display: grid; grid-template-columns: 1fr; }
+  .uw-reports-page .uw-toolbar select { width: 100%; }
+  .uw-report-row { grid-template-columns: 60px minmax(0, 1fr); padding: 13px; border-radius: 16px; }
+  .uw-report-photo { width: 60px; height: 60px; border-radius: 12px; }
+  .uw-report-description h2 { font-size: 14px; }
+  .uw-report-meta, .uw-report-actions { grid-column: 1 / -1; }
+  .uw-report-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .uw-report-actions .uw-button { width: 100%; padding-inline: 9px; }
+  .uw-report-actions .uw-report-details { grid-column: 1 / -1; }
+  .uw-confirm-dialog { padding: 22px; border-radius: 20px; }
+  .uw-report-edit { padding: 17px; border-radius: 17px; }
+  .uw-report-edit-heading { margin-bottom: 17px; }
+  .uw-report-edit-heading h3 { font-size: 18px; }
+  .uw-report-edit-grid { grid-template-columns: 1fr; gap: 14px; }
+  .uw-report-edit-wide { grid-column: auto; }
+  .uw-report-edit-actions { display: grid; grid-template-columns: 1fr 1fr; }
+  .uw-report-edit-actions .uw-button { width: 100%; padding-inline: 10px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .uw-report-row, .uw-confirm-backdrop, .uw-confirm-dialog, .uw-confirm-spinner { animation: none !important; transition: none !important; }
+  .uw-report-row:hover { transform: none; }
+}

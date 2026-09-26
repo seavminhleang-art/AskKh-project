@@ -7,6 +7,7 @@ import { setSidebarMobileOpen } from "@/redux/slices/uiSlice";
 import { useLogoutApiMutation } from "@/features/auth/authApi";
 import { useNotifications } from "@/features/notifications/useNotifications";
 import { User, Settings, LogOut } from "lucide-react";
+import useLogoutPrompt from "@/hooks/useLogoutPrompt";
 
 function useBreadcrumb() {
   const { pathname } = useLocation();
@@ -17,14 +18,20 @@ function useBreadcrumb() {
 
 export default function Topbar() {
   const dispatch = useDispatch();
-  const [logoutApi] = useLogoutApiMutation();
+  const [logoutApi, logoutState] = useLogoutApiMutation();
   const navigate = useNavigate();
   const admin = useSelector((s) => s.auth.admin) || { name: "Admin User" };
   const { title, segments } = useBreadcrumb();
   const { data: notifications } = useNotifications();
   const unread = notifications?.filter((n) => !n.read).length || 0;
+  async function confirmLogout() {
+    await logoutApi();
+    navigate("/login");
+  }
+  const logoutPrompt = useLogoutPrompt(confirmLogout, logoutState.isLoading);
 
   return (
+    <>
     <header className="sticky top-0 z-20 bg-white/90 backdrop-blur border-b border-gray-100 h-16 flex items-center px-4 sm:px-6 gap-4">
       <button
         className="lg:hidden text-gray-500"
@@ -83,15 +90,13 @@ export default function Topbar() {
         <DropdownItem
           icon={LogOut}
           danger
-          onClick={async () => {
-            if (!window.confirm("Are you sure you want to log out?")) return;
-            await logoutApi();
-            navigate("/login");
-          }}
+          onClick={logoutPrompt.requestLogout}
         >
           Logout
         </DropdownItem>
       </Dropdown>
     </header>
+    {logoutPrompt.dialog}
+    </>
   );
 }

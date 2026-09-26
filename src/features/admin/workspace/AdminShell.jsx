@@ -25,6 +25,7 @@ import { logout } from "@/features/auth/authSlice";
 import { baseApi } from "@/store/api/baseApi";
 import "./admin.css";
 import AdminTopbar from "./AdminTopbar";
+import useLogoutPrompt from "@/hooks/useLogoutPrompt";
 const sidebarNavigation = [
   ["dashboard", "Dashboard", LayoutDashboard],
   ["moderation", "Moderation", ShieldAlert],
@@ -66,7 +67,6 @@ export default function AdminShell() {
     .join("")
     .toUpperCase();
   async function exit() {
-    if (!window.confirm("Are you sure you want to log out?")) return;
     setLeaving(true);
     try {
       await logoutApi();
@@ -81,6 +81,7 @@ export default function AdminShell() {
       setLeaving(false);
     }
   }
+  const logoutPrompt = useLogoutPrompt(exit, leaving);
   return (
     <div
       className={`admin-live ${collapsed ? "is-collapsed" : ""} ${dark ? "al-dark" : ""}`}
@@ -131,7 +132,7 @@ export default function AdminShell() {
           <button
             className="al-logout"
             disabled={leaving}
-            onClick={exit}
+            onClick={logoutPrompt.requestLogout}
             aria-label={w("Log out")}
             title={w("Log out")}
           >
@@ -171,6 +172,7 @@ export default function AdminShell() {
           <Outlet />
         </main>
       </div>
+      {logoutPrompt.dialog}
     </div>
   );
 }

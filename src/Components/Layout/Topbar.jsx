@@ -16,6 +16,9 @@ import {
 import Avatar from "../common/Avatar";
 import { openMobileSidebar, toggleSidebar } from "../../features/ui/uiSlice";
 import { selectCurrentUser } from "../../features/auth/authSlice";
+import { useGetMeQuery } from "../../features/users/userApi";
+import { resolveUserAvatar } from "../../features/workspace/profileImage";
+import useLogoutPrompt from "../../hooks/useLogoutPrompt";
 
 // ---- i18n --------------------------------------------------------------
 // Swap this for your real i18n solution (react-i18next, etc.) if you have
@@ -90,6 +93,12 @@ export default function Topbar() {
   const navigate = useNavigate();
   const crumbs = useBreadcrumb();
   const user = useSelector(selectCurrentUser);
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const { data: currentUserData } = useGetMeQuery(undefined, {
+    skip: !isAuthenticated,
+  });
+  const currentProfile = currentUserData?.data ?? currentUserData ?? {};
+  const profileUser = { ...currentProfile, ...user };
   const sidebarCollapsed = useSelector((state) => state.ui.sidebarCollapsed);
 
   const [menuOpen, setMenuOpen] = useState(false);
@@ -150,10 +159,11 @@ export default function Topbar() {
   const [logoutApi, { isLoading: loggingOut }] = useLogoutApiMutation();
 
   async function handleLogout() {
-    if (loggingOut || !window.confirm("Are you sure you want to log out?")) return;
+    if (loggingOut) return;
     await logoutApi();
     navigate("/leaderboard");
   }
+  const logoutPrompt = useLogoutPrompt(handleLogout, loggingOut);
 
   function toggleTheme() {
     setTheme((prev) => (prev === "dark" ? "light" : "dark"));
@@ -164,6 +174,7 @@ export default function Topbar() {
   }
 
   return (
+    <>
     <header className="flex h-14 shrink-0 items-center justify-between gap-4 border-b border-gray-100 bg-white px-4 dark:border-gray-700 dark:bg-gray-900">
       {/* Left side */}
       <div className="flex min-w-0 items-center gap-3">
@@ -285,7 +296,10 @@ export default function Topbar() {
             aria-expanded={menuOpen}
             className="flex items-center gap-2 rounded-md p-1.5 hover:bg-gray-100 dark:hover:bg-gray-800"
           >
-            <Avatar name={user?.displayName ?? user?.email} />
+            <Avatar
+              name={profileUser?.displayName ?? profileUser?.email}
+              src={resolveUserAvatar(profileUser)}
+            />
 
             <ChevronDown className="h-4 w-4 text-gray-400 dark:text-gray-300" />
           </button>
@@ -317,7 +331,7 @@ export default function Topbar() {
               <button
                 type="button"
                 role="menuitem"
-                onClick={handleLogout}
+            onClick={logoutPrompt.requestLogout}
                 disabled={loggingOut}
                 className="block w-full px-3 py-2 text-left text-base text-brand-secondary hover:bg-brand-secondary-light dark:hover:bg-gray-700"
               >
@@ -328,5 +342,7 @@ export default function Topbar() {
         </div>
       </div>
     </header>
+    {logoutPrompt.dialog}
+    </>
   );
 }

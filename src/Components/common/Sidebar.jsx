@@ -24,12 +24,13 @@ import { baseApi } from "../../store/api/baseApi";
 import { useWorkspaceDataQuery } from "../../features/workspace/workspaceApi";
 import { profileImageUrl, resolveUserAvatar } from "../../features/workspace/profileImage";
 import { cn } from "@/lib/utils";
+import useLogoutPrompt from "../../hooks/useLogoutPrompt";
 export default function Sidebar({ mode = "user", mobile = false }) {
   const { w } = useWorkspaceTranslation();
   const indicatorId = useId();
   const reduceMotion = useReducedMotion();
   const navigate = useNavigate();
-  const [logoutApi] = useLogoutApiMutation();
+  const [logoutApi, logoutState] = useLogoutApiMutation();
   const dispatch = useAppDispatch();
   const { user: storedUser, role } = useAppSelector((state) => state.auth);
   const profile = useWorkspaceDataQuery({
@@ -114,7 +115,6 @@ export default function Sidebar({ mode = "user", mobile = false }) {
   ];
   const navItems = mode === "admin" ? adminNavItems : userNavItems;
   const handleLogout = async () => {
-    if (!window.confirm("Are you sure you want to log out?")) return;
     try {
       await logoutApi();
     } finally {
@@ -123,6 +123,7 @@ export default function Sidebar({ mode = "user", mobile = false }) {
       navigate("/login");
     }
   };
+  const logoutPrompt = useLogoutPrompt(handleLogout, logoutState.isLoading);
   if (mode === "user") {
     const groups = [
       ["Overview", userNavItems.slice(0, 3)],
@@ -199,10 +200,11 @@ export default function Sidebar({ mode = "user", mobile = false }) {
             ))}
           </nav>
         </LayoutGroup>
-        <button className="uw-signout" onClick={handleLogout}>
+        <button className="uw-signout" onClick={logoutPrompt.requestLogout}>
           <LogOut size={17} />
           {w("Sign Out")}
         </button>
+        {logoutPrompt.dialog}
       </aside>
     );
   }
@@ -339,13 +341,14 @@ export default function Sidebar({ mode = "user", mobile = false }) {
       {/* Bottom Actions */}
       <div className="space-y-2 pt-4 border-t border-slate-100 dark:border-slate-800/80">
         <button
-          onClick={handleLogout}
+          onClick={logoutPrompt.requestLogout}
           className="flex w-full items-center gap-2 px-3.5 py-2 text-base font-semibold text-slate-500 hover:text-rose-600 dark:hover:text-rose-400 transition-colors cursor-pointer"
         >
           <LogOut className="w-4 h-4" />
           <span>{w("Sign Out")}</span>
         </button>
       </div>
+      {logoutPrompt.dialog}
     </aside>
   );
 }

@@ -1,9 +1,12 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
+import { profileImageUrl } from "@/features/workspace/profileImage";
+import usePlatformMembers from "@/features/users/usePlatformMembers";
 
 export default function CommunityVoice({ darkMode }) {
   const { t } = useTranslation();
+  const members = usePlatformMembers();
 
   const testimonials = [
     {
@@ -61,7 +64,14 @@ export default function CommunityVoice({ darkMode }) {
       </div>
 
       <div className="grid md:grid-cols-3 gap-8">
-        {testimonials.map((testimonial, idx) => (
+        {testimonials.map((testimonial, idx) => {
+          const member = members[idx];
+          const memberPhoto = member
+            ? profileImageUrl(
+                member.profileImage || member.profileImageUrl || member.avatar || member.photoURL || member.image,
+              )
+            : "";
+          return (
           <motion.div
             key={idx}
             whileHover={{ y: -6 }}
@@ -86,8 +96,11 @@ export default function CommunityVoice({ darkMode }) {
               }`}
             >
               <img
-                src={testimonial.avatar}
+                src={memberPhoto || testimonial.avatar}
                 alt={testimonial.author}
+                onError={(event) => {
+                  if (memberPhoto) event.currentTarget.src = testimonial.avatar;
+                }}
                 className={`w-10 h-10 rounded-full object-cover ${
                   darkMode ? "border-zinc-700" : "border-gray-200"
                 }`}
@@ -106,7 +119,8 @@ export default function CommunityVoice({ darkMode }) {
               </div>
             </div>
           </motion.div>
-        ))}
+          );
+        })}
       </div>
     </section>
   );

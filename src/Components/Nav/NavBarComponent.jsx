@@ -34,8 +34,10 @@ import {
 import { logout } from "../../store/slices/authSlice";
 import { useLogoutApiMutation } from "../../features/auth/authApi";
 import { baseApi } from "../../store/api/baseApi";
-import { profileImageUrl } from "../../features/workspace/profileImage";
+import { resolveUserAvatar } from "../../features/workspace/profileImage";
+import { useGetMeQuery } from "../../features/users/userApi";
 import { notificationTarget } from "../../features/notifications/notificationTarget";
+import useLogoutPrompt from "@/hooks/useLogoutPrompt";
 
 let notificationAudioContext;
 function armNotificationSound() {
@@ -81,10 +83,15 @@ export default function Navbar({
   const reducedMotion = useReducedMotion();
   const [hoveredItem, setHoveredItem] = useState(null);
 
-  const authUser = useSelector((state) => state.auth.user);
+  const storedUser = useSelector((state) => state.auth.user);
   const isAuthenticated = useSelector(
     (state) => !!state.auth.accessToken || !!state.auth.isAuthenticated,
   );
+  const { data: currentUserData } = useGetMeQuery(undefined, {
+    skip: !isAuthenticated,
+  });
+  const currentProfile = currentUserData?.data ?? currentUserData ?? {};
+  const authUser = { ...currentProfile, ...storedUser };
 
   const { data: unreadData, isSuccess: unreadCountLoaded } = useGetUnreadCountQuery(undefined, {
     skip: !isAuthenticated,
@@ -188,9 +195,7 @@ export default function Navbar({
   }, [notificationSoundEnabled]);
 
   const userName = authUser?.displayName || authUser?.name || t("dashboard", "Dashboard");
-  const userPhoto = profileImageUrl(
-    authUser?.profileImage || authUser?.avatar || authUser?.photoURL,
-  );
+  const userPhoto = resolveUserAvatar(authUser);
   const userInitials = (userName || "U")
     .trim()
     .split(/\s+/)
@@ -198,6 +203,10 @@ export default function Navbar({
     .map((part) => Array.from(part)[0])
     .join("")
     .toUpperCase();
+
+  useEffect(() => {
+    setPhotoFailed(false);
+  }, [userPhoto]);
 
   const handleProfileMouseEnter = () => {
     clearTimeout(profileCloseTimer.current);
@@ -211,7 +220,6 @@ export default function Navbar({
   };
 
   const handleLogout = async () => {
-    if (!window.confirm("Are you sure you want to log out?")) return;
     setProfileOpen(false);
     setMobileOpen(false);
     try {
@@ -222,6 +230,7 @@ export default function Navbar({
       navigate("/login");
     }
   };
+  const logoutPrompt = useLogoutPrompt(handleLogout);
 
   useEffect(() => {
     const current = navItems.find((item) =>
@@ -429,6 +438,7 @@ export default function Navbar({
     );
 
   return (
+    <>
     <nav
       className="site-navbar font-brand sticky top-0 z-[1000] w-full rounded-b-2xl border border-gray-200 bg-white transition-colors duration-300 dark:border-gray-700 dark:bg-gray-900"
       aria-label="Main navigation"
@@ -811,7 +821,7 @@ export default function Navbar({
                   type="button"
                   role="menuitem"
                   className="flex w-full items-center gap-3 px-3 py-2.5 rounded-xl text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-950/30 hover:text-red-600 dark:hover:text-red-400 transition-colors cursor-pointer text-left border-none bg-transparent"
-                  onClick={handleLogout}
+                onClick={logoutPrompt.requestLogout}
                 >
                   <LogOut size={18} className="text-red-500 shrink-0" />
                   <span>{t("logout", "Log out")}</span>
@@ -1036,7 +1046,7 @@ export default function Navbar({
 
             <button
               type="button"
-              onClick={handleLogout}
+              onClick={logoutPrompt.requestLogout}
               className="flex items-center justify-center gap-2 h-10 rounded-xl border border-red-200 dark:border-red-900/50 bg-red-50 dark:bg-red-950/30 text-red-600 dark:text-red-400 font-medium text-base hover:bg-red-100 dark:hover:bg-red-900/50 transition-colors cursor-pointer"
             >
               <LogOut size={16} />
@@ -1054,5 +1064,7 @@ export default function Navbar({
         )}
       </div>
     </nav>
+    {logoutPrompt.dialog}
+    </>
   );
 }

@@ -19,6 +19,7 @@ import {
 import Avatar from "@/Components/Admin/common/Avatar";
 import { toggleSidebar, setSidebarMobileOpen } from "@/redux/slices/uiSlice";
 import { useLogoutApiMutation } from "@/features/auth/authApi";
+import useLogoutPrompt from "@/hooks/useLogoutPrompt";
 
 const nav = [
   { to: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -35,13 +36,17 @@ const nav = [
 
 export default function Sidebar() {
   const dispatch = useDispatch();
-  const [logoutApi] = useLogoutApiMutation();
+  const [logoutApi, logoutState] = useLogoutApiMutation();
   const collapsed = useSelector((s) => s.ui.sidebarCollapsed);
   const mobileOpen = useSelector((s) => s.ui.sidebarMobileOpen);
   const admin = useSelector((s) => s.auth.admin) || {
     name: "Admin User",
     email: "admin@askkh.io",
   };
+  const confirmLogout = async () => {
+    await logoutApi();
+  };
+  const logoutPrompt = useLogoutPrompt(confirmLogout, logoutState.isLoading);
 
   const content = (
     <div className="flex flex-col h-full">
@@ -106,9 +111,7 @@ export default function Sidebar() {
           )}
           {!collapsed && (
             <button
-              onClick={() => {
-                if (window.confirm("Are you sure you want to log out?")) logoutApi();
-              }}
+              onClick={logoutPrompt.requestLogout}
               className="text-gray-400 hover:text-brand-secondary transition-colors"
               aria-label="Logout"
             >
@@ -140,6 +143,7 @@ export default function Sidebar() {
           </aside>
         </div>
       )}
+      {logoutPrompt.dialog}
     </>
   );
 }

@@ -287,7 +287,7 @@ export default function WorkspaceListPage({ page }) {
         />
       )}
       <div className="uw-columns">
-        <section className="uw-card">
+        <section className={`uw-card ${page === "lost-found" ? "uw-reports-list" : ""}`}>
           <QueryState query={query} unavailableMessage={page === "matches" ? "Match Center is not available yet." : undefined}>
             {related ? (
               <>

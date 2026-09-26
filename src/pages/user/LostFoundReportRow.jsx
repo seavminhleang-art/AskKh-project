@@ -6,6 +6,8 @@ import { dateLabel, message, rows } from '@/features/workspace/workspaceModel';
 import { useWorkspaceDataQuery, useWorkspaceSaveMutation } from '@/features/workspace/workspaceApi';
 import { toast } from 'react-toastify';
 import ReportDetails from '@/Components/PagesComponent/HomeComponent/Lost&FoundComponent/ReportDetails';
+import { formatMediaUrl } from '@/features/workspace/profileImage';
+import './LostFoundReportRow.css';
 
 function inputDate(value) {
   if (!value) return '';
@@ -106,6 +108,7 @@ export default function LostFoundReportRow({ item }) {
   const cancelDeleteRef = useRef(null);
   const deleteTriggerRef = useRef(null);
   const found = item.itemType?.toLowerCase() === 'found';
+  const scope = String(item.scope || item.visibility || item.reportScope || 'istad').toLowerCase();
   const date = item.itemDate || item.createdAt;
   const hasTime = typeof date === 'string' && date.includes('T') && !Number.isNaN(Date.parse(date));
   const location = item.freeTextLocation || item.locationLabel || item.location?.building || '—';
@@ -128,9 +131,9 @@ export default function LostFoundReportRow({ item }) {
   }
   return <>
     <article className="uw-report-row">
-      <div className="uw-report-photo">{item.photoUrl ? <img src={item.photoUrl} alt={item.title || ''} loading="lazy" /> : <Package size={26} aria-label={w('No image')} />}</div>
+      <div className="uw-report-photo">{item.photoUrl ? <img src={formatMediaUrl(item.photoUrl)} alt={item.title || ''} loading="lazy" /> : <Package size={26} aria-label={w('No image')} />}</div>
       <div className="uw-report-description">
-        <span className={`uw-report-type ${found ? 'found' : 'lost'}`}>{w(found ? 'Found' : 'Lost')}</span>
+        <div className="uw-report-labels"><span className={`uw-report-type ${found ? 'found' : 'lost'}`}>{w(found ? 'Found' : 'Lost')}</span><span className={`uw-report-scope ${scope === 'public' ? 'public' : 'istad'}`}>{scope === 'public' ? w('Public') : 'ISTAD'}</span></div>
         <h2>{item.title}</h2>
         <p>{item.description}</p>
         {!!tags.length && <div className="uw-report-tags">{tags.map(tag => <span key={tag}>{tag}</span>)}</div>}

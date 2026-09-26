@@ -13,6 +13,7 @@ import { useWorkspaceTranslation } from "@/locales/workspace/useWorkspaceTransla
 import { logout } from "../../store/slices/authSlice";
 import { useLogoutApiMutation } from "@/features/auth/authApi";
 import { baseApi } from "../../store/api/baseApi";
+import useLogoutPrompt from "../../hooks/useLogoutPrompt";
 
 export default function WorkspaceProfileMenu({ user, mode = "user" }) {
   const { w } = useWorkspaceTranslation();
@@ -76,7 +77,6 @@ export default function WorkspaceProfileMenu({ user, mode = "user" }) {
   };
 
   const handleLogout = async () => {
-    if (!window.confirm("Are you sure you want to log out?")) return;
     if (ref.current) ref.current.open = false;
     try {
       await logoutApi();
@@ -86,12 +86,14 @@ export default function WorkspaceProfileMenu({ user, mode = "user" }) {
       navigate("/login");
     }
   };
+  const logoutPrompt = useLogoutPrompt(handleLogout);
 
   useEffect(() => {
     setPhotoError(false);
   }, [user?.profileImage, user?.avatar]);
 
   return (
+    <>
     <details
       className="workspace-profile"
       ref={ref}
@@ -150,13 +152,15 @@ export default function WorkspaceProfileMenu({ user, mode = "user" }) {
         <button
           type="button"
           className="workspace-profile-logout"
-          onClick={handleLogout}
+          onClick={logoutPrompt.requestLogout}
         >
           <LogOut size={17} />
           {w("Log out")}
         </button>
       </div>
     </details>
+    {logoutPrompt.dialog}
+    </>
   );
 }
 

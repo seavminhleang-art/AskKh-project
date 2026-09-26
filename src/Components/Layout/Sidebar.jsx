@@ -5,6 +5,7 @@ import { LayoutDashboard, Trophy, X, LogOut } from "lucide-react";
 import { closeMobileSidebar } from "../../features/ui/uiSlice";
 import { selectCurrentUser } from "../../features/auth/authSlice";
 import Avatar from "../common/Avatar";
+import useLogoutPrompt from "../../hooks/useLogoutPrompt";
 
 const NAV_ITEMS = [
   { path: "/admin", label: "Dashboard", icon: LayoutDashboard, end: true },
@@ -17,9 +18,10 @@ function SidebarContent({ collapsed, onNavigate }) {
   const [logoutApi, { isLoading: loggingOut }] = useLogoutApiMutation();
 
   async function handleLogout() {
-    if (loggingOut || !window.confirm("Are you sure you want to log out?")) return;
+    if (loggingOut) return;
     await logoutApi();
   }
+  const logoutPrompt = useLogoutPrompt(handleLogout, loggingOut);
 
   return (
     <>
@@ -63,7 +65,7 @@ function SidebarContent({ collapsed, onNavigate }) {
       <div className="border-t border-gray-100 p-3 dark:border-gray-700">
         <button
           type="button"
-          onClick={handleLogout}
+          onClick={logoutPrompt.requestLogout}
                 disabled={loggingOut}
           className="flex w-full items-center gap-2.5 rounded-full bg-gray-50 px-2.5 py-2 text-gray-600 hover:bg-gray-100 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
         >
@@ -72,6 +74,7 @@ function SidebarContent({ collapsed, onNavigate }) {
           {!collapsed && <LogOut className="ml-auto h-4 w-4 text-gray-400" />}
         </button>
       </div>
+      {logoutPrompt.dialog}
     </>
   );
 }
