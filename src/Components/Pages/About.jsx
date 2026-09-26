@@ -5,7 +5,7 @@ import { useTheme } from "../../context/ThemeContext.jsx";
 import ScrollReveal from "../Animations/ScrollReveal.jsx";
 
 import missionDarkImg from "../../assets/Website/mission_dark.png";
-import communityDarkImg from "../../assets/Website/community_dark.png";
+import teamHeroPhoto from "../../assets/Website/nexa-team.jpg";
 import visionDarkImg from "../../assets/Website/vision_dark.png";
 
 import sokcheatPhoto from "../../assets/Mentor/srorng_sokcheat.jpg";
@@ -441,11 +441,7 @@ export default function AboutNexa() {
 
         <div className="flex justify-center">
           <ScrollReveal animation="scaleIn" delay={200}>
-            <IllustrationImage
-              src={communityDarkImg}
-              alt="About NEXA"
-              className="w-full max-w-md animate-float"
-            />
+            <div className="about-team-hero"><img src={teamHeroPhoto} alt="NEXA team members" /></div>
           </ScrollReveal>
         </div>
       </section>

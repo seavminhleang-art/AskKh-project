@@ -3,6 +3,7 @@ import showcaseTwoImage from "@/assets/Website/4dba6191ebd18650c52de2ed5fb47f7d.
 import showcaseThreeImage from "@/assets/Website/0534f7df0b08edc70592d10d4bd908c0.jpg";
 import showcaseBackground from "@/assets/Website/d54a0076d493ce9c0d95d99a16ecec15.jpg";
 import React from "react";
+import teamPhoto from "@/assets/Website/nexa-team.jpg";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
@@ -100,14 +101,8 @@ export default function PlatformShowcase({ darkMode }) {
             }`}
           >
             <div className="flex items-center gap-3">
-              <span
-                className={`text-xl p-2 rounded-xl ${
-                  darkMode
-                    ? "bg-zinc-800"
-                    : "bg-[var(--color-brand-primary-light)]"
-                }`}
-              >
-                👥
+              <span className="w-11 h-11 shrink-0 overflow-hidden rounded-full border-2 border-white shadow-sm ring-1 ring-brand-primary/20">
+                <img src={teamPhoto} alt="NEXA team" className="w-full h-full object-cover object-[52%_58%]" />
               </span>
               <div>
                 <p
