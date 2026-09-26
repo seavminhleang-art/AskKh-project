@@ -76,6 +76,7 @@ export default function WorkspaceProfileMenu({ user, mode = "user" }) {
   };
 
   const handleLogout = async () => {
+    if (!window.confirm("Are you sure you want to log out?")) return;
     if (ref.current) ref.current.open = false;
     try {
       await logoutApi();

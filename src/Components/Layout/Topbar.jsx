@@ -150,7 +150,7 @@ export default function Topbar() {
   const [logoutApi, { isLoading: loggingOut }] = useLogoutApiMutation();
 
   async function handleLogout() {
-    if (loggingOut) return;
+    if (loggingOut || !window.confirm("Are you sure you want to log out?")) return;
     await logoutApi();
     navigate("/leaderboard");
   }

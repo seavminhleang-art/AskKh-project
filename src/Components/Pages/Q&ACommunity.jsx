@@ -19,6 +19,7 @@ import {
   useGetPostsQuery,
   useGetPostByIdQuery,
   useCreatePostMutation,
+  useDeletePostMutation,
 } from "../../features/posts/postApi";
 
 import {
@@ -29,6 +30,7 @@ import {
 
 import {
   useVotePostMutation,
+  useUpdateVoteMutation,
   useDeleteVoteMutation,
 } from "../../features/votes/voteApi";
 
@@ -96,9 +98,24 @@ export default function QACommunity({
   // ==================================================
 
   const [error, setError] = useState("");
-  const [votes, setVotes] = useState({});
+  const [votes, setVotes] = useState(() => {
+    try {
+      return JSON.parse(window.localStorage.getItem("askkh:qa-votes") || "{}");
+    } catch {
+      return {};
+    }
+  });
+  const [deletePost] = useDeletePostMutation();
 
   const busy = useRef(new Set());
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem("askkh:qa-votes", JSON.stringify(votes));
+    } catch {
+      // The vote itself is still saved by the API if browser storage is unavailable.
+    }
+  }, [votes]);
 
   // ==================================================
   // API Queries
@@ -126,6 +143,7 @@ export default function QACommunity({
   const [removeBookmark] = useRemoveBookmarkMutation();
 
   const [votePost] = useVotePostMutation();
+  const [updateVote] = useUpdateVoteMutation();
   const [deleteVote] = useDeleteVoteMutation();
 
   // ==================================================
@@ -172,7 +190,8 @@ export default function QACommunity({
 
       return {
         ...mappedPost,
-        isLiked: Boolean(votes[voteKey]),
+        isLiked: votes[voteKey]?.voteTypeId === 1,
+        isDisliked: votes[voteKey]?.voteTypeId === 2,
       };
     });
 
@@ -226,31 +245,34 @@ export default function QACommunity({
   // Like / Vote
   // ==================================================
 
-  const handleToggleLike = (postId) =>
+  const handleToggleLike = (postId, voteTypeId) =>
     perform(`vote:${postId}`, async () => {
       const voteKey = `${userId}:${postId}`;
+      const currentVote = votes[voteKey];
 
-      if (votes[voteKey]) {
-        await deleteVote(votes[voteKey]).unwrap();
-
-        setVotes((previous) => ({
-          ...previous,
-          [voteKey]: null,
-        }));
-
+      if (currentVote?.id && currentVote.voteTypeId === voteTypeId) {
+        await deleteVote(currentVote.id).unwrap();
+        setVotes((previous) => ({ ...previous, [voteKey]: null }));
         return;
       }
 
-      const result = await votePost({
-        postId,
-        voteTypeId: 1,
-      }).unwrap();
+      const result = currentVote?.id
+        ? await updateVote({ voteId: currentVote.id, postId, voteTypeId }).unwrap()
+        : await votePost({ postId, voteTypeId }).unwrap();
 
       setVotes((previous) => ({
         ...previous,
-        [voteKey]: result.id,
+        [voteKey]: { id: result.id ?? currentVote?.id, voteTypeId },
       }));
     });
+
+  const handleDeletePost = (postId) => {
+    if (!window.confirm("Delete this post? This action cannot be undone.")) return;
+    return perform(`delete-post:${postId}`, async () => {
+      await deletePost(postId).unwrap();
+      if (selectedPostId === postId) setSelectedPostId(null);
+    });
+  };
 
   // ==================================================
   // Bookmark
@@ -563,6 +585,7 @@ export default function QACommunity({
                       onToggleBookmark={toggleBookmark}
                       onSelectPost={handleSelectPost}
                       onToggleLike={handleToggleLike}
+                      onDeletePost={handleDeletePost}
                     />
                   ))}
                   <Pagination

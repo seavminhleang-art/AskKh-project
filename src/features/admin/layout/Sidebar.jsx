@@ -106,7 +106,9 @@ export default function Sidebar() {
           )}
           {!collapsed && (
             <button
-              onClick={() => logoutApi()}
+              onClick={() => {
+                if (window.confirm("Are you sure you want to log out?")) logoutApi();
+              }}
               className="text-gray-400 hover:text-brand-secondary transition-colors"
               aria-label="Logout"
             >

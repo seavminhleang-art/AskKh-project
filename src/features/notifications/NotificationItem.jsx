@@ -14,6 +14,7 @@ import {
   useDeleteNotificationMutation,
 } from "../../store/api/apiSlice";
 import { toast } from "sonner";
+import { notificationTarget } from "./notificationTarget";
 
 export default function NotificationItem({ notification }) {
   const navigate = useNavigate();
@@ -35,12 +36,11 @@ export default function NotificationItem({ notification }) {
   };
 
   const handleAction = () => {
-    if (!notification.isRead) {
+    if (!notification.read && !notification.isRead) {
       markRead(notification.id);
     }
-    if (notification.link) {
-      navigate(notification.link);
-    }
+    const target = notificationTarget(notification);
+    if (target) navigate(target);
   };
 
   const handleDelete = (e) => {
@@ -53,7 +53,7 @@ export default function NotificationItem({ notification }) {
     <Card
       onClick={handleAction}
       className={`p-4 sm:p-5 transition-all cursor-pointer flex items-start gap-4 ${
-        !notification.isRead
+        !(notification.read ?? notification.isRead)
           ? "bg-blue-50/40 dark:bg-blue-950/20 border-blue-200/80 dark:border-blue-900/40"
           : "hover:bg-slate-50 dark:hover:bg-slate-800/50"
       }`}
@@ -67,7 +67,7 @@ export default function NotificationItem({ notification }) {
         <div className="flex items-center justify-between gap-2">
           <h4
             className={`text-base tracking-tight truncate ${
-              !notification.isRead
+              !(notification.read ?? notification.isRead)
                 ? "font-bold text-slate-900 dark:text-white"
                 : "font-medium text-slate-700 dark:text-slate-300"
             }`}
@@ -84,7 +84,7 @@ export default function NotificationItem({ notification }) {
         </div>
 
         <p className="text-base text-slate-600 dark:text-slate-400 leading-relaxed">
-          {notification.message}
+          {notification.body || notification.message}
         </p>
       </div>
 

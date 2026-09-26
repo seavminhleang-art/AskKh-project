@@ -84,6 +84,7 @@ export default function Topbar() {
           icon={LogOut}
           danger
           onClick={async () => {
+            if (!window.confirm("Are you sure you want to log out?")) return;
             await logoutApi();
             navigate("/login");
           }}

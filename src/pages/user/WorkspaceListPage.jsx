@@ -1,7 +1,7 @@
 import LostFoundReportRow from "./LostFoundReportRow";
 import { useWorkspaceTranslation } from "@/locales/workspace/useWorkspaceTranslation";
 import { useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import {
   useWorkspaceDataQuery,
   useWorkspaceSaveMutation,
@@ -13,6 +13,7 @@ import {
   message,
 } from "../../features/workspace/workspaceModel";
 import { Heading, QueryState, Empty, Badge, QuickLinks } from "./WorkspaceUI";
+import { notificationTarget } from "../../features/notifications/notificationTarget";
 const titles = {
   questions: "My Questions",
   "lost-found": "My Lost & Found Reports",
@@ -143,6 +144,7 @@ function ClaimForm({ report, onClose }) {
 }
 export default function WorkspaceListPage({ page }) {
   const { w, locale } = useWorkspaceTranslation();
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const search = searchParams.get("search") || "";
   const setSearch = (value) =>
@@ -198,6 +200,10 @@ export default function WorkspaceListPage({ page }) {
       setError(message(error));
     }
   }
+  async function openNotification(item) {
+    if (!item.read) await mark("mark-read", item.id);
+    navigate(notificationTarget(item) || "/dashboard/notifications");
+  }
   const related = page === "claims" || page === "matches";
   const totalPages = query.data?.totalPages ?? query.data?.data?.totalPages;
   return (
@@ -219,13 +225,22 @@ export default function WorkspaceListPage({ page }) {
             {page === "questions" ? w("Ask a question") : w("Report an item")}
           </Link>
         ) : page === "notifications" ? (
-          <button
-            className="uw-button"
-            disabled={state.isLoading || query.isLoading || query.isError}
-            onClick={() => mark("read-all")}
-          >
-            {w("Mark all as read")}
-          </button>
+          <div className="flex flex-wrap gap-2">
+            <button
+              className="uw-button secondary"
+              disabled={query.isFetching}
+              onClick={() => query.refetch()}
+            >
+              {query.isFetching ? w("Refreshing…") : w("Refresh")}
+            </button>
+            <button
+              className="uw-button"
+              disabled={state.isLoading || query.isLoading || query.isError}
+              onClick={() => mark("read-all")}
+            >
+              {w("Mark all as read")}
+            </button>
+          </div>
         ) : null}
       </Heading>
       {error && (
@@ -348,13 +363,21 @@ export default function WorkspaceListPage({ page }) {
                       )}
                     </div>
                     {page === "notifications" ? (
-                      <button
-                        className="uw-button secondary"
-                        disabled={item.read || state.isLoading}
-                        onClick={() => mark("mark-read", item.id)}
-                      >
-                        {item.read ? w("Read") : w("Mark read")}
-                      </button>
+                      <div className="uw-stack">
+                        <button
+                          className="uw-button secondary"
+                          disabled={item.read || state.isLoading}
+                          onClick={() => mark("mark-read", item.id)}
+                        >
+                          {item.read ? w("Read") : w("Mark read")}
+                        </button>
+                        <button
+                          className="uw-button"
+                          onClick={() => openNotification(item)}
+                        >
+                          {w("Open")}
+                        </button>
+                      </div>
                     ) : page === "lost-found" ? (
                       <div className="uw-stack">
                         <Badge>{w(item.status || item.itemType)}</Badge>

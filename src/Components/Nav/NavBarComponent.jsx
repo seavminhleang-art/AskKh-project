@@ -13,6 +13,9 @@ import {
   CheckCheck,
   ExternalLink,
   Loader2,
+  RefreshCw,
+  Volume2,
+  VolumeX,
   User,
   LayoutDashboard,
   LogOut,
@@ -32,6 +35,41 @@ import { logout } from "../../store/slices/authSlice";
 import { useLogoutApiMutation } from "../../features/auth/authApi";
 import { baseApi } from "../../store/api/baseApi";
 import { profileImageUrl } from "../../features/workspace/profileImage";
+import { notificationTarget } from "../../features/notifications/notificationTarget";
+
+let notificationAudioContext;
+function armNotificationSound() {
+  try {
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextClass) return;
+    notificationAudioContext ??= new AudioContextClass();
+    if (notificationAudioContext.state === "suspended") {
+      notificationAudioContext.resume().catch(() => {});
+    }
+  } catch {
+    // Audio is optional; keep notifications working when the browser blocks it.
+  }
+}
+
+function playNotificationSound() {
+  if (!notificationAudioContext || notificationAudioContext.state !== "running") return;
+  const context = notificationAudioContext;
+  const now = context.currentTime;
+  [880, 1175].forEach((frequency, index) => {
+    const start = now + index * 0.13;
+    const oscillator = context.createOscillator();
+    const gain = context.createGain();
+    oscillator.type = "sine";
+    oscillator.frequency.setValueAtTime(frequency, start);
+    gain.gain.setValueAtTime(0.0001, start);
+    gain.gain.exponentialRampToValueAtTime(0.12, start + 0.015);
+    gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.18);
+    oscillator.connect(gain);
+    gain.connect(context.destination);
+    oscillator.start(start);
+    oscillator.stop(start + 0.19);
+  });
+}
 
 export default function Navbar({
   notificationCount: propNotificationCount = 0,
@@ -48,19 +86,34 @@ export default function Navbar({
     (state) => !!state.auth.accessToken || !!state.auth.isAuthenticated,
   );
 
-  const { data: unreadData } = useGetUnreadCountQuery(undefined, {
+  const { data: unreadData, isSuccess: unreadCountLoaded } = useGetUnreadCountQuery(undefined, {
     skip: !isAuthenticated,
     pollingInterval: 30000,
   });
 
   const [notificationOpen, setNotificationOpen] = useState(false);
+  const [notificationSoundEnabled, setNotificationSoundEnabled] = useState(() => {
+    try {
+      return window.localStorage.getItem("askkh:notification-sound") !== "off";
+    } catch {
+      return true;
+    }
+  });
   const notificationRef = useRef(null);
 
-  const { data: notificationsData, isLoading: notificationsLoading } =
-    useGetNotificationsQuery(
-      { page: 0, size: 8 },
-      { skip: !isAuthenticated || !notificationOpen },
-    );
+  const {
+    data: notificationsData,
+    isLoading: notificationsLoading,
+    isFetching: notificationsFetching,
+    refetch: refetchNotifications,
+  } = useGetNotificationsQuery(
+    { page: 0, size: 8 },
+    {
+      skip: !isAuthenticated || !notificationOpen,
+      refetchOnMountOrArgChange: true,
+      pollingInterval: notificationOpen ? 30000 : 0,
+    },
+  );
 
   const [markRead] = useMarkReadMutation();
   const [markAllRead, { isLoading: isMarkingAll }] = useMarkAllReadMutation();
@@ -114,6 +167,25 @@ export default function Navbar({
   const [logoutApi] = useLogoutApiMutation();
 
   const previousNotificationCount = useRef(notificationCount);
+  const hasNotificationBaseline = useRef(false);
+
+  useEffect(() => {
+    const armSound = () => armNotificationSound();
+    document.addEventListener("pointerdown", armSound, { once: true, capture: true });
+    document.addEventListener("keydown", armSound, { once: true, capture: true });
+    return () => {
+      document.removeEventListener("pointerdown", armSound, true);
+      document.removeEventListener("keydown", armSound, true);
+    };
+  }, []);
+
+  useEffect(() => {
+    try {
+      window.localStorage.setItem("askkh:notification-sound", notificationSoundEnabled ? "on" : "off");
+    } catch {
+      // Sound preference is optional when browser storage is unavailable.
+    }
+  }, [notificationSoundEnabled]);
 
   const userName = authUser?.displayName || authUser?.name || t("dashboard", "Dashboard");
   const userPhoto = profileImageUrl(
@@ -139,6 +211,7 @@ export default function Navbar({
   };
 
   const handleLogout = async () => {
+    if (!window.confirm("Are you sure you want to log out?")) return;
     setProfileOpen(false);
     setMobileOpen(false);
     try {
@@ -222,35 +295,19 @@ export default function Navbar({
     : (notificationsData?.content ?? notificationsData?.data ?? []);
 
   const handleNotificationClick = (item) => {
-    if (!item.read && !item.isRead) {
-      markRead(item.id);
-    }
+    if (!item.read) markRead(item.id);
     setNotificationOpen(false);
     setMobileOpen(false);
 
-    if (
-      item.type === "COMMENT_ON_POST" ||
-      item.type === "POST_VOTE" ||
-      item.type === "question_answer" ||
-      item.type === "comment"
-    ) {
-      navigate(
-        item.targetId
-          ? `/dashboard/questions/${item.targetId}`
-          : `/dashboard/questions`,
-      );
-    } else if (
-      item.type === "LOST_FOUND_MATCH" ||
-      item.type === "match_found"
-    ) {
+    const target = notificationTarget(item);
+    if (target) {
+      navigate(target);
+    } else if (item.type === "COMMENT_ON_POST" || item.type === "POST_VOTE") {
+      navigate(item.targetId ? `/dashboard/questions/${item.targetId}` : "/dashboard/questions");
+    } else if (item.type === "LOST_FOUND_MATCH") {
       navigate("/dashboard/matches");
-    } else if (
-      item.type?.startsWith("LOST_FOUND_CLAIM") ||
-      item.type === "claim_update"
-    ) {
+    } else if (item.type?.startsWith("LOST_FOUND_CLAIM")) {
       navigate("/dashboard/claims");
-    } else if (item.link) {
-      navigate(item.link);
     } else {
       navigate("/dashboard/notifications");
     }
@@ -298,7 +355,15 @@ export default function Navbar({
   };
 
   useEffect(() => {
+    if (!unreadCountLoaded) return;
+    if (!hasNotificationBaseline.current) {
+      previousNotificationCount.current = notificationCount;
+      hasNotificationBaseline.current = true;
+      return;
+    }
+
     if (notificationCount > previousNotificationCount.current) {
+      if (notificationSoundEnabled) playNotificationSound();
       setBadgeAnimate(false);
 
       requestAnimationFrame(() => {
@@ -319,7 +384,7 @@ export default function Navbar({
     }
 
     previousNotificationCount.current = notificationCount;
-  }, [notificationCount]);
+  }, [notificationCount, notificationSoundEnabled, unreadCountLoaded]);
 
   const handleMouseEnter = () => {
     clearTimeout(closeTimer.current);
@@ -524,17 +589,39 @@ export default function Navbar({
                       </span>
                     )}
                   </div>
-                  {notificationCount > 0 && (
+                  <div className="flex items-center gap-3">
                     <button
                       type="button"
-                      disabled={isMarkingAll}
-                      onClick={() => markAllRead()}
-                      className="text-base text-brand-primary hover:text-brand-secondary font-medium flex items-center gap-1 transition-colors disabled:opacity-50"
+                      onClick={() => setNotificationSoundEnabled((enabled) => !enabled)}
+                      className="text-base text-brand-primary hover:text-brand-secondary font-medium flex items-center gap-1 transition-colors"
+                      aria-label={notificationSoundEnabled ? (isKhmer ? "បិទសំឡេង" : "Mute notification sound") : (isKhmer ? "បើកសំឡេង" : "Enable notification sound")}
+                      title={notificationSoundEnabled ? (isKhmer ? "បិទសំឡេង" : "Mute notification sound") : (isKhmer ? "បើកសំឡេង" : "Enable notification sound")}
                     >
-                      <CheckCheck size={14} />
-                      {isKhmer ? "អានទាំងអស់" : "Mark all read"}
+                      {notificationSoundEnabled ? <Volume2 size={14} /> : <VolumeX size={14} />}
                     </button>
-                  )}
+                    <button
+                      type="button"
+                      disabled={notificationsFetching}
+                      onClick={() => refetchNotifications()}
+                      className="text-base text-brand-primary hover:text-brand-secondary font-medium flex items-center gap-1 transition-colors disabled:opacity-50"
+                      aria-label={isKhmer ? "ផ្ទុកការជូនដំណឹងឡើងវិញ" : "Refresh notifications"}
+                      title={isKhmer ? "ផ្ទុកការជូនដំណឹងឡើងវិញ" : "Refresh notifications"}
+                    >
+                      <RefreshCw size={14} className={notificationsFetching ? "animate-spin" : ""} />
+                      {isKhmer ? "ផ្ទុកឡើងវិញ" : "Refresh"}
+                    </button>
+                    {notificationCount > 0 && (
+                      <button
+                        type="button"
+                        disabled={isMarkingAll}
+                        onClick={() => markAllRead()}
+                        className="text-base text-brand-primary hover:text-brand-secondary font-medium flex items-center gap-1 transition-colors disabled:opacity-50"
+                      >
+                        <CheckCheck size={14} />
+                        {isKhmer ? "អានទាំងអស់" : "Mark all read"}
+                      </button>
+                    )}
+                  </div>
                 </div>
 
                 <div className="max-h-80 overflow-y-auto divide-y divide-gray-100 dark:divide-gray-800/60">
@@ -588,13 +675,13 @@ export default function Navbar({
                                     : "font-normal text-gray-700 dark:text-gray-300"
                                 }`}
                               >
-                                {item.title || item.message || "Notification"}
+                                {item.title || item.body || item.message || "Notification"}
                               </h4>
                               {isUnread && (
                                 <span className="w-2 h-2 rounded-full bg-brand-primary shrink-0 mt-1" />
                               )}
                             </div>
-                            {item.message && item.title && (
+                            {(item.body || item.message) && item.title && (
                               <p className="text-base text-gray-500 dark:text-gray-400 line-clamp-2 mt-0.5">
                                 {item.message}
                               </p>

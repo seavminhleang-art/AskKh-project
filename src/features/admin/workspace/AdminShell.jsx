@@ -66,6 +66,7 @@ export default function AdminShell() {
     .join("")
     .toUpperCase();
   async function exit() {
+    if (!window.confirm("Are you sure you want to log out?")) return;
     setLeaving(true);
     try {
       await logoutApi();

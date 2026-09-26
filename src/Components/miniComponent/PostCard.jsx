@@ -1,5 +1,5 @@
 import React from "react";
-import { Bookmark, Eye, ThumbsUp, MessageSquare } from "lucide-react";
+import { Bookmark, Eye, ThumbsDown, ThumbsUp, MessageSquare, Trash2 } from "lucide-react";
 import { useOutletContext } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
@@ -15,9 +15,12 @@ const PostCard = ({
   image,
   isBookmarked,
   isLiked: isVoted,
+  isDisliked = false,
+  isOwnPost = false,
   onToggleBookmark,
   onSelectPost,
   onToggleLike: onToggleVote,
+  onDeletePost,
   darkMode: propDarkMode,
 }) => {
   const { t } = useTranslation();
@@ -67,6 +70,11 @@ const PostCard = ({
             </div>
 
             <div className="flex items-center space-x-1 flex-shrink-0">
+              {isOwnPost && (
+                <button type="button" onClick={() => onDeletePost(id)} aria-label="Delete post" title="Delete post" className={`p-2 rounded-xl border transition-colors ${darkMode ? "border-zinc-700 text-zinc-400 hover:text-red-400" : "border-transparent text-gray-400 hover:bg-red-50 hover:text-red-600"}`}>
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              )}
               <button
                 type="button"
                 onClick={(e) => {
@@ -144,7 +152,7 @@ const PostCard = ({
               </button>
 
               <button
-                onClick={() => onToggleVote(id)}
+                onClick={() => onToggleVote(id, 1)}
                 aria-pressed={Boolean(isVoted)}
                 aria-label={t(isVoted ? "post.unvote" : "post.vote")}
                 title={t(isVoted ? "post.unvote" : "post.vote")}
@@ -156,6 +164,16 @@ const PostCard = ({
                   className={`w-3.5 h-3.5 ${isVoted ? "fill-blue-500 text-blue-500" : ""}`}
                 />
                 {Number(voteScore).toLocaleString()}
+              </button>
+
+              <button
+                onClick={() => onToggleVote(id, 2)}
+                aria-pressed={Boolean(isDisliked)}
+                aria-label="Dislike post"
+                title="Dislike post"
+                className={`flex items-center gap-1 transition-colors ${isDisliked ? "text-red-600 font-bold" : "hover:text-red-600"}`}
+              >
+                <ThumbsDown className={`w-3.5 h-3.5 ${isDisliked ? "fill-red-500 text-red-500" : ""}`} />
               </button>
 
               <button

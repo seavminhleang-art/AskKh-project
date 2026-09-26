@@ -114,6 +114,7 @@ export default function Sidebar({ mode = "user", mobile = false }) {
   ];
   const navItems = mode === "admin" ? adminNavItems : userNavItems;
   const handleLogout = async () => {
+    if (!window.confirm("Are you sure you want to log out?")) return;
     try {
       await logoutApi();
     } finally {
