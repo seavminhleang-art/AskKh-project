@@ -40,7 +40,7 @@ export default function GoogleComponent({
             googleProvider,
           );
 
-        onSuccess?.(
+        await onSuccess?.(
           result.user,
           result,
         );

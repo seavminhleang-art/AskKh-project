@@ -15,10 +15,10 @@ export const voteApi = baseApi.injectEndpoints({
       ],
     }),
     updateVote: builder.mutation({
-      query: ({ voteId, voteTypeId }) => ({
+      query: ({ voteId, postId, voteTypeId }) => ({
         url: `/votes/${voteId}`,
         method: 'PUT',
-        body: { voteTypeId },
+        body: { postId, voteTypeId },
       }),
       invalidatesTags: ['Vote', 'Post'],
     }),

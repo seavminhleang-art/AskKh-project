@@ -21,6 +21,7 @@ const PostCard = ({
   onSelectPost,
   onToggleLike: onToggleVote,
   onDeletePost,
+  isDeletingPost = false,
   darkMode: propDarkMode,
 }) => {
   const { t } = useTranslation();
@@ -71,7 +72,7 @@ const PostCard = ({
 
             <div className="flex items-center space-x-1 flex-shrink-0">
               {isOwnPost && (
-                <button type="button" onClick={() => onDeletePost(id)} aria-label="Delete post" title="Delete post" className={`p-2 rounded-xl border transition-colors ${darkMode ? "border-zinc-700 text-zinc-400 hover:text-red-400" : "border-transparent text-gray-400 hover:bg-red-50 hover:text-red-600"}`}>
+                <button type="button" onClick={() => onDeletePost(id)} disabled={isDeletingPost} aria-label="Delete post" title="Delete post" className={`p-2 rounded-xl border transition-colors ${darkMode ? "border-zinc-700 text-zinc-400 hover:text-red-400" : "border-transparent text-gray-400 hover:bg-red-50 hover:text-red-600"}`}>
                   <Trash2 className="w-4 h-4" />
                 </button>
               )}

@@ -40,7 +40,7 @@ export default function GithubComponent({
             githubProvider,
           );
 
-        onSuccess?.(
+        await onSuccess?.(
           result.user,
           result,
         );

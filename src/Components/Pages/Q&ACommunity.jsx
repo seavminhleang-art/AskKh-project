@@ -15,6 +15,7 @@ import enTranslations from "../locales/en.json";
 import kmTranslations from "../locales/km.json";
 
 // API
+import { useGetMeQuery } from "../../features/users/userApi";
 import {
   useGetPostsQuery,
   useGetPostByIdQuery,
@@ -81,7 +82,13 @@ export default function QACommunity({
 
   const { user, isAuthenticated } = useSelector((state) => state.auth);
 
-  const userId = user?.id ?? user?.userId;
+  const profile = useGetMeQuery(undefined, {
+    skip: !isAuthenticated,
+    refetchOnMountOrArgChange: true,
+  });
+  const userId = isAuthenticated && !profile.isFetching && !profile.isError
+    ? profile.currentData?.id ?? profile.currentData?.userId
+    : null;
 
   // ==================================================
   // Page State
@@ -105,7 +112,7 @@ export default function QACommunity({
       return {};
     }
   });
-  const [deletePost] = useDeletePostMutation();
+  const [deletePost, postDeletion] = useDeletePostMutation();
 
   const busy = useRef(new Set());
 
@@ -267,10 +274,19 @@ export default function QACommunity({
     });
 
   const handleDeletePost = (postId) => {
+    if (!requireAuth() || postDeletion.isLoading) return;
+    const post = [...posts, ...saved.map((item) => mapPost(item, userId)),
+      ...(detail.currentData ? [mapPost(detail.currentData, userId)] : [])]
+      .find((item) => String(item.id) === String(postId));
+    if (!post?.isOwnPost) {
+      setError("You can only delete your own posts. Wait for your profile to load and try again.");
+      return;
+    }
     if (!window.confirm("Delete this post? This action cannot be undone.")) return;
     return perform(`delete-post:${postId}`, async () => {
       await deletePost(postId).unwrap();
-      if (selectedPostId === postId) setSelectedPostId(null);
+      if (String(selectedPostId) === String(postId)) setSelectedPostId(null);
+      setCurrentPage(1);
     });
   };
 
@@ -497,6 +513,8 @@ export default function QACommunity({
               darkMode={darkMode}
               language={currentLang}
               post={selectedPost}
+              onDeletePost={handleDeletePost}
+              isDeletingPost={postDeletion.isLoading}
               onBack={() => setSelectedPostId(null)}
               key={selectedPost.id}
             />
@@ -586,6 +604,7 @@ export default function QACommunity({
                       onSelectPost={handleSelectPost}
                       onToggleLike={handleToggleLike}
                       onDeletePost={handleDeletePost}
+                      isDeletingPost={postDeletion.isLoading}
                     />
                   ))}
                   <Pagination

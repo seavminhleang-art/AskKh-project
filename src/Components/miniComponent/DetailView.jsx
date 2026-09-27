@@ -14,7 +14,7 @@ import { rowsOf, errorMessage } from "../../features/qa/model";
 
 const CodeEditor = lazy(() => import("./CodeEditor"));
 
-const DetailView = ({ post, onBack, darkMode: propDarkMode }) => {
+const DetailView = ({ post, onBack, onDeletePost, isDeletingPost = false, darkMode: propDarkMode }) => {
   const { t } = useTranslation();
   const context = useOutletContext();
   const darkMode = propDarkMode ?? context?.darkMode ?? false;
@@ -87,6 +87,18 @@ const DetailView = ({ post, onBack, darkMode: propDarkMode }) => {
       >
         <ArrowLeft className="w-3.5 h-3.5" /> {t("detail.backToFeed")}
       </button>
+
+      {post.isOwnPost && onDeletePost && (
+        <button
+          type="button"
+          onClick={() => onDeletePost(post.id)}
+          disabled={isDeletingPost}
+          className="flex items-center gap-2 text-red-500 hover:text-red-600 disabled:opacity-50"
+        >
+          <Trash2 className="h-4 w-4" />
+          {isDeletingPost ? "Deleting…" : "Delete post"}
+        </button>
+      )}
 
       {/* Post Title */}
       <h1
