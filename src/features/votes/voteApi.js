@@ -3,10 +3,14 @@ import { baseApi } from '../../store/api/baseApi';
 export const voteApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     votePost: builder.mutation({
-      query: ({ postId, voteTypeId }) => ({
+      query: ({ postId, voteTypeId, value }) => ({
         url: '/votes',
         method: 'POST',
-        body: { postId, voteTypeId },
+        body: {
+          postId,
+          voteTypeId,
+          value: value ?? (voteTypeId === 1 ? 1 : -1),
+        },
       }),
       invalidatesTags: (result, error, { postId }) => [
         { type: 'Vote', id: postId },
@@ -15,12 +19,20 @@ export const voteApi = baseApi.injectEndpoints({
       ],
     }),
     updateVote: builder.mutation({
-      query: ({ voteId, postId, voteTypeId }) => ({
+      query: ({ voteId, postId, voteTypeId, value }) => ({
         url: `/votes/${voteId}`,
         method: 'PUT',
-        body: { postId, voteTypeId },
+        body: {
+          postId,
+          voteTypeId,
+          value: value ?? (voteTypeId === 1 ? 1 : -1),
+        },
       }),
-      invalidatesTags: ['Vote', 'Post'],
+      invalidatesTags: (result, error, { postId, voteId }) => [
+        { type: 'Vote', id: voteId },
+        { type: 'Post', id: postId },
+        { type: 'Post', id: 'LIST' },
+      ],
     }),
     deleteVote: builder.mutation({
       query: (voteId) => ({

@@ -299,19 +299,54 @@ export default function Navbar({
     setNotificationOpen(false);
     setMobileOpen(false);
 
+    // First try the smart URL translator (handles backend API paths → frontend routes)
     const target = notificationTarget(item);
     if (target) {
       navigate(target);
-    } else if (item.type === "COMMENT_ON_POST" || item.type === "POST_VOTE") {
-      navigate(item.targetId ? `/dashboard/questions/${item.targetId}` : "/dashboard/questions");
-    } else if (item.type === "LOST_FOUND_MATCH") {
-      navigate("/dashboard/matches");
-    } else if (item.type?.startsWith("LOST_FOUND_CLAIM")) {
-      navigate("/dashboard/claims");
-    } else {
-      navigate("/dashboard/notifications");
+      return;
     }
+
+    // Extract entity ID from whichever field the backend uses
+    const entityId =
+      item.referenceId ??
+      item.relatedId ??
+      item.targetId ??
+      item.entityId ??
+      item.postId ??
+      item.reportId ??
+      item.claimId ??
+      null;
+
+    const type = String(item.type || '').toUpperCase();
+
+    // Comment / answer / vote on a question → question detail page
+    if (
+      type === 'COMMENT_ON_POST' ||
+      type === 'ANSWER_ON_POST' ||
+      type === 'POST_VOTE' ||
+      type.includes('COMMENT') ||
+      type.includes('ANSWER')
+    ) {
+      navigate(entityId ? `/dashboard/questions/${entityId}` : '/dashboard/questions');
+      return;
+    }
+
+    // Lost-found claim notifications → claims page
+    if (type.startsWith('LOST_FOUND_CLAIM') || type.includes('CLAIM')) {
+      navigate('/dashboard/claims');
+      return;
+    }
+
+    // Lost-found match notifications → matches page
+    if (type === 'LOST_FOUND_MATCH' || type.includes('MATCH')) {
+      navigate('/dashboard/matches');
+      return;
+    }
+
+    // Default → notifications page
+    navigate('/dashboard/notifications');
   };
+
 
   const getNotificationIcon = (type) => {
     switch (type) {

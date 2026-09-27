@@ -1,6 +1,9 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
+import momRothaImg from "@/assets/Website/mom_rotha.png";
+import neangThanaImg from "@/assets/Website/neang_thana.png";
+import cheatChanmonizaImg from "@/assets/Website/cheat_chanmoniza.jpg";
 
 export default function CommunityVoice({ darkMode }) {
   const { t } = useTranslation();
@@ -10,21 +13,19 @@ export default function CommunityVoice({ darkMode }) {
       quote: t("test1Quote"),
       author: t("test1Author"),
       role: t("test1Role"),
-      avatar: "https://randomuser.me/api/portraits/men/32.jpg",
+      avatar: momRothaImg,
     },
     {
       quote: t("test2Quote"),
       author: t("test2Author"),
       role: t("test2Role"),
-      avatar:
-        "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150",
+      avatar: neangThanaImg,
     },
     {
       quote: t("test3Quote"),
       author: t("test3Author"),
       role: t("test3Role"),
-      avatar:
-        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150",
+      avatar: cheatChanmonizaImg,
     },
   ];
 

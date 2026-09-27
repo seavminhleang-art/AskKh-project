@@ -44,6 +44,10 @@ export function workspaceRequest({
     return { url: "/users/upload-image", method: "PUT", body };
   if (action === "create" && ["posts", "reports"].includes(resource))
     return { url: paths[resource], method: "POST", body };
+  if (["posts", "my-posts", "reports"].includes(resource) && action === "update" && key)
+    return { url: `${paths[resource] || paths.posts}/${key}`, method: "PUT", body };
+  if (["posts", "my-posts", "reports"].includes(resource) && action === "delete" && key)
+    return { url: `${paths[resource] || paths.posts}/${key}`, method: "DELETE" };
   if (action === "create" && resource === "image-upload")
     return { url: "/upload/upload-single", method: "POST", body };
   if (action === "create" && resource === "claims" && key)

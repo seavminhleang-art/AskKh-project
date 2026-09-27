@@ -263,9 +263,10 @@ export default function QACommunity({
         return;
       }
 
+      const value = voteTypeId === 1 ? 1 : -1;
       const result = currentVote?.id
-        ? await updateVote({ voteId: currentVote.id, postId, voteTypeId }).unwrap()
-        : await votePost({ postId, voteTypeId }).unwrap();
+        ? await updateVote({ voteId: currentVote.id, postId, voteTypeId, value }).unwrap()
+        : await votePost({ postId, voteTypeId, value }).unwrap();
 
       setVotes((previous) => ({
         ...previous,
@@ -398,7 +399,7 @@ export default function QACommunity({
   return (
     <div
       style={googleSansStyle}
-      className={`shared-theme shared-page min-h-screen flex flex-col justify-between transition-colors duration-300 ${pageTheme}`}
+      className={`shared-theme shared-page min-h-screen transition-colors duration-300 ${pageTheme}`}
     >
       <main className="w-full max-w-[1600px] mx-auto px-4 py-6 sm:px-6 lg:px-8">
         {/* ==========================================
@@ -623,7 +624,7 @@ export default function QACommunity({
 
           {!isCreatingPost && (
             <aside
-              className={`space-y-3 rounded-2xl p-5 text-base ${
+              className={`sticky top-24 self-start space-y-3 rounded-2xl p-5 text-base ${
                 darkMode ? "bg-zinc-900" : "bg-white"
               }`}
             >

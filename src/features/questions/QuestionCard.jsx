@@ -18,12 +18,16 @@ import { toast } from "sonner";
 export default function QuestionCard({ question }) {
   const [votePost, { isLoading }] = useVotePostMutation();
 
-  const handleVote = async (e) => {
+  const handleVote = async (e, voteTypeId = 1) => {
     e.preventDefault();
     e.stopPropagation();
     try {
-      await votePost({ postId: question.id, voteTypeId: 1 }).unwrap();
-      toast.success("Vote recorded!");
+      await votePost({
+        postId: question.id,
+        voteTypeId,
+        value: voteTypeId === 1 ? 1 : -1,
+      }).unwrap();
+      toast.success(voteTypeId === 1 ? "Upvoted!" : "Downvoted!");
     } catch {
       toast.error("Failed to register vote. Please login if you haven't.");
     }

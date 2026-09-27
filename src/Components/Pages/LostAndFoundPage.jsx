@@ -63,7 +63,7 @@ export default function LostAndFoundPage() {
   return (
     <main
       onMouseMove={handleMouseMove}
-      className={`shared-theme shared-page relative min-h-screen px-4 py-10 overflow-hidden font-sans cursor-default transition-colors duration-300 sm:px-6 lg:px-10 xl:px-16 ${pageTheme}`}
+      className={`shared-theme shared-page relative min-h-screen px-4 py-10 font-sans cursor-default transition-colors duration-300 sm:px-6 lg:px-10 xl:px-16 ${pageTheme}`}
     >
       {/* ==================================================
           Custom Mouse Follower Tooltip

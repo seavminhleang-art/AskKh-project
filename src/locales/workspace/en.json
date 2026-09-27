@@ -829,5 +829,16 @@
   "Preview": "Preview",
   "Your formatted text will appear here.": "Your formatted text will appear here.",
   "Select text to format it. Preview before publishing.": "Select text to format it. Preview before publishing.",
-  "characters": "characters"
+  "characters": "characters",
+  "Edit question": "Edit question",
+  "Update the question details below.": "Update the question details below.",
+  "Question updated.": "Question updated.",
+  "Question Title": "Question Title",
+  "Question Description": "Question Description",
+  "Write your question in detail…": "Write your question in detail…",
+  "edit question": "edit question",
+  "update the question details below.": "update the question details below.",
+  "question updated.": "question updated.",
+  "question description": "question description",
+  "write your question in detail…": "write your question in detail…"
 }

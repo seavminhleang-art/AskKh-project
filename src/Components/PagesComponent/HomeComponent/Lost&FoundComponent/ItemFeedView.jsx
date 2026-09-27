@@ -288,13 +288,15 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          <div className="lg:col-span-3 space-y-4">
-            {!reports.isLoading &&
-            !reports.isError &&
-            filteredItems.length === 0 ? (
-              <div
-                className={`backdrop-blur-md rounded-3xl p-12 text-center text-base font-medium ${
+        {/* Main Grid Content */}
+        <div className="grid grid-cols-1 lg:grid-cols-4 items-start gap-8">
+          {/* Feed List (Left 3 columns) */}
+          <div className="lg:col-span-3 space-y-5">
+            {!reports.isLoading && !reports.isError && filteredItems.length === 0 ? (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.98 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className={`rounded-3xl p-16 text-center border shadow-sm flex flex-col items-center justify-center ${
                   darkMode
                     ? "bg-zinc-900/90 text-slate-400"
                     : "bg-white/95 text-gray-500"
@@ -421,7 +423,9 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
             )}
           </div>
 
-          <div className="space-y-4">
+          {/* Sidebar / Widgets (Right Column) */}
+          <aside className="space-y-6 lg:sticky lg:top-24 lg:self-start">
+            {/* Categories Widget */}
             <div
               className={`backdrop-blur-md rounded-3xl p-5 transition-all duration-300 ${
                 darkMode
@@ -528,9 +532,19 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
               whileTap={{ scale: 0.97 }}
               className="w-full bg-[var(--color-brand-primary,#3b82f6)] hover:bg-blue-600 text-white font-semibold py-3.5 px-4 rounded-2xl text-base transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer"
             >
-              <PlusCircle size={16} /> {t("feedReportBtn")}
-            </motion.button>
-          </div>
+              <div className="absolute -right-6 -bottom-6 w-32 h-32 bg-white/10 rounded-full blur-2xl pointer-events-none" />
+              <h4 className="font-bold text-lg mb-1">Lost or found something?</h4>
+              <p className="text-xs text-blue-100 mb-5 leading-relaxed">
+                Create a report instantly to notify the campus community and track status updates.
+              </p>
+              <button
+                onClick={onOpenReport}
+                className="w-full bg-white text-blue-600 hover:bg-blue-50 font-bold py-3 px-4 rounded-2xl text-sm transition-all duration-200 flex items-center justify-center gap-2 shadow-lg cursor-pointer"
+              >
+                <PlusCircle size={16} /> {t("feedReportBtn")}
+              </button>
+            </motion.div>
+          </aside>
         </div>
       </main>
     </section>

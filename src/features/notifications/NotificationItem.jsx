@@ -7,13 +7,14 @@ import {
   Bell,
   Trash2,
   Clock,
+  ShieldCheck,
 } from "lucide-react";
 import Card from "../../Components/Admin/common/Card";
 import {
   useMarkNotificationReadMutation,
   useDeleteNotificationMutation,
 } from "../../store/api/apiSlice";
-import { toast } from "sonner";
+import { toast } from "react-toastify";
 import { notificationTarget } from "./notificationTarget";
 
 export default function NotificationItem({ notification }) {
@@ -22,26 +23,69 @@ export default function NotificationItem({ notification }) {
   const [deleteNotif] = useDeleteNotificationMutation();
 
   const getIcon = () => {
-    switch (notification.type) {
-      case "question_answer":
-      case "comment":
-        return <MessageSquare className="w-5 h-5 text-blue-500" />;
-      case "match_found":
-        return <Sparkles className="w-5 h-5 text-amber-500" />;
-      case "claim_update":
-        return <Bookmark className="w-5 h-5 text-emerald-500" />;
-      default:
-        return <Bell className="w-5 h-5 text-indigo-500" />;
+    const type = String(notification.type || "").toLowerCase();
+    if (type.includes("claim")) {
+      return <ShieldCheck className="w-5 h-5 text-emerald-500" />;
     }
+    if (type.includes("question") || type.includes("comment") || type.includes("answer")) {
+      return <MessageSquare className="w-5 h-5 text-blue-500" />;
+    }
+    if (type.includes("match")) {
+      return <Sparkles className="w-5 h-5 text-amber-500" />;
+    }
+    return <Bell className="w-5 h-5 text-indigo-500" />;
   };
 
   const handleAction = () => {
     if (!notification.read && !notification.isRead) {
       markRead(notification.id);
     }
+
+    // Try the smart URL translator first
     const target = notificationTarget(notification);
-    if (target) navigate(target);
+    if (target) {
+      navigate(target);
+      return;
+    }
+
+    // Extract entity ID from whichever field the backend uses
+    const entityId =
+      notification.referenceId ??
+      notification.relatedId ??
+      notification.targetId ??
+      notification.entityId ??
+      notification.postId ??
+      notification.reportId ??
+      notification.claimId ??
+      null;
+
+    const type = String(notification.type || '').toUpperCase();
+
+    if (
+      type === 'COMMENT_ON_POST' ||
+      type === 'ANSWER_ON_POST' ||
+      type === 'POST_VOTE' ||
+      type.includes('COMMENT') ||
+      type.includes('ANSWER')
+    ) {
+      navigate(entityId ? `/dashboard/questions/${entityId}` : '/dashboard/questions');
+      return;
+    }
+
+    if (type.startsWith('LOST_FOUND_CLAIM') || type.includes('CLAIM')) {
+      navigate('/dashboard/claims');
+      return;
+    }
+
+    if (type === 'LOST_FOUND_MATCH' || type.includes('MATCH')) {
+      navigate('/dashboard/matches');
+      return;
+    }
+
+    navigate('/dashboard/notifications');
   };
+
+
 
   const handleDelete = (e) => {
     e.stopPropagation();

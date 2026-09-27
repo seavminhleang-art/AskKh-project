@@ -8,28 +8,36 @@ export const votesApi = baseApi.injectEndpoints({
             providesTags: (result, error, voteId) => [{ type: "Vote", id: voteId }],
         }),
 
-        // POST /votes   body: { postId, voteTypeId }
+        // POST /votes   body: { postId, voteTypeId, value }
         createVote: builder.mutation({
             query: (body) => ({
                 url: "/votes",
                 method: "POST",
-                body,
+                body: {
+                    ...body,
+                    value: body.value ?? (body.voteTypeId === 1 ? 1 : -1),
+                },
             }),
             invalidatesTags: (result, error, { postId }) => [
                 { type: "Post", id: postId },
+                { type: "Post", id: "LIST" },
             ],
         }),
 
-        // PUT /votes/{voteId}   body: { postId, voteTypeId }
+        // PUT /votes/{voteId}   body: { postId, voteTypeId, value }
         updateVote: builder.mutation({
             query: ({ voteId, ...body }) => ({
                 url: `/votes/${voteId}`,
                 method: "PUT",
-                body,
+                body: {
+                    ...body,
+                    value: body.value ?? (body.voteTypeId === 1 ? 1 : -1),
+                },
             }),
             invalidatesTags: (result, error, { voteId, postId }) => [
                 { type: "Vote", id: voteId },
                 { type: "Post", id: postId },
+                { type: "Post", id: "LIST" },
             ],
         }),
 

@@ -40,7 +40,7 @@ export default function AnswerItem({ answer, questionId, isQuestionAuthor }) {
 
   const handleVote = async () => {
     try {
-      await voteAnswer({ postId: answer.id, voteTypeId: 1 }).unwrap();
+      await voteAnswer({ postId: answer.id, voteTypeId: 1, value: 1 }).unwrap();
       toast.success("Vote recorded!");
     } catch {
       toast.error("Failed to vote on answer.");

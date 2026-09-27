@@ -11,6 +11,7 @@ const PostCard = ({
   author,
   views,
   likes: voteScore,
+  dislikes: dislikeScore = 0,
   comments,
   image,
   isBookmarked,
@@ -153,28 +154,41 @@ const PostCard = ({
               </button>
 
               <button
-                onClick={() => onToggleVote(id, 1)}
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onToggleVote(id, 1);
+                }}
                 aria-pressed={Boolean(isVoted)}
                 aria-label={t(isVoted ? "post.unvote" : "post.vote")}
                 title={t(isVoted ? "post.unvote" : "post.vote")}
-                className={`flex items-center gap-1 transition-colors ${
+                className={`flex items-center gap-1.5 transition-colors cursor-pointer ${
                   isVoted ? "text-blue-600 font-bold" : "hover:text-blue-600"
                 }`}
               >
                 <ThumbsUp
                   className={`w-3.5 h-3.5 ${isVoted ? "fill-blue-500 text-blue-500" : ""}`}
                 />
-                {Number(voteScore).toLocaleString()}
+                <span>{Number(voteScore ?? 0).toLocaleString()}</span>
               </button>
 
               <button
-                onClick={() => onToggleVote(id, 2)}
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onToggleVote(id, 2);
+                }}
                 aria-pressed={Boolean(isDisliked)}
                 aria-label="Dislike post"
                 title="Dislike post"
-                className={`flex items-center gap-1 transition-colors ${isDisliked ? "text-red-600 font-bold" : "hover:text-red-600"}`}
+                className={`flex items-center gap-1.5 transition-colors cursor-pointer ${
+                  isDisliked ? "text-red-600 font-bold" : "hover:text-red-600"
+                }`}
               >
-                <ThumbsDown className={`w-3.5 h-3.5 ${isDisliked ? "fill-red-500 text-red-500" : ""}`} />
+                <ThumbsDown
+                  className={`w-3.5 h-3.5 ${isDisliked ? "fill-red-500 text-red-500" : ""}`}
+                />
+                <span>{Number(dislikeScore ?? 0).toLocaleString()}</span>
               </button>
 
               <button

@@ -3,6 +3,15 @@ import { useOutletContext } from "react-router-dom";
 import enTranslations from "../locales/en.json";
 import kmTranslations from "../locales/km.json";
 
+import lyhengPhoto from "@/assets/Team/cheakching_lyheng.jpg";
+import sothearithPhoto from "@/assets/Team/sroeun_sothearith.JPG";
+import tharathPhoto from "@/assets/Team/venthan_tharath.jpg";
+import seavminhPhoto from "@/assets/Team/leang_seavminh.JPG";
+import thanaPhoto from "@/assets/Team/neang_thana.jpg";
+import lisaPhoto from "@/assets/Team/mom_lisa.jpg";
+import monizaPhoto from "@/assets/Team/cheat_chanmoniza.jpg";
+import tonganPhoto from "@/assets/Team/hor_tongan.jpg";
+
 const SidebarRight = ({ darkMode: propDarkMode, language = "en" }) => {
   const context = useOutletContext();
   const darkMode = propDarkMode ?? context?.darkMode ?? false;
@@ -17,49 +26,49 @@ const SidebarRight = ({ darkMode: propDarkMode, language = "en" }) => {
       id: 1,
       name: "Cheakching Lyheng",
       role: "Java Developer",
-      avatar: "../../src/assets/Website/Ly heng.jpg",
+      avatar: lyhengPhoto,
     },
     {
       id: 2,
       name: "Sroeun Sothearith",
       role: "Frontend Developer",
-      avatar: "../../src/assets/Website/Rith.jpg",
+      avatar: sothearithPhoto,
     },
     {
       id: 3,
       name: "Venthan Tharath",
       role: "Frontend Developer",
-      avatar: "../../src/assets/Website/Tharat.jpg",
+      avatar: tharathPhoto,
     },
     {
       id: 4,
       name: "Leang Seavminh",
       role: "Java Developer",
-      avatar: "../../src/assets/Website/Seav minh.jpg",
+      avatar: seavminhPhoto,
     },
     {
       id: 5,
       name: "Neang Thana",
       role: "Frontend Developer",
-      avatar: "../../src/assets/Website/Thana.jpg",
+      avatar: thanaPhoto,
     },
     {
       id: 6,
       name: "Mom Lisa",
       role: "Frontend Developer",
-      avatar: "../../src/assets/Website/Lisa.jpg",
+      avatar: lisaPhoto,
     },
     {
       id: 7,
       name: "Cheat Chanmoniza",
       role: "Frontend Developer",
-      avatar: "../../src/assets/Website/Nisa.jpg",
+      avatar: monizaPhoto,
     },
     {
       id: 8,
       name: "Hor Tongan",
       role: "Java Developer",
-      avatar: "../../src/assets/Website/Tong An.jpg",
+      avatar: tonganPhoto,
     },
   ];
 
@@ -70,7 +79,7 @@ const SidebarRight = ({ darkMode: propDarkMode, language = "en" }) => {
   };
 
   return (
-    <aside className="w-full min-w-0 lg:col-start-2 xl:col-start-auto">
+    <aside className="w-full min-w-0 lg:col-start-2 xl:col-start-auto lg:sticky lg:top-24 lg:self-start">
       <div
         className={`rounded-2xl p-4 transition-colors duration-300 ${
           darkMode ? "bg-zinc-900" : "bg-white"

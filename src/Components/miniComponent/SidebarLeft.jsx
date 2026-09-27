@@ -70,7 +70,7 @@ const SidebarLeft = ({
     }));
 
   return (
-    <aside className="w-full min-w-0 space-y-6">
+    <aside className="w-full min-w-0 lg:sticky lg:top-24 lg:self-start space-y-6">
       {/* Navigation Card */}
       <div
         className={`rounded-2xl p-2.5 space-y-1.5 transition-colors ${

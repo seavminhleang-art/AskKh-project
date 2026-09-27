@@ -1,7 +1,11 @@
 import LostFoundReportRow from "./LostFoundReportRow";
+import EditQuestionForm from "./EditQuestionForm";
 import { useWorkspaceTranslation } from "@/locales/workspace/useWorkspaceTranslation";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { Pencil, Trash2 } from "lucide-react";
 import {
   useWorkspaceDataQuery,
   useWorkspaceSaveMutation,
@@ -38,8 +42,33 @@ function ReportRelated({ page, reportId, userId }) {
         {w("Select a report to view")} {page}.
       </Empty>
     );
-  const items =
-    page === "claims" ? ownClaims(rows(query.data), userId) : rows(query.data);
+  const items = rows(query.data);
+  async function update(action, item) {
+    setActionError("");
+    try {
+      await save({ resource: page, action, id: item.id }).unwrap();
+      if (action === "approve") {
+        toast.success(w("Claim approved successfully."));
+      } else {
+        toast.info(w("Claim rejected."));
+      }
+    } catch (error) {
+      const errMsg = message(error);
+      setActionError(errMsg);
+      toast.error(errMsg);
+    }
+  }
+  async function updateMatch(item, status) {
+    setActionError("");
+    try {
+      await save({ resource: "matches", action: "update-status", id: item.id, body: { status } }).unwrap();
+      toast.success(w("Match updated."));
+    } catch (error) {
+      const errMsg = message(error);
+      setActionError(errMsg);
+      toast.error(errMsg);
+    }
+  }
   return (
     <QueryState query={query} unavailableMessage={page === "matches" ? "Match Center is not available yet." : undefined}>
       {!items.length ? (
@@ -66,18 +95,26 @@ function ReportRelated({ page, reportId, userId }) {
                   ? w("Submitted {{value0}}", {
                       value0: dateLabel(item.createdAt, locale),
                     })
-                  : w("Lost report #{{value0}} \xB7 Found report #{{value1}}", {
+                  : w("Lost report #{{value0}} · Found report #{{value1}}", {
                       value0: item.lostItemId,
                       value1: item.foundItemId,
                     })}
               </p>
               {page === "claims" && (
-                <p>
-                  {w("Finder confirmation:")}{" "}
-                  {item.confirmedByFinder ? w("Confirmed") : w("Pending")}
-                  {w("\xB7 Your confirmation:")}{" "}
-                  {item.confirmedByClaimant ? w("Confirmed") : w("Pending")}
-                </p>
+                <>
+                  <p>
+                    {w("Finder confirmation:")}{" "}
+                    {item.confirmedByFinder ? w("Confirmed") : w("Pending")}
+                    {w(" · Your confirmation:")}{" "}
+                    {item.confirmedByClaimant ? w("Confirmed") : w("Pending")}
+                  </p>
+                  {(item.describedHiddenDetail || item.proofDescription) && (
+                    <div className="mt-2 p-2.5 rounded-lg bg-slate-100 dark:bg-slate-800/80 text-xs text-slate-700 dark:text-slate-300">
+                      <strong>{w("Ownership proof:")}</strong>{" "}
+                      {item.describedHiddenDetail || item.proofDescription}
+                    </div>
+                  )}
+                </>
               )}
             </div>
             <Badge>{w(item.status)}</Badge>
@@ -142,9 +179,192 @@ function ClaimForm({ report, onClose }) {
     </section>
   );
 }
+
+// ── Single question row with edit toggle and delete confirm ───────────────────
+function QuestionRow({ item, profile, authUser, locale, w, page }) {
+  const [editing, setEditing] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [actionError, setActionError] = useState("");
+  const [save, deleteState] = useWorkspaceSaveMutation();
+  const cancelDeleteRef = useRef(null);
+  const deleteTriggerRef = useRef(null);
+
+  const currentUserId = profile?.id ?? profile?.userId ?? authUser?.id ?? authUser?.userId;
+  const currentUsername = profile?.username ?? authUser?.username ?? profile?.displayName ?? authUser?.displayName;
+  const isOwn =
+    page === "questions" ||
+    (currentUserId != null &&
+      [item.ownerId, item.userId, item.authorId, item.author?.id, item.user?.id, item.owner?.id].some(
+        (id) => id != null && String(id) === String(currentUserId),
+      )) ||
+    (currentUsername != null &&
+      [item.ownerDisplayName, item.author?.name, item.username].some(
+        (name) => name && name.toLowerCase() === String(currentUsername).toLowerCase(),
+      ));
+
+  useEffect(() => {
+    if (!confirmDelete) return undefined;
+    cancelDeleteRef.current?.focus();
+    return () => deleteTriggerRef.current?.focus();
+  }, [confirmDelete]);
+
+  async function removeQuestion() {
+    setActionError("");
+    try {
+      await save({ resource: "posts", action: "delete", id: item.id }).unwrap();
+      toast.success(w("Question deleted."));
+      setConfirmDelete(false);
+    } catch (failure) {
+      setActionError(message(failure));
+    }
+  }
+
+  return (
+    <>
+      <article className="uw-row">
+        {item.photoUrl && (
+          <img src={item.photoUrl} alt="" className="h-16 w-16 rounded-lg object-cover" />
+        )}
+        <div>
+          <h2>
+            <Link to={`/dashboard/questions/${item.id}`}>{item.title}</Link>
+          </h2>
+          <p className="line-clamp-2">{item.body || item.description}</p>
+          <p className="mt-2">
+            {item.ownerDisplayName}{" "}
+            {dateLabel(item.creationDate || item.createdAt, locale)}
+          </p>
+          <div className="uw-toolbar mt-2">
+            <span>
+              {item.score ?? 0} {w("votes ·")}{" "}
+              {item.viewCount ?? 0} {w("views")}
+            </span>
+            {item.tagResponses?.map((tag) => (
+              <Badge key={tag.id}>{tag.tagName || tag.name}</Badge>
+            ))}
+          </div>
+        </div>
+        {isOwn && (
+          <div className="uw-stack shrink-0">
+            <div className="uw-actions">
+              <Link to={`/dashboard/questions/${item.id}`} className="uw-button secondary">
+                {w("View")}
+              </Link>
+              <button
+                className="uw-button secondary"
+                onClick={() => {
+                  setEditing((v) => !v);
+                  setActionError("");
+                }}
+                aria-expanded={editing}
+              >
+                <Pencil size={14} />
+                {w("Edit")}
+              </button>
+              <button
+                ref={deleteTriggerRef}
+                className="uw-button secondary text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30"
+                onClick={() => {
+                  setActionError("");
+                  setConfirmDelete(true);
+                }}
+              >
+                <Trash2 size={14} />
+                {w("Delete")}
+              </button>
+            </div>
+          </div>
+        )}
+      </article>
+      {editing && (
+        <EditQuestionForm
+          item={item}
+          onCancel={() => setEditing(false)}
+          onSaved={() => setEditing(false)}
+        />
+      )}
+      {confirmDelete && (
+        <div
+          className="uw-confirm-backdrop"
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget && !deleteState.isLoading)
+              setConfirmDelete(false);
+          }}
+          onKeyDown={(event) => {
+            if (event.key === "Escape" && !deleteState.isLoading)
+              setConfirmDelete(false);
+            if (event.key === "Tab") {
+              event.preventDefault();
+              const next =
+                document.activeElement === cancelDeleteRef.current
+                  ? event.currentTarget.querySelector("[data-confirm-delete]")
+                  : cancelDeleteRef.current;
+              next?.focus();
+            }
+          }}
+        >
+          <section
+            className="uw-confirm-dialog"
+            role="alertdialog"
+            aria-modal="true"
+            aria-labelledby={`delete-title-${item.id}`}
+            aria-describedby={`delete-description-${item.id}`}
+          >
+            <span className="uw-confirm-icon">
+              <Trash2 size={21} />
+            </span>
+            <h2 id={`delete-title-${item.id}`}>{w("Delete this question?")}</h2>
+            <p id={`delete-description-${item.id}`}>
+              {w(
+                "This action cannot be undone. The question will be permanently removed.",
+              )}
+            </p>
+            {actionError && (
+              <p className="uw-confirm-error" role="alert">
+                {actionError}
+              </p>
+            )}
+            <div className="uw-confirm-actions">
+              <button
+                ref={cancelDeleteRef}
+                className="uw-button secondary"
+                type="button"
+                onClick={() => setConfirmDelete(false)}
+                disabled={deleteState.isLoading}
+              >
+                {w("Cancel")}
+              </button>
+              <button
+                data-confirm-delete
+                className="uw-button uw-confirm-delete"
+                type="button"
+                onClick={removeQuestion}
+                disabled={deleteState.isLoading}
+              >
+                {deleteState.isLoading ? (
+                  <>
+                    <span className="uw-confirm-spinner" aria-hidden="true" />
+                    {w("Deleting…")}
+                  </>
+                ) : (
+                  <>
+                    <Trash2 size={16} />
+                    {w("Delete question")}
+                  </>
+                )}
+              </button>
+            </div>
+          </section>
+        </div>
+      )}
+    </>
+  );
+}
+
 export default function WorkspaceListPage({ page }) {
   const { w, locale } = useWorkspaceTranslation();
   const navigate = useNavigate();
+  const authUser = useSelector((state) => state.auth.user);
   const [searchParams, setSearchParams] = useSearchParams();
   const search = searchParams.get("search") || "";
   const setSearch = (value) =>
@@ -176,13 +396,28 @@ export default function WorkspaceListPage({ page }) {
   const profile = profileQuery.data?.data ?? profileQuery.data;
   const [save, state] = useWorkspaceSaveMutation();
   const all = rows(query.data);
+  const currentUserId = profile?.id ?? profile?.userId ?? authUser?.id ?? authUser?.userId;
+  const currentUsername = profile?.username ?? authUser?.username ?? profile?.displayName ?? authUser?.displayName;
+
   const items = all.filter((item) => {
-    if (
-      filter === "mine" &&
-      (profile?.id == null ||
-        String(item.ownerId ?? item.userId) !== String(profile.id))
-    )
-      return false;
+    if (filter === "mine") {
+      const matchId =
+        currentUserId != null &&
+        [
+          item.ownerId,
+          item.userId,
+          item.authorId,
+          item.author?.id,
+          item.user?.id,
+          item.owner?.id,
+        ].some((id) => id != null && String(id) === String(currentUserId));
+      const matchName =
+        currentUsername != null &&
+        [item.ownerDisplayName, item.author?.name, item.username].some(
+          (name) => name && name.toLowerCase() === String(currentUsername).toLowerCase(),
+        );
+      if (!matchId && !matchName && page !== "questions") return false;
+    }
     if (filter === "unread" && item.read) return false;
     return `${item.title || ""} ${item.body || item.description || ""}`
       .toLowerCase()
@@ -201,9 +436,52 @@ export default function WorkspaceListPage({ page }) {
     }
   }
   async function openNotification(item) {
-    if (!item.read) await mark("mark-read", item.id);
-    navigate(notificationTarget(item) || "/dashboard/notifications");
+    if (!item.read) await mark('mark-read', item.id);
+
+    // Try the smart URL translator first
+    const target = notificationTarget(item);
+    if (target) {
+      navigate(target);
+      return;
+    }
+
+    // Fall back to type-based routing
+    const entityId =
+      item.referenceId ??
+      item.relatedId ??
+      item.targetId ??
+      item.entityId ??
+      item.postId ??
+      item.reportId ??
+      item.claimId ??
+      null;
+
+    const type = String(item.type || '').toUpperCase();
+
+    if (
+      type === 'COMMENT_ON_POST' ||
+      type === 'ANSWER_ON_POST' ||
+      type === 'POST_VOTE' ||
+      type.includes('COMMENT') ||
+      type.includes('ANSWER')
+    ) {
+      navigate(entityId ? `/dashboard/questions/${entityId}` : '/dashboard/questions');
+      return;
+    }
+
+    if (type.startsWith('LOST_FOUND_CLAIM') || type.includes('CLAIM')) {
+      navigate('/dashboard/claims');
+      return;
+    }
+
+    if (type === 'LOST_FOUND_MATCH' || type.includes('MATCH')) {
+      navigate('/dashboard/matches');
+      return;
+    }
+
+    navigate('/dashboard/notifications');
   }
+
   const related = page === "claims" || page === "matches";
   const totalPages = query.data?.totalPages ?? query.data?.data?.totalPages;
   return (
@@ -322,6 +600,16 @@ export default function WorkspaceListPage({ page }) {
                 )}
                 {items.map((item) => page === "lost-found" ? (
                   <LostFoundReportRow key={item.id} item={item} />
+                ) : page === "questions" ? (
+                  <QuestionRow
+                    key={item.id}
+                    item={item}
+                    profile={profile}
+                    authUser={authUser}
+                    locale={locale}
+                    w={w}
+                    page={page}
+                  />
                 ) : (
                   <article className="uw-row" key={item.id}>
                     {item.photoUrl && (
@@ -332,15 +620,7 @@ export default function WorkspaceListPage({ page }) {
                       />
                     )}
                     <div>
-                      <h2>
-                        {page === "questions" ? (
-                          <Link to={`/dashboard/questions/${item.id}`}>
-                            {item.title}
-                          </Link>
-                        ) : (
-                          item.title
-                        )}
-                      </h2>
+                      <h2>{item.title}</h2>
                       <p className="line-clamp-2">
                         {item.body || item.description}
                       </p>
@@ -350,17 +630,6 @@ export default function WorkspaceListPage({ page }) {
                           item.freeTextLocation}{" "}
                         {dateLabel(item.creationDate || item.createdAt, locale)}
                       </p>
-                      {page === "questions" && (
-                        <div className="uw-toolbar mt-2">
-                          <span>
-                            {item.score ?? 0} {w("votes \xB7")}{" "}
-                            {item.viewCount ?? 0} {w("views")}
-                          </span>
-                          {item.tagResponses?.map((tag) => (
-                            <Badge key={tag.id}>{tag.tagName}</Badge>
-                          ))}
-                        </div>
-                      )}
                     </div>
                     {page === "notifications" ? (
                       <div className="uw-stack">
@@ -377,20 +646,6 @@ export default function WorkspaceListPage({ page }) {
                         >
                           {w("Open")}
                         </button>
-                      </div>
-                    ) : page === "lost-found" ? (
-                      <div className="uw-stack">
-                        <Badge>{w(item.status || item.itemType)}</Badge>
-                        {item.itemType?.toLowerCase() === "found" &&
-                          profile?.id != null &&
-                          String(item.userId) !== String(profile.id) && (
-                            <button
-                              className="uw-button secondary"
-                              onClick={() => setClaim(item)}
-                            >
-                              {w("Claim item")}
-                            </button>
-                          )}
                       </div>
                     ) : null}
                   </article>
