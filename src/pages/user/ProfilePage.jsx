@@ -1,7 +1,8 @@
 import { prepareProfilePhoto } from "../../features/workspace/prepareProfilePhoto";
+import { getProfileCover, saveProfileCover, removeProfileCover } from "../../features/workspace/profileCover";
 import { profileImageUrl, resolveUserAvatar, setCachedAvatar, getCachedAvatar } from "../../features/workspace/profileImage";
 import { Link } from "react-router-dom";
-import { Sun, Moon, LockKeyhole, Palette, Settings2, Check, ArrowUpRight, Camera, Fingerprint, Mail, ShieldCheck, Sparkles, UserRound, CalendarDays, Save, Trophy, Eye, ThumbsUp, Loader2, Upload } from "lucide-react";
+import { Sun, Moon, LockKeyhole, Palette, Settings2, Check, ArrowUpRight, Camera, Fingerprint, Mail, ShieldCheck, UserRound, CalendarDays, Save, Trophy, Eye, ThumbsUp, Loader2, Upload } from "lucide-react";
 import { useWorkspaceTranslation } from "@/locales/workspace/useWorkspaceTranslation";
 import { useState, useRef, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -26,6 +27,71 @@ function ProfileForm({ profile, refetchProfile }) {
   const [failedPhoto, setFailedPhoto] = useState(null);
   const [preparingPhoto, setPreparingPhoto] = useState(false);
   const fileInputRef = useRef(null);
+  const coverInputRef = useRef(null);
+  const [coverUrl, setCoverUrl] = useState(null);
+  const [coverLoading, setCoverLoading] = useState(true);
+  const [coverBusy, setCoverBusy] = useState(false);
+  const [coverFeedback, setCoverFeedback] = useState(null);
+  const coverUserKey = profile?.id != null || authUser?.id != null
+    ? `user:${profile?.id ?? authUser?.id}`
+    : profile?.email || authUser?.email
+      ? `email:${(profile?.email || authUser?.email).toLowerCase()}`
+      : null;
+
+  useEffect(() => {
+    let active = true;
+    setCoverUrl(null);
+    setCoverFeedback(null);
+    if (!coverUserKey) {
+      setCoverLoading(false);
+      return () => { active = false; };
+    }
+    setCoverLoading(true);
+    getProfileCover(coverUserKey)
+      .then((url) => { if (active) setCoverUrl(url || null); })
+      .catch(() => {
+        if (active) setCoverFeedback({ ok: false, text: "Could not load your saved cover on this device." });
+      })
+      .finally(() => { if (active) setCoverLoading(false); });
+    return () => { active = false; };
+  }, [coverUserKey]);
+
+
+  async function uploadCover(event) {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if (!file || !coverUserKey) return;
+    if (!["image/jpeg", "image/png", "image/webp"].includes(file.type) || file.size > 5 * 1024 * 1024) {
+      setCoverFeedback({ ok: false, text: "Choose a JPG, PNG, or WebP cover under 5 MB." });
+      return;
+    }
+    setCoverBusy(true);
+    setCoverFeedback(null);
+    try {
+      const url = await saveProfileCover(coverUserKey, file);
+      setCoverUrl(url);
+      setCoverFeedback({ ok: true, text: "Cover saved on this device." });
+    } catch {
+      setCoverFeedback({ ok: false, text: "Could not save the cover on this device. Please try a smaller image." });
+    } finally {
+      setCoverBusy(false);
+    }
+  }
+
+  async function clearCover() {
+    if (!coverUserKey) return;
+    setCoverBusy(true);
+    setCoverFeedback(null);
+    try {
+      await removeProfileCover(coverUserKey);
+      setCoverUrl(null);
+      setCoverFeedback({ ok: true, text: "Cover removed from this device." });
+    } catch {
+      setCoverFeedback({ ok: false, text: "Could not remove the cover. Please try again." });
+    } finally {
+      setCoverBusy(false);
+    }
+  }
 
   async function submit(event) {
     event.preventDefault();
@@ -186,9 +252,18 @@ function ProfileForm({ profile, refetchProfile }) {
 
   return (
     <section className="uw-card profile-editor">
-      <div className="profile-banner">
-        <span className="profile-eyebrow"><Sparkles size={14} /> {w("YOUR COMMUNITY IDENTITY")}</span>
-        <div className="profile-banner-art" aria-hidden="true"><i /><i /><i /></div>
+      <div className={`profile-banner${coverUrl ? " has-cover" : ""}`}>
+        {coverUrl && <img className="profile-banner-image" src={coverUrl} alt="" />}
+        {!coverUrl && <div className="profile-banner-art" aria-hidden="true"><i /><i /><i /></div>}
+        <div className="profile-banner-actions">
+          <span>{w("Saved on this device")}</span>
+          {coverUrl && <button type="button" disabled={coverBusy || coverLoading} onClick={clearCover}>{w("Remove cover")}</button>}
+          <button type="button" disabled={coverBusy || coverLoading || !coverUserKey} onClick={() => coverInputRef.current?.click()}>
+            {coverBusy ? <Loader2 className="animate-spin" size={14} /> : <Camera size={14} />}
+            {w(coverUrl ? "Change cover" : "Add cover")}
+          </button>
+        </div>
+        <input ref={coverInputRef} className="profile-cover-input" type="file" accept="image/jpeg,image/png,image/webp" disabled={coverBusy || coverLoading} onChange={uploadCover} aria-label={w("Choose profile cover image")} />
       </div>
       <div className="profile-identity">
         <div
@@ -263,6 +338,14 @@ function ProfileForm({ profile, refetchProfile }) {
             className={photoFeedback.ok ? "uw-success" : "uw-error"}
           >
             {w(photoFeedback.text)}
+          </p>
+        </div>
+      )}
+
+      {coverFeedback && (
+        <div className="profile-photo-feedback">
+          <p role={coverFeedback.ok ? "status" : "alert"} className={coverFeedback.ok ? "uw-success" : "uw-error"}>
+            {w(coverFeedback.text)}
           </p>
         </div>
       )}

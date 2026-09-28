@@ -1758,6 +1758,16 @@ html.dark .uw-overview [role="alert"] {
 .profile-layout { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 24px; align-items: start; }
 .profile-editor { padding: 0; overflow: hidden; border-radius: 20px; box-shadow: 0 10px 40px #102a5607; }
 .profile-banner { height: 160px; background: linear-gradient(115deg, #102a56 0%, #204e85 68%, #337b91 100%); position: relative; overflow: hidden; padding: 28px 30px; color: #daeafc; }
+.profile-banner.has-cover { background: #102a56; }
+.profile-banner-image { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; }
+.profile-banner-actions { position: absolute; right: 20px; bottom: 15px; z-index: 2; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+.profile-banner-actions span { font-size: 11px; color: #e4edf8; }
+.profile-banner-actions button { display: inline-flex; align-items: center; gap: 6px; border: 1px solid rgb(255 255 255 / .55); border-radius: 999px; background: rgb(12 35 70 / .65); color: white; padding: 7px 11px; font-size: 12px; font-weight: 600; cursor: pointer; backdrop-filter: blur(5px); }
+.profile-banner-actions button:hover { background: rgb(12 35 70 / .9); }
+.profile-banner-actions button:focus-visible { outline: 3px solid #72b8ff; outline-offset: 2px; }
+.profile-banner-actions button:disabled { opacity: .55; cursor: not-allowed; }
+.profile-cover-input { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+@media (max-width: 600px) { .profile-banner-actions span { display: none; } .profile-banner-actions { right: 12px; bottom: 10px; gap: 5px; } .profile-banner-actions button { padding: 6px 9px; font-size: 11px; } }
 .profile-eyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; letter-spacing: 2px; }
 .profile-banner-art { position: absolute; right: -30px; top: -100px; width: 350px; height: 350px; transform: rotate(-25deg); }
 .profile-banner-art i { display: block; position: absolute; inset: 0; border: 1px solid #c0e5ff45; border-radius: 75px; }
