@@ -17,7 +17,7 @@ export default function StatusBadge({ status, className }) {
       return (
         <span
           className={cn(
-            "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-base font-bold bg-rose-500/10 text-rose-600 border border-rose-500/20 dark:bg-rose-950/40 dark:text-rose-400 dark:border-rose-800/60",
+            "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-lg font-bold bg-rose-500/10 text-rose-600 border border-rose-500/20 dark:bg-rose-950/40 dark:text-rose-400 dark:border-rose-800/60",
             className,
           )}
         >
@@ -29,7 +29,7 @@ export default function StatusBadge({ status, className }) {
       return (
         <span
           className={cn(
-            "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-base font-bold bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 dark:bg-emerald-950/40 dark:text-emerald-400 dark:border-emerald-800/60",
+            "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-lg font-bold bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 dark:bg-emerald-950/40 dark:text-emerald-400 dark:border-emerald-800/60",
             className,
           )}
         >
@@ -43,7 +43,7 @@ export default function StatusBadge({ status, className }) {
       return (
         <span
           className={cn(
-            "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-base font-bold bg-blue-500/10 text-blue-600 border border-blue-500/20 dark:bg-blue-950/40 dark:text-blue-400 dark:border-blue-800/60",
+            "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-lg font-bold bg-blue-500/10 text-blue-600 border border-blue-500/20 dark:bg-blue-950/40 dark:text-blue-400 dark:border-blue-800/60",
             className,
           )}
         >
@@ -55,7 +55,7 @@ export default function StatusBadge({ status, className }) {
       return (
         <span
           className={cn(
-            "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-base font-bold bg-amber-500/10 text-amber-600 border border-amber-500/20 dark:bg-amber-950/40 dark:text-amber-400 dark:border-amber-800/60",
+            "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-lg font-bold bg-amber-500/10 text-amber-600 border border-amber-500/20 dark:bg-amber-950/40 dark:text-amber-400 dark:border-amber-800/60",
             className,
           )}
         >
@@ -68,7 +68,7 @@ export default function StatusBadge({ status, className }) {
       return (
         <span
           className={cn(
-            "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-base font-bold bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 dark:bg-emerald-950/40 dark:text-emerald-400 dark:border-emerald-800/60",
+            "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-lg font-bold bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 dark:bg-emerald-950/40 dark:text-emerald-400 dark:border-emerald-800/60",
             className,
           )}
         >
@@ -80,7 +80,7 @@ export default function StatusBadge({ status, className }) {
       return (
         <span
           className={cn(
-            "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-base font-bold bg-slate-500/10 text-slate-600 border border-slate-500/20 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-700",
+            "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-lg font-bold bg-slate-500/10 text-slate-600 border border-slate-500/20 dark:bg-slate-800 dark:text-slate-400 dark:border-slate-700",
             className,
           )}
         >
@@ -92,7 +92,7 @@ export default function StatusBadge({ status, className }) {
       return (
         <span
           className={cn(
-            "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-base font-bold bg-indigo-500/10 text-indigo-600 border border-indigo-500/20 dark:bg-indigo-950/40 dark:text-indigo-400 dark:border-indigo-800/60",
+            "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-lg font-bold bg-indigo-500/10 text-indigo-600 border border-indigo-500/20 dark:bg-indigo-950/40 dark:text-indigo-400 dark:border-indigo-800/60",
             className,
           )}
         >
@@ -104,7 +104,7 @@ export default function StatusBadge({ status, className }) {
       return (
         <span
           className={cn(
-            "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-base font-bold bg-slate-100 text-slate-700 border border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700",
+            "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-lg font-bold bg-slate-100 text-slate-700 border border-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:border-slate-700",
             className,
           )}
         >

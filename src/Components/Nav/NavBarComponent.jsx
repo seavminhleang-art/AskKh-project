@@ -52,7 +52,8 @@ function armNotificationSound() {
 }
 
 function playNotificationSound() {
-  if (!notificationAudioContext || notificationAudioContext.state !== "running") return;
+  if (!notificationAudioContext || notificationAudioContext.state !== "running")
+    return;
   const context = notificationAudioContext;
   const now = context.currentTime;
   [880, 1175].forEach((frequency, index) => {
@@ -86,19 +87,24 @@ export default function Navbar({
     (state) => !!state.auth.accessToken || !!state.auth.isAuthenticated,
   );
 
-  const { data: unreadData, isSuccess: unreadCountLoaded } = useGetUnreadCountQuery(undefined, {
-    skip: !isAuthenticated,
-    pollingInterval: 30000,
-  });
+  const { data: unreadData, isSuccess: unreadCountLoaded } =
+    useGetUnreadCountQuery(undefined, {
+      skip: !isAuthenticated,
+      pollingInterval: 30000,
+    });
 
   const [notificationOpen, setNotificationOpen] = useState(false);
-  const [notificationSoundEnabled, setNotificationSoundEnabled] = useState(() => {
-    try {
-      return window.localStorage.getItem("askkh:notification-sound") !== "off";
-    } catch {
-      return true;
-    }
-  });
+  const [notificationSoundEnabled, setNotificationSoundEnabled] = useState(
+    () => {
+      try {
+        return (
+          window.localStorage.getItem("askkh:notification-sound") !== "off"
+        );
+      } catch {
+        return true;
+      }
+    },
+  );
   const notificationRef = useRef(null);
 
   const {
@@ -171,8 +177,14 @@ export default function Navbar({
 
   useEffect(() => {
     const armSound = () => armNotificationSound();
-    document.addEventListener("pointerdown", armSound, { once: true, capture: true });
-    document.addEventListener("keydown", armSound, { once: true, capture: true });
+    document.addEventListener("pointerdown", armSound, {
+      once: true,
+      capture: true,
+    });
+    document.addEventListener("keydown", armSound, {
+      once: true,
+      capture: true,
+    });
     return () => {
       document.removeEventListener("pointerdown", armSound, true);
       document.removeEventListener("keydown", armSound, true);
@@ -181,13 +193,17 @@ export default function Navbar({
 
   useEffect(() => {
     try {
-      window.localStorage.setItem("askkh:notification-sound", notificationSoundEnabled ? "on" : "off");
+      window.localStorage.setItem(
+        "askkh:notification-sound",
+        notificationSoundEnabled ? "on" : "off",
+      );
     } catch {
       // Sound preference is optional when browser storage is unavailable.
     }
   }, [notificationSoundEnabled]);
 
-  const userName = authUser?.displayName || authUser?.name || t("dashboard", "Dashboard");
+  const userName =
+    authUser?.displayName || authUser?.name || t("dashboard", "Dashboard");
   const userPhoto = profileImageUrl(
     authUser?.profileImage || authUser?.avatar || authUser?.photoURL,
   );
@@ -250,10 +266,7 @@ export default function Navbar({
       ) {
         setNotificationOpen(false);
       }
-      if (
-        profileRef.current &&
-        !profileRef.current.contains(event.target)
-      ) {
+      if (profileRef.current && !profileRef.current.contains(event.target)) {
         setProfileOpen(false);
       }
     };
@@ -299,18 +312,54 @@ export default function Navbar({
     setNotificationOpen(false);
     setMobileOpen(false);
 
+    // First try the smart URL translator (handles backend API paths → frontend routes)
     const target = notificationTarget(item);
     if (target) {
       navigate(target);
-    } else if (item.type === "COMMENT_ON_POST" || item.type === "POST_VOTE") {
-      navigate(item.targetId ? `/dashboard/questions/${item.targetId}` : "/dashboard/questions");
-    } else if (item.type === "LOST_FOUND_MATCH") {
-      navigate("/dashboard/matches");
-    } else if (item.type?.startsWith("LOST_FOUND_CLAIM")) {
-      navigate("/dashboard/claims");
-    } else {
-      navigate("/dashboard/notifications");
+      return;
     }
+
+    // Extract entity ID from whichever field the backend uses
+    const entityId =
+      item.referenceId ??
+      item.relatedId ??
+      item.targetId ??
+      item.entityId ??
+      item.postId ??
+      item.reportId ??
+      item.claimId ??
+      null;
+
+    const type = String(item.type || "").toUpperCase();
+
+    // Comment / answer / vote on a question → question detail page
+    if (
+      type === "COMMENT_ON_POST" ||
+      type === "ANSWER_ON_POST" ||
+      type === "POST_VOTE" ||
+      type.includes("COMMENT") ||
+      type.includes("ANSWER")
+    ) {
+      navigate(
+        entityId ? `/dashboard/questions/${entityId}` : "/dashboard/questions",
+      );
+      return;
+    }
+
+    // Lost-found claim notifications → claims page
+    if (type.startsWith("LOST_FOUND_CLAIM") || type.includes("CLAIM")) {
+      navigate("/dashboard/claims");
+      return;
+    }
+
+    // Lost-found match notifications → matches page
+    if (type === "LOST_FOUND_MATCH" || type.includes("MATCH")) {
+      navigate("/dashboard/matches");
+      return;
+    }
+
+    // Default → notifications page
+    navigate("/dashboard/notifications");
   };
 
   const getNotificationIcon = (type) => {
@@ -507,7 +556,7 @@ export default function Navbar({
                         key={sub.label}
                         to={sub.to}
                         role="menuitem"
-                        className="block px-3.5 py-2.5 rounded-lg text-base font-medium text-gray-800 dark:text-gray-200 no-underline transition-colors duration-150 hover:bg-brand-secondary-light dark:hover:bg-gray-700 hover:text-brand-secondary"
+                        className="block px-3.5 py-2.5 rounded-lg text-lg font-medium text-gray-800 dark:text-gray-200 no-underline transition-colors duration-150 hover:bg-brand-secondary-light dark:hover:bg-gray-700 hover:text-brand-secondary"
                         onClick={() => {
                           setCommunityOpen(false);
                           handleNavClick(item.label);
@@ -566,7 +615,7 @@ export default function Navbar({
               <Bell size={20} />
               {notificationCount > 0 && (
                 <span
-                  className={`absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-brand-secondary text-white text-base font-bold flex items-center justify-center border-2 border-white dark:border-gray-900 transition-transform ${
+                  className={`absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-brand-secondary text-white text-lg font-bold flex items-center justify-center border-2 border-white dark:border-gray-900 transition-transform ${
                     badgeAnimate ? "scale-125" : "scale-100"
                   }`}
                 >
@@ -580,11 +629,11 @@ export default function Navbar({
               <div className="absolute right-0 mt-2 w-80 sm:w-96 max-w-[calc(100vw-2rem)] rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-2xl z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
                 <div className="p-3.5 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <h3 className="font-semibold text-base text-gray-900 dark:text-white">
+                    <h3 className="font-semibold text-lg text-gray-900 dark:text-white">
                       {t("notificationLabel", "Notifications")}
                     </h3>
                     {notificationCount > 0 && (
-                      <span className="px-2 py-0.5 rounded-full text-base font-semibold bg-brand-primary-light dark:bg-gray-800 text-brand-primary">
+                      <span className="px-2 py-0.5 rounded-full text-lg font-semibold bg-brand-primary-light dark:bg-gray-800 text-brand-primary">
                         {notificationCount} {isKhmer ? "ថ្មី" : "new"}
                       </span>
                     )}
@@ -592,22 +641,55 @@ export default function Navbar({
                   <div className="flex items-center gap-3">
                     <button
                       type="button"
-                      onClick={() => setNotificationSoundEnabled((enabled) => !enabled)}
-                      className="text-base text-brand-primary hover:text-brand-secondary font-medium flex items-center gap-1 transition-colors"
-                      aria-label={notificationSoundEnabled ? (isKhmer ? "បិទសំឡេង" : "Mute notification sound") : (isKhmer ? "បើកសំឡេង" : "Enable notification sound")}
-                      title={notificationSoundEnabled ? (isKhmer ? "បិទសំឡេង" : "Mute notification sound") : (isKhmer ? "បើកសំឡេង" : "Enable notification sound")}
+                      onClick={() =>
+                        setNotificationSoundEnabled((enabled) => !enabled)
+                      }
+                      className="text-lg text-brand-primary hover:text-brand-secondary font-medium flex items-center gap-1 transition-colors"
+                      aria-label={
+                        notificationSoundEnabled
+                          ? isKhmer
+                            ? "បិទសំឡេង"
+                            : "Mute notification sound"
+                          : isKhmer
+                            ? "បើកសំឡេង"
+                            : "Enable notification sound"
+                      }
+                      title={
+                        notificationSoundEnabled
+                          ? isKhmer
+                            ? "បិទសំឡេង"
+                            : "Mute notification sound"
+                          : isKhmer
+                            ? "បើកសំឡេង"
+                            : "Enable notification sound"
+                      }
                     >
-                      {notificationSoundEnabled ? <Volume2 size={14} /> : <VolumeX size={14} />}
+                      {notificationSoundEnabled ? (
+                        <Volume2 size={14} />
+                      ) : (
+                        <VolumeX size={14} />
+                      )}
                     </button>
                     <button
                       type="button"
                       disabled={notificationsFetching}
                       onClick={() => refetchNotifications()}
-                      className="text-base text-brand-primary hover:text-brand-secondary font-medium flex items-center gap-1 transition-colors disabled:opacity-50"
-                      aria-label={isKhmer ? "ផ្ទុកការជូនដំណឹងឡើងវិញ" : "Refresh notifications"}
-                      title={isKhmer ? "ផ្ទុកការជូនដំណឹងឡើងវិញ" : "Refresh notifications"}
+                      className="text-lg text-brand-primary hover:text-brand-secondary font-medium flex items-center gap-1 transition-colors disabled:opacity-50"
+                      aria-label={
+                        isKhmer
+                          ? "ផ្ទុកការជូនដំណឹងឡើងវិញ"
+                          : "Refresh notifications"
+                      }
+                      title={
+                        isKhmer
+                          ? "ផ្ទុកការជូនដំណឹងឡើងវិញ"
+                          : "Refresh notifications"
+                      }
                     >
-                      <RefreshCw size={14} className={notificationsFetching ? "animate-spin" : ""} />
+                      <RefreshCw
+                        size={14}
+                        className={notificationsFetching ? "animate-spin" : ""}
+                      />
                       {isKhmer ? "ផ្ទុកឡើងវិញ" : "Refresh"}
                     </button>
                     {notificationCount > 0 && (
@@ -615,7 +697,7 @@ export default function Navbar({
                         type="button"
                         disabled={isMarkingAll}
                         onClick={() => markAllRead()}
-                        className="text-base text-brand-primary hover:text-brand-secondary font-medium flex items-center gap-1 transition-colors disabled:opacity-50"
+                        className="text-lg text-brand-primary hover:text-brand-secondary font-medium flex items-center gap-1 transition-colors disabled:opacity-50"
                       >
                         <CheckCheck size={14} />
                         {isKhmer ? "អានទាំងអស់" : "Mark all read"}
@@ -631,7 +713,7 @@ export default function Navbar({
                         size={22}
                         className="animate-spin text-brand-primary"
                       />
-                      <span className="text-base">
+                      <span className="text-lg">
                         {isKhmer ? "កំពុងផ្ទុក..." : "Loading notifications..."}
                       </span>
                     </div>
@@ -641,12 +723,12 @@ export default function Navbar({
                         size={28}
                         className="mx-auto text-gray-300 dark:text-gray-600 mb-2"
                       />
-                      <p className="text-base font-medium text-gray-600 dark:text-gray-300">
+                      <p className="text-lg font-medium text-gray-600 dark:text-gray-300">
                         {isKhmer
                           ? "មិនមានការជូនដំណឹងថ្មីទេ"
                           : "No notifications yet"}
                       </p>
-                      <p className="text-base text-gray-400 mt-1">
+                      <p className="text-lg text-gray-400 mt-1">
                         {isKhmer
                           ? "ការជូនដំណឹងនឹងបង្ហាញនៅទីនេះពេលមានសកម្មភាពថ្មី"
                           : "You'll be notified when there's new activity"}
@@ -669,20 +751,23 @@ export default function Navbar({
                           <div className="flex-1 min-w-0">
                             <div className="flex items-start justify-between gap-1">
                               <h4
-                                className={`text-base leading-snug truncate ${
+                                className={`text-lg leading-snug truncate ${
                                   isUnread
                                     ? "font-semibold text-gray-900 dark:text-white"
                                     : "font-normal text-gray-700 dark:text-gray-300"
                                 }`}
                               >
-                                {item.title || item.body || item.message || "Notification"}
+                                {item.title ||
+                                  item.body ||
+                                  item.message ||
+                                  "Notification"}
                               </h4>
                               {isUnread && (
                                 <span className="w-2 h-2 rounded-full bg-brand-primary shrink-0 mt-1" />
                               )}
                             </div>
                             {(item.body || item.message) && item.title && (
-                              <p className="text-base text-gray-500 dark:text-gray-400 line-clamp-2 mt-0.5">
+                              <p className="text-lg text-gray-500 dark:text-gray-400 line-clamp-2 mt-0.5">
                                 {item.message}
                               </p>
                             )}
@@ -700,7 +785,7 @@ export default function Navbar({
                   <Link
                     to="/dashboard/notifications"
                     onClick={() => setNotificationOpen(false)}
-                    className="text-base font-semibold text-brand-primary hover:text-brand-secondary inline-flex items-center gap-1.5 transition-colors"
+                    className="text-lg font-semibold text-brand-primary hover:text-brand-secondary inline-flex items-center gap-1.5 transition-colors"
                   >
                     <span>
                       {isKhmer
@@ -716,7 +801,7 @@ export default function Navbar({
 
           <button
             type="button"
-            className="inline-flex items-center gap-2 h-10 px-3.5 rounded-full border border-brand-primary bg-white dark:bg-gray-800 text-brand-secondary text-base font-semibold transition-all duration-200 hover:bg-brand-primary-light dark:hover:bg-gray-700 hover:-translate-y-0.5"
+            className="inline-flex items-center gap-2 h-10 px-3.5 rounded-full border border-brand-primary bg-white dark:bg-gray-800 text-brand-secondary text-lg font-semibold transition-all duration-200 hover:bg-brand-primary-light dark:hover:bg-gray-700 hover:-translate-y-0.5"
             aria-label={isKhmer ? "Switch to English" : "ប្តូរទៅភាសាខ្មែរ"}
             onClick={toggleLanguage}
           >
@@ -733,7 +818,7 @@ export default function Navbar({
             >
               <button
                 type="button"
-                className="inline-flex items-center gap-2 h-10 pl-1.5 pr-3.5 rounded-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 text-base font-semibold transition-all duration-200 hover:border-brand-primary hover:bg-brand-primary-light/50 dark:hover:bg-gray-700 hover:-translate-y-0.5 shadow-xs cursor-pointer select-none"
+                className="inline-flex items-center gap-2 h-10 pl-1.5 pr-3.5 rounded-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 text-lg font-semibold transition-all duration-200 hover:border-brand-primary hover:bg-brand-primary-light/50 dark:hover:bg-gray-700 hover:-translate-y-0.5 shadow-xs cursor-pointer select-none"
                 aria-label={t("profile", "Profile")}
                 aria-haspopup="true"
                 aria-expanded={profileOpen}
@@ -751,7 +836,7 @@ export default function Navbar({
                     userInitials
                   )}
                 </span>
-                <span className="max-w-[120px] truncate text-base font-medium">
+                <span className="max-w-[120px] truncate text-lg font-medium">
                   {userName}
                 </span>
                 <ChevronDown
@@ -772,7 +857,7 @@ export default function Navbar({
                 }`}
               >
                 <div className="p-3 border-b border-gray-100 dark:border-gray-800/80 mb-1">
-                  <p className="font-semibold text-base text-gray-900 dark:text-white truncate">
+                  <p className="font-semibold text-lg text-gray-900 dark:text-white truncate">
                     {userName}
                   </p>
                   {authUser?.email && (
@@ -784,20 +869,31 @@ export default function Navbar({
 
                 {/* Option 1: Dashboard */}
                 <Link
-                  to={authUser?.role === "admin" ? "/admin/dashboard" : "/dashboard"}
+                  to={
+                    authUser?.role === "admin"
+                      ? "/admin/dashboard"
+                      : "/dashboard"
+                  }
                   role="menuitem"
-                  className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-brand-primary-light dark:hover:bg-gray-800 hover:text-brand-primary transition-colors no-underline"
+                  className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-lg font-medium text-gray-700 dark:text-gray-200 hover:bg-brand-primary-light dark:hover:bg-gray-800 hover:text-brand-primary transition-colors no-underline"
                   onClick={() => setProfileOpen(false)}
                 >
-                  <LayoutDashboard size={18} className="text-brand-primary shrink-0" />
+                  <LayoutDashboard
+                    size={18}
+                    className="text-brand-primary shrink-0"
+                  />
                   <span>{t("dashboard", "Dashboard")}</span>
                 </Link>
 
                 {/* Option 2: Profile */}
                 <Link
-                  to={authUser?.role === "admin" ? "/admin/settings" : "/dashboard/profile"}
+                  to={
+                    authUser?.role === "admin"
+                      ? "/admin/settings"
+                      : "/dashboard/profile"
+                  }
                   role="menuitem"
-                  className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-brand-primary-light dark:hover:bg-gray-800 hover:text-brand-primary transition-colors no-underline"
+                  className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-lg font-medium text-gray-700 dark:text-gray-200 hover:bg-brand-primary-light dark:hover:bg-gray-800 hover:text-brand-primary transition-colors no-underline"
                   onClick={() => setProfileOpen(false)}
                 >
                   <User size={18} className="text-brand-primary shrink-0" />
@@ -810,7 +906,7 @@ export default function Navbar({
                 <button
                   type="button"
                   role="menuitem"
-                  className="flex w-full items-center gap-3 px-3 py-2.5 rounded-xl text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-950/30 hover:text-red-600 dark:hover:text-red-400 transition-colors cursor-pointer text-left border-none bg-transparent"
+                  className="flex w-full items-center gap-3 px-3 py-2.5 rounded-xl text-lg font-medium text-gray-700 dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-950/30 hover:text-red-600 dark:hover:text-red-400 transition-colors cursor-pointer text-left border-none bg-transparent"
                   onClick={handleLogout}
                 >
                   <LogOut size={18} className="text-red-500 shrink-0" />
@@ -821,7 +917,7 @@ export default function Navbar({
           ) : (
             <Link
               to="/register"
-              className="h-10 px-5.5 inline-flex items-center rounded-full border border-[rgba(255,255,255,0.35)] bg-brand-primary text-white text-base font-semibold no-underline transition-all duration-200 hover:bg-brand-secondary hover:border-brand-secondary hover:-translate-y-0.5"
+              className="h-10 px-5.5 inline-flex items-center rounded-full border border-[rgba(255,255,255,0.35)] bg-brand-primary text-white text-lg font-semibold no-underline transition-all duration-200 hover:bg-brand-secondary hover:border-brand-secondary hover:-translate-y-0.5"
             >
               {t("getStarted")}
             </Link>
@@ -889,7 +985,7 @@ export default function Navbar({
               >
                 <button
                   type="button"
-                  className={`w-full flex items-center justify-between bg-transparent border-none text-base py-3.5 px-1 cursor-pointer ${
+                  className={`w-full flex items-center justify-between bg-transparent border-none text-lg py-3.5 px-1 cursor-pointer ${
                     activeItem === item.label
                       ? "text-brand-primary font-semibold"
                       : "text-gray-800 dark:text-gray-200 font-medium"
@@ -913,7 +1009,7 @@ export default function Navbar({
                     <Link
                       key={sub.label}
                       to={sub.to}
-                      className="mx-1 my-0.5 px-4 py-2.5 rounded-lg bg-brand-primary-light dark:bg-gray-800 text-gray-800 dark:text-gray-200 no-underline text-base font-medium transition-colors duration-150 hover:bg-brand-secondary-light dark:hover:bg-gray-700 hover:text-brand-secondary"
+                      className="mx-1 my-0.5 px-4 py-2.5 rounded-lg bg-brand-primary-light dark:bg-gray-800 text-gray-800 dark:text-gray-200 no-underline text-lg font-medium transition-colors duration-150 hover:bg-brand-secondary-light dark:hover:bg-gray-700 hover:text-brand-secondary"
                       onClick={() => handleNavClick(item.label)}
                     >
                       {sub.label}
@@ -928,7 +1024,7 @@ export default function Navbar({
               >
                 <Link
                   to={item.to}
-                  className={`block py-3.5 px-1 no-underline text-base ${
+                  className={`block py-3.5 px-1 no-underline text-lg ${
                     activeItem === item.label
                       ? "text-brand-primary font-semibold"
                       : "text-gray-800 dark:text-gray-200 font-medium"
@@ -944,7 +1040,7 @@ export default function Navbar({
             <li className="border-b border-gray-200 dark:border-gray-700">
               <Link
                 to="/dashboard"
-                className="block py-3.5 px-1 no-underline text-base text-brand-primary font-semibold"
+                className="block py-3.5 px-1 no-underline text-lg text-brand-primary font-semibold"
                 onClick={() => setMobileOpen(false)}
               >
                 {t("dashboard", "Dashboard")}
@@ -970,7 +1066,7 @@ export default function Navbar({
           >
             <Bell size={20} />
             {notificationCount > 0 && (
-              <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-brand-secondary text-white text-base font-bold flex items-center justify-center border-2 border-white dark:border-gray-900">
+              <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-brand-secondary text-white text-lg font-bold flex items-center justify-center border-2 border-white dark:border-gray-900">
                 {notificationCount > 99 ? "99+" : notificationCount}
               </span>
             )}
@@ -978,7 +1074,7 @@ export default function Navbar({
 
           <button
             type="button"
-            className="inline-flex items-center gap-2 h-10 px-3.5 rounded-full border border-brand-primary bg-white dark:bg-gray-800 text-brand-secondary text-base font-semibold"
+            className="inline-flex items-center gap-2 h-10 px-3.5 rounded-full border border-brand-primary bg-white dark:bg-gray-800 text-brand-secondary text-lg font-semibold"
             aria-label={isKhmer ? "Switch to English" : "ប្តូរទៅភាសាខ្មែរ"}
             onClick={toggleLanguage}
           >
@@ -1004,7 +1100,7 @@ export default function Navbar({
                 )}
               </span>
               <div className="min-w-0 flex-1">
-                <p className="font-semibold text-base text-gray-900 dark:text-white truncate">
+                <p className="font-semibold text-lg text-gray-900 dark:text-white truncate">
                   {userName}
                 </p>
                 {authUser?.email && (
@@ -1017,17 +1113,23 @@ export default function Navbar({
 
             <div className="grid grid-cols-2 gap-2">
               <Link
-                to={authUser?.role === "admin" ? "/admin/dashboard" : "/dashboard"}
+                to={
+                  authUser?.role === "admin" ? "/admin/dashboard" : "/dashboard"
+                }
                 onClick={() => setMobileOpen(false)}
-                className="flex items-center justify-center gap-2 h-10 rounded-xl bg-brand-primary text-white font-medium text-base no-underline hover:bg-brand-secondary transition-colors"
+                className="flex items-center justify-center gap-2 h-10 rounded-xl bg-brand-primary text-white font-medium text-lg no-underline hover:bg-brand-secondary transition-colors"
               >
                 <LayoutDashboard size={16} />
                 <span>{t("dashboard", "Dashboard")}</span>
               </Link>
               <Link
-                to={authUser?.role === "admin" ? "/admin/settings" : "/dashboard/profile"}
+                to={
+                  authUser?.role === "admin"
+                    ? "/admin/settings"
+                    : "/dashboard/profile"
+                }
                 onClick={() => setMobileOpen(false)}
-                className="flex items-center justify-center gap-2 h-10 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 font-medium text-base no-underline hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                className="flex items-center justify-center gap-2 h-10 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 font-medium text-lg no-underline hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
               >
                 <User size={16} />
                 <span>{t("profile", "Profile")}</span>
@@ -1037,7 +1139,7 @@ export default function Navbar({
             <button
               type="button"
               onClick={handleLogout}
-              className="flex items-center justify-center gap-2 h-10 rounded-xl border border-red-200 dark:border-red-900/50 bg-red-50 dark:bg-red-950/30 text-red-600 dark:text-red-400 font-medium text-base hover:bg-red-100 dark:hover:bg-red-900/50 transition-colors cursor-pointer"
+              className="flex items-center justify-center gap-2 h-10 rounded-xl border border-red-200 dark:border-red-900/50 bg-red-50 dark:bg-red-950/30 text-red-600 dark:text-red-400 font-medium text-lg hover:bg-red-100 dark:hover:bg-red-900/50 transition-colors cursor-pointer"
             >
               <LogOut size={16} />
               <span>{t("logout", "Log out")}</span>

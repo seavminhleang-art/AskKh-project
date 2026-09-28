@@ -18,10 +18,10 @@ export default function Avatar({ src, alt, name, size = "md", className }) {
     : "U";
 
   const sizeClasses = {
-    xs: "w-6 h-6 text-base",
-    sm: "w-8 h-8 text-base",
-    md: "w-10 h-10 text-base",
-    lg: "w-14 h-14 text-base",
+    xs: "w-6 h-6 text-lg",
+    sm: "w-8 h-8 text-lg",
+    md: "w-10 h-10 text-lg",
+    lg: "w-14 h-14 text-lg",
     xl: "w-20 h-20 text-xl font-bold",
   };
 

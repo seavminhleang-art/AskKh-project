@@ -25,7 +25,7 @@ export default function Footer() {
                 Ask & Found
               </span>
             </div>
-            <p className="text-slate-400 text-base leading-relaxed max-w-sm">
+            <p className="text-slate-400 text-lg leading-relaxed max-w-sm">
               Cambodia’s dedicated lost & found community platform. Helping
               citizens, travelers, and local communities reconnect with lost
               identity documents, pets, electronics, and personal belongings.
@@ -57,7 +57,7 @@ export default function Footer() {
             <h3 className="text-white font-semibold mb-4 text-lg uppercase tracking-wider">
               Navigation
             </h3>
-            <ul className="space-y-2.5 text-base">
+            <ul className="space-y-2.5 text-lg">
               <li>
                 <a href="#" className="hover:text-white transition-colors">
                   Home
@@ -91,7 +91,7 @@ export default function Footer() {
             <h3 className="text-white font-semibold mb-4 text-lg uppercase tracking-wider">
               Top Categories
             </h3>
-            <ul className="space-y-2.5 text-base">
+            <ul className="space-y-2.5 text-lg">
               <li>
                 <a href="#" className="hover:text-white transition-colors">
                   ID & Passports
@@ -125,7 +125,7 @@ export default function Footer() {
             <h3 className="text-white font-semibold mb-4 text-lg uppercase tracking-wider">
               Contact & Safety
             </h3>
-            <ul className="space-y-3 text-base text-slate-400">
+            <ul className="space-y-3 text-lg text-slate-400">
               <li className="flex items-center gap-2.5">
                 <MapPin className="w-4 h-4 text-blue-400 shrink-0" />
                 <span>Phnom Penh, Cambodia</span>
@@ -143,7 +143,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-base text-slate-500">
+        <div className="pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-lg text-slate-500">
           <p>
             © {new Date().getFullYear()} Ask & Found Cambodia. All rights
             reserved.

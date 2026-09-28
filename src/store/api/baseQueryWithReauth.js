@@ -1,6 +1,6 @@
 import { fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { setCredentials, logout } from '../../features/auth/authSlice';
-import { authCredentials, getRefreshToken } from '../../features/auth/authSession';
+import { authCredentials, getRefreshToken, extractToken } from '../../features/auth/authSession';
 import { FORUM_API_BASE_URL } from '../../config/forumApi';
 
 export const BASE_API_URL = FORUM_API_BASE_URL;
@@ -77,8 +77,9 @@ export const baseQueryWithReauth = async (args, api, extraOptions) => {
     refreshPromise = (async () => {
       const refreshed = await publicQuery({ url: '/auth/refresh', method: 'POST', body: { refreshToken } }, api, extraOptions);
       if (api.getState().auth.refreshToken !== refreshToken) return false;
-      if (!refreshed.data?.accessToken) { api.dispatch(logout()); return false; }
-      api.dispatch(setCredentials(authCredentials(refreshed.data, refreshed.data.refreshToken || refreshToken)));
+      const token = extractToken(refreshed.data);
+      if (!token) { api.dispatch(logout()); return false; }
+      api.dispatch(setCredentials(authCredentials(refreshed.data, refreshed.data?.refreshToken || refreshToken)));
       return true;
     })().finally(() => { refreshPromise = undefined; });
   }

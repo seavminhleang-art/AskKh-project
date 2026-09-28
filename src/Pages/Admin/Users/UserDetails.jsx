@@ -17,13 +17,13 @@ export default function UserDetails() {
 
   if (isLoading)
     return <div className="h-64 bg-gray-100 rounded-lg animate-pulse" />;
-  if (!user) return <p className="text-base text-gray-500">User not found.</p>;
+  if (!user) return <p className="text-lg text-gray-500">User not found.</p>;
 
   return (
     <div>
       <button
         onClick={() => navigate(-1)}
-        className="flex items-center gap-1.5 text-base text-gray-500 hover:text-gray-700 mb-4 transition-colors"
+        className="flex items-center gap-1.5 text-lg text-gray-500 hover:text-gray-700 mb-4 transition-colors"
       >
         <ArrowLeft size={15} /> Back to Users
       </button>
@@ -33,7 +33,7 @@ export default function UserDetails() {
         <Card className="p-6 lg:col-span-1 text-center">
           <Avatar src={user.avatar} name={user.name} size={72} />
           <h2 className="mt-3 font-semibold text-gray-900">{user.name}</h2>
-          <p className="text-base text-gray-400 flex items-center justify-center gap-1 mt-0.5">
+          <p className="text-lg text-gray-400 flex items-center justify-center gap-1 mt-0.5">
             <Mail size={13} /> {user.email}
           </p>
           <div className="flex justify-center gap-2 mt-3">
@@ -42,7 +42,7 @@ export default function UserDetails() {
           </div>
           <div className="grid grid-cols-2 gap-3 mt-5 text-left">
             <div className="p-3 bg-gray-50 rounded-lg">
-              <p className="text-base text-gray-400 flex items-center gap-1">
+              <p className="text-lg text-gray-400 flex items-center gap-1">
                 <Award size={12} /> Reputation
               </p>
               <p className="font-semibold text-gray-800">
@@ -50,7 +50,7 @@ export default function UserDetails() {
               </p>
             </div>
             <div className="p-3 bg-gray-50 rounded-lg">
-              <p className="text-base text-gray-400 flex items-center gap-1">
+              <p className="text-lg text-gray-400 flex items-center gap-1">
                 <Calendar size={12} /> Joined
               </p>
               <p className="font-semibold text-gray-800">{user.joined}</p>
@@ -75,8 +75,8 @@ export default function UserDetails() {
                   key={p.id}
                   className="flex items-center justify-between py-2.5"
                 >
-                  <p className="text-base text-gray-700">{p.title}</p>
-                  <span className="text-base text-gray-400">{p.date}</span>
+                  <p className="text-lg text-gray-700">{p.title}</p>
+                  <span className="text-lg text-gray-400">{p.date}</span>
                 </div>
               ))}
             </div>
@@ -88,8 +88,8 @@ export default function UserDetails() {
             <div className="divide-y divide-gray-50">
               {activity.comments.map((c) => (
                 <div key={c.id} className="py-2.5">
-                  <p className="text-base text-gray-700">{c.body}</p>
-                  <span className="text-base text-gray-400">{c.date}</span>
+                  <p className="text-lg text-gray-700">{c.body}</p>
+                  <span className="text-lg text-gray-400">{c.date}</span>
                 </div>
               ))}
             </div>

@@ -99,7 +99,7 @@ export default function WorkspaceProfileMenu({ user, mode = "user" }) {
       onMouseLeave={handleMouseLeave}
     >
       <summary aria-label={w("My profile")}>
-        <span className="workspace-profile-avatar">
+        <span className="workspace-profile-avatar text-base">
           {photo ? (
             <img
               src={photo}
@@ -112,15 +112,16 @@ export default function WorkspaceProfileMenu({ user, mode = "user" }) {
             initials
           )}
         </span>
-        <span className="workspace-profile-name">{name}</span>
+        <span className="workspace-profile-name text-base">{name}</span>
         <ChevronDown size={14} aria-hidden="true" />
       </summary>
       <div className="workspace-profile-panel">
         <div className="workspace-profile-info">
-          <strong>{name}</strong>
-          {user?.email && <span>{user.email}</span>}
+          <strong className="text-base">{name}</strong>
+          {user?.email && <span className="text-base">{user.email}</span>}
         </div>
         <Link
+          className="text-base"
           to="/"
           onClick={() => {
             if (ref.current) ref.current.open = false;
@@ -130,6 +131,7 @@ export default function WorkspaceProfileMenu({ user, mode = "user" }) {
           {w("Home")}
         </Link>
         <Link
+          className="text-base"
           to={mode === "admin" ? "/admin/dashboard" : "/dashboard"}
           onClick={() => {
             if (ref.current) ref.current.open = false;
@@ -139,6 +141,7 @@ export default function WorkspaceProfileMenu({ user, mode = "user" }) {
           {w("Dashboard")}
         </Link>
         <Link
+          className="text-base"
           to={mode === "admin" ? "/admin/settings" : "/dashboard/profile"}
           onClick={() => {
             if (ref.current) ref.current.open = false;
@@ -149,7 +152,7 @@ export default function WorkspaceProfileMenu({ user, mode = "user" }) {
         </Link>
         <button
           type="button"
-          className="workspace-profile-logout"
+          className="workspace-profile-logout text-base"
           onClick={handleLogout}
         >
           <LogOut size={17} />
@@ -159,4 +162,3 @@ export default function WorkspaceProfileMenu({ user, mode = "user" }) {
     </details>
   );
 }
-

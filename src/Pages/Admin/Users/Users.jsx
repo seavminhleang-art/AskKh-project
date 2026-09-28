@@ -117,7 +117,7 @@ export default function Users() {
               <button
                 key={r}
                 onClick={() => setRole(r)}
-                className={`px-3 py-1.5 rounded-full text-base font-medium transition-colors
+                className={`px-3 py-1.5 rounded-full text-lg font-medium transition-colors
                   ${role === r ? "bg-brand-primary text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}
               >
                 {r}

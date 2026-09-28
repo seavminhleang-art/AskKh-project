@@ -63,6 +63,33 @@ test("list parsing rejects malformed payloads instead of showing a false empty s
   assert.equal(dateLabel(null), "—");
 });
 
+test("post updates and deletion use documented endpoints", () => {
+  assert.deepEqual(
+    workspaceRequest({
+      resource: "posts",
+      action: "update",
+      id: 15,
+      body: { title: "Updated title", body: "Updated content for testing." },
+    }),
+    {
+      url: "/posts/15",
+      method: "PUT",
+      body: { title: "Updated title", body: "Updated content for testing." },
+    },
+  );
+  assert.deepEqual(
+    workspaceRequest({
+      resource: "posts",
+      action: "delete",
+      id: 15,
+    }),
+    {
+      url: "/posts/15",
+      method: "DELETE",
+    },
+  );
+});
+
 test("media and profile images resolve to the standardized media uri", async () => {
   const { formatMediaUrl, profileImageUrl, MEDIA_BASE_URI } = await import("../src/features/workspace/profileImage.js");
   assert.equal(MEDIA_BASE_URI, "https://forum-istad-api.cheat.casa/api/v1/media/");

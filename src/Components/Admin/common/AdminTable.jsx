@@ -53,7 +53,7 @@ export default function AdminTable({
 
   return (
     <div className="overflow-x-auto">
-      <table className="w-full text-base">
+      <table className="w-full text-lg">
         <thead>
           <tr className="border-b border-gray-100 text-left text-gray-500">
             {columns.map((col) => (

@@ -15,8 +15,22 @@ export function errorMessage(error) {
 }
 export function mapPost(post, userId) {
   const date = new Date(post.creationDate ?? post.createdAt);
-  return { ...post, content: post.body ?? '', tags: (post.tagResponses ?? []).map(tag => tag.tagName),
-    author: { name: post.ownerDisplayName || 'Community member', avatar: formatMediaUrl(post.ownerAvatarUrl), time: Number.isNaN(date.getTime()) ? '' : date.toLocaleDateString() },
-    views: post.viewCount ?? 0, likes: post.score ?? 0, comments: post.comments ?? [], image: formatMediaUrl(post.imageUrls?.[0]),
-    isOwnPost: userId != null && String(post.ownerId) === String(userId) };
+  const likes = post.likeCount ?? post.likes ?? post.upVotes ?? post.upvotes ?? post.score ?? 0;
+  const dislikes = post.dislikeCount ?? post.dislikes ?? post.downVotes ?? post.downvotes ?? 0;
+  return {
+    ...post,
+    content: post.body ?? '',
+    tags: (post.tagResponses ?? []).map(tag => tag.tagName),
+    author: {
+      name: post.ownerDisplayName || 'Community member',
+      avatar: formatMediaUrl(post.ownerAvatarUrl),
+      time: Number.isNaN(date.getTime()) ? '' : date.toLocaleDateString()
+    },
+    views: post.viewCount ?? post.views ?? 0,
+    likes,
+    dislikes,
+    comments: post.comments ?? [],
+    image: formatMediaUrl(post.imageUrls?.[0]),
+    isOwnPost: userId != null && String(post.ownerId) === String(userId)
+  };
 }

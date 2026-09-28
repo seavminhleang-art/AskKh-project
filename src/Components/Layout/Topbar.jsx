@@ -150,7 +150,8 @@ export default function Topbar() {
   const [logoutApi, { isLoading: loggingOut }] = useLogoutApiMutation();
 
   async function handleLogout() {
-    if (loggingOut || !window.confirm("Are you sure you want to log out?")) return;
+    if (loggingOut || !window.confirm("Are you sure you want to log out?"))
+      return;
     await logoutApi();
     navigate("/leaderboard");
   }
@@ -193,7 +194,7 @@ export default function Topbar() {
 
         {/* Breadcrumb */}
         <nav aria-label="Breadcrumb" className="hidden min-w-0 md:block">
-          <ol className="flex items-center gap-1 truncate text-base text-gray-500 dark:text-gray-400">
+          <ol className="flex items-center gap-1 truncate text-lg text-gray-500 dark:text-gray-400">
             {crumbs.length === 0 && (
               <li className="font-medium text-gray-900 dark:text-white">
                 {t.dashboard}
@@ -225,14 +226,14 @@ export default function Topbar() {
       </div>
 
       {/* Search */}
-      <div className="flex min-w-0 flex-1 items-center gap-2 rounded-full bg-gray-100 px-4 py-2.5 text-base text-gray-400 dark:bg-gray-800 dark:text-gray-500">
+      <div className="flex min-w-0 flex-1 items-center gap-2 rounded-full bg-gray-100 px-4 py-2.5 text-lg text-gray-400 dark:bg-gray-800 dark:text-gray-500">
         <Search className="h-4 w-4 shrink-0" />
 
         <input
           ref={searchRef}
           type="search"
           placeholder={t.search}
-          className="w-full bg-transparent text-base text-gray-700 outline-none placeholder:text-gray-400 dark:text-white dark:placeholder:text-gray-500"
+          className="w-full bg-transparent text-lg text-gray-700 outline-none placeholder:text-gray-400 dark:text-white dark:placeholder:text-gray-500"
         />
       </div>
 
@@ -244,7 +245,7 @@ export default function Topbar() {
           onClick={toggleLang}
           aria-label={t.switchLanguage}
           title={t.switchLanguage}
-          className="flex items-center gap-1 rounded-md p-2 text-base font-medium text-gray-500 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
+          className="flex items-center gap-1 rounded-md p-2 text-lg font-medium text-gray-500 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
         >
           <Languages className="h-5 w-5" />
           <span className="hidden sm:inline">
@@ -299,7 +300,7 @@ export default function Topbar() {
               <Link
                 to="/users/me"
                 role="menuitem"
-                className="block px-3 py-2 text-base text-gray-700 hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-gray-700"
+                className="block px-3 py-2 text-lg text-gray-700 hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-gray-700"
                 onClick={() => setMenuOpen(false)}
               >
                 {t.profile}
@@ -308,7 +309,7 @@ export default function Topbar() {
               <Link
                 to="/settings"
                 role="menuitem"
-                className="block px-3 py-2 text-base text-gray-700 hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-gray-700"
+                className="block px-3 py-2 text-lg text-gray-700 hover:bg-gray-50 dark:text-gray-200 dark:hover:bg-gray-700"
                 onClick={() => setMenuOpen(false)}
               >
                 {t.settings}
@@ -319,7 +320,7 @@ export default function Topbar() {
                 role="menuitem"
                 onClick={handleLogout}
                 disabled={loggingOut}
-                className="block w-full px-3 py-2 text-left text-base text-brand-secondary hover:bg-brand-secondary-light dark:hover:bg-gray-700"
+                className="block w-full px-3 py-2 text-left text-lg text-brand-secondary hover:bg-brand-secondary-light dark:hover:bg-gray-700"
               >
                 {t.logout}
               </button>

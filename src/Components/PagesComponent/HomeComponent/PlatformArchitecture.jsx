@@ -32,7 +32,7 @@ export default function PlatformArchitecture({ darkMode }) {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         whileHover={{ scale: 1.05 }}
-        className={`inline-block text-base font-semibold uppercase tracking-wider px-4 py-1.5 rounded-full mb-4 cursor-pointer ${
+        className={`inline-block text-lg font-semibold uppercase tracking-wider px-4 py-1.5 rounded-full mb-4 cursor-pointer ${
           darkMode
             ? "bg-zinc-800 text-[var(--home-primary-text)]"
             : "bg-[var(--color-brand-primary-light)] text-[var(--home-primary-text)]"
@@ -46,7 +46,7 @@ export default function PlatformArchitecture({ darkMode }) {
       </h2>
 
       <p
-        className={`max-w-xl mx-auto text-base md:text-base mb-12 leading-relaxed ${
+        className={`max-w-xl mx-auto text-lg md:text-lg mb-12 leading-relaxed ${
           darkMode ? "text-slate-400" : "text-gray-600"
         }`}
       >
@@ -81,7 +81,7 @@ export default function PlatformArchitecture({ darkMode }) {
                 {item.title}
               </h3>
               <p
-                className={`text-base leading-relaxed ${darkMode ? "text-slate-400" : "text-gray-600"}`}
+                className={`text-lg leading-relaxed ${darkMode ? "text-slate-400" : "text-gray-600"}`}
               >
                 {item.desc}
               </p>

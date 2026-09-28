@@ -7,7 +7,7 @@ export default function Breadcrumb({ items = [], className = "" }) {
   return (
     <nav
       className={cn(
-        "flex items-center text-base text-slate-500 dark:text-slate-400 py-2",
+        "flex items-center text-lg text-slate-500 dark:text-slate-400 py-2",
         className,
       )}
       aria-label="Breadcrumb"

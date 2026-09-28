@@ -18,12 +18,16 @@ import { toast } from "sonner";
 export default function QuestionCard({ question }) {
   const [votePost, { isLoading }] = useVotePostMutation();
 
-  const handleVote = async (e) => {
+  const handleVote = async (e, voteTypeId = 1) => {
     e.preventDefault();
     e.stopPropagation();
     try {
-      await votePost({ postId: question.id, voteTypeId: 1 }).unwrap();
-      toast.success("Vote recorded!");
+      await votePost({
+        postId: question.id,
+        voteTypeId,
+        value: voteTypeId === 1 ? 1 : -1,
+      }).unwrap();
+      toast.success(voteTypeId === 1 ? "Upvoted!" : "Downvoted!");
     } catch {
       toast.error("Failed to register vote. Please login if you haven't.");
     }
@@ -66,9 +70,7 @@ export default function QuestionCard({ question }) {
             title="Upvote question"
           >
             <ThumbsUp className="w-4 h-4" />
-            <span className="text-base font-bold leading-none mt-1">
-              {score}
-            </span>
+            <span className="text-lg font-bold leading-none mt-1">{score}</span>
           </button>
         </div>
 
@@ -77,7 +79,7 @@ export default function QuestionCard({ question }) {
           <div className="flex flex-wrap items-center gap-2">
             <Badge variant="blue">{category}</Badge>
             {isAccepted && (
-              <span className="inline-flex items-center gap-1 text-base font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800">
+              <span className="inline-flex items-center gap-1 text-lg font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800">
                 <CheckCircle2 className="w-3 h-3" />
                 Solved
               </span>
@@ -93,7 +95,7 @@ export default function QuestionCard({ question }) {
             </h3>
           </Link>
 
-          <p className="text-base text-slate-600 dark:text-slate-400 line-clamp-2 leading-relaxed">
+          <p className="text-lg text-slate-600 dark:text-slate-400 line-clamp-2 leading-relaxed">
             {descriptionText}
           </p>
 
@@ -103,7 +105,7 @@ export default function QuestionCard({ question }) {
               {tags.map((tag, idx) => (
                 <span
                   key={idx}
-                  className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg text-base font-medium bg-slate-100 text-slate-600 dark:bg-slate-800/80 dark:text-slate-300 hover:bg-slate-200 transition-colors"
+                  className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg text-lg font-medium bg-slate-100 text-slate-600 dark:bg-slate-800/80 dark:text-slate-300 hover:bg-slate-200 transition-colors"
                 >
                   <Tag className="w-2.5 h-2.5 opacity-60" />
                   {tag}
@@ -113,7 +115,7 @@ export default function QuestionCard({ question }) {
           )}
 
           {/* Card Footer Meta */}
-          <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-100 dark:border-slate-800/80 text-base text-slate-500 dark:text-slate-400">
+          <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-100 dark:border-slate-800/80 text-lg text-slate-500 dark:text-slate-400">
             {/* Author */}
             <div className="flex items-center gap-2">
               <Avatar src={authorAvatar} name={authorName} size="xs" />

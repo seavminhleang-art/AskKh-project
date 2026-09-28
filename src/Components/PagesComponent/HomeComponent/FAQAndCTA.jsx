@@ -39,7 +39,7 @@ export default function FAQAndCTA({ darkMode }) {
       <section className="mb-28 max-w-4xl mx-auto px-4 sm:px-6">
         <div className="text-center mb-12">
           <div
-            className={`inline-block text-base font-bold uppercase tracking-wider px-4 py-1.5 rounded-full mb-3 ${
+            className={`inline-block text-lg font-bold uppercase tracking-wider px-4 py-1.5 rounded-full mb-3 ${
               darkMode
                 ? "bg-zinc-800 text-[var(--home-primary-text)]"
                 : "bg-[var(--color-brand-primary-light)] text-[var(--home-primary-text)]"
@@ -69,7 +69,7 @@ export default function FAQAndCTA({ darkMode }) {
               >
                 <div className="flex items-center justify-between gap-4">
                   <h3
-                    className={`text-base sm:text-lg font-bold ${
+                    className={`text-lg sm:text-lg font-bold ${
                       darkMode ? "text-slate-100" : "text-gray-900"
                     }`}
                   >
@@ -97,7 +97,7 @@ export default function FAQAndCTA({ darkMode }) {
                       transition={{ duration: 0.3, ease: "easeInOut" }}
                     >
                       <p
-                        className={`text-base leading-relaxed pt-4 border-t ${
+                        className={`text-lg leading-relaxed pt-4 border-t ${
                           darkMode
                             ? "border-zinc-800 text-slate-300"
                             : "border-gray-100 text-gray-600"
@@ -136,7 +136,7 @@ export default function FAQAndCTA({ darkMode }) {
             {t("ctaTitle")}
           </h2>
           {/* Forced light gray subtitle color */}
-          <p className="text-base sm:text-base mb-8 leading-relaxed max-w-xl mx-auto text-gray-200">
+          <p className="text-lg sm:text-lg mb-8 leading-relaxed max-w-xl mx-auto text-gray-200">
             {t("ctaSubtitle")}
           </p>
 
@@ -151,13 +151,13 @@ export default function FAQAndCTA({ darkMode }) {
                 value={emailInput}
                 onChange={(e) => setEmailInput(e.target.value)}
                 placeholder={t("emailPlaceholder")}
-                className="backdrop-blur-md border rounded-full px-5 py-3 w-full focus:outline-none focus:ring-2 focus:ring-[var(--color-brand-primary)] text-base shadow-inner transition-all bg-white/10 border-white/20 text-white placeholder-gray-300"
+                className="backdrop-blur-md border rounded-full px-5 py-3 w-full focus:outline-none focus:ring-2 focus:ring-[var(--color-brand-primary)] text-lg shadow-inner transition-all bg-white/10 border-white/20 text-white placeholder-gray-300"
               />
               <motion.button
                 type="submit"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="bg-[var(--color-brand-primary)] hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded-full text-base transition shadow-lg cursor-pointer flex-shrink-0 w-full sm:w-auto"
+                className="bg-[var(--color-brand-primary)] hover:bg-blue-600 text-white font-semibold px-6 py-3 rounded-full text-lg transition shadow-lg cursor-pointer flex-shrink-0 w-full sm:w-auto"
               >
                 {t("joinUsButton")}
               </motion.button>
@@ -167,7 +167,7 @@ export default function FAQAndCTA({ darkMode }) {
               <motion.p
                 initial={{ opacity: 0, y: -5 }}
                 animate={{ opacity: 1, y: 0 }}
-                className={`text-base font-medium mt-2 ${status === "success" ? "text-emerald-400" : "text-red-400"}`}
+                className={`text-lg font-medium mt-2 ${status === "success" ? "text-emerald-400" : "text-red-400"}`}
               >
                 {message}
               </motion.p>

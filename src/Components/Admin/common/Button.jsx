@@ -6,8 +6,8 @@ const variants = {
 };
 
 const sizes = {
-  sm: "text-base px-2.5 py-1.5 gap-1.5",
-  md: "text-base px-3.5 py-2 gap-2",
+  sm: "text-lg px-2.5 py-1.5 gap-1.5",
+  md: "text-lg px-3.5 py-2 gap-2",
 };
 
 export default function Button({

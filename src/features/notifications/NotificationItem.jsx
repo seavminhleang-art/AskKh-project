@@ -7,13 +7,14 @@ import {
   Bell,
   Trash2,
   Clock,
+  ShieldCheck,
 } from "lucide-react";
 import Card from "../../Components/Admin/common/Card";
 import {
   useMarkNotificationReadMutation,
   useDeleteNotificationMutation,
 } from "../../store/api/apiSlice";
-import { toast } from "sonner";
+import { toast } from "react-toastify";
 import { notificationTarget } from "./notificationTarget";
 
 export default function NotificationItem({ notification }) {
@@ -22,25 +23,72 @@ export default function NotificationItem({ notification }) {
   const [deleteNotif] = useDeleteNotificationMutation();
 
   const getIcon = () => {
-    switch (notification.type) {
-      case "question_answer":
-      case "comment":
-        return <MessageSquare className="w-5 h-5 text-blue-500" />;
-      case "match_found":
-        return <Sparkles className="w-5 h-5 text-amber-500" />;
-      case "claim_update":
-        return <Bookmark className="w-5 h-5 text-emerald-500" />;
-      default:
-        return <Bell className="w-5 h-5 text-indigo-500" />;
+    const type = String(notification.type || "").toLowerCase();
+    if (type.includes("claim")) {
+      return <ShieldCheck className="w-5 h-5 text-emerald-500" />;
     }
+    if (
+      type.includes("question") ||
+      type.includes("comment") ||
+      type.includes("answer")
+    ) {
+      return <MessageSquare className="w-5 h-5 text-blue-500" />;
+    }
+    if (type.includes("match")) {
+      return <Sparkles className="w-5 h-5 text-amber-500" />;
+    }
+    return <Bell className="w-5 h-5 text-indigo-500" />;
   };
 
   const handleAction = () => {
     if (!notification.read && !notification.isRead) {
       markRead(notification.id);
     }
+
+    // Try the smart URL translator first
     const target = notificationTarget(notification);
-    if (target) navigate(target);
+    if (target) {
+      navigate(target);
+      return;
+    }
+
+    // Extract entity ID from whichever field the backend uses
+    const entityId =
+      notification.referenceId ??
+      notification.relatedId ??
+      notification.targetId ??
+      notification.entityId ??
+      notification.postId ??
+      notification.reportId ??
+      notification.claimId ??
+      null;
+
+    const type = String(notification.type || "").toUpperCase();
+
+    if (
+      type === "COMMENT_ON_POST" ||
+      type === "ANSWER_ON_POST" ||
+      type === "POST_VOTE" ||
+      type.includes("COMMENT") ||
+      type.includes("ANSWER")
+    ) {
+      navigate(
+        entityId ? `/dashboard/questions/${entityId}` : "/dashboard/questions",
+      );
+      return;
+    }
+
+    if (type.startsWith("LOST_FOUND_CLAIM") || type.includes("CLAIM")) {
+      navigate("/dashboard/claims");
+      return;
+    }
+
+    if (type === "LOST_FOUND_MATCH" || type.includes("MATCH")) {
+      navigate("/dashboard/matches");
+      return;
+    }
+
+    navigate("/dashboard/notifications");
   };
 
   const handleDelete = (e) => {
@@ -66,7 +114,7 @@ export default function NotificationItem({ notification }) {
       <div className="flex-1 min-w-0 space-y-1">
         <div className="flex items-center justify-between gap-2">
           <h4
-            className={`text-base tracking-tight truncate ${
+            className={`text-lg tracking-tight truncate ${
               !(notification.read ?? notification.isRead)
                 ? "font-bold text-slate-900 dark:text-white"
                 : "font-medium text-slate-700 dark:text-slate-300"
@@ -74,7 +122,7 @@ export default function NotificationItem({ notification }) {
           >
             {notification.title}
           </h4>
-          <span className="text-base text-slate-400 shrink-0 flex items-center gap-1">
+          <span className="text-lg text-slate-400 shrink-0 flex items-center gap-1">
             <Clock className="w-3 h-3" />
             {new Date(notification.createdAt).toLocaleTimeString([], {
               hour: "2-digit",
@@ -83,7 +131,7 @@ export default function NotificationItem({ notification }) {
           </span>
         </div>
 
-        <p className="text-base text-slate-600 dark:text-slate-400 leading-relaxed">
+        <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed">
           {notification.body || notification.message}
         </p>
       </div>

@@ -123,6 +123,13 @@ const router = createBrowserRouter([
   },
 ]);
 
+import useAuthInit from "./hooks/useAuthInit.js";
+
+function AuthInitializer({ children }) {
+  useAuthInit();
+  return children;
+}
+
 const root = document.getElementById("root");
 ReactDOM.createRoot(root).render(
   <React.StrictMode>
@@ -131,8 +138,10 @@ ReactDOM.createRoot(root).render(
         <ThemeProvider>
           <LanguageProvider>
             <Preloader>
-              <RouterProvider router={router} />
-              <ToastContainer position="top-right" autoClose={4200} limit={3} />
+              <AuthInitializer>
+                <RouterProvider router={router} />
+                <ToastContainer position="top-right" autoClose={4200} limit={3} />
+              </AuthInitializer>
             </Preloader>
           </LanguageProvider>
         </ThemeProvider>
@@ -140,3 +149,4 @@ ReactDOM.createRoot(root).render(
     </Provider>
   </React.StrictMode>,
 );
+

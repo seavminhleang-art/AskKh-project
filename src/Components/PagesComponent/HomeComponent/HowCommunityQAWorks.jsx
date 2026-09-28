@@ -38,13 +38,13 @@ export default function HowCommunityQAWorks({ darkMode }) {
             <div className="flex gap-1.5">
               <div className="bg-white/90 dark:bg-zinc-800/90 backdrop-blur-sm px-2.5 py-1 rounded-full flex items-center gap-1.5">
                 <Tag className="w-3.5 h-3.5 text-[var(--home-secondary-text)]" />
-                <span className="text-base font-semibold text-slate-700 dark:text-slate-200">
+                <span className="text-lg font-semibold text-slate-700 dark:text-slate-200">
                   {t("tagTopic", { defaultValue: "Topic: React" })}
                 </span>
               </div>
               <div className="bg-white/90 dark:bg-zinc-800/90 backdrop-blur-sm px-2.5 py-1 rounded-full flex items-center gap-1.5">
                 <ShieldCheck className="w-3.5 h-3.5 text-[var(--home-secondary-text)]" />
-                <span className="text-base font-semibold text-slate-700 dark:text-slate-200">
+                <span className="text-lg font-semibold text-slate-700 dark:text-slate-200">
                   {t("tagScope", { defaultValue: "Scope: ISTAD" })}
                 </span>
               </div>
@@ -74,7 +74,7 @@ export default function HowCommunityQAWorks({ darkMode }) {
             </div>
             <div className="bg-white/90 dark:bg-zinc-800/90 backdrop-blur-sm rounded-xl p-3 shadow-md">
               <div className="flex items-center gap-2.5 mb-2">
-                <div className="w-8 h-8 rounded-full bg-[var(--color-brand-secondary-light)] dark:bg-red-950 flex items-center justify-center text-[var(--home-secondary-text)] font-bold text-base">
+                <div className="w-8 h-8 rounded-full bg-[var(--color-brand-secondary-light)] dark:bg-red-950 flex items-center justify-center text-[var(--home-secondary-text)] font-bold text-lg">
                   U1
                 </div>
                 <div className="flex-1 space-y-1">
@@ -105,14 +105,14 @@ export default function HowCommunityQAWorks({ darkMode }) {
             <div className="bg-white/95 dark:bg-zinc-800/95 backdrop-blur-sm rounded-full p-2.5 shadow-md flex items-center gap-2.5 mb-3.5">
               <div className="flex items-center gap-1.5 text-slate-600 dark:text-slate-300">
                 <ThumbsUp className="w-4 h-4" />
-                <span className="text-base font-bold">
+                <span className="text-lg font-bold">
                   {t("likesCount", { defaultValue: "532 Likes" })}
                 </span>
               </div>
               <div className="h-4 w-px bg-slate-200 dark:bg-zinc-700" />
               <div className="flex items-center gap-1.5 text-slate-600 dark:text-slate-300">
                 <CheckCircle2 className="w-4 h-4" />
-                <span className="text-base font-bold">
+                <span className="text-lg font-bold">
                   {t("solutionsCount", { defaultValue: "12 Solutions" })}
                 </span>
               </div>
@@ -122,12 +122,12 @@ export default function HowCommunityQAWorks({ darkMode }) {
                 <Award className="w-6 h-6 text-white" />
               </div>
               <div className="text-left">
-                <p className="text-base font-bold text-slate-800 dark:text-slate-100">
+                <p className="text-lg font-bold text-slate-800 dark:text-slate-100">
                   {t("badgeTitle", {
                     defaultValue: "Knowledge Helper Badges Awarded",
                   })}
                 </p>
-                <p className="text-base text-slate-400 dark:text-slate-400">
+                <p className="text-lg text-slate-400 dark:text-slate-400">
                   {t("badgeDesc", {
                     defaultValue: "Awarded for 100+ solution upvotes",
                   })}
@@ -147,7 +147,7 @@ export default function HowCommunityQAWorks({ darkMode }) {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         whileHover={{ scale: 1.05 }}
-        className={`inline-block text-base font-semibold uppercase tracking-wider px-4 py-1.5 rounded-full mb-4 cursor-pointer ${
+        className={`inline-block text-lg font-semibold uppercase tracking-wider px-4 py-1.5 rounded-full mb-4 cursor-pointer ${
           darkMode
             ? "bg-zinc-800 text-[var(--home-primary-text)]"
             : "bg-[var(--color-brand-primary-light)] text-[var(--home-primary-text)]"
@@ -161,7 +161,7 @@ export default function HowCommunityQAWorks({ darkMode }) {
       </h2>
 
       <p
-        className={`max-w-xl mx-auto text-base md:text-base mb-12 leading-relaxed ${
+        className={`max-w-xl mx-auto text-lg md:text-lg mb-12 leading-relaxed ${
           darkMode ? "text-slate-400" : "text-gray-600"
         }`}
       >
@@ -190,7 +190,7 @@ export default function HowCommunityQAWorks({ darkMode }) {
                 {item.graphic}
               </div>
               <div className="flex items-center gap-3 mb-2">
-                <span className="w-6 h-6 bg-[var(--color-brand-primary)] text-white font-bold text-base rounded-md flex items-center justify-center shrink-0 shadow">
+                <span className="w-6 h-6 bg-[var(--color-brand-primary)] text-white font-bold text-lg rounded-md flex items-center justify-center shrink-0 shadow">
                   {item.id}
                 </span>
                 <h3
@@ -200,7 +200,7 @@ export default function HowCommunityQAWorks({ darkMode }) {
                 </h3>
               </div>
               <p
-                className={`text-base leading-relaxed ${darkMode ? "text-slate-400" : "text-gray-600"}`}
+                className={`text-lg leading-relaxed ${darkMode ? "text-slate-400" : "text-gray-600"}`}
               >
                 {item.desc}
               </p>

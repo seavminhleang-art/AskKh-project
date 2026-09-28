@@ -10,9 +10,9 @@ export default function EmptyState({
       <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center text-gray-400 mb-3">
         <Icon size={22} />
       </div>
-      <p className="text-base font-medium text-gray-700">{title}</p>
+      <p className="text-lg font-medium text-gray-700">{title}</p>
       {description && (
-        <p className="text-base text-gray-400 mt-1 max-w-xs">{description}</p>
+        <p className="text-lg text-gray-400 mt-1 max-w-xs">{description}</p>
       )}
     </div>
   );

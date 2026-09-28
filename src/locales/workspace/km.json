@@ -630,7 +630,7 @@
   "help a lost item find its way back to its owner.": "ជួយឱ្យរបស់បាត់ត្រឡប់ទៅម្ចាស់វិញ។",
   "question details": "ព័ត៌មានលម្អិតសំណួរ",
   "item details": "ព័ត៌មានលម្អិតវត្ថុ",
-  "question title": "ចំណងជើងសំណួរ",
+  "question title": "ចន្ញោ្តស្រកស្អល",
   "item name": "ឈ្មោះវត្ថុ",
   "what would you like help with?": "តើអ្នកចង់ឱ្យជួយអ្វី?",
   "describe the item": "ពិពណ៌នាវត្ថុ",
@@ -829,5 +829,16 @@
   "Preview": "មើលជាមុន",
   "Your formatted text will appear here.": "អត្ថបទដែលបានធ្វើទ្រង់ទ្រាយរបស់អ្នកនឹងបង្ហាញនៅទីនេះ។",
   "Select text to format it. Preview before publishing.": "ជ្រើសរើសអត្ថបទដើម្បីធ្វើទ្រង់ទ្រាយ។ មើលជាមុនមុនពេលបង្ហោះ។",
-  "characters": "តួអក្សរ"
+  "characters": "តួអក្សរ",
+  "Edit question": "កែស្ន័សអ្វីស្រកស្អល",
+  "Update the question details below.": "ត្រួតប័លេកស្ន័សអ្វីខាងក្រោមនឹោះ។",
+  "Question updated.": "ស្រកស្អលត្រួរប័ល។",
+  "Question Title": "ចន្ញោ្តស្រកស្អល",
+  "Question Description": "ស្រាយលឡើសរកស្អល",
+  "Write your question in detail…": "ស្រើសស្រកស្អលរបស់ឡើត់ប័ល។។។",
+  "edit question": "កែស្ន័សអ្វីស្រកស្អល",
+  "update the question details below.": "ត្រួតប័លេកស្ន័សអ្វីខាងក្រោមនឹោះ។",
+  "question updated.": "ស្រកស្អលត្រួរប័ល។",
+  "question description": "ស្រាយលឡើសរកស្អល",
+  "write your question in detail…": "ស្រើសស្រកស្អលរបស់ឡើត់ប័ល។។។"
 }

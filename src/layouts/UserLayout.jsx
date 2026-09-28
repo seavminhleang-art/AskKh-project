@@ -3,9 +3,12 @@ import { Outlet } from "react-router-dom";
 import Sidebar from "../Components/common/Sidebar";
 import WorkspaceTopbar from "./WorkspaceTopbar";
 import { usePageSEO } from "../Components/common/SEO";
+import { useRealtimeNotifications } from "../features/notifications/useRealtimeNotifications.jsx";
 
 export default function UserLayout({ mode = "user" }) {
   const [collapsed, setCollapsed] = useState(false);
+  // Establish WebSocket connection for real-time claim approve/reject notifications
+  useRealtimeNotifications();
 
   usePageSEO({
     title: mode === "admin" ? "Admin Workspace | NEXA" : "User Dashboard | NEXA",
@@ -28,7 +31,7 @@ export default function UserLayout({ mode = "user" }) {
 
   return (
     <div
-      className={`user-workspace uw-shell ${collapsed ? "sidebar-collapsed" : ""}`}
+      className={`user-workspace uw-shell text-sm ${collapsed ? "sidebar-collapsed" : ""}`}
     >
       <Sidebar mode={mode} />
       <div className="uw-shell-content">

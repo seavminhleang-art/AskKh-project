@@ -183,7 +183,7 @@ export default function ResetPasswordPage() {
         </Link>
         <Link
           to="/"
-          className={`inline-flex items-center gap-2 text-base font-medium px-4 py-2 rounded-full border transition-all duration-200 no-underline ${
+          className={`inline-flex items-center gap-2 text-lg font-medium px-4 py-2 rounded-full border transition-all duration-200 no-underline ${
             darkMode
               ? "border-zinc-700 bg-zinc-900/80 text-gray-300 hover:bg-zinc-800 hover:text-white"
               : "border-gray-200 bg-white text-gray-600 hover:bg-gray-100 hover:text-gray-900"
@@ -221,14 +221,14 @@ export default function ResetPasswordPage() {
               </div>
 
               <div>
-                <span className="inline-flex items-center gap-1.5 text-base font-semibold px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-500 mb-3 border border-emerald-500/20">
+                <span className="inline-flex items-center gap-1.5 text-lg font-semibold px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-500 mb-3 border border-emerald-500/20">
                   <Sparkles size={13} /> {t.successTitle}
                 </span>
                 <h1 className="text-5xl sm:text-5xl font-bold tracking-tight text-emerald-500">
                   {t.successTitle}
                 </h1>
                 <p
-                  className={`mt-2 text-base leading-relaxed ${darkMode ? "text-slate-300" : "text-gray-600"}`}
+                  className={`mt-2 text-lg leading-relaxed ${darkMode ? "text-slate-300" : "text-gray-600"}`}
                 >
                   {data?.message || t.successDesc}
                 </p>
@@ -258,14 +258,14 @@ export default function ResetPasswordPage() {
                   {t.title}
                 </h1>
                 <p
-                  className={`mt-2 text-base leading-relaxed ${darkMode ? "text-slate-400" : "text-gray-500"}`}
+                  className={`mt-2 text-lg leading-relaxed ${darkMode ? "text-slate-400" : "text-gray-500"}`}
                 >
                   {t.subtitle}
                 </p>
               </div>
 
               {(validationError || isError) && (
-                <div className="p-3.5 rounded-xl bg-red-500/10 border border-red-500/20 text-red-500 text-base font-medium text-left flex items-start gap-2">
+                <div className="p-3.5 rounded-xl bg-red-500/10 border border-red-500/20 text-red-500 text-lg font-medium text-left flex items-start gap-2">
                   <XCircle size={16} className="shrink-0 mt-0.5" />
                   <span>
                     {validationError || authError(error, t.errorDesc)}
@@ -277,7 +277,7 @@ export default function ResetPasswordPage() {
                 {/* Manual Token Input (Only if not already in URL) */}
                 {!urlToken && (
                   <div>
-                    <label className="block text-base font-semibold mb-1.5 opacity-80">
+                    <label className="block text-lg font-semibold mb-1.5 opacity-80">
                       {t.manualTokenLabel}
                     </label>
                     <div className="relative">
@@ -291,7 +291,7 @@ export default function ResetPasswordPage() {
                         onChange={(e) => setTokenInput(e.target.value)}
                         placeholder={t.manualTokenPlaceholder}
                         required
-                        className={`w-full pl-10 pr-4 py-2.5 rounded-xl text-base border focus:outline-none focus:ring-2 focus:ring-brand-primary font-mono text-base transition-all ${
+                        className={`w-full pl-10 pr-4 py-2.5 rounded-xl text-lg border focus:outline-none focus:ring-2 focus:ring-brand-primary font-mono text-lg transition-all ${
                           darkMode
                             ? "bg-zinc-800/80 border-zinc-700 text-white placeholder-zinc-500"
                             : "bg-white border-gray-200 text-gray-800 placeholder-gray-400"
@@ -303,7 +303,7 @@ export default function ResetPasswordPage() {
 
                 {/* New Password */}
                 <div>
-                  <label className="block text-base font-semibold mb-1.5 opacity-80">
+                  <label className="block text-lg font-semibold mb-1.5 opacity-80">
                     {t.newPasswordLabel}
                   </label>
                   <div className="relative">
@@ -318,7 +318,7 @@ export default function ResetPasswordPage() {
                       placeholder={t.newPasswordPlaceholder}
                       required
                       minLength={8}
-                      className={`w-full pl-10 pr-11 py-2.5 rounded-xl text-base border focus:outline-none focus:ring-2 focus:ring-brand-primary transition-all ${
+                      className={`w-full pl-10 pr-11 py-2.5 rounded-xl text-lg border focus:outline-none focus:ring-2 focus:ring-brand-primary transition-all ${
                         darkMode
                           ? "bg-zinc-800/80 border-zinc-700 text-white placeholder-zinc-500"
                           : "bg-white border-gray-200 text-gray-800 placeholder-gray-400"
@@ -336,7 +336,7 @@ export default function ResetPasswordPage() {
 
                 {/* Confirm Password */}
                 <div>
-                  <label className="block text-base font-semibold mb-1.5 opacity-80">
+                  <label className="block text-lg font-semibold mb-1.5 opacity-80">
                     {t.confirmPasswordLabel}
                   </label>
                   <div className="relative">
@@ -351,7 +351,7 @@ export default function ResetPasswordPage() {
                       placeholder={t.confirmPasswordPlaceholder}
                       required
                       minLength={8}
-                      className={`w-full pl-10 pr-11 py-2.5 rounded-xl text-base border focus:outline-none focus:ring-2 focus:ring-brand-primary transition-all ${
+                      className={`w-full pl-10 pr-11 py-2.5 rounded-xl text-lg border focus:outline-none focus:ring-2 focus:ring-brand-primary transition-all ${
                         darkMode
                           ? "bg-zinc-800/80 border-zinc-700 text-white placeholder-zinc-500"
                           : "bg-white border-gray-200 text-gray-800 placeholder-gray-400"
@@ -388,7 +388,7 @@ export default function ResetPasswordPage() {
                     : "bg-slate-50 border-slate-200"
                 }`}
               >
-                <h4 className="text-base font-semibold flex items-center gap-2">
+                <h4 className="text-lg font-semibold flex items-center gap-2">
                   <Mail size={14} className="text-brand-primary" />
                   <span>{t.requestNewPrompt}</span>
                 </h4>
@@ -399,7 +399,7 @@ export default function ResetPasswordPage() {
                     onChange={(e) => setForgotEmail(e.target.value)}
                     placeholder={t.requestEmailPlaceholder}
                     required
-                    className={`flex-1 px-3 py-2 rounded-lg text-base border focus:outline-none focus:ring-2 focus:ring-brand-primary ${
+                    className={`flex-1 px-3 py-2 rounded-lg text-lg border focus:outline-none focus:ring-2 focus:ring-brand-primary ${
                       darkMode
                         ? "bg-zinc-900 border-zinc-700 text-white placeholder-zinc-500"
                         : "bg-white border-gray-200 text-gray-800 placeholder-gray-400"
@@ -408,14 +408,14 @@ export default function ResetPasswordPage() {
                   <button
                     type="submit"
                     disabled={forgotState.isLoading}
-                    className="px-3 py-2 bg-slate-700 hover:bg-slate-800 text-white text-base font-medium rounded-lg transition-colors duration-150 disabled:opacity-50 cursor-pointer"
+                    className="px-3 py-2 bg-slate-700 hover:bg-slate-800 text-white text-lg font-medium rounded-lg transition-colors duration-150 disabled:opacity-50 cursor-pointer"
                   >
                     {forgotState.isLoading ? t.requesting : t.requestBtn}
                   </button>
                 </form>
                 {forgotFeedback && (
                   <p
-                    className={`text-base font-medium ${forgotFeedback.ok ? "text-emerald-500" : "text-red-500"}`}
+                    className={`text-lg font-medium ${forgotFeedback.ok ? "text-emerald-500" : "text-red-500"}`}
                   >
                     {forgotFeedback.message}
                   </p>
@@ -425,7 +425,7 @@ export default function ResetPasswordPage() {
               <div className="pt-2">
                 <Link
                   to="/login"
-                  className={`inline-flex items-center gap-2 text-base font-medium hover:underline ${
+                  className={`inline-flex items-center gap-2 text-lg font-medium hover:underline ${
                     darkMode ? "text-slate-300" : "text-gray-600"
                   }`}
                 >
@@ -439,7 +439,7 @@ export default function ResetPasswordPage() {
       </main>
 
       {/* Footer */}
-      <footer className="w-full text-center py-6 text-base text-gray-400">
+      <footer className="w-full text-center py-6 text-lg text-gray-400">
         &copy; {new Date().getFullYear()} NEXA. All rights reserved.
       </footer>
     </div>

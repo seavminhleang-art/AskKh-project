@@ -72,7 +72,7 @@ const CreatePostView = ({ onAddPost, onCancel, darkMode: propDarkMode }) => {
         title: title.trim(),
         body: content.trim(),
         postTypeId: QUESTION_POST_TYPE_ID,
-        tagIds: tags.map(tag => tag.id),
+        tagIds: tags.map((tag) => tag.id),
         codeSnippet: showCode ? codeSnippet : null,
         codeLanguage: showCode && codeSnippet ? codeLanguage : null,
         imageUrls: [],
@@ -110,14 +110,14 @@ const CreatePostView = ({ onAddPost, onCancel, darkMode: propDarkMode }) => {
             }`}
           >
             <h3
-              className={`font-bold text-base ${darkMode ? "text-slate-200" : "text-gray-800"}`}
+              className={`font-bold text-lg ${darkMode ? "text-slate-200" : "text-gray-800"}`}
             >
               {t("create.blogDetails")}
             </h3>
 
             <div>
               <label
-                className={`block text-base font-semibold mb-1 ${darkMode ? "text-slate-300" : "text-gray-700"}`}
+                className={`block text-lg font-semibold mb-1 ${darkMode ? "text-slate-300" : "text-gray-700"}`}
               >
                 {t("create.blogTitleLabel")}{" "}
                 <span className="text-red-500">*</span>
@@ -129,7 +129,7 @@ const CreatePostView = ({ onAddPost, onCancel, darkMode: propDarkMode }) => {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder={t("create.blogTitleLabel")}
-                className={`w-full rounded-xl px-3 py-2 text-base border focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors ${
+                className={`w-full rounded-xl px-3 py-2 text-lg border focus:outline-none focus:ring-1 focus:ring-blue-500 transition-colors ${
                   darkMode
                     ? "bg-zinc-800/80 border-zinc-700 text-slate-100 placeholder-zinc-500"
                     : "bg-white border-gray-200 text-gray-900 placeholder-gray-400"
@@ -139,21 +139,28 @@ const CreatePostView = ({ onAddPost, onCancel, darkMode: propDarkMode }) => {
             </div>
 
             <div>
-              <label htmlFor="community-description"
-                className={`block text-base font-semibold mb-1 ${darkMode ? "text-slate-300" : "text-gray-700"}`}
+              <label
+                htmlFor="community-description"
+                className={`block text-lg font-semibold mb-1 ${darkMode ? "text-slate-300" : "text-gray-700"}`}
               >
                 {t("create.contentLabel")}
               </label>
               <div
                 className={`border rounded-xl overflow-hidden ${darkMode ? "border-zinc-700" : "border-gray-200"}`}
               >
-                <TextEditor id="community-description" value={content} onChange={setContent} disabled={submitting} placeholder={t("create.placeholderContent")} />
+                <TextEditor
+                  id="community-description"
+                  value={content}
+                  onChange={setContent}
+                  disabled={submitting}
+                  placeholder={t("create.placeholderContent")}
+                />
               </div>
             </div>
           </div>
 
           <section className="rounded-2xl border border-slate-300/30 p-5 space-y-3">
-            <label className="flex items-center gap-2 text-base font-semibold">
+            <label className="flex items-center gap-2 text-lg font-semibold">
               <input
                 type="checkbox"
                 checked={showCode}
@@ -163,7 +170,7 @@ const CreatePostView = ({ onAddPost, onCancel, darkMode: propDarkMode }) => {
             </label>
             {showCode && (
               <>
-                <label className="flex items-center gap-3 text-base">
+                <label className="flex items-center gap-3 text-lg">
                   Language
                   <select
                     className="rounded-lg border p-2 bg-transparent"
@@ -192,14 +199,14 @@ const CreatePostView = ({ onAddPost, onCancel, darkMode: propDarkMode }) => {
                     darkMode={darkMode}
                   />
                 </Suspense>
-                <p className="text-base opacity-60">
+                <p className="text-lg opacity-60">
                   {codeSnippet.length.toLocaleString()} / 20,000 characters
                 </p>
               </>
             )}
           </section>
           {error && (
-            <p role="alert" className="text-base text-red-500">
+            <p role="alert" className="text-lg text-red-500">
               {error}
             </p>
           )}
@@ -210,7 +217,7 @@ const CreatePostView = ({ onAddPost, onCancel, darkMode: propDarkMode }) => {
             }`}
           >
             <h3
-              className={`font-bold text-base ${darkMode ? "text-slate-200" : "text-gray-800"}`}
+              className={`font-bold text-lg ${darkMode ? "text-slate-200" : "text-gray-800"}`}
             >
               {t("create.coverImage")}
             </h3>
@@ -233,7 +240,7 @@ const CreatePostView = ({ onAddPost, onCancel, darkMode: propDarkMode }) => {
                     className={`w-8 h-8 mb-2 ${darkMode ? "text-zinc-500" : "text-gray-400"}`}
                   />
                   <span
-                    className={`text-base font-semibold ${darkMode ? "text-slate-300" : "text-gray-700"}`}
+                    className={`text-lg font-semibold ${darkMode ? "text-slate-300" : "text-gray-700"}`}
                   >
                     {t("create.uploadFile")}
                   </span>
@@ -253,7 +260,7 @@ const CreatePostView = ({ onAddPost, onCancel, darkMode: propDarkMode }) => {
             <button
               type="submit"
               disabled={submitting || tagBusy}
-              className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-2 rounded-xl text-base transition-colors"
+              className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 py-2 rounded-xl text-lg transition-colors"
             >
               {submitting ? "Publishing…" : t("create.addBlog")}
             </button>
@@ -261,7 +268,7 @@ const CreatePostView = ({ onAddPost, onCancel, darkMode: propDarkMode }) => {
               type="button"
               onClick={onCancel}
               disabled={submitting || tagBusy}
-              className={`font-medium px-6 py-2 rounded-xl text-base transition-colors border ${
+              className={`font-medium px-6 py-2 rounded-xl text-lg transition-colors border ${
                 darkMode
                   ? "bg-red-950/40 text-red-400 hover:bg-red-900/50 border-red-900/30"
                   : "bg-red-50 text-red-500 hover:bg-red-100 border-transparent"
@@ -280,12 +287,17 @@ const CreatePostView = ({ onAddPost, onCancel, darkMode: propDarkMode }) => {
             }`}
           >
             <h3
-              className={`font-bold text-base ${darkMode ? "text-slate-200" : "text-gray-800"}`}
+              className={`font-bold text-lg ${darkMode ? "text-slate-200" : "text-gray-800"}`}
             >
               {t("create.tags")}
             </h3>
 
-            <HashtagPicker value={tags} onChange={setTags} disabled={submitting} onBusyChange={setTagBusy} />
+            <HashtagPicker
+              value={tags}
+              onChange={setTags}
+              disabled={submitting}
+              onBusyChange={setTagBusy}
+            />
           </div>
         </div>
       </form>

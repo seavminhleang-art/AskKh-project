@@ -141,7 +141,7 @@ export default function PostItemModal({
           <h2 className="text-5xl font-black text-slate-900 dark:text-white tracking-tight">
             Report Campus Belongings
           </h2>
-          <p className="text-base text-slate-500 dark:text-slate-400 mt-1">
+          <p className="text-lg text-slate-500 dark:text-slate-400 mt-1">
             Provide accurate details to facilitate instant verification and
             smart matching.
           </p>
@@ -152,7 +152,7 @@ export default function PostItemModal({
           <button
             type="button"
             onClick={() => setType("LOST")}
-            className={`py-2.5 rounded-xl font-bold text-base transition-all select-none cursor-pointer ${
+            className={`py-2.5 rounded-xl font-bold text-lg transition-all select-none cursor-pointer ${
               type === "LOST"
                 ? "bg-rose-500 text-white shadow-xs"
                 : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
@@ -163,7 +163,7 @@ export default function PostItemModal({
           <button
             type="button"
             onClick={() => setType("FOUND")}
-            className={`py-2.5 rounded-xl font-bold text-base transition-all select-none cursor-pointer ${
+            className={`py-2.5 rounded-xl font-bold text-lg transition-all select-none cursor-pointer ${
               type === "FOUND"
                 ? "bg-emerald-600 text-white shadow-xs"
                 : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
@@ -175,7 +175,7 @@ export default function PostItemModal({
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-base font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+            <label className="block text-lg font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
               Item Title *
             </label>
             <Input
@@ -185,19 +185,19 @@ export default function PostItemModal({
               error={errors.name}
             />
             {errors.name && (
-              <p className="text-base text-rose-500 mt-1">{errors.name}</p>
+              <p className="text-lg text-rose-500 mt-1">{errors.name}</p>
             )}
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-base font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+              <label className="block text-lg font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
                 Category *
               </label>
               <select
                 value={categoryId}
                 onChange={(e) => setCategoryId(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-base text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-lg text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none"
               >
                 {categories.map((c) => (
                   <option key={c.id} value={c.id}>
@@ -208,7 +208,7 @@ export default function PostItemModal({
             </div>
 
             <div>
-              <label className="block text-base font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+              <label className="block text-lg font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
                 Campus Location *
               </label>
               <select
@@ -221,7 +221,7 @@ export default function PostItemModal({
                   if (selectedLoc)
                     setFreeTextLocation(selectedLoc.label || selectedLoc.name);
                 }}
-                className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-base text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-lg text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none"
               >
                 {locations.map((loc) => (
                   <option key={loc.id} value={loc.id}>
@@ -234,7 +234,7 @@ export default function PostItemModal({
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-base font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+              <label className="block text-lg font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
                 Date *
               </label>
               <Input
@@ -244,7 +244,7 @@ export default function PostItemModal({
               />
             </div>
             <div>
-              <label className="block text-base font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+              <label className="block text-lg font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
                 Approximate Time
               </label>
               <Input
@@ -256,7 +256,7 @@ export default function PostItemModal({
           </div>
 
           <div>
-            <label className="block text-base font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+            <label className="block text-lg font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
               Detailed Description & Distinguishing Marks *
             </label>
             <Textarea
@@ -267,14 +267,12 @@ export default function PostItemModal({
               error={errors.description}
             />
             {errors.description && (
-              <p className="text-base text-rose-500 mt-1">
-                {errors.description}
-              </p>
+              <p className="text-lg text-rose-500 mt-1">{errors.description}</p>
             )}
           </div>
 
           <div>
-            <label className="block text-base font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+            <label className="block text-lg font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
               Confidential Hidden Detail (For Ownership Verification)
             </label>
             <Input
@@ -282,7 +280,7 @@ export default function PostItemModal({
               onChange={(e) => setHiddenDetail(e.target.value)}
               placeholder="e.g. Serial number, desktop wallpaper, student ID number inside..."
             />
-            <p className="text-base text-slate-400 mt-1">
+            <p className="text-lg text-slate-400 mt-1">
               Kept hidden. Claimants must describe this detail to verify
               legitimate ownership.
             </p>
@@ -290,7 +288,7 @@ export default function PostItemModal({
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-base font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+              <label className="block text-lg font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
                 Contact Info / Desk *
               </label>
               <Input
@@ -300,17 +298,17 @@ export default function PostItemModal({
                 error={errors.contactInfo}
               />
               {errors.contactInfo && (
-                <p className="text-base text-rose-500 mt-1">
+                <p className="text-lg text-rose-500 mt-1">
                   {errors.contactInfo}
                 </p>
               )}
             </div>
 
             <div>
-              <label className="block text-base font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
+              <label className="block text-lg font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
                 Upload Photo (API Upload)
               </label>
-              <label className="flex items-center gap-2 px-3 py-2.5 rounded-xl border border-dashed border-slate-300 dark:border-slate-700 hover:border-blue-500 bg-slate-50 dark:bg-slate-800/60 cursor-pointer text-base text-slate-600 dark:text-slate-300">
+              <label className="flex items-center gap-2 px-3 py-2.5 rounded-xl border border-dashed border-slate-300 dark:border-slate-700 hover:border-blue-500 bg-slate-50 dark:bg-slate-800/60 cursor-pointer text-lg text-slate-600 dark:text-slate-300">
                 {isUploading ? (
                   <Loader2 className="w-4 h-4 animate-spin text-blue-600" />
                 ) : (
