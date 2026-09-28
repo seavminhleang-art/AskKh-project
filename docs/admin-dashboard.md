@@ -34,3 +34,10 @@ The moderation screen reads lost-and-found reports and their `moderationStatus`,
 The side panels load Q&A tags, lost-and-found categories, and locations. Category creation uses `POST /lost-found/categories`; zone counts count matching loaded reports. Missing safety scores and resolution dates display as unavailable. Report visibility controls are disabled because the schema contains no hide/unhide operation.
 
 Validation: `node --test tests/admin-moderation.test.mjs tests/admin-management.test.mjs`; production build. No live mutations were performed.
+
+## Admin-Nexa post review
+
+- `/admin/posts` uses `GET /posts` (`getAllPosts`) to load all posts, with search and local pagination.
+- Review shows the post title, author, body, and code snippet. Signed-in admins can open the permanent-delete confirmation from the table or review view, including for posts owned by other users.
+- Confirmed deletion uses `DELETE /posts/{postId}`; successful requests invalidate the post and analytics caches. Failed requests keep the confirmation open and show an error.
+- The backend OpenAPI contract checked on 2026-09-28 still describes deletion as owner-only. The external backend must authorize admins to delete other users’ posts and continue rejecting unauthorized users. This frontend cannot grant that permission. Live deletion was not tested.
