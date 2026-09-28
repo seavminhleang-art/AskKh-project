@@ -1,16 +1,28 @@
 import { baseApi } from '../../store/api/baseApi';
 
+// The API requires `value` for its non-null votes.value column. Always derive
+// it from voteTypeId so callers cannot accidentally submit null/undefined or
+// an inconsistent value.
+const votePayload = ({ postId, userId, voteTypeId }) => {
+  const normalizedVoteTypeId = Number(voteTypeId);
+  if (normalizedVoteTypeId !== 1 && normalizedVoteTypeId !== 2) {
+    throw new Error('voteTypeId must be 1 (upvote) or 2 (downvote).');
+  }
+  return {
+    postId,
+    ...(userId == null ? {} : { userId }),
+    voteTypeId: normalizedVoteTypeId,
+    value: normalizedVoteTypeId === 1 ? 1 : -1,
+  };
+};
+
 export const voteApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     votePost: builder.mutation({
-      query: ({ postId, voteTypeId, value }) => ({
+      query: (vote) => ({
         url: '/votes',
         method: 'POST',
-        body: {
-          postId,
-          voteTypeId,
-          value: value ?? (voteTypeId === 1 ? 1 : -1),
-        },
+        body: votePayload(vote),
       }),
       invalidatesTags: (result, error, { postId }) => [
         { type: 'Vote', id: postId },
@@ -19,14 +31,10 @@ export const voteApi = baseApi.injectEndpoints({
       ],
     }),
     updateVote: builder.mutation({
-      query: ({ voteId, postId, voteTypeId, value }) => ({
+      query: ({ voteId, ...vote }) => ({
         url: `/votes/${voteId}`,
         method: 'PUT',
-        body: {
-          postId,
-          voteTypeId,
-          value: value ?? (voteTypeId === 1 ? 1 : -1),
-        },
+        body: votePayload(vote),
       }),
       invalidatesTags: (result, error, { postId, voteId }) => [
         { type: 'Vote', id: voteId },

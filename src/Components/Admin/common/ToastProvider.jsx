@@ -36,7 +36,7 @@ export function ToastProvider({ children }) {
                 size={18}
                 className={`${tones[t.type]} flex-shrink-0 mt-0.5`}
               />
-              <p className="text-base text-gray-700 flex-1">{t.message}</p>
+              <p className="text-lg text-gray-700 flex-1">{t.message}</p>
               <button
                 onClick={() => dismiss(t.id)}
                 className="text-gray-300 hover:text-gray-500"

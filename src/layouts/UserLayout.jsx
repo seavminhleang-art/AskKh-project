@@ -31,7 +31,7 @@ export default function UserLayout({ mode = "user" }) {
 
   return (
     <div
-      className={`user-workspace uw-shell ${collapsed ? "sidebar-collapsed" : ""}`}
+      className={`user-workspace uw-shell text-sm ${collapsed ? "sidebar-collapsed" : ""}`}
     >
       <Sidebar mode={mode} />
       <div className="uw-shell-content">

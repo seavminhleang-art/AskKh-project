@@ -80,7 +80,7 @@ function IllustrationImage({ src, alt, className = "w-full max-w-sm" }) {
   if (!src) {
     return (
       <div
-        className={`${className} aspect-[4/3] rounded-2xl bg-slate-100 border-2 border-dashed border-brand-primary/30 flex items-center justify-center text-slate-400 text-base`}
+        className={`${className} aspect-[4/3] rounded-2xl bg-slate-100 border-2 border-dashed border-brand-primary/30 flex items-center justify-center text-slate-400 text-lg`}
       >
         Add image
       </div>
@@ -277,7 +277,7 @@ function MemberCard({
       }`}
     >
       <div className="flex justify-between items-start px-5">
-        <span className="bg-brand-primary text-white text-base font-bold px-3 py-1.5 rounded-lg">
+        <span className="bg-brand-primary text-white text-lg font-bold px-3 py-1.5 rounded-lg">
           {num}
         </span>
 
@@ -333,7 +333,7 @@ function MemberCard({
       <div className="flex items-center justify-center gap-2 mt-2">
         <span className="w-4 h-px bg-brand-secondary/40" />
 
-        <p className="text-brand-secondary text-base font-bold uppercase tracking-wide">
+        <p className="text-brand-secondary text-lg font-bold uppercase tracking-wide">
           {roleLabel}
         </p>
 
@@ -441,7 +441,9 @@ export default function AboutNexa() {
 
         <div className="flex justify-center">
           <ScrollReveal animation="scaleIn" delay={200}>
-            <div className="about-team-hero"><img src={teamHeroPhoto} alt="NEXA team members" /></div>
+            <div className="about-team-hero">
+              <img src={teamHeroPhoto} alt="NEXA team members" />
+            </div>
           </ScrollReveal>
         </div>
       </section>
@@ -492,7 +494,7 @@ export default function AboutNexa() {
                   </svg>
                 </div>
 
-                <h3 className="font-semibold text-[var(--text-main)] text-2xl">
+                <h3 className="font-semibold text-[var(--text-main)] text-lg">
                   {t(`${feature.key}.title`)}
                 </h3>
 
@@ -518,7 +520,7 @@ export default function AboutNexa() {
 
         <div className="order-1 md:order-2">
           <ScrollReveal animation="fadeInUp">
-            <span className="text-brand-primary text-base font-semibold">
+            <span className="text-brand-primary text-lg font-semibold">
               {t("aboutPage.missionTitle")}
             </span>
 
@@ -555,7 +557,7 @@ export default function AboutNexa() {
         <div className="max-w-6xl mx-auto px-6 py-20 grid md:grid-cols-2 gap-12 items-center">
           <div className="no-transition">
             <ScrollReveal animation="fadeInUp">
-              <span className="text-brand-primary text-base font-semibold">
+              <span className="text-brand-primary text-lg font-semibold">
                 {t("aboutPage.visionTitle")}
               </span>
 

@@ -86,7 +86,7 @@ export default function Settings() {
             <button
               key={key}
               onClick={() => setActive(key)}
-              className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-base font-medium transition-colors
+              className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-lg font-medium transition-colors
                 ${active === key ? "bg-brand-primary-light text-brand-primary" : "text-gray-500 hover:bg-gray-50"}`}
             >
               <Icon size={16} /> {label}

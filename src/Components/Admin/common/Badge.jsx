@@ -29,7 +29,7 @@ export const statusTone = (status) => {
 export default function Badge({ tone = "neutral", children, className = "" }) {
   return (
     <span
-      className={`inline-flex items-center px-2 py-0.5 rounded-full text-base font-medium ${tones[tone]} ${className}`}
+      className={`inline-flex items-center px-2 py-0.5 rounded-full text-lg font-medium ${tones[tone]} ${className}`}
     >
       {children}
     </span>

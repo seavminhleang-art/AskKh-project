@@ -67,7 +67,7 @@ export default function Marketplace() {
               <button
                 key={c}
                 onClick={() => setCategory(c)}
-                className={`px-3 py-1.5 rounded-full text-base font-medium transition-colors ${category === c ? "bg-brand-primary text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}
+                className={`px-3 py-1.5 rounded-full text-lg font-medium transition-colors ${category === c ? "bg-brand-primary text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"}`}
               >
                 {c}
               </button>
@@ -102,7 +102,7 @@ export default function Marketplace() {
               />
               <div className="p-4">
                 <div className="flex items-start justify-between gap-2">
-                  <p className="font-medium text-gray-800 text-base leading-snug">
+                  <p className="font-medium text-gray-800 text-lg leading-snug">
                     {item.name}
                   </p>
                   <Badge tone={statusTone(item.status)}>{item.status}</Badge>
@@ -110,10 +110,10 @@ export default function Marketplace() {
                 <p className="text-brand-primary font-semibold mt-1">
                   ${item.price}
                 </p>
-                <p className="text-base text-gray-400 mt-1.5 flex items-center gap-1">
+                <p className="text-lg text-gray-400 mt-1.5 flex items-center gap-1">
                   <MapPin size={12} /> {item.location}
                 </p>
-                <p className="text-base text-gray-400 mt-0.5">
+                <p className="text-lg text-gray-400 mt-0.5">
                   Seller: {item.seller}
                 </p>
               </div>

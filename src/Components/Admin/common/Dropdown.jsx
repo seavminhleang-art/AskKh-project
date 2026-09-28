@@ -31,7 +31,7 @@ export default function Dropdown({ trigger, children, align = "right" }) {
 export function DropdownItem({ icon: Icon, children, danger, ...props }) {
   return (
     <button
-      className={`w-full flex items-center gap-2 px-3.5 py-2 text-base text-left transition-colors
+      className={`w-full flex items-center gap-2 px-3.5 py-2 text-lg text-left transition-colors
         ${danger ? "text-brand-secondary hover:bg-brand-secondary-light" : "text-gray-700 hover:bg-gray-50"}`}
       {...props}
     >

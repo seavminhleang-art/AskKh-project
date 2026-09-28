@@ -40,7 +40,8 @@ const SidebarLeft = ({
   const tagsList = [];
   if (rawTags.length > 0) {
     rawTags.forEach((tag) => {
-      const tagName = tag.tagName || tag.name || (typeof tag === "string" ? tag : "");
+      const tagName =
+        tag.tagName || tag.name || (typeof tag === "string" ? tag : "");
       if (!tagName) return;
       const count = tagCountsFromPosts[tagName] ?? tag.count ?? 0;
       tagsList.push({
@@ -100,9 +101,9 @@ const SidebarLeft = ({
             <Search className="w-4 h-4" />
           </div>
           <div className="text-left">
-            <p className="font-semibold text-base">{t("nav.newest")}</p>
+            <p className="font-semibold text-lg">{t("nav.newest")}</p>
             <p
-              className={`text-base ${
+              className={`text-lg ${
                 activeTab === "newest"
                   ? "text-blue-100"
                   : darkMode
@@ -139,9 +140,9 @@ const SidebarLeft = ({
               <Bookmark className="w-4 h-4 fill-current" />
             </div>
             <div className="text-left">
-              <p className="font-semibold text-base">{t("nav.bookmarks")}</p>
+              <p className="font-semibold text-lg">{t("nav.bookmarks")}</p>
               <p
-                className={`text-base ${
+                className={`text-lg ${
                   activeTab === "bookmarks"
                     ? "text-blue-100"
                     : darkMode
@@ -155,7 +156,7 @@ const SidebarLeft = ({
           </div>
           {savedCount > 0 && (
             <span
-              className={`text-base font-bold px-2 py-0.5 rounded-full ${
+              className={`text-lg font-bold px-2 py-0.5 rounded-full ${
                 activeTab === "bookmarks"
                   ? "bg-white text-blue-600"
                   : darkMode
@@ -191,9 +192,9 @@ const SidebarLeft = ({
             <Heart className="w-4 h-4" />
           </div>
           <div className="text-left">
-            <p className="font-semibold text-base">{t("nav.yourPost")}</p>
+            <p className="font-semibold text-lg">{t("nav.yourPost")}</p>
             <p
-              className={`text-base ${
+              className={`text-lg ${
                 activeTab === "following"
                   ? "text-blue-100"
                   : darkMode
@@ -214,17 +215,17 @@ const SidebarLeft = ({
         }`}
       >
         <h3
-          className={`font-bold text-base mb-3 ${darkMode ? "text-slate-200" : "text-gray-800"}`}
+          className={`font-bold text-lg mb-3 ${darkMode ? "text-slate-200" : "text-gray-800"}`}
         >
           {t("sidebar.popularTags")}
         </h3>
         {query.isLoading && (
-          <p role="status" className="text-base">
+          <p role="status" className="text-lg">
             Loading tags…
           </p>
         )}
         {query.isError && (
-          <button className="text-base" onClick={query.refetch}>
+          <button className="text-lg" onClick={query.refetch}>
             Retry loading tags
           </button>
         )}
@@ -249,7 +250,7 @@ const SidebarLeft = ({
                 </div>
                 <div>
                   <p
-                    className={`text-base font-bold transition-colors ${
+                    className={`text-lg font-bold transition-colors ${
                       darkMode
                         ? "text-slate-200 group-hover:text-blue-400"
                         : "text-gray-800 group-hover:text-blue-600"
@@ -258,7 +259,7 @@ const SidebarLeft = ({
                     {tag.name}
                   </p>
                   <p
-                    className={`text-base ${darkMode ? "text-zinc-400" : "text-gray-400"}`}
+                    className={`text-lg ${darkMode ? "text-zinc-400" : "text-gray-400"}`}
                   >
                     {tag.count}
                   </p>

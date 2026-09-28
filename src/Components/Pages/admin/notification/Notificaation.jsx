@@ -77,11 +77,11 @@ export default function Notifications() {
                     <Icon size={16} />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-base font-medium text-gray-800">
+                    <p className="text-lg font-medium text-gray-800">
                       {n.title}
                     </p>
-                    <p className="text-base text-gray-500">{n.message}</p>
-                    <p className="text-base text-gray-400 mt-0.5">
+                    <p className="text-lg text-gray-500">{n.message}</p>
+                    <p className="text-lg text-gray-400 mt-0.5">
                       {n.user} · {timeAgo(n.time)}
                     </p>
                   </div>

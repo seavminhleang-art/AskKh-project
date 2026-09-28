@@ -35,7 +35,7 @@ export default function StatCard({
     <Card className="p-5 animate-fade-slide">
       <div className="flex items-start justify-between">
         <div>
-          <p className="text-base text-gray-500">{title}</p>
+          <p className="text-lg text-gray-500">{title}</p>
           <p className="mt-1.5 text-5xl font-semibold text-gray-900">
             {displayValue}
           </p>
@@ -47,7 +47,7 @@ export default function StatCard({
         )}
       </div>
       {(trend !== undefined || supportingText) && (
-        <div className="mt-3 flex items-center gap-1.5 text-base">
+        <div className="mt-3 flex items-center gap-1.5 text-lg">
           {trend !== undefined && (
             <span
               className={`inline-flex items-center gap-0.5 font-medium ${direction === "up" ? "text-green-600" : "text-red-600"}`}

@@ -17,17 +17,17 @@ export default function AppearancePanel() {
   return (
     <Card className="p-6">
       <h3 className="font-semibold text-gray-900 mb-1">Appearance & Layout</h3>
-      <p className="text-base text-gray-500 mb-5">
+      <p className="text-lg text-gray-500 mb-5">
         Personalize how the admin dashboard looks for you. Saved to this device.
       </p>
 
-      <p className="text-base font-medium text-gray-700 mb-2">Theme</p>
+      <p className="text-lg font-medium text-gray-700 mb-2">Theme</p>
       <div className="flex gap-2 mb-5">
         {themes.map(({ value, label, icon: Icon }) => (
           <button
             key={value}
             onClick={() => dispatch(setTheme(value))}
-            className={`flex-1 flex flex-col items-center gap-1.5 py-3 rounded-lg border text-base transition-colors
+            className={`flex-1 flex flex-col items-center gap-1.5 py-3 rounded-lg border text-lg transition-colors
               ${theme === value ? "border-brand-primary bg-brand-primary-light text-brand-primary" : "border-gray-200 text-gray-500 hover:bg-gray-50"}`}
           >
             <Icon size={18} /> {label}
@@ -35,9 +35,9 @@ export default function AppearancePanel() {
         ))}
       </div>
 
-      <p className="text-base font-medium text-gray-700 mb-2">Sidebar</p>
+      <p className="text-lg font-medium text-gray-700 mb-2">Sidebar</p>
       <div className="flex items-center justify-between p-3 border border-gray-200 rounded-lg mb-5">
-        <span className="text-base text-gray-600">Collapsed by default</span>
+        <span className="text-lg text-gray-600">Collapsed by default</span>
         <button
           onClick={() => dispatch(toggleSidebar())}
           className={`w-10 h-5.5 rounded-full transition-colors relative ${sidebarCollapsed ? "bg-brand-primary" : "bg-gray-200"}`}
@@ -50,13 +50,13 @@ export default function AppearancePanel() {
         </button>
       </div>
 
-      <p className="text-base font-medium text-gray-700 mb-2">Table Density</p>
+      <p className="text-lg font-medium text-gray-700 mb-2">Table Density</p>
       <div className="flex gap-2">
         {densities.map((d) => (
           <button
             key={d}
             onClick={() => dispatch(setDensity(d))}
-            className={`px-4 py-2 rounded-lg text-base capitalize border transition-colors
+            className={`px-4 py-2 rounded-lg text-lg capitalize border transition-colors
               ${density === d ? "border-brand-primary bg-brand-primary-light text-brand-primary" : "border-gray-200 text-gray-500 hover:bg-gray-50"}`}
           >
             {d}

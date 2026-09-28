@@ -28,7 +28,7 @@ function StatCard({ stat }) {
           <Icon className="h-5 w-5" aria-hidden="true" />
         </span>
       </div>
-      <p className="mt-5 text-base text-slate-400">
+      <p className="mt-5 text-lg text-slate-400">
         <span className={isUp ? "text-emerald-400" : "text-rose-400"}>
           {isUp ? "+" : ""}
           {stat.trend}%
@@ -50,7 +50,7 @@ export default function Dashboard() {
         <h1 className="text-5xl sm:text-5xl font-bold tracking-tight text-white">
           Dashboard
         </h1>
-        <p className="mt-2 text-base text-slate-400">
+        <p className="mt-2 text-lg text-slate-400">
           Platform activity and moderation status at a glance.
         </p>
       </div>
@@ -86,7 +86,7 @@ export default function Dashboard() {
                     title={`${value} posts`}
                   />
                 </div>
-                <span className="text-center text-base text-slate-400">
+                <span className="text-center text-lg text-slate-400">
                   {days[index]}
                 </span>
               </div>
@@ -99,10 +99,10 @@ export default function Dashboard() {
           <p className="mt-6 text-5xl font-bold tracking-tight text-white">
             143
           </p>
-          <p className="mt-2 text-base text-slate-400">items awaiting review</p>
+          <p className="mt-2 text-lg text-slate-400">items awaiting review</p>
           <a
             href="#recent-posts"
-            className="admin-inline-link mt-auto pt-8 text-base font-semibold"
+            className="admin-inline-link mt-auto pt-8 text-lg font-semibold"
           >
             Review recent content →
           </a>
@@ -116,7 +116,7 @@ export default function Dashboard() {
             {mockRecentPosts.length} results
           </span>
         </div>
-        <div className="admin-post-header admin-post-grid px-5 sm:px-6 py-3 text-base font-bold uppercase tracking-wider text-slate-500 bg-white/[.025]">
+        <div className="admin-post-header admin-post-grid px-5 sm:px-6 py-3 text-lg font-bold uppercase tracking-wider text-slate-500 bg-white/[.025]">
           <span>Post</span>
           <span>Author</span>
           <span>Date</span>
@@ -126,7 +126,7 @@ export default function Dashboard() {
           {mockRecentPosts.map((post) => (
             <div
               key={post.id}
-              className="admin-post-grid px-5 sm:px-6 py-4 text-base"
+              className="admin-post-grid px-5 sm:px-6 py-4 text-lg"
             >
               <p className="min-w-0 truncate font-semibold text-slate-100">
                 {post.title}

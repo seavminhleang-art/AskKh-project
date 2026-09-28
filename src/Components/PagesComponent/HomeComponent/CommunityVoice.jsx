@@ -1,9 +1,9 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
-import momRothaImg from "@/assets/Website/mom_rotha.png";
-import neangThanaImg from "@/assets/Website/neang_thana.png";
-import cheatChanmonizaImg from "@/assets/Website/cheat_chanmoniza.jpg";
+import momRothaImg from "@/assets/Team/mom_lisa.jpg";
+import neangThanaImg from "@/assets/Team/neang_thana.jpg";
+import cheatChanmonizaImg from "@/assets/Team/cheat_chanmoniza.jpg";
 
 export default function CommunityVoice({ darkMode }) {
   const { t } = useTranslation();
@@ -39,7 +39,7 @@ export default function CommunityVoice({ darkMode }) {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           transition={{ duration: 0.2 }}
-          className={`inline-block text-base font-bold uppercase tracking-wider px-4 py-1.5 rounded-full mb-3  cursor-pointer ${
+          className={`inline-block text-lg font-bold uppercase tracking-wider px-4 py-1.5 rounded-full mb-3  cursor-pointer ${
             darkMode
               ? "bg-zinc-800 text-[var(--home-primary-text)]"
               : "bg-[var(--color-brand-primary-light)] text-[var(--home-primary-text)]"
@@ -53,7 +53,7 @@ export default function CommunityVoice({ darkMode }) {
         </h2>
 
         <p
-          className={`max-w-xl mx-auto text-base md:text-base leading-relaxed ${
+          className={`max-w-xl mx-auto text-lg md:text-lg leading-relaxed ${
             darkMode ? "text-slate-400" : "text-gray-600"
           }`}
         >
@@ -74,7 +74,7 @@ export default function CommunityVoice({ darkMode }) {
             }`}
           >
             <p
-              className={`text-base leading-relaxed mb-6 italic ${
+              className={`text-lg leading-relaxed mb-6 italic ${
                 darkMode ? "text-slate-300" : "text-gray-700"
               }`}
             >
@@ -95,12 +95,12 @@ export default function CommunityVoice({ darkMode }) {
               />
               <div>
                 <h4
-                  className={`font-bold text-base ${darkMode ? "text-slate-100" : "text-gray-900"}`}
+                  className={`font-bold text-lg ${darkMode ? "text-slate-100" : "text-gray-900"}`}
                 >
                   {testimonial.author}
                 </h4>
                 <p
-                  className={`text-base ${darkMode ? "text-slate-400" : "text-gray-500"}`}
+                  className={`text-lg ${darkMode ? "text-slate-400" : "text-gray-500"}`}
                 >
                   {testimonial.role}
                 </p>

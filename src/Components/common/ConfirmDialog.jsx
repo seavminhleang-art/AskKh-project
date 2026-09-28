@@ -39,13 +39,13 @@ export default function ConfirmDialog({
             <h3 className="text-lg font-bold text-slate-900 dark:text-white">
               {title}
             </h3>
-            <p className="text-base text-slate-500 dark:text-slate-400 mt-0.5">
+            <p className="text-lg text-slate-500 dark:text-slate-400 mt-0.5">
               Please review before confirming
             </p>
           </div>
         </div>
 
-        <p className="text-base text-slate-600 dark:text-slate-300 leading-relaxed">
+        <p className="text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
           {description}
         </p>
 

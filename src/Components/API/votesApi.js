@@ -1,5 +1,18 @@
 import { baseApi } from "./baseApi.js";
 
+const votePayload = ({ postId, userId, voteTypeId }) => {
+    const normalizedVoteTypeId = Number(voteTypeId);
+    if (normalizedVoteTypeId !== 1 && normalizedVoteTypeId !== 2) {
+        throw new Error("voteTypeId must be 1 (upvote) or 2 (downvote).");
+    }
+    return {
+        postId,
+        ...(userId == null ? {} : { userId }),
+        voteTypeId: normalizedVoteTypeId,
+        value: normalizedVoteTypeId === 1 ? 1 : -1,
+    };
+};
+
 export const votesApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         // GET /votes/{voteId}
@@ -10,13 +23,10 @@ export const votesApi = baseApi.injectEndpoints({
 
         // POST /votes   body: { postId, voteTypeId, value }
         createVote: builder.mutation({
-            query: (body) => ({
+            query: (vote) => ({
                 url: "/votes",
                 method: "POST",
-                body: {
-                    ...body,
-                    value: body.value ?? (body.voteTypeId === 1 ? 1 : -1),
-                },
+                body: votePayload(vote),
             }),
             invalidatesTags: (result, error, { postId }) => [
                 { type: "Post", id: postId },
@@ -26,13 +36,10 @@ export const votesApi = baseApi.injectEndpoints({
 
         // PUT /votes/{voteId}   body: { postId, voteTypeId, value }
         updateVote: builder.mutation({
-            query: ({ voteId, ...body }) => ({
+            query: ({ voteId, ...vote }) => ({
                 url: `/votes/${voteId}`,
                 method: "PUT",
-                body: {
-                    ...body,
-                    value: body.value ?? (body.voteTypeId === 1 ? 1 : -1),
-                },
+                body: votePayload(vote),
             }),
             invalidatesTags: (result, error, { voteId, postId }) => [
                 { type: "Vote", id: voteId },

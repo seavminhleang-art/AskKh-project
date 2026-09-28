@@ -8,7 +8,7 @@ export default function GenericPanel({ title, description, fields = [] }) {
   return (
     <Card className="p-6">
       <h3 className="font-semibold text-gray-900 mb-1">{title}</h3>
-      <p className="text-base text-gray-500 mb-5">{description}</p>
+      <p className="text-lg text-gray-500 mb-5">{description}</p>
       <div className="space-y-4">
         {fields.map((f) => (
           <div
@@ -16,12 +16,12 @@ export default function GenericPanel({ title, description, fields = [] }) {
             className="flex items-center justify-between p-3 border border-gray-200 rounded-lg"
           >
             <div>
-              <p className="text-base font-medium text-gray-700">{f.label}</p>
+              <p className="text-lg font-medium text-gray-700">{f.label}</p>
               {f.hint && (
-                <p className="text-base text-gray-400 mt-0.5">{f.hint}</p>
+                <p className="text-lg text-gray-400 mt-0.5">{f.hint}</p>
               )}
             </div>
-            <span className="text-base px-2.5 py-1 rounded-full bg-gray-100 text-gray-500">
+            <span className="text-lg px-2.5 py-1 rounded-full bg-gray-100 text-gray-500">
               {f.status || "Configured"}
             </span>
           </div>

@@ -407,7 +407,10 @@ export default function NotFoundPage({
             darkMode ? "text-slate-300" : "text-[#333333]"
           }`}
         >
-          {t("notFoundDescription", "The page you’re looking for isn’t here. Let’s get you back to NEXA.")}
+          {t(
+            "notFoundDescription",
+            "The page you’re looking for isn’t here. Let’s get you back to NEXA.",
+          )}
         </p>
 
         <Link to="/">
@@ -419,7 +422,7 @@ export default function NotFoundPage({
             onMouseLeave={() => setIsHovered && setIsHovered(false)}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="relative bg-[var(--color-brand-primary)] text-white font-semibold px-6 py-2.5 rounded-full hover:bg-[var(--color-brand-primary-dark)] transition cursor-pointer text-base whitespace-nowrap"
+            className="relative bg-[var(--color-brand-primary)] text-white font-semibold px-6 py-2.5 rounded-full hover:bg-[var(--color-brand-primary-dark)] transition cursor-pointer text-lg whitespace-nowrap"
           >
             {t("goBackHomeButton", "Go back home")}
           </motion.button>

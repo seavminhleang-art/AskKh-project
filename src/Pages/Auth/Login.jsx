@@ -34,25 +34,25 @@ export default function Login() {
         <h1 className="text-lg font-semibold text-gray-900">
           Sign in to Ask-Kh Admin
         </h1>
-        <p className="text-base text-gray-500 mt-1 mb-5">
+        <p className="text-lg text-gray-500 mt-1 mb-5">
           Manage users, posts, and moderation.
         </p>
-        <label className="block text-base text-gray-600 mb-1">Email</label>
+        <label className="block text-lg text-gray-600 mb-1">Email</label>
         <input
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-          className="w-full mb-4 px-3 py-2 text-base border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary/30 focus:border-brand-primary"
+          className="w-full mb-4 px-3 py-2 text-lg border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary/30 focus:border-brand-primary"
           placeholder="admin@askkh.io"
         />
-        <label className="block text-base text-gray-600 mb-1">Password</label>
+        <label className="block text-lg text-gray-600 mb-1">Password</label>
         <input
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-          className="w-full mb-5 px-3 py-2 text-base border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary/30 focus:border-brand-primary"
+          className="w-full mb-5 px-3 py-2 text-lg border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary/30 focus:border-brand-primary"
           placeholder="••••••••"
         />
         <Button type="submit" className="w-full">

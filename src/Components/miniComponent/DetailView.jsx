@@ -14,7 +14,13 @@ import { rowsOf, errorMessage } from "../../features/qa/model";
 
 const CodeEditor = lazy(() => import("./CodeEditor"));
 
-const DetailView = ({ post, onBack, onDeletePost, isDeletingPost = false, darkMode: propDarkMode }) => {
+const DetailView = ({
+  post,
+  onBack,
+  onDeletePost,
+  isDeletingPost = false,
+  darkMode: propDarkMode,
+}) => {
   const { t } = useTranslation();
   const context = useOutletContext();
   const darkMode = propDarkMode ?? context?.darkMode ?? false;
@@ -43,9 +49,10 @@ const DetailView = ({ post, onBack, onDeletePost, isDeletingPost = false, darkMo
     },
     isOwnComment: userId != null && String(comment.userId) === String(userId),
   }));
-  const codeBlock = showCommentCode && commentCode.trim()
-    ? `\n\n\`\`\`${commentLanguage}\n${commentCode.trim()}\n\`\`\``
-    : "";
+  const codeBlock =
+    showCommentCode && commentCode.trim()
+      ? `\n\n\`\`\`${commentLanguage}\n${commentCode.trim()}\n\`\`\``
+      : "";
   const commentLength = commentText.trim().length + codeBlock.length;
   async function handleSendComment() {
     if (!isAuthenticated) {
@@ -83,7 +90,7 @@ const DetailView = ({ post, onBack, onDeletePost, isDeletingPost = false, darkMo
       {/* Back Button */}
       <button
         onClick={onBack}
-        className="flex items-center text-base text-blue-500 hover:text-blue-600 font-semibold gap-1 hover:underline transition-colors"
+        className="flex items-center text-lg text-blue-500 hover:text-blue-600 font-semibold gap-1 hover:underline transition-colors"
       >
         <ArrowLeft className="w-3.5 h-3.5" /> {t("detail.backToFeed")}
       </button>
@@ -112,7 +119,7 @@ const DetailView = ({ post, onBack, onDeletePost, isDeletingPost = false, darkMo
         {post.tags?.map((tag, i) => (
           <span
             key={i}
-            className={`px-2.5 py-1 text-base rounded-full border font-medium ${
+            className={`px-2.5 py-1 text-lg rounded-full border font-medium ${
               darkMode
                 ? "bg-blue-950/50 text-blue-400 border-blue-900/50"
                 : "bg-blue-50 text-blue-600 border-blue-100"
@@ -126,13 +133,15 @@ const DetailView = ({ post, onBack, onDeletePost, isDeletingPost = false, darkMo
       {/* Description */}
       <div>
         <h4
-          className={`text-base font-bold tracking-wider uppercase mb-1 ${
+          className={`text-lg font-bold tracking-wider uppercase mb-1 ${
             darkMode ? "text-zinc-500" : "text-gray-400"
           }`}
         >
           {t("detail.description")}
         </h4>
-        <FormattedText>{post.content || t("detail.noDescription")}</FormattedText>
+        <FormattedText>
+          {post.content || t("detail.noDescription")}
+        </FormattedText>
       </div>
 
       {post.image && (
@@ -144,16 +153,16 @@ const DetailView = ({ post, onBack, onDeletePost, isDeletingPost = false, darkMo
       )}
       {post.codeSnippet && (
         <section className="overflow-hidden rounded-xl border border-slate-300/30">
-          <p className="px-4 py-2 text-base opacity-60">
+          <p className="px-4 py-2 text-lg opacity-60">
             {post.codeLanguage || "Code"}
           </p>
-          <pre className="overflow-auto p-4 text-base">
+          <pre className="overflow-auto p-4 text-lg">
             <code>{post.codeSnippet}</code>
           </pre>
         </section>
       )}
       {error && (
-        <p role="alert" className="text-base text-red-500">
+        <p role="alert" className="text-lg text-red-500">
           {error}
         </p>
       )}
@@ -165,7 +174,7 @@ const DetailView = ({ post, onBack, onDeletePost, isDeletingPost = false, darkMo
         </p>
       )}
       {!isAuthenticated && (
-        <p className="text-base">
+        <p className="text-lg">
           <button className="text-blue-500" onClick={() => navigate("/login")}>
             Sign in
           </button>{" "}
@@ -177,7 +186,7 @@ const DetailView = ({ post, onBack, onDeletePost, isDeletingPost = false, darkMo
         className={`space-y-3 pt-4 border-t ${darkMode ? "border-zinc-800" : "border-gray-100"}`}
       >
         <h3
-          className={`font-bold text-base ${darkMode ? "text-slate-200" : "text-gray-800"}`}
+          className={`font-bold text-lg ${darkMode ? "text-slate-200" : "text-gray-800"}`}
         >
           {t("detail.commentsTitle")} ({sortedComments.length})
         </h3>
@@ -191,7 +200,7 @@ const DetailView = ({ post, onBack, onDeletePost, isDeletingPost = false, darkMo
             aria-label={t("detail.addCommentPlaceholder")}
             disabled={creation.isLoading}
             className={
-              "w-full min-h-28 resize-y rounded-xl border px-4 py-3 text-base leading-relaxed outline-none transition-colors focus:ring-2 focus:ring-blue-500/30 " +
+              "w-full min-h-28 resize-y rounded-xl border px-4 py-3 text-lg leading-relaxed outline-none transition-colors focus:ring-2 focus:ring-blue-500/30 " +
               (darkMode
                 ? "border-zinc-700 bg-zinc-800 text-slate-100 placeholder-zinc-500 focus:border-blue-500"
                 : "border-gray-200 bg-gray-50 text-gray-900 placeholder-gray-400 focus:border-blue-500")
@@ -202,13 +211,13 @@ const DetailView = ({ post, onBack, onDeletePost, isDeletingPost = false, darkMo
             aria-pressed={showCommentCode}
             onClick={() => setShowCommentCode((visible) => !visible)}
             disabled={creation.isLoading}
-            className="inline-flex items-center gap-2 rounded-lg border border-gray-200 px-3 py-2 text-base hover:bg-gray-100"
+            className="inline-flex items-center gap-2 rounded-lg border border-gray-200 px-3 py-2 text-lg hover:bg-gray-100"
           >
             <Code2 className="h-4 w-4" /> {t("detail.codeSnippet")}
           </button>
           {showCommentCode && (
             <div className="space-y-2">
-              <label className="block text-base">
+              <label className="block text-lg">
                 {t("detail.codeLanguage")}
                 <select
                   value={commentLanguage}
@@ -216,13 +225,32 @@ const DetailView = ({ post, onBack, onDeletePost, isDeletingPost = false, darkMo
                   disabled={creation.isLoading}
                   className="ml-2 rounded border px-2 py-1"
                 >
-                  {["javascript", "typescript", "python", "java", "html", "css", "sql", "plaintext"].map((language) => (
-                    <option key={language} value={language}>{language}</option>
+                  {[
+                    "javascript",
+                    "typescript",
+                    "python",
+                    "java",
+                    "html",
+                    "css",
+                    "sql",
+                    "plaintext",
+                  ].map((language) => (
+                    <option key={language} value={language}>
+                      {language}
+                    </option>
                   ))}
                 </select>
               </label>
-              <div className={`overflow-hidden rounded-xl border ${darkMode ? "border-zinc-700" : "border-gray-200"}`}>
-                <Suspense fallback={<p className="p-4 text-base">{t("detail.loadingCodeEditor")}</p>}>
+              <div
+                className={`overflow-hidden rounded-xl border ${darkMode ? "border-zinc-700" : "border-gray-200"}`}
+              >
+                <Suspense
+                  fallback={
+                    <p className="p-4 text-lg">
+                      {t("detail.loadingCodeEditor")}
+                    </p>
+                  }
+                >
                   <CodeEditor
                     value={commentCode}
                     onChange={setCommentCode}
@@ -233,7 +261,11 @@ const DetailView = ({ post, onBack, onDeletePost, isDeletingPost = false, darkMo
                   />
                 </Suspense>
               </div>
-              <p className="text-sm opacity-60">{commentCode.length.toLocaleString()} / {Math.max(0, 500 - commentText.trim().length)} {t("detail.characters")}</p>
+              <p className="text-sm opacity-60">
+                {commentCode.length.toLocaleString()} /{" "}
+                {Math.max(0, 500 - commentText.trim().length)}{" "}
+                {t("detail.characters")}
+              </p>
             </div>
           )}
           <div className="flex flex-wrap items-center justify-between gap-3">
@@ -244,11 +276,9 @@ const DetailView = ({ post, onBack, onDeletePost, isDeletingPost = false, darkMo
             <button
               onClick={handleSendComment}
               disabled={
-                creation.isLoading ||
-                commentLength < 5 ||
-                commentLength > 500
+                creation.isLoading || commentLength < 5 || commentLength > 500
               }
-              className="disabled:opacity-50 disabled:cursor-not-allowed bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-base font-medium flex items-center gap-2 transition-colors"
+              className="disabled:opacity-50 disabled:cursor-not-allowed bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-lg font-medium flex items-center gap-2 transition-colors"
             >
               <Send className="w-4 h-4" /> {t("detail.commentBtn")}
             </button>
@@ -274,12 +304,12 @@ const DetailView = ({ post, onBack, onDeletePost, isDeletingPost = false, darkMo
                     {comment.author.name.slice(0, 1)}
                   </span>
                   <span
-                    className={`text-base font-bold ${darkMode ? "text-slate-200" : "text-gray-800"}`}
+                    className={`text-lg font-bold ${darkMode ? "text-slate-200" : "text-gray-800"}`}
                   >
                     {comment.author.name}
                   </span>
                   <span
-                    className={`text-base ${darkMode ? "text-zinc-500" : "text-gray-400"}`}
+                    className={`text-lg ${darkMode ? "text-zinc-500" : "text-gray-400"}`}
                   >
                     {comment.author.time}
                   </span>
@@ -298,7 +328,9 @@ const DetailView = ({ post, onBack, onDeletePost, isDeletingPost = false, darkMo
                 )}
               </div>
 
-              <div className={`break-words text-base leading-relaxed ${darkMode ? "text-slate-300" : "text-gray-600"}`}>
+              <div
+                className={`break-words text-lg leading-relaxed ${darkMode ? "text-slate-300" : "text-gray-600"}`}
+              >
                 <FormattedText>{comment.text}</FormattedText>
               </div>
             </div>

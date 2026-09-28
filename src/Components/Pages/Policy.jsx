@@ -36,13 +36,13 @@ function SectionBlock({
     <article id={`section-${num}`} className="scroll-mt-24">
       <div className="flex items-start gap-4">
         {/* Section Number */}
-        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-primary text-base font-bold text-white">
+        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-primary text-lg font-bold text-white">
           {num}
         </span>
 
         {/* Section Content */}
         <div className="min-w-0 flex-1">
-          <h2 className="mb-3 text-5xl font-bold text-2xl">{title}</h2>
+          <h2 className="mb-3 text-5xl font-bold text-lg">{title}</h2>
 
           {/* Paragraphs */}
           {paragraphs.map((paragraph, index) => (
@@ -59,7 +59,7 @@ function SectionBlock({
             <div className="mb-3 space-y-4">
               {groups.map((group, index) => (
                 <div key={index}>
-                  <h3 className="mb-2 text-2xl font-semibold text-brand-primary">
+                  <h3 className="mb-2 text-lg font-semibold text-brand-primary">
                     {group.heading}
                   </h3>
 

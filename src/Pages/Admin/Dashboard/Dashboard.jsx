@@ -58,7 +58,7 @@ function GrowthChart({ points }) {
                 x={padding.left - 7}
                 y={y + 4}
                 textAnchor="end"
-                className="fill-gray-400 text-base"
+                className="fill-gray-400 text-lg"
               >
                 {value}
               </text>
@@ -100,7 +100,7 @@ function GrowthChart({ points }) {
             x={point.x}
             y={height - 4}
             textAnchor="middle"
-            className="fill-gray-400 text-base"
+            className="fill-gray-400 text-lg"
           >
             {point.month}
           </text>
@@ -120,7 +120,7 @@ function ActivityChart({ rows }) {
             key={value}
             className="relative border-t border-dashed border-gray-100"
           >
-            <span className="absolute -left-1 -top-2 -translate-x-full text-base text-gray-400">
+            <span className="absolute -left-1 -top-2 -translate-x-full text-lg text-gray-400">
               {value}
             </span>
           </div>
@@ -151,7 +151,7 @@ function ActivityChart({ rows }) {
           </div>
         ))}
       </div>
-      <div className="absolute inset-x-0 bottom-0 flex justify-around text-base text-gray-400">
+      <div className="absolute inset-x-0 bottom-0 flex justify-around text-lg text-gray-400">
         {rows.map((row) => (
           <span key={row.day}>{row.day}</span>
         ))}
@@ -221,7 +221,7 @@ export default function Dashboard() {
             {data.categoryDistribution.map((entry, index) => (
               <span
                 key={entry.name}
-                className="flex items-center gap-1 text-base text-gray-500"
+                className="flex items-center gap-1 text-lg text-gray-500"
               >
                 <span
                   className="h-2 w-2 rounded-full"
@@ -250,12 +250,12 @@ export default function Dashboard() {
               <div key={champion.id} className="flex items-center gap-3">
                 <Avatar src={champion.avatar} name={champion.name} size={36} />
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-base font-medium text-gray-800">
+                  <p className="truncate text-lg font-medium text-gray-800">
                     {champion.name}
                   </p>
-                  <p className="text-base text-gray-400">{champion.title}</p>
+                  <p className="text-lg text-gray-400">{champion.title}</p>
                 </div>
-                <span className="text-base font-semibold text-brand-primary">
+                <span className="text-lg font-semibold text-brand-primary">
                   {champion.score.toLocaleString()}
                 </span>
               </div>
@@ -273,8 +273,8 @@ export default function Dashboard() {
               className="flex items-center justify-between gap-3 py-2.5"
             >
               <div className="min-w-0">
-                <p className="truncate text-base text-gray-800">{post.title}</p>
-                <p className="text-base text-gray-400">
+                <p className="truncate text-lg text-gray-800">{post.title}</p>
+                <p className="text-lg text-gray-400">
                   {post.author} · {post.date}
                 </p>
               </div>

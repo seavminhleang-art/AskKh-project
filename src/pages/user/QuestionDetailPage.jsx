@@ -32,8 +32,12 @@ export default function QuestionDetailPage() {
   const post = query.data?.data ?? query.data;
 
   usePageSEO({
-    title: post?.title ? `${post.title} | NEXA Questions` : "Question Details | NEXA",
-    description: post?.body ? post.body.slice(0, 160) : "View question details and community answers on NEXA.",
+    title: post?.title
+      ? `${post.title} | NEXA Questions`
+      : "Question Details | NEXA",
+    description: post?.body
+      ? post.body.slice(0, 160)
+      : "View question details and community answers on NEXA.",
     noIndex: true,
   });
   async function submit(event) {
@@ -80,7 +84,7 @@ export default function QuestionDetailPage() {
             <article className="uw-card uw-stack">
               <FormattedText>{post.body}</FormattedText>
               {post.codeSnippet && (
-                <pre className="overflow-auto rounded-lg bg-slate-950 p-4 text-base text-slate-100">
+                <pre className="overflow-auto rounded-lg bg-slate-950 p-4 text-lg text-slate-100">
                   <code>{post.codeSnippet}</code>
                 </pre>
               )}
@@ -132,7 +136,7 @@ export default function QuestionDetailPage() {
                 <div>
                   <p className="whitespace-pre-wrap">{answer.body}</p>
                   {answer.codeSnippet && (
-                    <pre className="overflow-auto text-base">
+                    <pre className="overflow-auto text-lg">
                       <code>{answer.codeSnippet}</code>
                     </pre>
                   )}

@@ -15,7 +15,7 @@ export default function PostDetails() {
     <div>
       <button
         onClick={() => navigate(-1)}
-        className="flex items-center gap-1.5 text-base text-gray-500 hover:text-gray-700 mb-4 transition-colors"
+        className="flex items-center gap-1.5 text-lg text-gray-500 hover:text-gray-700 mb-4 transition-colors"
       >
         <ArrowLeft size={15} /> Back to Posts
       </button>
@@ -34,13 +34,13 @@ export default function PostDetails() {
         }
       />
       <Card className="p-6">
-        <p className="text-base text-gray-700 leading-relaxed">{post.body}</p>
+        <p className="text-lg text-gray-700 leading-relaxed">{post.body}</p>
         <div className="flex gap-1.5 mt-4">
           {post.tags.map((t) => (
             <Badge key={t}>{t}</Badge>
           ))}
         </div>
-        <div className="flex gap-6 mt-4 text-base text-gray-500">
+        <div className="flex gap-6 mt-4 text-lg text-gray-500">
           <span>{post.views.toLocaleString()} views</span>
           <span>{post.score} score</span>
         </div>
@@ -50,8 +50,8 @@ export default function PostDetails() {
         <div className="divide-y divide-gray-50">
           {post.comments.map((c) => (
             <div key={c.id} className="py-2.5">
-              <p className="text-base font-medium text-gray-700">{c.author}</p>
-              <p className="text-base text-gray-500">{c.body}</p>
+              <p className="text-lg font-medium text-gray-700">{c.author}</p>
+              <p className="text-lg text-gray-500">{c.body}</p>
             </div>
           ))}
         </div>

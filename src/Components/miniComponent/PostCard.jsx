@@ -1,5 +1,12 @@
 import React from "react";
-import { Bookmark, Eye, ThumbsDown, ThumbsUp, MessageSquare, Trash2 } from "lucide-react";
+import {
+  Bookmark,
+  Eye,
+  ThumbsDown,
+  ThumbsUp,
+  MessageSquare,
+  Trash2,
+} from "lucide-react";
 import { useOutletContext } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
@@ -54,7 +61,7 @@ const PostCard = ({
             <div>
               <h2
                 onClick={() => onSelectPost(id)}
-                className={`font-semibold cursor-pointer text-base sm:text-base leading-snug transition-colors ${
+                className={`font-semibold cursor-pointer text-lg sm:text-lg leading-snug transition-colors ${
                   darkMode
                     ? "text-slate-100 hover:text-blue-400"
                     : "text-gray-800 hover:text-blue-600"
@@ -64,7 +71,7 @@ const PostCard = ({
               </h2>
               {content && (
                 <p
-                  className={`text-base line-clamp-2 mt-1 ${darkMode ? "text-zinc-400" : "text-gray-500"}`}
+                  className={`text-lg line-clamp-2 mt-1 ${darkMode ? "text-zinc-400" : "text-gray-500"}`}
                 >
                   {content}
                 </p>
@@ -73,7 +80,14 @@ const PostCard = ({
 
             <div className="flex items-center space-x-1 flex-shrink-0">
               {isOwnPost && (
-                <button type="button" onClick={() => onDeletePost(id)} disabled={isDeletingPost} aria-label="Delete post" title="Delete post" className={`p-2 rounded-xl border transition-colors ${darkMode ? "border-zinc-700 text-zinc-400 hover:text-red-400" : "border-transparent text-gray-400 hover:bg-red-50 hover:text-red-600"}`}>
+                <button
+                  type="button"
+                  onClick={() => onDeletePost(id)}
+                  disabled={isDeletingPost}
+                  aria-label="Delete post"
+                  title="Delete post"
+                  className={`p-2 rounded-xl border transition-colors ${darkMode ? "border-zinc-700 text-zinc-400 hover:text-red-400" : "border-transparent text-gray-400 hover:bg-red-50 hover:text-red-600"}`}
+                >
                   <Trash2 className="w-4 h-4" />
                 </button>
               )}
@@ -111,7 +125,7 @@ const PostCard = ({
             {tags.map((t, i) => (
               <span
                 key={i}
-                className={`px-2 py-0.5 text-base font-medium rounded-full border ${
+                className={`px-2 py-0.5 text-lg font-medium rounded-full border ${
                   darkMode
                     ? "bg-blue-950/50 text-blue-400 border-blue-900/50"
                     : "bg-blue-50 text-blue-600 border-blue-100"
@@ -129,12 +143,12 @@ const PostCard = ({
               </span>
               <div>
                 <p
-                  className={`text-base font-bold ${darkMode ? "text-slate-200" : "text-gray-800"}`}
+                  className={`text-lg font-bold ${darkMode ? "text-slate-200" : "text-gray-800"}`}
                 >
                   {author.name}
                 </p>
                 <p
-                  className={`text-base ${darkMode ? "text-zinc-500" : "text-gray-400"}`}
+                  className={`text-lg ${darkMode ? "text-zinc-500" : "text-gray-400"}`}
                 >
                   {author.time}
                 </p>
@@ -143,7 +157,7 @@ const PostCard = ({
 
             {/* Interactive Views, Votes, Comments */}
             <div
-              className={`flex items-center space-x-3 text-base ${darkMode ? "text-zinc-400" : "text-gray-500"}`}
+              className={`flex items-center space-x-3 text-lg ${darkMode ? "text-zinc-400" : "text-gray-500"}`}
             >
               <button
                 onClick={() => onSelectPost(id)}

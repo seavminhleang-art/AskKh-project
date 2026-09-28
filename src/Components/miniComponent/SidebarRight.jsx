@@ -87,12 +87,12 @@ const SidebarRight = ({ darkMode: propDarkMode, language = "en" }) => {
       >
         <div className="flex items-center justify-between mb-4">
           <h3
-            className={`font-bold text-base ${darkMode ? "text-slate-200" : "text-gray-800"}`}
+            className={`font-bold text-lg ${darkMode ? "text-slate-200" : "text-gray-800"}`}
           >
             {t.sidebarRight.peopleYouKnow}
           </h3>
           <button
-            className={`text-base font-medium transition-colors hover:underline ${
+            className={`text-lg font-medium transition-colors hover:underline ${
               darkMode
                 ? "text-blue-400 hover:text-blue-300"
                 : "text-blue-600 hover:text-blue-700"
@@ -118,12 +118,12 @@ const SidebarRight = ({ darkMode: propDarkMode, language = "en" }) => {
                   />
                   <div>
                     <p
-                      className={`text-base font-bold ${darkMode ? "text-slate-200" : "text-gray-800"}`}
+                      className={`text-lg font-bold ${darkMode ? "text-slate-200" : "text-gray-800"}`}
                     >
                       {person.name}
                     </p>
                     <p
-                      className={`text-base ${darkMode ? "text-zinc-400" : "text-gray-400"}`}
+                      className={`text-lg ${darkMode ? "text-zinc-400" : "text-gray-400"}`}
                     >
                       {person.role}
                     </p>
@@ -131,7 +131,7 @@ const SidebarRight = ({ darkMode: propDarkMode, language = "en" }) => {
                 </div>
                 <button
                   onClick={() => toggleFollow(person.id)}
-                  className={`text-base font-semibold flex-shrink-0 transition-colors ${
+                  className={`text-lg font-semibold flex-shrink-0 transition-colors ${
                     isFollowing
                       ? darkMode
                         ? "text-blue-400 hover:text-blue-300"

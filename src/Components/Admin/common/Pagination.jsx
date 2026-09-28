@@ -12,7 +12,7 @@ export default function Pagination({
   const end = Math.min(page * pageSize, totalItems);
 
   return (
-    <div className="flex items-center justify-between px-4 py-3 border-t border-gray-100 text-base">
+    <div className="flex items-center justify-between px-4 py-3 border-t border-gray-100 text-lg">
       <span className="text-gray-500">
         Showing{" "}
         <span className="font-medium text-gray-700">

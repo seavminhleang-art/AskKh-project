@@ -5,7 +5,7 @@ export default function Tabs({ tabs, active, onChange }) {
         <button
           key={tab.value}
           onClick={() => onChange(tab.value)}
-          className={`relative px-4 py-2.5 text-base font-medium transition-colors
+          className={`relative px-4 py-2.5 text-lg font-medium transition-colors
             ${active === tab.value ? "text-brand-primary" : "text-gray-500 hover:text-gray-700"}`}
         >
           {tab.label}

@@ -35,7 +35,7 @@ export default function Topbar() {
       </button>
 
       <div>
-        <div className="flex items-center gap-1 text-base text-gray-400">
+        <div className="flex items-center gap-1 text-lg text-gray-400">
           <span>Admin</span>
           {segments.map((s, i) => (
             <span key={i} className="flex items-center gap-1">
@@ -58,7 +58,7 @@ export default function Topbar() {
       >
         <Bell size={20} />
         {unread > 0 && (
-          <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-brand-secondary text-white text-base flex items-center justify-center">
+          <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-brand-secondary text-white text-lg flex items-center justify-center">
             {unread}
           </span>
         )}

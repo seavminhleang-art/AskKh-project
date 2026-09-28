@@ -10,7 +10,7 @@ export default function ErrorState({
       <div className="w-12 h-12 rounded-full bg-brand-secondary-light flex items-center justify-center text-brand-secondary mb-3">
         <AlertTriangle size={22} />
       </div>
-      <p className="text-base font-medium text-gray-700">{message}</p>
+      <p className="text-lg font-medium text-gray-700">{message}</p>
       {onRetry && (
         <Button
           variant="secondary"

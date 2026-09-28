@@ -125,7 +125,7 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
     <section className="mb-20 relative z-10 font-[family-name:var(--font-brand)]">
       <div className="relative text-center py-12 md:py-16 px-6 mb-8">
         <span
-          className={`inline-flex items-center gap-1.5 text-base font-semibold px-3 py-1 rounded-full mb-3 border transition-all duration-300 hover:scale-105 ${
+          className={`inline-flex items-center gap-1.5 text-lg font-semibold px-3 py-1 rounded-full mb-3 border transition-all duration-300 hover:scale-105 ${
             darkMode
               ? "bg-blue-950/60 text-blue-400 border-blue-900 hover:border-blue-700"
               : "bg-blue-50 text-[var(--color-brand-primary,#3b82f6)] border-blue-100 hover:border-blue-300"
@@ -133,28 +133,24 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
         >
           <ShieldCheck size={14} /> {t("feedBadge")}
         </span>
-        <h1
-          className="text-5xl md:text-5xl font-bold mb-2 text-[var(--home-primary-text)]"
-        >
+        <h1 className="text-5xl md:text-5xl font-bold mb-2 text-[var(--home-primary-text)]">
           {t("feedHeroTitle1")}{" "}
           <span className="text-[var(--home-secondary-text)]">
             {t("feedHeroTitle2")}
           </span>
         </h1>
         <p
-          className={`max-w-2xl mx-auto leading-relaxed text-base md:text-base ${darkMode ? "text-slate-400" : "text-gray-600"}`}
+          className={`max-w-2xl mx-auto leading-relaxed text-lg md:text-lg ${darkMode ? "text-slate-400" : "text-gray-600"}`}
         >
           {t("feedHeroDescription")}
         </p>
 
         <div className="mt-8">
-          <h2
-            className="text-xl md:text-5xl font-bold text-[var(--home-primary-text)]"
-          >
+          <h2 className="text-xl md:text-5xl font-bold text-[var(--home-primary-text)]">
             {t("feedActiveRecoveryTitle")}
           </h2>
           <p
-            className={`text-base mt-1 ${darkMode ? "text-slate-500" : "text-gray-500"}`}
+            className={`text-lg mt-1 ${darkMode ? "text-slate-500" : "text-gray-500"}`}
           >
             {t("feedActiveRecoverySub")}
           </p>
@@ -195,7 +191,7 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
             <button
               key={tab.key}
               onClick={() => handleTabChange(tab.key)}
-              className={`pb-3 text-base font-semibold relative transition-all duration-200 cursor-pointer hover:opacity-100 ${
+              className={`pb-3 text-lg font-semibold relative transition-all duration-200 cursor-pointer hover:opacity-100 ${
                 activeTab === tab.key
                   ? "text-[var(--color-brand-primary,#3b82f6)] font-bold"
                   : darkMode
@@ -218,7 +214,7 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
               placeholder={t("feedSearchPlaceholder")}
               value={searchQuery}
               onChange={handleSearchChange}
-              className={`w-full rounded-2xl pl-9 pr-4 py-2.5 text-base transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--color-brand-primary,#3b82f6)]/40 hover:border-[var(--color-brand-primary,#3b82f6)]/50 ${
+              className={`w-full rounded-2xl pl-9 pr-4 py-2.5 text-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[var(--color-brand-primary,#3b82f6)]/40 hover:border-[var(--color-brand-primary,#3b82f6)]/50 ${
                 darkMode
                   ? "bg-zinc-900/90 border border-zinc-800 text-slate-100 placeholder-zinc-500"
                   : "bg-white/95 border border-gray-100 text-gray-800 placeholder-gray-400"
@@ -234,7 +230,7 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
             <select
               value={selectedCategory}
               onChange={(e) => handleCategoryChange(e.target.value)}
-              className={`rounded-2xl px-3.5 py-2.5 text-base outline-none cursor-pointer font-medium transition-all duration-200 hover:border-[var(--color-brand-primary,#3b82f6)]/50 ${
+              className={`rounded-2xl px-3.5 py-2.5 text-lg outline-none cursor-pointer font-medium transition-all duration-200 hover:border-[var(--color-brand-primary,#3b82f6)]/50 ${
                 darkMode
                   ? "bg-zinc-900/90 border border-zinc-800 text-slate-200"
                   : "bg-white/95 border border-gray-100 text-gray-800"
@@ -258,7 +254,7 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
             <select
               value={sortBy}
               onChange={handleSortChange}
-              className={`rounded-2xl px-3.5 py-2.5 text-base outline-none cursor-pointer font-medium transition-all duration-200 hover:border-[var(--color-brand-primary,#3b82f6)]/50 ${
+              className={`rounded-2xl px-3.5 py-2.5 text-lg outline-none cursor-pointer font-medium transition-all duration-200 hover:border-[var(--color-brand-primary,#3b82f6)]/50 ${
                 darkMode
                   ? "bg-zinc-900/90 border border-zinc-800 text-slate-200"
                   : "bg-white/95 border border-gray-100 text-gray-800"
@@ -292,7 +288,9 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
         <div className="grid grid-cols-1 lg:grid-cols-4 items-start gap-8">
           {/* Feed List (Left 3 columns) */}
           <div className="lg:col-span-3 space-y-5">
-            {!reports.isLoading && !reports.isError && filteredItems.length === 0 ? (
+            {!reports.isLoading &&
+            !reports.isError &&
+            filteredItems.length === 0 ? (
               <motion.div
                 initial={{ opacity: 0, scale: 0.98 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -303,7 +301,7 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
                 }`}
               >
                 {t("feedNoItemsFound")}
-              </div>
+              </motion.div>
             ) : (
               <>
                 {paginatedItems.map((item) => (
@@ -319,7 +317,7 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
                   >
                     <div className="absolute top-4 left-4 z-10">
                       <span
-                        className={`inline-block text-base font-semibold px-3 py-1 rounded-full uppercase tracking-wider transition-transform duration-200 group-hover:scale-105 ${
+                        className={`inline-block text-lg font-semibold px-3 py-1 rounded-full uppercase tracking-wider transition-transform duration-200 group-hover:scale-105 ${
                           item.type === "LOST"
                             ? darkMode
                               ? "bg-red-950/80 text-red-400 border border-red-800"
@@ -355,7 +353,7 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
 
                     <div className="flex-1 flex flex-col justify-between pt-6 md:pt-0">
                       <div>
-                        <div className="flex items-center gap-4 text-base text-gray-400 mb-2">
+                        <div className="flex items-center gap-4 text-lg text-gray-400 mb-2">
                           <span className="flex items-center gap-1 text-red-500 font-medium">
                             <MapPin size={13} /> {item.location}
                           </span>
@@ -369,7 +367,7 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
                           {item.title}
                         </h3>
                         <p
-                          className={`text-base leading-relaxed line-clamp-3 ${darkMode ? "text-slate-400" : "text-gray-600"}`}
+                          className={`text-lg leading-relaxed line-clamp-3 ${darkMode ? "text-slate-400" : "text-gray-600"}`}
                         >
                           {item.description}
                         </p>
@@ -391,7 +389,7 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
                             />
                           )}
                           <span
-                            className={`text-base font-medium ${darkMode ? "text-slate-300" : "text-gray-700"}`}
+                            className={`text-lg font-medium ${darkMode ? "text-slate-300" : "text-gray-700"}`}
                           >
                             {item.reporter}
                           </span>
@@ -400,7 +398,7 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
                           onClick={() => setSelectedReport(item)}
                           whileHover={{ scale: 1.05 }}
                           whileTap={{ scale: 0.95 }}
-                          className={`text-base font-semibold px-4 py-2 rounded-xl transition-all duration-200 cursor-pointer ${
+                          className={`text-lg font-semibold px-4 py-2 rounded-xl transition-all duration-200 cursor-pointer ${
                             darkMode
                               ? "bg-emerald-950/80 text-emerald-400 border border-emerald-800 hover:bg-emerald-900 hover:border-emerald-600"
                               : "bg-emerald-50 text-[var(--color-brand-accent,#10b981)] hover:bg-emerald-100"
@@ -434,7 +432,7 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
               }`}
             >
               <span
-                className={`inline-block text-base font-semibold px-3 py-1 rounded-full mb-4 transition-transform duration-200 hover:scale-105 ${
+                className={`inline-block text-lg font-semibold px-3 py-1 rounded-full mb-4 transition-transform duration-200 hover:scale-105 ${
                   darkMode
                     ? "bg-zinc-800 text-[var(--color-brand-primary,#3b82f6)] border border-zinc-700"
                     : "bg-[var(--color-brand-primary-light,#eff6ff)] text-[var(--color-brand-primary,#3b82f6)]"
@@ -458,7 +456,7 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
                     }}
                     whileHover={{ x: 4 }}
                     transition={{ duration: 0.15 }}
-                    className={`flex items-center justify-between text-base cursor-pointer p-1.5 rounded-xl transition-colors ${
+                    className={`flex items-center justify-between text-lg cursor-pointer p-1.5 rounded-xl transition-colors ${
                       selectedCategory === cat.name
                         ? "font-bold text-[var(--color-brand-primary,#3b82f6)] bg-[var(--color-brand-primary,#3b82f6)]/10"
                         : darkMode
@@ -485,7 +483,7 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
               }`}
             >
               <span
-                className={`inline-block text-base font-semibold px-3 py-1 rounded-full mb-4 transition-transform duration-200 hover:scale-105 ${
+                className={`inline-block text-lg font-semibold px-3 py-1 rounded-full mb-4 transition-transform duration-200 hover:scale-105 ${
                   darkMode
                     ? "bg-zinc-800 text-[var(--color-brand-secondary,#ec4899)] border border-zinc-700"
                     : "bg-[var(--color-brand-secondary-light,#fdf2f8)] text-[var(--color-brand-secondary,#ec4899)]"
@@ -509,7 +507,7 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
                     }}
                     whileHover={{ x: 4 }}
                     transition={{ duration: 0.15 }}
-                    className={`flex items-center justify-between text-base cursor-pointer p-1.5 rounded-xl transition-colors ${
+                    className={`flex items-center justify-between text-lg cursor-pointer p-1.5 rounded-xl transition-colors ${
                       darkMode
                         ? "text-slate-300 hover:bg-zinc-800/60 hover:text-white"
                         : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
@@ -526,16 +524,18 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
               </ul>
             </div>
 
-            <motion.button
-              onClick={onOpenReport}
+            <div
               whileHover={{ scale: 1.03, y: -2 }}
               whileTap={{ scale: 0.97 }}
-              className="w-full bg-[var(--color-brand-primary,#3b82f6)] hover:bg-blue-600 text-white font-semibold py-3.5 px-4 rounded-2xl text-base transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full bg-[var(--color-brand-primary,#3b82f6)] hover:bg-blue-600 text-white font-semibold py-3.5 px-4 rounded-2xl text-lg transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer"
             >
               <div className="absolute -right-6 -bottom-6 w-32 h-32 bg-white/10 rounded-full blur-2xl pointer-events-none" />
-              <h4 className="font-bold text-lg mb-1">Lost or found something?</h4>
+              <h4 className="font-bold text-lg mb-1">
+                Lost or found something?
+              </h4>
               <p className="text-xs text-blue-100 mb-5 leading-relaxed">
-                Create a report instantly to notify the campus community and track status updates.
+                Create a report instantly to notify the campus community and
+                track status updates.
               </p>
               <button
                 onClick={onOpenReport}
@@ -543,7 +543,7 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
               >
                 <PlusCircle size={16} /> {t("feedReportBtn")}
               </button>
-            </motion.div>
+            </div>
           </aside>
         </div>
       </main>

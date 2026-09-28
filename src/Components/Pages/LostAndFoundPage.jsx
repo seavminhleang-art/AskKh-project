@@ -69,7 +69,7 @@ export default function LostAndFoundPage() {
           Custom Mouse Follower Tooltip
       ================================================== */}
       <motion.div
-        className={`hidden lg:flex fixed top-0 left-0 z-50 pointer-events-none items-center justify-center px-3 py-1.5 rounded-full backdrop-blur-md text-base font-medium shadow-xl ${
+        className={`hidden lg:flex fixed top-0 left-0 z-50 pointer-events-none items-center justify-center px-3 py-1.5 rounded-full backdrop-blur-md text-lg font-medium shadow-xl ${
           darkMode
             ? "bg-gray-100/90 text-gray-900"
             : "bg-gray-900/90 text-white"

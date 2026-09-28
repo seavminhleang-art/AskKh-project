@@ -109,7 +109,7 @@ function ReportRelated({ page, reportId, userId }) {
                     {item.confirmedByClaimant ? w("Confirmed") : w("Pending")}
                   </p>
                   {(item.describedHiddenDetail || item.proofDescription) && (
-                    <div className="mt-2 p-2.5 rounded-lg bg-slate-100 dark:bg-slate-800/80 text-xs text-slate-700 dark:text-slate-300">
+                    <div className="mt-2 p-2.5 rounded-lg bg-slate-100 dark:bg-slate-800/80 text-base text-slate-700 dark:text-slate-300">
                       <strong>{w("Ownership proof:")}</strong>{" "}
                       {item.describedHiddenDetail || item.proofDescription}
                     </div>

@@ -47,7 +47,7 @@ export default function Sidebar() {
     <div className="flex flex-col h-full">
       <div className="flex items-center justify-between px-4 h-16 flex-shrink-0">
         <div className="flex items-center gap-2 overflow-hidden">
-          <div className="w-8 h-8 rounded-lg bg-brand-primary text-white flex items-center justify-center font-bold text-base flex-shrink-0">
+          <div className="w-8 h-8 rounded-lg bg-brand-primary text-white flex items-center justify-center font-bold text-lg flex-shrink-0">
             A
           </div>
           {!collapsed && (
@@ -83,7 +83,7 @@ export default function Sidebar() {
             to={to}
             onClick={() => dispatch(setSidebarMobileOpen(false))}
             className={({ isActive }) =>
-              `flex items-center gap-3 px-3 py-2.5 rounded-lg text-base font-medium transition-colors
+              `flex items-center gap-3 px-3 py-2.5 rounded-lg text-lg font-medium transition-colors
               ${isActive ? "bg-brand-primary-light text-brand-primary" : "text-gray-500 hover:bg-gray-100"}`
             }
           >
@@ -98,16 +98,17 @@ export default function Sidebar() {
           <Avatar name={admin.name} size={32} />
           {!collapsed && (
             <div className="flex-1 min-w-0">
-              <p className="text-base font-medium text-gray-800 truncate">
+              <p className="text-lg font-medium text-gray-800 truncate">
                 {admin.name}
               </p>
-              <p className="text-base text-gray-400 truncate">{admin.email}</p>
+              <p className="text-lg text-gray-400 truncate">{admin.email}</p>
             </div>
           )}
           {!collapsed && (
             <button
               onClick={() => {
-                if (window.confirm("Are you sure you want to log out?")) logoutApi();
+                if (window.confirm("Are you sure you want to log out?"))
+                  logoutApi();
               }}
               className="text-gray-400 hover:text-brand-secondary transition-colors"
               aria-label="Logout"
