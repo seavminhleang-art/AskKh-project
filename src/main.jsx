@@ -27,9 +27,6 @@ import ProfilePage from './pages/user/ProfilePage.jsx';
 import QuestionDetailPage from './pages/user/QuestionDetailPage.jsx';
 import PublicQuestionPage from './Pages/public/PublicQuestionPage.jsx';
 import UserPostPage from "./pages/user/UserPostPage.jsx";
-import AdminDashboardPage from "./features/admin/workspace/Dashboard.jsx";
-import AdminShell from "./features/admin/workspace/AdminShell.jsx";
-import AdminResourcePage from "./features/admin/workspace/ResourcePage.jsx";
 import ProtectedRoute from "./routes/ProtectedRoute.jsx";
 import UserLayout from "./layouts/UserLayout.jsx";
 
@@ -105,19 +102,6 @@ const router = createBrowserRouter([
           { path: "dashboard/claims", element: <WorkspaceListPage key="claims" page="claims" /> },
           { path: "dashboard/notifications", element: <WorkspaceListPage key="notifications" page="notifications" /> },
         ],
-      },
-      {
-        element: <ProtectedRoute requiredRole="admin" />,
-        children: [{
-          element: <AdminShell />,
-          children: [
-            { path: "admin", element: <AdminDashboardPage /> },
-            { path: "admin/dashboard", element: <AdminDashboardPage /> },
-            ...["users", "posts", "comments", "tags", "lost-found", "moderation", "marketplace", "notifications", "settings", "locations", "claims", "leaderboard"].map(resource => ({
-              path: `admin/${resource}`, element: <AdminResourcePage key={resource} resource={resource} />,
-            })),
-          ],
-        }],
       },
     ],
   },

@@ -9,7 +9,7 @@ import {
   Clock,
   ShieldCheck,
 } from "lucide-react";
-import Card from "../../Components/Admin/common/Card";
+import Card from "../../Components/common/Card";
 import {
   useMarkNotificationReadMutation,
   useDeleteNotificationMutation,

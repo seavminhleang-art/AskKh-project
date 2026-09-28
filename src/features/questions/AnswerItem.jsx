@@ -8,7 +8,7 @@ import {
   Send,
 } from "lucide-react";
 import Avatar from "../../Components/ui/Avatar";
-import Button from "../../Components/Admin/common/Button";
+import Button from "../../Components/common/Button";
 import Textarea from "../../Components/ui/Textarea";
 import {
   useVoteAnswerMutation,

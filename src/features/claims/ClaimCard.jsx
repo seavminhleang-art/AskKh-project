@@ -9,7 +9,7 @@ import {
   X,
   Loader2,
 } from "lucide-react";
-import Card from "../../Components/Admin/common/Card";
+import Card from "../../Components/common/Card";
 import StatusBadge from "../../Components/ui/StatusBadge";
 import Avatar from "../../Components/ui/Avatar";
 import { lostFoundApi } from "../lostFound/lostFoundApi";

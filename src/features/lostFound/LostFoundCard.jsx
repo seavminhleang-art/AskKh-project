@@ -7,10 +7,10 @@ import {
   ShieldCheck,
   ArrowRight,
 } from "lucide-react";
-import Card from "../../Components/Admin/common/Card";
+import Card from "../../Components/common/Card";
 import StatusBadge from "../../Components/ui/StatusBadge";
 import Badge from "../../Components/ui/badge";
-import Button from "../../Components/Admin/common/Button";
+import Button from "../../Components/common/Button";
 import Avatar from "../../Components/ui/Avatar";
 import ClaimModal from "../../Components/modals/ClaimModal";
 

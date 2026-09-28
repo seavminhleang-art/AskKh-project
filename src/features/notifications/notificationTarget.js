@@ -64,7 +64,7 @@ export function notificationTarget(notification) {
   }
 
   // Already a dashboard-prefixed path — pass through as-is
-  if (path.startsWith('/dashboard/') || path.startsWith('/admin/')) {
+  if (path.startsWith('/dashboard/')) {
     return path;
   }
 

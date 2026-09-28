@@ -870,9 +870,7 @@ export default function Navbar({
                 {/* Option 1: Dashboard */}
                 <Link
                   to={
-                    authUser?.role === "admin"
-                      ? "/admin/dashboard"
-                      : "/dashboard"
+                    "/dashboard"
                   }
                   role="menuitem"
                   className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-lg font-medium text-gray-700 dark:text-gray-200 hover:bg-brand-primary-light dark:hover:bg-gray-800 hover:text-brand-primary transition-colors no-underline"
@@ -888,9 +886,7 @@ export default function Navbar({
                 {/* Option 2: Profile */}
                 <Link
                   to={
-                    authUser?.role === "admin"
-                      ? "/admin/settings"
-                      : "/dashboard/profile"
+                    "/dashboard/profile"
                   }
                   role="menuitem"
                   className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-lg font-medium text-gray-700 dark:text-gray-200 hover:bg-brand-primary-light dark:hover:bg-gray-800 hover:text-brand-primary transition-colors no-underline"
@@ -1114,7 +1110,7 @@ export default function Navbar({
             <div className="grid grid-cols-2 gap-2">
               <Link
                 to={
-                  authUser?.role === "admin" ? "/admin/dashboard" : "/dashboard"
+                  "/dashboard"
                 }
                 onClick={() => setMobileOpen(false)}
                 className="flex items-center justify-center gap-2 h-10 rounded-xl bg-brand-primary text-white font-medium text-lg no-underline hover:bg-brand-secondary transition-colors"
@@ -1124,9 +1120,7 @@ export default function Navbar({
               </Link>
               <Link
                 to={
-                  authUser?.role === "admin"
-                    ? "/admin/settings"
-                    : "/dashboard/profile"
+                  "/dashboard/profile"
                 }
                 onClick={() => setMobileOpen(false)}
                 className="flex items-center justify-center gap-2 h-10 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 font-medium text-lg no-underline hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"

@@ -603,101 +603,12 @@ html.dark .about-team-hero { border-color: rgb(96 165 250 / .28); box-shadow: 0 
   .login-options { align-items: flex-start; flex-direction: column; }
 }
 
-/* Admin dashboard visual treatment */
-.admin-workspace {
-  background: #09090b;
-  color: #f8fafc;
-}
-.admin-sidebar {
-  border-right: 1px solid #27272a;
-  background: #111113;
-}
-.admin-brand-mark {
-  display: grid;
-  width: 3rem;
-  height: 3rem;
-  flex: none;
-  place-items: center;
-  border-radius: 1rem;
-  background: #5b50e6;
-  box-shadow: 0 10px 24px rgb(91 80 230 / .25);
-  color: #fff;
-  font-size: 1.5rem;
-  font-weight: 800;
-}
-.admin-profile {
-  border-color: #303034;
-  background: #1b1b1e;
-}
-.admin-nav-active {
-  background: #202024;
-  color: #fff;
-}
-.admin-nav-active svg { color: #8d86ff; }
-.admin-nav-idle { color: #a1a1aa; }
-.admin-nav-idle:hover { background: #1d1d20; color: #fff; }
-.admin-sidebar > div:last-child button { color: #a1a1aa; }
-.admin-sidebar > div:last-child button:hover { color: #fca5a5; }
-.admin-topbar {
-  border-color: #27272a;
-  background: #09090b;
-}
-.admin-topbar-icon { background: #242429; color: #a9a5ff; }
-.admin-eyebrow {
-  color: #92929d;
-  font-size: .875rem;
-  font-weight: 700;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-}
-.admin-stat-card,
-.admin-panel {
-  border: 1px solid #29292d;
-  border-radius: 1.25rem;
-  background: #151517;
-}
-.admin-stat-card { padding: 1.35rem; }
-.admin-stat-icon {
-  display: grid;
-  width: 2.5rem;
-  height: 2.5rem;
-  flex: none;
-  place-items: center;
-  border-radius: .8rem;
-  background: #28283b;
-  color: #a9a5ff;
-}
-.admin-chart-track { background: #222226; }
-.admin-chart-bar { background: linear-gradient(180deg, #8d86ff, #5149d8); }
-.admin-inline-link { color: #aaa5ff; }
-.admin-inline-link:hover { color: #d5d2ff; }
-.admin-post-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: .5rem;
-  align-items: center;
-}
-.admin-post-header { display: none; }
-.admin-status {
-  border-radius: 9999px;
-  padding: .35rem .7rem;
-  font-size: .875rem;
-  font-weight: 700;
-}
-.admin-status-pending { background: #3f2b13; color: #fcd34d; }
-.admin-status-published { background: #12352b; color: #86efac; }
-@media (min-width: 640px) {
-  .admin-post-grid { grid-template-columns: minmax(0, 2.2fr) minmax(0, 1fr) minmax(0, .85fr) minmax(0, .8fr); gap: 1rem; }
-  .admin-post-header { display: grid; }
-}
-
 .workspace-language { max-width:130px; min-height:34px; padding:4px 8px; border:1px solid var(--border-color,#e5e7eb); border-radius:6px; background:var(--bg-card,#fff); color:var(--text-main,#17243a); font-size:14px; }
-:lang(km) .user-workspace, :lang(km) .admin-live { line-height:1.85; }
-:lang(km) .uw-sidebar h2, :lang(km) .ad-eyebrow { letter-spacing:0; }
+:lang(km) .user-workspace { line-height:1.85; }
+:lang(km) .uw-sidebar h2 { letter-spacing:0; }
 :lang(km) .uw-topbar { gap:10px; }
 :lang(km) .uw-welcome h1 { line-height:1.7; }
-:lang(km) .al-sidebar nav a { height:auto; }
-@media(max-width:600px) { .workspace-language { max-width:85px; }.uw-topbar>div { gap:10px; }.al-top-actions { gap:5px; } }
+@media(max-width:600px) { .workspace-language { max-width:85px; }.uw-topbar>div { gap:10px; } }
 
 /* Matching language, notification, and profile controls in workspace headers. */
 .workspace-topbar-actions { display:flex; align-items:center; gap:10px; flex-shrink:0; }
@@ -1650,7 +1561,7 @@ html.dark .uw-overview [role="alert"] {
   }
 }
 
-/* Match the admin dashboard's entrance timing and card interactions. */
+/* Workspace entrance timing and card interactions. */
 .uw-overview .uw-welcome {
   animation: uw-dashboard-enter .55s backwards;
 }

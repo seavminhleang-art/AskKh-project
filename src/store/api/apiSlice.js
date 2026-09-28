@@ -142,16 +142,6 @@ import {
   useGetAchievementsQuery,
 } from '../../features/achievements/achievementsApi';
 
-import {
-  adminApi,
-  useGetAdminAnalyticsQuery,
-  useGetUsersQuery,
-  useUpdateUserRoleMutation,
-  useToggleBlockUserMutation,
-  useUpdateClaimStatusMutation,
-  useUpdateReportStatusMutation,
-} from '../../features/admin/adminApi';
-
 // Re-export all hooks and endpoints
 export const useGetItemByIdQuery = useGetReportByIdQuery;
 
@@ -257,11 +247,4 @@ export {
   useGetLeaderboardQuery,
   achievementsApi,
   useGetAchievementsQuery,
-  adminApi,
-  useGetAdminAnalyticsQuery,
-  useGetUsersQuery,
-  useUpdateUserRoleMutation,
-  useToggleBlockUserMutation,
-  useUpdateClaimStatusMutation,
-  useUpdateReportStatusMutation,
 };

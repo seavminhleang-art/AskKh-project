@@ -9,7 +9,7 @@ import {
   Tag,
   Clock,
 } from "lucide-react";
-import Card from "../../Components/Admin/common/Card";
+import Card from "../../Components/common/Card";
 import Avatar from "../../Components/ui/Avatar";
 import Badge from "../../Components/ui/badge";
 import { useVotePostMutation } from "../../store/api/apiSlice";
