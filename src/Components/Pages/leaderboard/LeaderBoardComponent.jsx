@@ -1192,13 +1192,35 @@ export default function LeaderBoardComponent({
     },
   ];
 
-  const users =
+  const sourceUsers =
     query.data && query.data.length > 0
       ? query.data
       : query.isError ||
           (!query.isLoading && (!query.data || query.data.length === 0))
         ? fallbackMembers
         : [];
+
+  const scoreOf = (user) => {
+    const score = Number(user.points ?? user.upvotes ?? 0);
+    return Number.isFinite(score) ? score : 0;
+  };
+  const metricOf = (user, key) => {
+    const metric = Number(user[key] ?? 0);
+    return Number.isFinite(metric) ? metric : 0;
+  };
+  const sortedUsers = [...sourceUsers].sort((a, b) =>
+    scoreOf(b) - scoreOf(a) ||
+    metricOf(b, "answers") - metricOf(a, "answers") ||
+    metricOf(b, "solutions") - metricOf(a, "solutions") ||
+    metricOf(b, "helpful") - metricOf(a, "helpful") ||
+    String(a.id).localeCompare(String(b.id), undefined, { numeric: true }),
+  );
+  const users = sortedUsers.map((user, index) => ({
+    ...user,
+    points: scoreOf(user),
+    upvotes: scoreOf(user),
+    rank: index + 1,
+  }));
 
   const categories = Array.from(
     new Set(users.map((user) => user.category).filter(Boolean)),

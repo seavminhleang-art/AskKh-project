@@ -4,7 +4,7 @@ import { rankContributors } from './rankings';
 export const leaderboardApi = baseApi.injectEndpoints({
   endpoints: builder => ({
     getLeaderboard: builder.query({
-      async queryFn(period = 'all', _api, _options, fetchWithBQ) {
+      async queryFn(period = 'all', api, _options, fetchWithBQ) {
         try {
           const response = await fetchWithBQ('/posts');
           if (response.error) return response;
@@ -16,16 +16,37 @@ export const leaderboardApi = baseApi.injectEndpoints({
           try {
             const reportsRes = await fetchWithBQ('/lost-found/reports');
             const reportsBody = reportsRes.data?.data ?? reportsRes.data;
-            if (Array.isArray(reportsBody)) reportsList = reportsBody;
+            reportsList = Array.isArray(reportsBody)
+              ? reportsBody
+              : reportsBody?.content ?? reportsBody?.items ?? reportsBody?.results ?? [];
           } catch {
             // Optional reports count enhancement
           }
 
-          const ranked = rankContributors(posts, period);
+          let savedVotes = {};
+          const currentUserId = api.getState()?.auth?.user?.id;
+          if (currentUserId != null && typeof window !== 'undefined') {
+            try {
+              savedVotes = JSON.parse(window.localStorage.getItem('askkh:qa-votes') || '{}');
+            } catch {
+              savedVotes = {};
+            }
+          }
+          const postsWithCurrentVote = posts.map((post) => {
+            const vote = savedVotes[`${currentUserId}:${post.id}`];
+            if (!vote || ![1, 2].includes(Number(vote.voteTypeId))) return post;
+            const serverScore = Number(post.score ?? post.likeCount ?? post.likes ?? post.upVotes ?? post.upvotes ?? 0);
+            const baseScore = Number(vote.baseScore ?? serverScore);
+            if (!Number.isFinite(serverScore) || !Number.isFinite(baseScore) || serverScore !== baseScore) return post;
+            return { ...post, score: baseScore + (Number(vote.voteTypeId) === 1 ? 1 : -1) };
+          });
+
+          const ranked = rankContributors(postsWithCurrentVote, period, new Date(), reportsList);
           const reportCounts = new Map();
           for (const rep of reportsList) {
-            if (rep.userId != null) {
-              reportCounts.set(String(rep.userId), (reportCounts.get(String(rep.userId)) || 0) + 1);
+            const reporterId = rep.userId ?? rep.reporterUserId ?? rep.ownerId;
+            if (reporterId != null) {
+              reportCounts.set(String(reporterId), (reportCounts.get(String(reporterId)) || 0) + 1);
             }
           }
 
@@ -46,7 +67,7 @@ export const leaderboardApi = baseApi.injectEndpoints({
           return { error: { status: 'CUSTOM_ERROR', error: error.message } };
         }
       },
-      providesTags: ['Post', 'Comment', 'Vote', 'User'],
+      providesTags: ['Post', 'Comment', 'Vote', 'User', 'LostFound'],
     }),
   }),
   overrideExisting: true,

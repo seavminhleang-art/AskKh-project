@@ -18,6 +18,19 @@ const votePayload = ({ postId, userId, voteTypeId }) => {
 
 export const voteApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
+    upvotePost: builder.mutation({
+      query: (postId) => ({
+        url: `/votes/posts/${encodeURIComponent(postId)}/upvote`,
+        method: 'POST',
+      }),
+      invalidatesTags: (result, error, postId) => [
+        { type: 'Vote', id: postId },
+        { type: 'Post', id: postId },
+        { type: 'Post', id: 'LIST' },
+        { type: 'LostFound', id: postId },
+        { type: 'LostFound', id: 'LIST' },
+      ],
+    }),
     votePost: builder.mutation({
       query: (vote) => ({
         url: '/votes',
@@ -54,6 +67,7 @@ export const voteApi = baseApi.injectEndpoints({
 });
 
 export const {
+  useUpvotePostMutation,
   useVotePostMutation,
   useUpdateVoteMutation,
   useDeleteVoteMutation,

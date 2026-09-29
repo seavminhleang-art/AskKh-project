@@ -11,6 +11,7 @@ import {
   PlusCircle,
   Tag,
   Building2,
+  ThumbsUp,
   SlidersHorizontal,
   Sparkles,
   Inbox,
@@ -23,7 +24,19 @@ import { useWorkspaceDataQuery } from "@/features/workspace/workspaceApi";
 import { rows, message, dateLabel } from "@/features/workspace/workspaceModel";
 import { formatMediaUrl } from "@/features/workspace/profileImage";
 import { useGetUserByIdQuery } from "@/features/users/userApi";
+import { useDeleteVoteMutation, useUpvotePostMutation } from "@/features/votes/voteApi";
 import ReportDetails from "./ReportDetails";
+
+const savedReportVotesKey = (userId) => `nexa:lost-found-votes:${userId}`;
+
+function readSavedReportVotes(userId) {
+  if (userId == null || typeof window === "undefined") return {};
+  try {
+    return JSON.parse(window.localStorage.getItem(savedReportVotesKey(userId)) || "{}");
+  } catch {
+    return {};
+  }
+}
 
 function ReportAuthor({ item, darkMode }) {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -90,7 +103,7 @@ function ReportAuthor({ item, darkMode }) {
         />
       ) : (
         <span
-          className={`grid h-8 w-8 shrink-0 place-items-center rounded-full text-xs font-bold shadow-sm transition-transform duration-300 group-hover/author:scale-105 ${
+          className={`grid h-8 w-8 shrink-0 place-items-center rounded-full text-[14px] font-normal shadow-sm transition-transform duration-300 group-hover/author:scale-105 ${
             darkMode 
               ? "bg-zinc-800 text-blue-400 border border-zinc-700" 
               : "bg-blue-50 text-blue-600 border border-blue-100"
@@ -101,11 +114,11 @@ function ReportAuthor({ item, darkMode }) {
       )}
       <div className="flex flex-col min-w-0">
         <span
-          className={`truncate text-sm font-semibold tracking-tight ${darkMode ? "text-slate-200" : "text-gray-800"}`}
+          className={`truncate text-[14px] font-normal tracking-tight ${darkMode ? "text-slate-200" : "text-gray-800"}`}
         >
           {name}
         </span>
-        <span className={`text-[11px] font-medium ${darkMode ? "text-zinc-500" : "text-gray-400"}`}>
+        <span className={`text-[14px] font-normal ${darkMode ? "text-zinc-500" : "text-gray-400"}`}>
           {scope === "istad" || scope === "public" ? memberLabel : "Verified Member"}
         </span>
       </div>
@@ -115,6 +128,11 @@ function ReportAuthor({ item, darkMode }) {
 
 export default function ItemFeedView({ onOpenReport, darkMode }) {
   const { t } = useTranslation();
+  const userId = useSelector((state) => state.auth.user?.id);
+  const [upvotePost] = useUpvotePostMutation();
+  const [deleteVote] = useDeleteVoteMutation();
+  const [savedReportVotes, setSavedReportVotes] = useState(() => readSavedReportVotes(userId));
+  const [likeCounts, setLikeCounts] = useState({});
   const reports = useWorkspaceDataQuery({ resource: "reports" });
   const categoryQuery = useWorkspaceDataQuery({ resource: "categories" });
   const locationQuery = useWorkspaceDataQuery({ resource: "locations" });
@@ -182,6 +200,43 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
     setCurrentPage(1);
   };
 
+  const handleReportLike = async (item) => {
+    if (userId == null || item.id == null) return;
+    const reportId = String(item.id);
+    const existingVoteId = savedReportVotes[reportId];
+    try {
+      if (existingVoteId != null) {
+        await deleteVote(existingVoteId).unwrap();
+        setSavedReportVotes((previous) => {
+          const next = { ...previous };
+          delete next[reportId];
+          window.localStorage.setItem(savedReportVotesKey(userId), JSON.stringify(next));
+          return next;
+        });
+        setLikeCounts((previous) => ({
+          ...previous,
+          [reportId]: Math.max(0, (previous[reportId] ?? Number(item.likeCount ?? item.likes ?? item.upVotes ?? item.upvotes ?? item.score ?? 0)) - 1),
+        }));
+        return;
+      }
+
+      const result = await upvotePost(item.id).unwrap();
+      const voteId = result?.id ?? result?.voteId ?? result?.upVoteId ?? result?.data?.id;
+      if (voteId == null) throw new Error("The vote response did not include a vote ID.");
+      setSavedReportVotes((previous) => {
+        const next = { ...previous, [reportId]: voteId };
+        window.localStorage.setItem(savedReportVotesKey(userId), JSON.stringify(next));
+        return next;
+      });
+      setLikeCounts((previous) => ({
+        ...previous,
+        [reportId]: (previous[reportId] ?? Number(item.likeCount ?? item.likes ?? item.upVotes ?? item.upvotes ?? item.score ?? 0)) + 1,
+      }));
+    } catch {
+      // Keep the displayed count unchanged when the API rejects the vote.
+    }
+  };
+
   const filteredItems = items
     .filter((item) => {
       const matchesTab =
@@ -229,7 +284,7 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
         <motion.span
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className={`inline-flex items-center gap-2 text-xs font-semibold px-4 py-1.5 rounded-full mb-4 border shadow-sm transition-all duration-300 hover:scale-105 ${
+          className={`inline-flex items-center gap-2 text-[14px] font-normal px-4 py-1.5 rounded-full mb-4 border shadow-sm transition-all duration-300 hover:scale-105 ${
             darkMode
               ? "bg-blue-950/80 text-blue-400 border-blue-900/80"
               : "bg-blue-50 text-[var(--color-brand-primary,#3b82f6)] border-blue-100"
@@ -242,7 +297,7 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className={`text-4xl md:text-6xl font-extrabold tracking-tight mb-4 ${darkMode ? "text-white" : "text-gray-900"}`}
+          className={`text-[14px] font-normal tracking-tight mb-4 ${darkMode ? "text-white" : "text-gray-900"}`}
         >
           {t("feedHeroTitle1")}{" "}
           <span className="bg-gradient-to-r from-blue-500 to-indigo-500 bg-clip-text text-transparent">
@@ -254,7 +309,7 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className={`max-w-2xl mx-auto leading-relaxed text-base md:text-lg ${darkMode ? "text-slate-400" : "text-gray-600"}`}
+          className={`max-w-2xl mx-auto leading-relaxed text-[14px] ${darkMode ? "text-slate-400" : "text-gray-600"}`}
         >
           {t("feedHeroDescription")}
         </motion.p>
@@ -280,11 +335,11 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
             >
               <div className="flex items-center gap-3">
                 <AlertCircle size={20} className="shrink-0 text-red-500" />
-                <span className="text-sm font-medium">{message(query.error)}</span>
+                <span className="text-[14px] font-normal">{message(query.error)}</span>
               </div>
               <button 
                 onClick={query.refetch}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-semibold shadow-sm transition-colors"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-[14px] font-normal shadow-sm transition-colors"
               >
                 <RefreshCw size={14} /> Retry
               </button>
@@ -293,19 +348,19 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
       )}
 
       {reports.isFetching && (
-        <div className="flex items-center justify-center gap-2 mb-6 text-sm font-medium text-blue-500 animate-pulse">
+        <div className="flex items-center justify-center gap-2 mb-6 text-[14px] font-normal text-blue-500 animate-pulse">
           <RefreshCw size={16} className="animate-spin" /> Loading reports…
         </div>
       )}
 
       {selectedLocation && (
-        <div className="max-w-7xl mx-auto px-4 mb-4 flex items-center justify-between p-3 rounded-2xl bg-blue-500/10 border border-blue-500/20 text-sm">
-          <span className="flex items-center gap-2 font-medium">
+        <div className="max-w-7xl mx-auto px-4 mb-4 flex items-center justify-between p-3 rounded-2xl bg-blue-500/10 border border-blue-500/20 text-[14px]">
+          <span className="flex items-center gap-2 font-normal">
             <MapPin size={16} className="text-blue-500" /> Filtered by active location location ID: {selectedLocation}
           </span>
           <button 
             onClick={() => setSelectedLocation("")}
-            className="flex items-center gap-1 px-2.5 py-1 rounded-xl bg-blue-500 text-white font-semibold text-xs hover:bg-blue-600 transition-colors"
+            className="flex items-center gap-1 px-2.5 py-1 rounded-xl bg-blue-500 text-white font-normal text-[14px] hover:bg-blue-600 transition-colors"
           >
             <X size={14} /> Clear location filter
           </button>
@@ -325,7 +380,7 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
               <button
                 key={tab.key}
                 onClick={() => handleTabChange(tab.key)}
-                className={`px-5 py-2.5 text-sm font-semibold rounded-2xl transition-all duration-300 cursor-pointer ${
+                className={`px-5 py-2.5 text-[14px] font-normal rounded-2xl transition-all duration-300 cursor-pointer ${
                   activeTab === tab.key
                     ? "bg-blue-600 text-white shadow-lg shadow-blue-500/25"
                     : darkMode
@@ -346,7 +401,7 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
                 placeholder={t("feedSearchPlaceholder")}
                 value={searchQuery}
                 onChange={handleSearchChange}
-                className={`w-full rounded-2xl pl-10 pr-4 py-2.5 text-sm transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500/40 shadow-sm ${
+                className={`w-full rounded-2xl pl-10 pr-4 py-2.5 text-[14px] transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500/40 shadow-sm ${
                   darkMode
                     ? "bg-zinc-900/90 border border-zinc-800 text-slate-100 placeholder-zinc-500"
                     : "bg-white border border-gray-200/80 text-gray-800 placeholder-gray-400"
@@ -362,7 +417,7 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
               <select
                 value={selectedCategory}
                 onChange={(e) => handleCategoryChange(e.target.value)}
-                className={`flex-1 sm:flex-initial rounded-2xl px-4 py-2.5 text-sm outline-none cursor-pointer font-medium shadow-sm transition-all duration-300 ${
+                className={`flex-1 sm:flex-initial rounded-2xl px-4 py-2.5 text-[14px] outline-none cursor-pointer font-normal shadow-sm transition-all duration-300 ${
                   darkMode
                     ? "bg-zinc-900/90 border border-zinc-800 text-slate-200"
                     : "bg-white border border-gray-200/80 text-gray-800"
@@ -382,7 +437,7 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
               <select
                 value={sortBy}
                 onChange={handleSortChange}
-                className={`flex-1 sm:flex-initial rounded-2xl px-4 py-2.5 text-sm outline-none cursor-pointer font-medium shadow-sm transition-all duration-300 ${
+                className={`flex-1 sm:flex-initial rounded-2xl px-4 py-2.5 text-[14px] outline-none cursor-pointer font-normal shadow-sm transition-all duration-300 ${
                   darkMode
                     ? "bg-zinc-900/90 border border-zinc-800 text-slate-200"
                     : "bg-white border border-gray-200/80 text-gray-800"
@@ -416,11 +471,11 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
                 <div className={`w-16 h-16 rounded-2xl grid place-items-center mb-4 ${darkMode ? "bg-zinc-800 text-blue-400" : "bg-blue-50 text-blue-600"}`}>
                   <Inbox size={32} />
                 </div>
-                <h3 className={`text-lg font-bold mb-1 ${darkMode ? "text-slate-200" : "text-gray-800"}`}>No items found</h3>
-                <p className="text-sm max-w-sm mb-6">{t("feedNoItemsFound")}</p>
+                <h3 className={`text-[14px] font-normal mb-1 ${darkMode ? "text-slate-200" : "text-gray-800"}`}>No items found</h3>
+                <p className="text-[14px] max-w-sm mb-6">{t("feedNoItemsFound")}</p>
                 <button
                   onClick={() => { setSearchQuery(""); setSelectedCategory("All Categories"); setSelectedLocation(""); setActiveTab("All Items"); }}
-                  className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs shadow-md transition-all"
+                  className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-normal text-[14px] shadow-md transition-all"
                 >
                   Reset all filters
                 </button>
@@ -444,7 +499,7 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
                       {/* Status Badge */}
                       <div className="absolute top-5 right-5 z-10">
                         <span
-                          className={`inline-flex items-center gap-1.5 text-xs font-bold px-3.5 py-1.5 rounded-full uppercase tracking-wider shadow-sm transition-transform duration-300 group-hover:scale-105 ${
+                          className={`inline-flex items-center gap-1.5 text-[14px] font-normal px-3.5 py-1.5 rounded-full uppercase tracking-wider shadow-sm transition-transform duration-300 group-hover:scale-105 ${
                             item.type === "LOST"
                               ? darkMode
                                 ? "bg-red-950/80 text-red-400 border border-red-900/60"
@@ -454,7 +509,6 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
                                 : "bg-emerald-50 text-emerald-600 border border-emerald-100"
                           }`}
                         >
-                          <span className={`w-1.5 h-1.5 rounded-full ${item.type === "LOST" ? "bg-red-500" : "bg-emerald-500 animate-pulse"}`} />
                           {item.type === "LOST" ? t("recStatusLost") : t("recStatusFound")}
                         </span>
                       </div>
@@ -478,7 +532,7 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
                         ) : (
                           <div className={`flex flex-col items-center justify-center gap-1.5 ${darkMode ? "text-zinc-600" : "text-gray-300"}`}>
                             <Sparkles size={24} />
-                            <span className="text-[11px] font-medium tracking-wide uppercase">No Image</span>
+                            <span className="text-[14px] font-normal tracking-wide uppercase">No Image</span>
                           </div>
                         )}
                       </div>
@@ -487,7 +541,7 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
                       <div className="flex-1 flex flex-col justify-between">
                         <div>
                           {/* Meta attributes */}
-                          <div className="flex items-center gap-4 text-xs font-semibold mb-2.5">
+                          <div className="flex items-center gap-4 text-[14px] font-normal mb-2.5">
                             <span className="flex items-center gap-1.5 text-blue-500 bg-blue-500/10 px-2.5 py-1 rounded-lg">
                               <MapPin size={13} /> {item.location}
                             </span>
@@ -497,13 +551,13 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
                           </div>
 
                           <h3
-                            className={`text-lg font-bold mb-2 tracking-tight transition-colors duration-200 group-hover:text-blue-500 ${darkMode ? "text-slate-100" : "text-gray-900"}`}
+                            className={`text-[14px] font-normal mb-2 tracking-tight transition-colors duration-200 group-hover:text-blue-500 ${darkMode ? "text-slate-100" : "text-gray-900"}`}
                           >
                             {item.title}
                           </h3>
 
                           <p
-                            className={`text-sm leading-relaxed line-clamp-2 mb-4 ${darkMode ? "text-zinc-400" : "text-gray-600"}`}
+                            className={`text-[14px] leading-relaxed line-clamp-2 mb-4 ${darkMode ? "text-zinc-400" : "text-gray-600"}`}
                           >
                             {item.description}
                           </p>
@@ -518,12 +572,29 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
                           }`}
                         >
                           <ReportAuthor item={item} darkMode={darkMode} />
+
+                          <span
+                            className={`inline-flex items-center gap-1.5 text-[14px] ${savedReportVotes[String(item.id)] != null ? "text-blue-600" : "text-slate-500"}`}
+                          >
+                            <button
+                              type="button"
+                              onClick={() => handleReportLike(item)}
+                              disabled={userId == null}
+                              aria-label={savedReportVotes[String(item.id)] != null ? "Unlike item" : "Like item"}
+                              aria-pressed={savedReportVotes[String(item.id)] != null}
+                              title={userId == null ? "Sign in to like this item" : undefined}
+                              className="inline-flex items-center gap-1.5 disabled:cursor-not-allowed disabled:opacity-50"
+                            >
+                              <ThumbsUp size={16} aria-hidden="true" />
+                              {Number(likeCounts[String(item.id)] ?? item.likeCount ?? item.likes ?? item.upVotes ?? item.upvotes ?? item.score ?? 0).toLocaleString()}
+                            </button>
+                          </span>
                           
                           <motion.button
                             onClick={() => setSelectedReport(item)}
                             whileHover={{ scale: 1.03 }}
                             whileTap={{ scale: 0.97 }}
-                            className={`text-xs font-bold px-5 py-2.5 rounded-xl transition-all duration-300 cursor-pointer shadow-sm ${
+                            className={`text-base font-normal px-5 py-2.5 rounded-xl transition-all duration-300 cursor-pointer shadow-sm ${
                               item.type === "FOUND"
                                 ? darkMode
                                   ? "bg-emerald-950/80 text-emerald-400 border border-emerald-800 hover:bg-emerald-900"
@@ -564,7 +635,7 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
             >
               <div className="flex items-center justify-between mb-4">
                 <span
-                  className={`inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full ${
+                  className={`inline-flex items-center gap-1.5 text-[14px] font-normal px-3 py-1.5 rounded-full ${
                     darkMode
                       ? "bg-blue-950/80 text-blue-400 border border-blue-900/60"
                       : "bg-blue-50 text-blue-600 border border-blue-100"
@@ -588,9 +659,9 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
                     }}
                     whileHover={{ x: 4 }}
                     transition={{ duration: 0.15 }}
-                    className={`flex items-center justify-between text-sm cursor-pointer p-2.5 rounded-2xl transition-all ${
+                    className={`flex items-center justify-between text-[14px] cursor-pointer p-2.5 rounded-2xl transition-all ${
                       selectedCategory === cat.name
-                        ? "font-bold text-white bg-blue-600 shadow-md shadow-blue-500/20"
+                        ? "font-normal text-white bg-blue-600 shadow-md shadow-blue-500/20"
                         : darkMode
                           ? "text-zinc-300 hover:bg-zinc-800/60 hover:text-white"
                           : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
@@ -598,7 +669,7 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
                   >
                     <span className="truncate pr-2">{cat.name}</span>
                     <span
-                      className={`text-xs px-2 py-0.5 rounded-full font-semibold ${
+                      className={`text-[14px] px-2 py-0.5 rounded-full font-normal ${
                         selectedCategory === cat.name 
                           ? "bg-blue-700 text-white" 
                           : darkMode ? "bg-zinc-800 text-zinc-400" : "bg-gray-100 text-gray-500"
@@ -621,7 +692,7 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
             >
               <div className="flex items-center justify-between mb-4">
                 <span
-                  className={`inline-flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full ${
+                  className={`inline-flex items-center gap-1.5 text-[14px] font-normal px-3 py-1.5 rounded-full ${
                     darkMode
                       ? "bg-pink-950/80 text-pink-400 border border-pink-900/60"
                       : "bg-pink-50 text-pink-600 border border-pink-100"
@@ -645,9 +716,9 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
                     }}
                     whileHover={{ x: 4 }}
                     transition={{ duration: 0.15 }}
-                    className={`flex items-center justify-between text-sm cursor-pointer p-2.5 rounded-2xl transition-all ${
+                    className={`flex items-center justify-between text-[14px] cursor-pointer p-2.5 rounded-2xl transition-all ${
                       selectedLocation === loc.id
-                        ? "font-bold text-white bg-pink-600 shadow-md shadow-pink-500/20"
+                        ? "font-normal text-white bg-pink-600 shadow-md shadow-pink-500/20"
                         : darkMode
                           ? "text-zinc-300 hover:bg-zinc-800/60 hover:text-white"
                           : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
@@ -655,7 +726,7 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
                   >
                     <span className="truncate pr-2">{loc.name}</span>
                     <span
-                      className={`text-xs px-2 py-0.5 rounded-full font-semibold ${
+                      className={`text-[14px] px-2 py-0.5 rounded-full font-normal ${
                         selectedLocation === loc.id 
                           ? "bg-pink-700 text-white" 
                           : darkMode ? "bg-zinc-800 text-zinc-400" : "bg-gray-100 text-gray-500"
@@ -675,13 +746,13 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
               className="relative overflow-hidden rounded-3xl p-6 bg-gradient-to-br from-blue-600 to-indigo-600 text-white shadow-xl shadow-blue-500/25"
             >
               <div className="absolute -right-6 -bottom-6 w-32 h-32 bg-white/10 rounded-full blur-2xl pointer-events-none" />
-              <h4 className="font-bold text-lg mb-1">Lost or found something?</h4>
-              <p className="text-xs text-blue-100 mb-5 leading-relaxed">
+              <h4 className="font-normal text-[14px] mb-1">Lost or found something?</h4>
+              <p className="text-[14px] text-blue-100 mb-5 leading-relaxed">
                 Create a report instantly to notify the campus community and track status updates.
               </p>
               <button
                 onClick={onOpenReport}
-                className="w-full bg-white text-blue-600 hover:bg-blue-50 font-bold py-3 px-4 rounded-2xl text-sm transition-all duration-200 flex items-center justify-center gap-2 shadow-lg cursor-pointer"
+                className="w-full bg-white text-blue-600 hover:bg-blue-50 font-normal py-3 px-4 rounded-2xl text-[14px] transition-all duration-200 flex items-center justify-center gap-2 shadow-lg cursor-pointer"
               >
                 <PlusCircle size={16} /> {t("feedReportBtn")}
               </button>

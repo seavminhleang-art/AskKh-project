@@ -36,7 +36,11 @@ export function useAuthInit() {
             body: JSON.stringify({ refreshToken }),
             signal: AbortSignal.timeout(15000),
           }).then(response => {
-            if (!response.ok) throw new Error('Refresh failed');
+            if (!response.ok) {
+              const error = new Error('Refresh failed');
+              error.status = response.status;
+              throw error;
+            }
             return response.json();
           }).finally(() => { pendingRefresh = undefined; });
         }
@@ -49,8 +53,11 @@ export function useAuthInit() {
         } else if (!isCancelled) {
           dispatch(logout());
         }
-      } catch {
-        if (!isCancelled) {
+      } catch (error) {
+        // Keep the saved session when refresh fails because of a temporary
+        // network/server issue. Only clear credentials when the server says
+        // the refresh token is no longer valid.
+        if (!isCancelled && [400, 401, 403].includes(error.status)) {
           dispatch(logout());
         }
       } finally {
