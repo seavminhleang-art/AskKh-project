@@ -11,7 +11,6 @@ import {
   PlusCircle,
   Tag,
   Building2,
-  ThumbsUp,
   SlidersHorizontal,
   Sparkles,
   Inbox,
@@ -24,19 +23,7 @@ import { useWorkspaceDataQuery } from "@/features/workspace/workspaceApi";
 import { rows, message, dateLabel } from "@/features/workspace/workspaceModel";
 import { formatMediaUrl } from "@/features/workspace/profileImage";
 import { useGetUserByIdQuery } from "@/features/users/userApi";
-import { useDeleteVoteMutation, useUpvotePostMutation } from "@/features/votes/voteApi";
 import ReportDetails from "./ReportDetails";
-
-const savedReportVotesKey = (userId) => `nexa:lost-found-votes:${userId}`;
-
-function readSavedReportVotes(userId) {
-  if (userId == null || typeof window === "undefined") return {};
-  try {
-    return JSON.parse(window.localStorage.getItem(savedReportVotesKey(userId)) || "{}");
-  } catch {
-    return {};
-  }
-}
 
 function ReportAuthor({ item, darkMode }) {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
@@ -128,11 +115,6 @@ function ReportAuthor({ item, darkMode }) {
 
 export default function ItemFeedView({ onOpenReport, darkMode }) {
   const { t } = useTranslation();
-  const userId = useSelector((state) => state.auth.user?.id);
-  const [upvotePost] = useUpvotePostMutation();
-  const [deleteVote] = useDeleteVoteMutation();
-  const [savedReportVotes, setSavedReportVotes] = useState(() => readSavedReportVotes(userId));
-  const [likeCounts, setLikeCounts] = useState({});
   const reports = useWorkspaceDataQuery({ resource: "reports" });
   const categoryQuery = useWorkspaceDataQuery({ resource: "categories" });
   const locationQuery = useWorkspaceDataQuery({ resource: "locations" });
@@ -200,43 +182,6 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
     setCurrentPage(1);
   };
 
-  const handleReportLike = async (item) => {
-    if (userId == null || item.id == null) return;
-    const reportId = String(item.id);
-    const existingVoteId = savedReportVotes[reportId];
-    try {
-      if (existingVoteId != null) {
-        await deleteVote(existingVoteId).unwrap();
-        setSavedReportVotes((previous) => {
-          const next = { ...previous };
-          delete next[reportId];
-          window.localStorage.setItem(savedReportVotesKey(userId), JSON.stringify(next));
-          return next;
-        });
-        setLikeCounts((previous) => ({
-          ...previous,
-          [reportId]: Math.max(0, (previous[reportId] ?? Number(item.likeCount ?? item.likes ?? item.upVotes ?? item.upvotes ?? item.score ?? 0)) - 1),
-        }));
-        return;
-      }
-
-      const result = await upvotePost(item.id).unwrap();
-      const voteId = result?.id ?? result?.voteId ?? result?.upVoteId ?? result?.data?.id;
-      if (voteId == null) throw new Error("The vote response did not include a vote ID.");
-      setSavedReportVotes((previous) => {
-        const next = { ...previous, [reportId]: voteId };
-        window.localStorage.setItem(savedReportVotesKey(userId), JSON.stringify(next));
-        return next;
-      });
-      setLikeCounts((previous) => ({
-        ...previous,
-        [reportId]: (previous[reportId] ?? Number(item.likeCount ?? item.likes ?? item.upVotes ?? item.upvotes ?? item.score ?? 0)) + 1,
-      }));
-    } catch {
-      // Keep the displayed count unchanged when the API rejects the vote.
-    }
-  };
-
   const filteredItems = items
     .filter((item) => {
       const matchesTab =
@@ -297,7 +242,7 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className={`text-[14px] font-normal tracking-tight mb-4 ${darkMode ? "text-white" : "text-gray-900"}`}
+          className={`text-4xl md:text-5xl font-semibold tracking-tight leading-tight mb-4 ${darkMode ? "text-white" : "text-gray-900"}`}
         >
           {t("feedHeroTitle1")}{" "}
           <span className="bg-gradient-to-r from-blue-500 to-indigo-500 bg-clip-text text-transparent">
@@ -309,7 +254,7 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className={`max-w-2xl mx-auto leading-relaxed text-[14px] ${darkMode ? "text-slate-400" : "text-gray-600"}`}
+          className={`max-w-2xl mx-auto leading-relaxed text-lg ${darkMode ? "text-slate-400" : "text-gray-600"}`}
         >
           {t("feedHeroDescription")}
         </motion.p>
@@ -573,23 +518,6 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
                         >
                           <ReportAuthor item={item} darkMode={darkMode} />
 
-                          <span
-                            className={`inline-flex items-center gap-1.5 text-[14px] ${savedReportVotes[String(item.id)] != null ? "text-blue-600" : "text-slate-500"}`}
-                          >
-                            <button
-                              type="button"
-                              onClick={() => handleReportLike(item)}
-                              disabled={userId == null}
-                              aria-label={savedReportVotes[String(item.id)] != null ? "Unlike item" : "Like item"}
-                              aria-pressed={savedReportVotes[String(item.id)] != null}
-                              title={userId == null ? "Sign in to like this item" : undefined}
-                              className="inline-flex items-center gap-1.5 disabled:cursor-not-allowed disabled:opacity-50"
-                            >
-                              <ThumbsUp size={16} aria-hidden="true" />
-                              {Number(likeCounts[String(item.id)] ?? item.likeCount ?? item.likes ?? item.upVotes ?? item.upvotes ?? item.score ?? 0).toLocaleString()}
-                            </button>
-                          </span>
-                          
                           <motion.button
                             onClick={() => setSelectedReport(item)}
                             whileHover={{ scale: 1.03 }}
