@@ -11,11 +11,11 @@ import visionDarkImg from "../../assets/Website/vision_dark.png";
 import sokcheatPhoto from "../../assets/Mentor/srorng_sokcheat.jpg";
 import rattanakmonyPhoto from "../../assets/Mentor/pech_rattanakmony.jpg";
 
-import lisaPhoto from "../../assets/Team/Lisa.jpg";
+import lisaPhoto from "../../assets/Team/Lisa.JPG";
 import seavminhPhoto from "../../assets/Team/Seavminh.JPG";
 import lyhengPhoto from "../../assets/Team/Lyheng.jpg";
 import monizaPhoto from "../../assets/Team/Niza.jpg";
-import tonganPhoto from "../../assets/Team/Tongan.jpg";
+import tonganPhoto from "../../assets/Team/Tongan.JPG";
 import sothearithPhoto from "../../assets/Team/Rith.JPG";
 import thanaPhoto from "../../assets/Team/Thana.jpg";
 import tharathPhoto from "../../assets/Team/venthan_tharath.jpg";

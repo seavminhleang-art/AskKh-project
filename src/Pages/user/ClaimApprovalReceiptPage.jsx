@@ -3,7 +3,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import { useWorkspaceTranslation } from "@/locales/workspace/useWorkspaceTranslation";
 import { useWorkspaceDataQuery } from "../../features/workspace/workspaceApi";
 import { dateLabel, rows } from "../../features/workspace/workspaceModel";
-import { Badge, Empty, QueryState } from "./WorkspaceUI";
+import { Badge, Empty, QueryState } from "../../pages/user/WorkspaceUI.jsx";
 
 export default function ClaimApprovalReceiptPage() {
   const { w, locale } = useWorkspaceTranslation();
