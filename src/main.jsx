@@ -23,7 +23,7 @@ import { ThemeProvider } from "./context/ThemeContext.jsx";
 import store from "./store/store.js";
 import DashboardPage from "./pages/user/DashboardPage.jsx";
 import WorkspaceListPage from "./pages/user/WorkspaceListPage.jsx";
-import ClaimApprovalReceiptPage from "./pages/user/ClaimApprovalReceiptPage.jsx";
+import ClaimApprovalReceiptPage from "./Pages/user/ClaimApprovalReceiptPage.jsx";
 import ProfilePage from './pages/user/ProfilePage.jsx';
 import QuestionDetailPage from './pages/user/QuestionDetailPage.jsx';
 import PublicQuestionPage from './Pages/public/PublicQuestionPage.jsx';
