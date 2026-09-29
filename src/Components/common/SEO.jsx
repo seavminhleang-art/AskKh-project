@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
 const SITE_NAME = "NEXA";
-const DEFAULT_ORIGIN = "https://ask-kh-project.vercel.app";
+const DEFAULT_ORIGIN = "nexa-frontend.cheat.casa";
 const DEFAULT_THUMBNAIL = `${DEFAULT_ORIGIN}/thumbnail.jpg`;
 const DEFAULT_LOGO = `${DEFAULT_ORIGIN}/nexa-orbit-logo.svg`;
 const DEFAULT_TITLE = "NEXA — Cambodian Developer & Student Community";

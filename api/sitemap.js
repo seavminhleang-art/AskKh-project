@@ -11,7 +11,7 @@
  * Cache: 1 hour (max-age=3600) to keep question list fresh without hammering the API.
  */
 
-const SITE_ORIGIN = "https://ask-kh-project.vercel.app";
+const SITE_ORIGIN = "nexa-frontend.cheat.casa";
 const API_BASE = "https://forum-istad-api.cheat.casa/api/v1";
 const QUESTION_TYPE_ID = 3;
 const TODAY = new Date().toISOString().slice(0, 10);

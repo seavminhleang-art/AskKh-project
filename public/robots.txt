@@ -49,4 +49,4 @@ Disallow: /forgot-password
 Disallow: /__forum_api/
 
 # Sitemap location (dynamic — includes individual question pages)
-Sitemap: https://ask-kh-project.vercel.app/sitemap.xml
+Sitemap: nexa-frontend.cheat.casa/sitemap.xml
