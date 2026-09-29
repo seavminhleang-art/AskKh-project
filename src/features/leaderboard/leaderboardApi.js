@@ -36,7 +36,7 @@ export const leaderboardApi = baseApi.injectEndpoints({
               name: item.name || `User #${item.id}`,
               handle: item.handle || (item.name ? `@${item.name.toLowerCase().replace(/\s+/g, '_')}` : `@user${item.id}`),
               avatar: item.avatar || null,
-              reputation: Math.max(10, item.points * 10),
+              reputation: item.points,
               returned: returnedCount,
             };
           });

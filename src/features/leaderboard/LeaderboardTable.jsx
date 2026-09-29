@@ -47,16 +47,16 @@ export default function LeaderboardTable({ users = [] }) {
           <TableHead>Member</TableHead>
           <TableHead>Role</TableHead>
           <TableHead className="text-right">Badges</TableHead>
-          <TableHead className="text-right">Reputation</TableHead>
+          <TableHead className="text-right">Score</TableHead>
           <TableHead className="text-right">Total Points</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {users.map((user, index) => (
+        {users.map((user) => (
           <TableRow key={user.id}>
             <TableCell className="text-center font-bold">
               <div className="flex justify-center">
-                {getRankBadge(index + 1)}
+                {getRankBadge(user.rank)}
               </div>
             </TableCell>
             <TableCell>
@@ -84,7 +84,7 @@ export default function LeaderboardTable({ users = [] }) {
               {user.badgeCount || 0}
             </TableCell>
             <TableCell className="text-right font-semibold text-emerald-600 dark:text-emerald-400">
-              {user.reputation}%
+              {user.points}
             </TableCell>
             <TableCell className="text-right font-extrabold text-blue-600 dark:text-blue-400 text-lg">
               {user.points?.toLocaleString()} pts

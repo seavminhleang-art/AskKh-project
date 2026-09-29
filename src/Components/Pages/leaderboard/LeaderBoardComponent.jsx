@@ -69,7 +69,7 @@ const COPY = {
     points: [
       {
         label: "Post score",
-        value: "+ comment score",
+        value: "Sum per user",
       },
     ],
 
@@ -134,7 +134,7 @@ const COPY = {
     points: [
       {
         label: "ពិន្ទុការបង្ហោះ",
-        value: "+ ពិន្ទុមតិយោបល់",
+        value: "សរុបតាមអ្នកប្រើ",
       },
     ],
 
@@ -1599,8 +1599,8 @@ export default function LeaderBoardComponent({
         >
           <p className="text-lg">
             {lang === "km"
-              ? "ពិន្ទុសរុបនៃការបង្ហោះ និងមតិយោបល់ដែលបានផ្ទុក។ តម្រងពេលវេលាយោងតាមថ្ងៃបង្កើតមាតិកា។"
-              : "Ranked by total post and comment scores in loaded posts. Time filters use content creation dates, not vote dates. Equal scores share a rank."}
+              ? "ពិន្ទុសរុបនៃការបង្ហោះដែលបានផ្ទុក។ តម្រងពេលវេលាយោងតាមថ្ងៃបង្កើតមាតិកា។"
+              : "Ranked by total post scores in loaded posts. Time filters use content creation dates, not vote dates. Equal scores share a rank."}
           </p>
 
           <button
