@@ -27,7 +27,7 @@ export default async function handler(request) {
     targetPath = '/' + targetPath;
   }
 
-  const backendBase = process.env.VITE_BASE_FORUM_LOST_URL || process.env.VITE_API_BASE_URL || 'https://forum-istad-api.cheat.casa/api/v1';
+  const backendBase = process.env.VITE_BASE_FORUM_LOST_URL || 'https://forum-istad-api.cheat.casa/api/v1';
   const cleanBase = backendBase.replace(/\/+$/, '');
   const targetUrl = `${cleanBase}${targetPath}${url.search}`;
 

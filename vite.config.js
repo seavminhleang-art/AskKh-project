@@ -5,7 +5,7 @@ import path from "path";
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), 'VITE_');
-  const backend = new URL(env.VITE_BASE_FORUM_LOST_URL || env.VITE_API_BASE_URL || 'https://forum-istad-api.cheat.casa/api/v1');
+  const backend = new URL(env.VITE_BASE_FORUM_LOST_URL || 'https://forum-istad-api.cheat.casa/api/v1');
   return {
   server: {
     headers: {
