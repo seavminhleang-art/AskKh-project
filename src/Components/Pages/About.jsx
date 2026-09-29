@@ -11,13 +11,13 @@ import visionDarkImg from "../../assets/Website/vision_dark.png";
 import sokcheatPhoto from "../../assets/Mentor/srorng_sokcheat.jpg";
 import rattanakmonyPhoto from "../../assets/Mentor/pech_rattanakmony.jpg";
 
-import lisaPhoto from "../../assets/Team/mom_lisa.jpg";
-import seavminhPhoto from "../../assets/Team/leang_seavminh.JPG";
-import lyhengPhoto from "../../assets/Team/cheakching_lyheng.jpg";
-import monizaPhoto from "../../assets/Team/cheat_chanmoniza.jpg";
-import tonganPhoto from "../../assets/Team/hor_tongan.jpg";
-import sothearithPhoto from "../../assets/Team/sroeun_sothearith.JPG";
-import thanaPhoto from "../../assets/Team/neang_thana.jpg";
+import lisaPhoto from "../../assets/Team/Lisa.jpg";
+import seavminhPhoto from "../../assets/Team/Seavminh.JPG";
+import lyhengPhoto from "../../assets/Team/Lyheng.jpg";
+import monizaPhoto from "../../assets/Team/Niza.jpg";
+import tonganPhoto from "../../assets/Team/Tongan.jpg";
+import sothearithPhoto from "../../assets/Team/Rith.JPG";
+import thanaPhoto from "../../assets/Team/Thana.jpg";
 import tharathPhoto from "../../assets/Team/venthan_tharath.jpg";
 
 // ---------- Icons ----------
@@ -118,13 +118,22 @@ const featuresKeys = [
     ),
   },
   {
-    key: "aboutPage.features.smartMatching",
+    key: "aboutPage.features.secureRecovery",
     color: "red",
     icon: (
       <>
-        <circle cx="12" cy="12" r="8" strokeWidth="2" />
-        <circle cx="12" cy="12" r="4" strokeWidth="2" />
-        <circle cx="12" cy="12" r="1" fill="currentColor" />
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
+          d="M12 3l7 3v6c0 5-3.5 8.5-7 9-3.5-.5-7-4-7-9V6l7-3z"
+        />
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
+          d="M9.5 12.5l1.8 1.8L15 10.5"
+        />
       </>
     ),
   },
@@ -473,10 +482,11 @@ export default function AboutNexa() {
               key={feature.key}
               animation="fadeInUp"
               delay={index * 100}
+              className="h-full"
             >
-              <div className="bg-[var(--bg-card)] rounded-2xl p-6 text-center hover:shadow-md transition-all duration-300 hover:-translate-y-1">
+              <div className="h-full min-h-[340px] bg-[var(--bg-card)] rounded-2xl p-6 text-center flex flex-col items-center hover:shadow-md transition-all duration-300 hover:-translate-y-1">
                 <div
-                  className={`w-14 h-14 mx-auto rounded-full border-2 flex items-center justify-center mb-4 bg-[var(--bg-card)] ${
+                  className={`w-14 h-14 shrink-0 mx-auto rounded-full border-2 flex items-center justify-center mb-4 bg-[var(--bg-card)] ${
                     feature.color === "red"
                       ? "border-brand-secondary/40 text-brand-secondary"
                       : "border-brand-primary/50 text-brand-primary"
@@ -492,7 +502,7 @@ export default function AboutNexa() {
                   </svg>
                 </div>
 
-                <h3 className="font-semibold text-[var(--text-main)] text-2xl">
+                <h3 className="w-full min-h-14 flex items-center justify-center font-semibold text-[var(--text-main)] text-2xl">
                   {t(`${feature.key}.title`)}
                 </h3>
 

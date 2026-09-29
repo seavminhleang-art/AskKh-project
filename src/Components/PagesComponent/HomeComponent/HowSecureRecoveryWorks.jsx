@@ -40,10 +40,10 @@ export default function HowSecureRecoveryWorks({ darkMode }) {
     },
     {
       id: 2,
-      title: t("recoveryStep2Title", { defaultValue: "Hidden Detail Verification" }),
+      title: t("recoveryStep2Title", { defaultValue: "Finder Approval" }),
       desc: t("recoveryStep2Desc", {
         defaultValue:
-          "Submit your unique hidden detail to verify ownership. A notification is instantly sent to the finder for review to approve or reject.",
+          "The person who found the item reviews your request and chooses to approve or reject the claim.",
       }),
       graphic: (
         <div className="relative w-full h-full flex items-center justify-center bg-gradient-to-br from-[var(--color-brand-secondary-light)]/40 to-indigo-50/20 rounded-2xl p-4 overflow-hidden">
@@ -84,10 +84,10 @@ export default function HowSecureRecoveryWorks({ darkMode }) {
     },
     {
       id: 3,
-      title: t("recoveryStep3Title", { defaultValue: "Verify & Collect" }),
+      title: t("recoveryStep3Title", { defaultValue: "Collect Your Item" }),
       desc: t("recoveryStep3Desc", {
         defaultValue:
-          "Once approved by the finder, secure coordination is finalized to pick up your asset safely from the building office.",
+          "If the finder approves your claim, arrange a safe handover and collect your item from the building office.",
       }),
       graphic: (
         <div className="relative w-full h-full flex items-center justify-center bg-gradient-to-br from-[var(--color-brand-secondary-light)]/40 to-indigo-50/20 rounded-2xl p-4 overflow-hidden">
@@ -98,12 +98,12 @@ export default function HowSecureRecoveryWorks({ darkMode }) {
             <div className="bg-white dark:bg-zinc-800 px-3 py-1.5 rounded-lg shadow-md text-center">
               <p className="text-base font-semibold text-slate-700 dark:text-slate-200">
                 {t("recoverySecVerification", {
-                  defaultValue: "Ownership Confirmed",
+                  defaultValue: "Claim Approved",
                 })}
               </p>
               <p className="text-base text-slate-400 dark:text-slate-400">
                 {t("recoverySecRequirement", {
-                  defaultValue: "Ready for Safe Handover",
+                  defaultValue: "Ready for Collection",
                 })}
               </p>
             </div>
@@ -160,7 +160,7 @@ export default function HowSecureRecoveryWorks({ darkMode }) {
           >
             <div>
               <div
-                className={`h-52 sm:h-56 rounded-2xl overflow-hidden mb-6 ${darkMode ? "bg-zinc-950" : "bg-gray-900/5"}`}
+                className={`h-52 sm:h-56 rounded-2xl  overflow-hidden mb-6 ${darkMode ? "bg-zinc-950" : "bg-gray-900/5"}`}
               >
                 {item.graphic}
               </div>

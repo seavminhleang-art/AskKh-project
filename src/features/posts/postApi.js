@@ -80,9 +80,11 @@ export const postApi = baseApi.injectEndpoints({
         url: `/posts/${postId}`,
         method: 'DELETE',
       }),
-      invalidatesTags: (result, error, postId) => [
+      invalidatesTags: (result, error, postId) => error ? [] : [
         { type: 'Post', id: postId },
         { type: 'Post', id: 'LIST' },
+        'Bookmark',
+        'Answer',
       ],
     }),
     getPostsByViews: builder.query({

@@ -11,8 +11,8 @@ import {
   Plus,
   Zap,
   History,
-  Sparkles,
-  Search,
+  BellRing,
+  ShieldCheck,
 } from "lucide-react";
 import { useWorkspaceDataQuery } from "../../features/workspace/workspaceApi";
 import { rows, dateLabel } from "../../features/workspace/workspaceModel";
@@ -66,10 +66,7 @@ function Overview() {
   const stats = [
     {
       label: "Questions Asked",
-      value: count(
-        forum,
-        posts.filter((item) => isQuestionPost(item)).length,
-      ),
+      value: count(forum, posts.filter((item) => isQuestionPost(item)).length),
       Icon: HelpCircle,
       tone: "blue",
       category: "Q&A",
@@ -77,10 +74,7 @@ function Overview() {
     },
     {
       label: "Answers Given",
-      value: count(
-        forum,
-        posts.filter((item) => isAnswerPost(item)).length,
-      ),
+      value: count(forum, posts.filter((item) => isAnswerPost(item)).length),
       Icon: CheckCircle2,
       tone: "green",
       category: "Community",
@@ -118,11 +112,11 @@ function Overview() {
   return (
     <div className="uw-page uw-overview">
       <section className="uw-card uw-welcome">
-        <span className="uw-welcome-avatar">
+        <span className="uw-welcome-avatar text-lg">
           {name.slice(0, 2).toUpperCase()}
         </span>
         <div className="uw-welcome-copy">
-          <h1>
+          <h1 className="text-xl font-bold tracking-tight sm:text-lg">
             {w(
               hour < 12
                 ? "Good morning, {{name}}"
@@ -133,16 +127,26 @@ function Overview() {
                 name,
               },
             )}{" "}
-            <Badge>{w("Member")}</Badge>
+            <Badge>
+              <span className="text-lg">{w("Member")}</span>
+            </Badge>
           </h1>
-          <p>{w("Manage your questions, answers, and personal tasks.")}</p>
+          <p className="text-lg">
+            {w("Manage your questions, answers, and personal tasks.")}
+          </p>
         </div>
         <div className="uw-actions">
-          <Link className="uw-button secondary" to="/dashboard/questions/new">
+          <Link
+            className="uw-button secondary text-lg"
+            to="/dashboard/questions/new"
+          >
             <MessageSquarePlus size={16} />
             {w("Ask Question")}
           </Link>
-          <Link className="uw-button" to="/dashboard/lost-found/new?type=lost">
+          <Link
+            className="uw-button text-lg"
+            to="/dashboard/lost-found/new?type=lost"
+          >
             <Plus size={16} />
             {w("Report Lost Item")}
           </Link>
@@ -152,44 +156,51 @@ function Overview() {
         {stats.map(({ label, value, Icon, tone, category, detail }) => (
           <section className={`uw-card uw-summary ${tone}`} key={label}>
             <div className="uw-summary-heading">
-              <h2>{w(label)}</h2>
+              <h2 className="text-lg font-semibold">{w(label)}</h2>
               <span className="uw-action-icon">
                 <Icon size={18} />
               </span>
             </div>
-            <strong>{value}</strong>
-            <p className="uw-muted">{w("Your contributions")}</p>
-            <footer>
+            <strong className="text-3xl font-bold leading-tight">
+              {value}
+            </strong>
+            <p className="uw-muted text-lg">{w("Your contributions")}</p>
+            <footer className="text-sm">
               <b>{w(category)}</b> <span>{w(detail)}</span>
             </footer>
           </section>
         ))}
       </div>
-      {reportsQuery.isError && <p className="uw-muted">{w("Your personal reports and updates are not available yet.")}</p>}
+      {reportsQuery.isError && (
+        <p className="uw-muted text-lg">
+          {w("Your personal reports and updates are not available yet.")}
+        </p>
+      )}
       <div className="uw-overview-grid">
         <div className="uw-stack">
           <section className="uw-card">
             <div className="uw-panel-heading">
               <HelpCircle size={18} />
               <div>
-                <h2>{w("My Recent Questions")}</h2>
-                <p>
-                  {w(
-                    "Your latest questions and contributions",
-                  )}
+                <h2 className="text-lg font-semibold">
+                  {w("My Recent Questions")}
+                </h2>
+                <p className="text-lg">
+                  {w("Your latest questions and contributions")}
                 </p>
               </div>
-              <Link to="/dashboard/questions">{w("View all")}</Link>
+              <Link className="text-lg" to="/dashboard/questions">
+                {w("View all")}
+              </Link>
             </div>
             <div className="uw-forum-counts">
               {[
                 ["Questions", questions.length],
                 ["Answers", answers.length],
-
               ].map(([label, value]) => (
                 <div key={label}>
-                  <span>{w(label)}</span>
-                  <strong>
+                  <span className="text-lg">{w(label)}</span>
+                  <strong className="text-xl font-bold">
                     {forum.isError ? "—" : forum.isLoading ? "…" : value}
                   </strong>
                 </div>
@@ -203,11 +214,14 @@ function Overview() {
                   <article className="uw-row" key={item.id}>
                     <div>
                       <h2>
-                        <Link to={`/dashboard/questions/${item.id}`}>
+                        <Link
+                          className="text-lg font-semibold"
+                          to={`/dashboard/questions/${item.id}`}
+                        >
                           {item.title}
                         </Link>
                       </h2>
-                      <p>
+                      <p className="text-lg">
                         {item.ownerDisplayName} ·{" "}
                         {dateLabel(item.creationDate, locale)}
                       </p>
@@ -224,30 +238,36 @@ function Overview() {
             <div className="uw-panel-heading">
               <History size={18} />
               <div>
-                <h2>{w("My Recent Activity")}</h2>
-                <p>
+                <h2 className="text-lg font-semibold">
+                  {w("My Recent Activity")}
+                </h2>
+                <p className="text-lg">
                   {w(
                     "Track your contributions, forum questions, answers, and lost & found reports.",
                   )}
                 </p>
               </div>
-              <Link to="/dashboard/activity">{w("View all")}</Link>
+              <Link className="text-lg" to="/dashboard/activity">
+                {w("View all")}
+              </Link>
             </div>
             <QueryState query={forum}>
-                {activity.length ? (
-                  activity.map((item) => (
-                    <article className="uw-row" key={`${item.path}-${item.id}`}>
-                      <div>
-                        <h2>
-                          <Link to={item.path}>{item.title}</Link>
-                        </h2>
-                        <p>{dateLabel(item.date, locale)}</p>
-                      </div>
-                    </article>
-                  ))
-                ) : (
-                  <Empty>{w("No activity yet.")}</Empty>
-                )}
+              {activity.length ? (
+                activity.map((item) => (
+                  <article className="uw-row" key={`${item.path}-${item.id}`}>
+                    <div>
+                      <h2>
+                        <Link className="text-lg font-semibold" to={item.path}>
+                          {item.title}
+                        </Link>
+                      </h2>
+                      <p className="text-lg">{dateLabel(item.date, locale)}</p>
+                    </div>
+                  </article>
+                ))
+              ) : (
+                <Empty>{w("No activity yet.")}</Empty>
+              )}
             </QueryState>
           </section>
         </div>
@@ -255,8 +275,8 @@ function Overview() {
           <section className="uw-card">
             <div className="uw-panel-heading">
               <Zap size={18} />
-              <h2>{w("Quick Actions")}</h2>
-              <span className="uw-muted">{w("Shortcuts")}</span>
+              <h2 className="text-lg font-semibold">{w("Quick Actions")}</h2>
+              <span className="uw-muted text-lg">{w("Shortcuts")}</span>
             </div>
             <div className="uw-shortcuts">
               {[
@@ -287,8 +307,10 @@ function Overview() {
                     <Icon size={19} />
                   </span>
                   <div>
-                    <strong>{w(title)}</strong>
-                    <p>{w(description)}</p>
+                    <strong className="text-lg font-semibold">
+                      {w(title)}
+                    </strong>
+                    <p className="text-lg">{w(description)}</p>
                   </div>
                 </Link>
               ))}
@@ -296,19 +318,27 @@ function Overview() {
           </section>
           <section className="uw-card">
             <div className="uw-panel-heading">
-              <Sparkles size={18} />
+              <BellRing size={18} />
               <div>
-                <h2>{w("Match Summary")}</h2>
-                <p>{w("Review potential matches for reported belongings.")}</p>
+                <h2 className="text-lg font-semibold">{w("Claim Requests")}</h2>
+                <p className="text-lg">
+                  {w("Review requests for items you have found.")}
+                </p>
               </div>
-              <Link to="/dashboard/matches">{w("View all")}</Link>
             </div>
-            <div className="uw-match-prompt">
-              <Search size={30} />
-              <h2>{w("Find a matching report")}</h2>
-              <p>{w("Select a report to see its latest matches.")}</p>
-              <Link className="uw-button secondary" to="/dashboard/matches">
-                {w("Open Match Center")}
+            <div className="uw-claim-prompt">
+              <div className="uw-claim-prompt-alert">
+                <ShieldCheck size={24} />
+                <div>
+                  <strong>{w("A person is claiming a found item")}</strong>
+                  <span>{w("Review their request and submitted ownership details.")}</span>
+                </div>
+              </div>
+              <p className="text-lg">
+                {w("You decide whether to approve or reject each claim.")}
+              </p>
+              <Link className="uw-button secondary text-lg" to="/dashboard/claims">
+                {w("Review Claims")}
               </Link>
             </div>
           </section>

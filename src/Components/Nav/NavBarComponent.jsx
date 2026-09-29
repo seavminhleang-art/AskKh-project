@@ -28,6 +28,7 @@ import LanguageFlag from "../common/LanguageFlag";
 import {
   useGetNotificationsQuery,
   useGetUnreadCountQuery,
+  useStreamNotificationsQuery,
   useMarkReadMutation,
   useMarkAllReadMutation,
 } from "../../features/notifications/notificationApi";
@@ -97,6 +98,7 @@ export default function Navbar({
     skip: !isAuthenticated,
     pollingInterval: 30000,
   });
+  useStreamNotificationsQuery(undefined, { skip: !isAuthenticated });
 
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [notificationSoundEnabled, setNotificationSoundEnabled] = useState(() => {

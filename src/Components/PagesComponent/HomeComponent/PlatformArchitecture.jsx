@@ -1,4 +1,4 @@
-import architectureImage from "@/assets/Website/Gemini_Generated_Image_6kpehf6kpehf6kpe.jpg";
+import architectureImage from "@/assets/Website/secure recovery.jpg";
 import architectureCommunityImage from "@/assets/Website/37469a0f02d084ef19d3cf0b052af250.jpg";
 import React from "react";
 import { motion } from "framer-motion";

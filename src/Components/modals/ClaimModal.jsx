@@ -2,13 +2,11 @@ import React, { useState } from "react";
 import { X, ShieldCheck, AlertCircle } from "lucide-react";
 import Button from "../ui/button";
 import Textarea from "../ui/Textarea";
-import Input from "../ui/Input";
 import { useCreateClaimMutation } from "../../store/api/apiSlice";
 import { toast } from "sonner";
 
 export default function ClaimModal({ isOpen, onClose, item }) {
   const [proofDescription, setProofDescription] = useState("");
-  const [proofPhoto, setProofPhoto] = useState("");
   const [error, setError] = useState("");
 
   const [createClaim, { isLoading }] = useCreateClaimMutation();
@@ -27,10 +25,7 @@ export default function ClaimModal({ isOpen, onClose, item }) {
     try {
       await createClaim({
         reportId: item.id,
-        itemId: item.id,
-        describedHiddenDetail: proofDescription,
-        proofDescription,
-        proofPhoto: proofPhoto || undefined,
+        describedHiddenDetail: proofDescription.trim(),
       }).unwrap();
 
       toast.success(
@@ -96,17 +91,6 @@ export default function ClaimModal({ isOpen, onClose, item }) {
               error={error}
             />
             {error && <p className="text-base text-rose-500 mt-1">{error}</p>}
-          </div>
-
-          <div>
-            <label className="block text-base font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1.5">
-              Supporting Photo / ID Card URL (Optional)
-            </label>
-            <Input
-              value={proofPhoto}
-              onChange={(e) => setProofPhoto(e.target.value)}
-              placeholder="https://..."
-            />
           </div>
 
           <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100 dark:border-slate-800">

@@ -140,10 +140,6 @@ export default function Sidebar({ mode = "user", mobile = false }) {
         "Lost & Found",
         [
           userNavItems[4],
-          {
-            ...userNavItems[5],
-            label: "Match Center",
-          },
           userNavItems[6],
         ],
       ],

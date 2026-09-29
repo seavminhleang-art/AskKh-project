@@ -44,6 +44,10 @@ export function workspaceRequest({
     return { url: "/users/upload-image", method: "PUT", body };
   if (action === "create" && ["posts", "reports"].includes(resource))
     return { url: paths[resource], method: "POST", body };
+  if (resource === "posts" && action === "update" && key)
+    return { url: `${paths.posts}/${key}`, method: "PUT", body };
+  if (resource === "posts" && action === "delete" && key)
+    return { url: `${paths.posts}/${key}`, method: "DELETE" };
   if (resource === "reports" && action === "update" && key)
     return { url: `${paths.reports}/${key}`, method: "PUT", body };
   if (resource === "reports" && action === "delete" && key)
@@ -79,6 +83,73 @@ export function ownClaims(items, userId) {
   return userId == null
     ? []
     : items.filter((item) => String(item.claimantUserId) === String(userId));
+}
+export function isIncomingClaimNotification(notification) {
+  const type = String(notification?.type || "").toUpperCase();
+  return type.includes("CLAIM_SUBMITTED") || type.includes("NEW_CLAIM") || type.includes("CLAIM_CREATED") || /new claim/i.test(`${notification?.title || ""} ${notification?.message || notification?.body || ""}`);
+}
+export function isApprovedClaimNotification(notification) {
+  const type = String(notification?.type || "").toUpperCase();
+  const status = String(
+    notification?.claimStatus ??
+      notification?.status ??
+      notification?.data?.claimStatus ??
+      notification?.data?.status ??
+      notification?.metadata?.claimStatus ??
+      notification?.metadata?.status ??
+      notification?.data?.metadata?.claimStatus ??
+      notification?.data?.metadata?.status ??
+      "",
+  ).toUpperCase();
+  return (
+    (type.includes("CLAIM") && (type.includes("APPROVED") || type.includes("APPROVE"))) ||
+    (type.includes("CLAIM") && status === "APPROVED")
+  );
+}
+export function notificationClaimId(notification) {
+  const notificationType = String(notification?.type || "").toUpperCase();
+  if (!isIncomingClaimNotification(notification) && !notificationType.includes("CLAIM")) return null;
+  const targetType = String(notification?.targetType ?? notification?.data?.targetType ?? notification?.metadata?.targetType ?? "").toUpperCase();
+  const typedTargetId = targetType.includes("CLAIM")
+    ? notification?.targetId ?? notification?.data?.targetId ?? notification?.metadata?.targetId
+    : null;
+  const directId = notification?.claimId ??
+    notification?.claim?.id ??
+    notification?.data?.claimId ??
+    notification?.data?.claim?.id ??
+    notification?.metadata?.claimId ??
+    notification?.metadata?.claim?.id ??
+    notification?.data?.metadata?.claimId ??
+    notification?.data?.metadata?.claim?.id ??
+    typedTargetId;
+  if (directId != null && /^\d+$/.test(String(directId))) return String(directId);
+  const target = `${notification?.targetUrl || ""} ${notification?.link || ""} ${notification?.body || notification?.message || ""} ${notification?.title || ""}`;
+  return target.match(/(?:claims\/|claim(?:[-_ ]?id)?[=/ :#-]+)(\d+)/i)?.[1] ?? null;
+}
+export function notificationReportId(notification) {
+  const targetType = String(notification?.targetType ?? notification?.data?.targetType ?? notification?.metadata?.targetType ?? "").toUpperCase();
+  const typedTargetId = targetType.includes("REPORT") || targetType.includes("ITEM")
+    ? notification?.targetId ?? notification?.data?.targetId ?? notification?.metadata?.targetId
+    : null;
+  const directId = notification?.reportId ??
+    notification?.report?.id ??
+    notification?.itemReportId ??
+    notification?.claim?.reportId ??
+    notification?.claim?.itemReportId ??
+    notification?.data?.reportId ??
+    notification?.data?.report?.id ??
+    notification?.data?.claim?.reportId ??
+    notification?.data?.claim?.itemReportId ??
+    notification?.metadata?.reportId ??
+    notification?.metadata?.claim?.reportId ??
+    notification?.metadata?.claim?.itemReportId ??
+    notification?.data?.metadata?.reportId ??
+    notification?.data?.metadata?.claim?.reportId ??
+    notification?.data?.metadata?.claim?.itemReportId ??
+    typedTargetId;
+  if (directId != null && /^\d+$/.test(String(directId))) return String(directId);
+  const target = `${notification?.targetUrl || ""} ${notification?.link || ""}`;
+  return target.match(/\/lost-found\/reports?\/(\d+)/i)?.[1] ?? null;
 }
 export function dateLabel(value, locale) {
   if (!value) return "—";

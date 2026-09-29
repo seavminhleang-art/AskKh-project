@@ -21,7 +21,10 @@ import FormattedText from "../../Components/editor/FormattedText.jsx";
 
 import React, { useMemo } from "react";
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { useGetPostByIdQuery, useGetAnswersQuery } from "../../features/posts/postApi";
+import {
+  useGetPostByIdQuery,
+  useGetAnswersQuery,
+} from "../../features/posts/postApi";
 import { usePageSEO } from "../../Components/common/SEO";
 import { publicQuestionPath } from "../../utils/slug";
 
@@ -46,7 +49,11 @@ function humanDate(iso) {
   const d = new Date(iso);
   return isNaN(d.getTime())
     ? ""
-    : d.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+    : d.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
 }
 
 /**
@@ -54,18 +61,20 @@ function humanDate(iso) {
  * Only includes acceptedAnswer when an answer is explicitly marked accepted.
  */
 function buildQAJsonLd({ post, answers, canonicalUrl }) {
-  const answerList = (answers || []).map((a) => ({
-    "@type": "Answer",
-    text: (a.body || "").slice(0, 2000),
-    dateCreated: formatDate(a.creationDate || a.createdAt),
-    author: a.ownerDisplayName
-      ? { "@type": "Person", name: a.ownerDisplayName }
-      : undefined,
-    upvoteCount: a.score ?? 0,
-  })).filter((a) => a.text.length > 0);
+  const answerList = (answers || [])
+    .map((a) => ({
+      "@type": "Answer",
+      text: (a.body || "").slice(0, 2000),
+      dateCreated: formatDate(a.creationDate || a.createdAt),
+      author: a.ownerDisplayName
+        ? { "@type": "Person", name: a.ownerDisplayName }
+        : undefined,
+      upvoteCount: a.score ?? 0,
+    }))
+    .filter((a) => a.text.length > 0);
 
   const accepted = (answers || []).find(
-    (a) => a.isAccepted || a.accepted || a.acceptedAnswer
+    (a) => a.isAccepted || a.accepted || a.acceptedAnswer,
   );
 
   const schema = {
@@ -97,7 +106,9 @@ function buildQAJsonLd({ post, answers, canonicalUrl }) {
             acceptedAnswer: {
               "@type": "Answer",
               text: (accepted.body || "").slice(0, 2000),
-              dateCreated: formatDate(accepted.creationDate || accepted.createdAt),
+              dateCreated: formatDate(
+                accepted.creationDate || accepted.createdAt,
+              ),
               author: accepted.ownerDisplayName
                 ? { "@type": "Person", name: accepted.ownerDisplayName }
                 : undefined,
@@ -107,7 +118,7 @@ function buildQAJsonLd({ post, answers, canonicalUrl }) {
         : {}),
       suggestedAnswer: accepted
         ? answerList.filter(
-            (a) => a.text !== (accepted.body || "").slice(0, 2000)
+            (a) => a.text !== (accepted.body || "").slice(0, 2000),
           )
         : answerList,
     },
@@ -158,9 +169,7 @@ export default function PublicQuestionPage() {
 
   // Dynamic SEO — from real API data
   usePageSEO({
-    title: post?.title
-      ? `${post.title} | NEXA Questions`
-      : "Question | NEXA",
+    title: post?.title ? `${post.title} | NEXA Questions` : "Question | NEXA",
     description: post?.body
       ? excerpt(post.body, 160)
       : "View this community question and answers on NEXA — Cambodia's developer Q&A platform.",
@@ -182,7 +191,7 @@ export default function PublicQuestionPage() {
   if (postQuery.isLoading) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-zinc-950 flex items-center justify-center">
-        <p className="text-gray-500 dark:text-zinc-400 text-base animate-pulse">
+        <p className="text-gray-500 dark:text-zinc-400 text-lg animate-pulse">
           Loading question…
         </p>
       </div>
@@ -193,15 +202,15 @@ export default function PublicQuestionPage() {
   if (postQuery.isError || (!postQuery.isLoading && !post)) {
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-zinc-950 flex flex-col items-center justify-center gap-4 px-4">
-        <h1 className="text-2xl font-bold text-gray-800 dark:text-slate-100">
+        <h1 className="text-lg font-bold text-gray-800 dark:text-slate-100">
           Question not found
         </h1>
-        <p className="text-gray-500 dark:text-zinc-400 text-base text-center max-w-sm">
+        <p className="text-gray-500 dark:text-zinc-400 text-lg text-center max-w-sm">
           This question may have been removed or the link may be incorrect.
         </p>
         <Link
           to="/community/qa"
-          className="mt-2 rounded-xl bg-blue-600 px-5 py-2.5 text-base font-semibold text-white hover:bg-blue-700 transition-colors"
+          className="mt-2 rounded-xl bg-blue-600 px-5 py-2.5 text-lg font-semibold text-white hover:bg-blue-700 transition-colors"
         >
           Browse all questions
         </Link>
@@ -215,15 +224,19 @@ export default function PublicQuestionPage() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-zinc-950 transition-colors">
       <div className="max-w-4xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
-
         {/* Breadcrumb */}
         <nav
           aria-label="Breadcrumb"
-          className="mb-6 flex items-center gap-2 text-base text-gray-500 dark:text-zinc-400"
+          className="mb-6 flex items-center gap-2 text-lg text-gray-500 dark:text-zinc-400"
         >
-          <Link to="/" className="hover:text-blue-600 transition-colors">Home</Link>
+          <Link to="/" className="hover:text-blue-600 transition-colors">
+            Home
+          </Link>
           <span>/</span>
-          <Link to="/community/qa" className="hover:text-blue-600 transition-colors">
+          <Link
+            to="/community/qa"
+            className="hover:text-blue-600 transition-colors"
+          >
             Q&amp;A Community
           </Link>
           <span>/</span>
@@ -236,7 +249,7 @@ export default function PublicQuestionPage() {
         <article
           itemScope
           itemType="https://schema.org/Question"
-          className="bg-white dark:bg-zinc-900 rounded-2xl p-6 sm:p-8 shadow-sm mb-6"
+          className="bg-white dark:bg-zinc-900 rounded-2xl p-6 sm:p-8 shadow-sm border border-gray-100 dark:border-zinc-800 mb-6"
         >
           {/* Tags */}
           {tags.length > 0 && (
@@ -245,7 +258,7 @@ export default function PublicQuestionPage() {
                 <Link
                   key={tag}
                   to={`/community/qa`}
-                  className="inline-block rounded-lg bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-400 text-base font-medium px-3 py-1 hover:bg-blue-100 dark:hover:bg-blue-900/60 transition-colors"
+                  className="inline-block rounded-lg bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-400 text-lg font-medium px-3 py-1 hover:bg-blue-100 dark:hover:bg-blue-900/60 transition-colors"
                 >
                   #{tag}
                 </Link>
@@ -256,13 +269,13 @@ export default function PublicQuestionPage() {
           {/* Title */}
           <h1
             itemProp="name"
-            className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-slate-50 mb-4 leading-snug"
+            className="text-lg sm:text-3xl font-bold text-gray-900 dark:text-slate-50 mb-4 leading-snug"
           >
             {post.title}
           </h1>
 
           {/* Meta */}
-          <div className="flex flex-wrap items-center gap-3 text-base text-gray-500 dark:text-zinc-400 mb-6 border-b border-gray-100 dark:border-zinc-800 pb-4">
+          <div className="flex flex-wrap items-center gap-3 text-lg text-gray-500 dark:text-zinc-400 mb-6 border-b border-gray-100 dark:border-zinc-800 pb-4">
             <span>
               Asked by{" "}
               <strong className="text-gray-700 dark:text-slate-300">
@@ -286,7 +299,7 @@ export default function PublicQuestionPage() {
 
           {/* Code snippet */}
           {post.codeSnippet && (
-            <pre className="mt-4 overflow-auto rounded-xl bg-slate-950 p-4 text-base text-slate-100">
+            <pre className="mt-4 overflow-auto rounded-xl bg-slate-950 p-4 text-lg text-slate-100">
               <code>{post.codeSnippet}</code>
             </pre>
           )}
@@ -315,7 +328,7 @@ export default function PublicQuestionPage() {
           </h2>
 
           {answersQuery.isLoading && (
-            <p className="text-gray-400 dark:text-zinc-500 text-base animate-pulse">
+            <p className="text-gray-400 dark:text-zinc-500 text-lg animate-pulse">
               Loading answers…
             </p>
           )}
@@ -325,7 +338,7 @@ export default function PublicQuestionPage() {
               key={answer.id ?? idx}
               itemScope
               itemType="https://schema.org/Answer"
-              className="bg-white dark:bg-zinc-900 rounded-2xl p-6 shadow-sm mb-4"
+              className="bg-white dark:bg-zinc-900 rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-zinc-800 mb-4"
             >
               <div className="flex items-start gap-4">
                 {/* Vote count */}
@@ -336,7 +349,7 @@ export default function PublicQuestionPage() {
                   >
                     {answer.score ?? 0}
                   </span>
-                  <span className="text-base text-gray-400 dark:text-zinc-500">
+                  <span className="text-lg text-gray-400 dark:text-zinc-500">
                     votes
                   </span>
                 </div>
@@ -344,23 +357,27 @@ export default function PublicQuestionPage() {
                 {/* Content */}
                 <div className="flex-1 min-w-0">
                   {(answer.isAccepted || answer.accepted) && (
-                    <span className="inline-block mb-2 text-base font-bold text-emerald-600 dark:text-emerald-400">
+                    <span className="inline-block mb-2 text-lg font-bold text-emerald-600 dark:text-emerald-400">
                       ✓ Accepted Answer
                     </span>
                   )}
                   <div
                     itemProp="text"
-                    className="text-base text-gray-800 dark:text-slate-200 leading-relaxed whitespace-pre-wrap"
+                    className="text-lg text-gray-800 dark:text-slate-200 leading-relaxed whitespace-pre-wrap"
                   >
                     {answer.body}
                   </div>
                   {answer.codeSnippet && (
-                    <pre className="mt-3 overflow-auto rounded-xl bg-slate-950 p-4 text-base text-slate-100">
+                    <pre className="mt-3 overflow-auto rounded-xl bg-slate-950 p-4 text-lg text-slate-100">
                       <code>{answer.codeSnippet}</code>
                     </pre>
                   )}
-                  <p className="mt-3 text-base text-gray-400 dark:text-zinc-500">
-                    <span itemProp="author" itemScope itemType="https://schema.org/Person">
+                  <p className="mt-3 text-lg text-gray-400 dark:text-zinc-500">
+                    <span
+                      itemProp="author"
+                      itemScope
+                      itemType="https://schema.org/Person"
+                    >
                       <span itemProp="name">
                         {answer.ownerDisplayName || "Community member"}
                       </span>
@@ -380,20 +397,20 @@ export default function PublicQuestionPage() {
           ))}
 
           {/* CTA to join & answer */}
-          <div className="mt-6 rounded-2xl bg-blue-50 dark:bg-blue-950/30 p-6 text-center">
-            <p className="text-base text-gray-700 dark:text-slate-300 mb-3">
+          <div className="mt-6 rounded-2xl bg-blue-50 dark:bg-blue-950/30 border border-blue-100 dark:border-blue-900 p-6 text-center">
+            <p className="text-lg text-gray-700 dark:text-slate-300 mb-3">
               Know the answer? Join NEXA and help the community!
             </p>
             <div className="flex items-center justify-center gap-3 flex-wrap">
               <Link
                 to="/register"
-                className="rounded-xl bg-blue-600 px-5 py-2.5 text-base font-semibold text-white hover:bg-blue-700 transition-colors"
+                className="rounded-xl bg-blue-600 px-5 py-2.5 text-lg font-semibold text-white hover:bg-blue-700 transition-colors"
               >
                 Join NEXA
               </Link>
               <Link
                 to="/login"
-                className="rounded-xl border border-blue-300 dark:border-blue-700 px-5 py-2.5 text-base font-semibold text-blue-700 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/40 transition-colors"
+                className="rounded-xl border border-blue-300 dark:border-blue-700 px-5 py-2.5 text-lg font-semibold text-blue-700 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/40 transition-colors"
               >
                 Sign in to answer
               </Link>
@@ -405,7 +422,7 @@ export default function PublicQuestionPage() {
         <div className="mt-8">
           <Link
             to="/community/qa"
-            className="text-base text-blue-600 dark:text-blue-400 hover:underline"
+            className="text-lg text-blue-600 dark:text-blue-400 hover:underline"
           >
             ← Browse all Q&amp;A
           </Link>

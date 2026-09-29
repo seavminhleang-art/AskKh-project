@@ -10,9 +10,17 @@ const workspaceApi = baseApi.injectEndpoints({
           if (args.resource === "my-reports") {
             const userId = api.getState().auth.user?.id;
             if (userId == null) return { error: { status: "CUSTOM_ERROR", error: "Sign in to view your contributions." } };
-            const result = await request(workspaceRequest({ resource: "reports" }), api, options);
-            if (result.error) return result;
-            return { data: ownReports(rows(result.data), userId) };
+            // Request both kinds explicitly: the API can default the unfiltered
+            // reports route to LOST, which hides claims on a user's FOUND items.
+            const [lostResult, foundResult] = await Promise.all([
+              request("/lost-found/reports?itemType=LOST", api, options),
+              request("/lost-found/reports?itemType=FOUND", api, options),
+            ]);
+            if (lostResult.error) return lostResult;
+            if (foundResult.error) return foundResult;
+            const reports = [...rows(lostResult.data), ...rows(foundResult.data)];
+            const uniqueReports = [...new Map(reports.map((report) => [String(report.id), report])).values()];
+            return { data: ownReports(uniqueReports, userId) };
           }
           if (["my-claims", "my-matches"].includes(args.resource)) {
             return { error: { status: "CUSTOM_ERROR", code: "FEATURE_UNAVAILABLE", error: "Your personal reports and updates are not available yet." } };

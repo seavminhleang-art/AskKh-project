@@ -1,4 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 import { 
   Package, 
   FileText, 
@@ -13,88 +16,46 @@ import {
   AlertCircle, 
   Loader2, 
   Search, 
-  CheckCircle2, 
   Sparkles,
   ArrowRight,
   ShieldCheck
 } from "lucide-react";
+import { useWorkspaceDataQuery, useWorkspaceSaveMutation } from "@/features/workspace/workspaceApi";
+import { rows, message } from "@/features/workspace/workspaceModel";
 
-// Mocking i18n and workspace hooks for the standalone interactive preview
-const useTranslation = () => ({
-  t: (key) => {
-    const translations = {
-      feedReportBtn: "Create Report",
-      reportCancelBtn: "Cancel",
-      reportFormToggleLost: "Lost Item",
-      reportFormToggleFound: "Found Item",
-      reportDescriptionLabel: "Description",
-      reportLocationPlaceholder: "e.g., Near the main library entrance, building B",
-      reportFormSubmitLost: "Publish Lost Report",
-      reportFormSubmitFound: "Publish Found Report"
-    };
-    return translations[key] || key;
-  }
-});
-
-const useCommunityAuth = () => true;
-
-const useWorkspaceDataQuery = ({ resource }) => {
-  if (resource === "categories") {
-    return {
-      isLoading: false,
-      isError: false,
-      data: {
-        rows: [
-          { id: 1, name: "Electronics & Gadgets" },
-          { id: 2, name: "Wallets & Purses" },
-          { id: 3, name: "Keys & ID Cards" },
-          { id: 4, name: "Books & Notes" },
-          { id: 5, name: "Clothing & Accessories" }
-        ]
-      },
-      refetch: () => {}
-    };
-  }
-  if (resource === "locations") {
-    return {
-      isLoading: false,
-      isError: false,
-      data: {
-        rows: [
-          { id: 101, building: "Science Block", floor: "Floor 2", room: "Lab 204" },
-          { id: 102, building: "Main Hall", floor: "Floor 1", room: "Auditorium" },
-          { id: 103, building: "Library", floor: "Floor 3", room: "Reading Room" },
-          { id: 104, building: "Student Center", floor: "Ground", room: "Cafeteria" }
-        ]
-      },
-      refetch: () => {}
-    };
-  }
-  return { isLoading: false, isError: false, data: { rows: [] }, refetch: () => {} };
-};
-
-const useWorkspaceSaveMutation = () => {
-  const [loading, setLoading] = useState(false);
-  const saveMutation = async ({ body }) => {
-    setLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 1200));
-    setLoading(false);
-    return true;
-  };
-  return [saveMutation, { isLoading: loading }];
-};
-
-const rows = (data) => data?.rows || [];
-const message = (err) => err?.message || "An unexpected error occurred.";
+const IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 
 export default function CreateReportForm({ onCancel = () => {}, darkMode = false }) {
   const { t } = useTranslation();
-  const authenticated = useCommunityAuth();
+  const authenticated = useSelector((state) => Boolean(state.auth.accessToken));
   const categories = useWorkspaceDataQuery({ resource: "categories" });
   const locations = useWorkspaceDataQuery({ resource: "locations" });
   const [save, state] = useWorkspaceSaveMutation();
   const [error, setError] = useState("");
   const [reportType, setReportType] = useState("lost");
+  const [photo, setPhoto] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState("");
+  const imageInput = useRef(null);
+
+  useEffect(() => {
+    if (!photo) {
+      setPreviewUrl("");
+      return undefined;
+    }
+    const objectUrl = URL.createObjectURL(photo);
+    setPreviewUrl(objectUrl);
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [photo]);
+
+  function chooseImage(file) {
+    if (!file) return;
+    if (!IMAGE_TYPES.includes(file.type) || file.size > 5 * 1024 * 1024) {
+      setError("Choose a JPG, PNG, WebP, or GIF image under 5 MB.");
+      return;
+    }
+    setPhoto(file);
+    setError("");
+  }
 
   const input =
     "block w-full rounded-xl border border-gray-300/60 dark:border-zinc-700/80 px-4 py-3 pl-11 mt-2 bg-white/50 dark:bg-zinc-800/50 text-gray-900 dark:text-zinc-100 placeholder-gray-400 dark:placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all shadow-sm text-sm";
@@ -115,6 +76,19 @@ export default function CreateReportForm({ onCancel = () => {}, darkMode = false
       return;
     }
     try {
+      let photoUrl = photo ? null : (form.get("photoUrl") || "").trim() || null;
+      if (photo) {
+        const uploadForm = new FormData();
+        uploadForm.append("file", photo);
+        const uploadResult = await save({
+          resource: "image-upload",
+          action: "create",
+          body: uploadForm,
+        }).unwrap();
+        const uploadedFile = uploadResult?.data ?? uploadResult;
+        photoUrl = uploadedFile?.uri || uploadedFile?.url || uploadedFile?.fileUrl || uploadedFile?.name || uploadedFile?.fileName;
+        if (!photoUrl) throw new Error("Image upload did not return a usable image URL.");
+      }
       await save({
         resource: "reports",
         action: "create",
@@ -132,7 +106,7 @@ export default function CreateReportForm({ onCancel = () => {}, darkMode = false
           freeTextLocation: location || null,
           scope: form.get("scope"),
           hiddenDetail: form.get("hiddenDetail").trim() || null,
-          photoUrl: form.get("photoUrl").trim() || null,
+          photoUrl,
         },
       }).unwrap();
       onCancel();
@@ -354,7 +328,7 @@ export default function CreateReportForm({ onCancel = () => {}, darkMode = false
                     <span>{message(query.error)}</span>
                     <button 
                       type="button" 
-                      onClick={query.refxl || query.refetch}
+                      onClick={query.refetch}
                       className="px-3 py-1 rounded-lg bg-amber-600 text-white font-medium text-xs hover:bg-amber-700 transition"
                     >
                       Retry
@@ -397,9 +371,37 @@ export default function CreateReportForm({ onCancel = () => {}, darkMode = false
               </span>
             </label>
 
-            {/* Photo URL */}
+            <div className="space-y-2">
+              <span className="block text-sm font-medium text-gray-700 dark:text-zinc-300">Choose an image (optional)</span>
+              <input
+                ref={imageInput}
+                type="file"
+                accept={IMAGE_TYPES.join(",")}
+                className="sr-only"
+                aria-label="Choose an image for this report"
+                onChange={(event) => {
+                  chooseImage(event.target.files?.[0]);
+                  event.target.value = "";
+                }}
+              />
+              <div className="flex flex-wrap items-center gap-3">
+                <button type="button" onClick={() => imageInput.current?.click()} className="inline-flex items-center gap-2 rounded-xl border border-gray-300 dark:border-zinc-700 px-4 py-2.5 text-sm font-semibold hover:bg-gray-100 dark:hover:bg-zinc-800 transition">
+                  <ImageIcon className="w-4 h-4" />{photo ? "Choose a different image" : "Choose from device"}
+                </button>
+                <span className="text-xs text-gray-500 dark:text-zinc-400">JPG, PNG, WebP, or GIF · Up to 5 MB</span>
+              </div>
+              {previewUrl && (
+                <div className="flex items-center gap-3 rounded-xl border border-gray-200 dark:border-zinc-700 p-3">
+                  <img src={previewUrl} alt="Selected item preview" className="h-16 w-16 rounded-lg object-cover" />
+                  <span className="min-w-0 flex-1 truncate text-sm">{photo.name}</span>
+                  <button type="button" onClick={() => setPhoto(null)} className="rounded-lg p-2 text-gray-500 hover:bg-gray-100 dark:hover:bg-zinc-800" aria-label="Remove selected image"><X className="h-4 w-4" /></button>
+                </div>
+              )}
+            </div>
+
+            {/* URL is an alternative when the image is already hosted. */}
             <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300">
-              Photo URL (optional)
+              Or use an image URL (optional)
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400 dark:text-zinc-500">
                   <ImageIcon className="w-4 h-4 mt-2" />
@@ -409,9 +411,11 @@ export default function CreateReportForm({ onCancel = () => {}, darkMode = false
                   name="photoUrl"
                   type="url"
                   pattern="https?://.+"
+                  disabled={Boolean(photo)}
                   placeholder="https://example.com/item-photo.jpg"
                 />
               </div>
+              {photo && <span className="mt-1 block text-xs text-gray-500 dark:text-zinc-400">Remove the selected image to use a URL instead.</span>}
             </label>
 
             {/* Action Buttons */}

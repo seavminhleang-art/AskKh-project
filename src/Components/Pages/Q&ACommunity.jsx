@@ -8,6 +8,7 @@ import PostCard from "../miniComponent/PostCard";
 import CreatePostView from "../miniComponent/CreatePostView";
 import DetailView from "../miniComponent/DetailView";
 import Pagination from "../common/Pagination";
+import { AlertTriangle, LoaderCircle, X } from "lucide-react";
 
 // Language
 import { useLanguage } from "../Language/LanguageContext.jsx";
@@ -15,6 +16,7 @@ import enTranslations from "../locales/en.json";
 import kmTranslations from "../locales/km.json";
 
 // API
+import { useGetMeQuery } from "../../features/users/userApi";
 import {
   useGetPostsQuery,
   useGetPostByIdQuery,
@@ -34,7 +36,10 @@ import {
   useDeleteVoteMutation,
 } from "../../features/votes/voteApi";
 
-import { useUploadSingleMutation, useUploadMultipleMutation } from "../../features/upload/uploadApi";
+import {
+  useUploadSingleMutation,
+  useUploadMultipleMutation,
+} from "../../features/upload/uploadApi";
 import { uploadQuestionImages } from "../../features/qa/uploadQuestionImages";
 
 // Helpers
@@ -81,7 +86,17 @@ export default function QACommunity({
 
   const { user, isAuthenticated } = useSelector((state) => state.auth);
 
-  const userId = user?.id ?? user?.userId;
+  const profile = useGetMeQuery(undefined, {
+    skip: !isAuthenticated,
+    refetchOnMountOrArgChange: true,
+  });
+  const userId =
+    isAuthenticated && !profile.isFetching && !profile.isError
+      ? (profile.currentData?.id ??
+        profile.currentData?.userId ??
+        profile.currentData?.data?.id ??
+        profile.currentData?.data?.userId)
+      : null;
 
   // ==================================================
   // Page State
@@ -90,6 +105,7 @@ export default function QACommunity({
   const [activeTab, setActiveTab] = useState("newest");
   const [selectedTag, setSelectedTag] = useState(null);
   const [selectedPostId, setSelectedPostId] = useState(null);
+  const [pendingDeletePostId, setPendingDeletePostId] = useState(null);
   const [isCreatingPost, setIsCreatingPost] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -105,7 +121,7 @@ export default function QACommunity({
       return {};
     }
   });
-  const [deletePost] = useDeletePostMutation();
+  const [deletePost, postDeletion] = useDeletePostMutation();
 
   const busy = useRef(new Set());
 
@@ -183,17 +199,16 @@ export default function QACommunity({
   // Posts
   // ==================================================
 
-  const posts = rowsOf(feed.data)
-    .map((post) => {
-      const mappedPost = mapPost(post, userId);
-      const voteKey = `${userId}:${mappedPost.id}`;
+  const posts = rowsOf(feed.data).map((post) => {
+    const mappedPost = mapPost(post, userId);
+    const voteKey = `${userId}:${mappedPost.id}`;
 
-      return {
-        ...mappedPost,
-        isLiked: votes[voteKey]?.voteTypeId === 1,
-        isDisliked: votes[voteKey]?.voteTypeId === 2,
-      };
-    });
+    return {
+      ...mappedPost,
+      isLiked: votes[voteKey]?.voteTypeId === 1,
+      isDisliked: votes[voteKey]?.voteTypeId === 2,
+    };
+  });
 
   // ==================================================
   // Authentication Helper
@@ -256,9 +271,16 @@ export default function QACommunity({
         return;
       }
 
+      const value = voteTypeId === 1 ? 1 : -1;
       const result = currentVote?.id
-        ? await updateVote({ voteId: currentVote.id, postId, voteTypeId }).unwrap()
-        : await votePost({ postId, voteTypeId }).unwrap();
+        ? await updateVote({
+            voteId: currentVote.id,
+            postId,
+            userId,
+            voteTypeId,
+            value,
+          }).unwrap()
+        : await votePost({ postId, userId, voteTypeId, value }).unwrap();
 
       setVotes((previous) => ({
         ...previous,
@@ -267,12 +289,42 @@ export default function QACommunity({
     });
 
   const handleDeletePost = (postId) => {
-    if (!window.confirm("Delete this post? This action cannot be undone.")) return;
+    if (!requireAuth() || postDeletion.isLoading) return;
+    const post = [
+      ...posts,
+      ...saved.map((item) => mapPost(item, userId)),
+      ...(detail.currentData ? [mapPost(detail.currentData, userId)] : []),
+    ].find((item) => String(item.id) === String(postId));
+    if (!post?.isOwnPost) {
+      setError(
+        "You can only delete your own posts. Wait for your profile to load and try again.",
+      );
+      return;
+    }
+    setPendingDeletePostId(postId);
+  };
+
+  const confirmDeletePost = () => {
+    if (pendingDeletePostId == null || postDeletion.isLoading) return;
+    const postId = pendingDeletePostId;
     return perform(`delete-post:${postId}`, async () => {
       await deletePost(postId).unwrap();
-      if (selectedPostId === postId) setSelectedPostId(null);
+      if (String(selectedPostId) === String(postId)) setSelectedPostId(null);
+      setCurrentPage(1);
+      setPendingDeletePostId(null);
     });
   };
+
+  useEffect(() => {
+    if (pendingDeletePostId == null) return undefined;
+    const closeOnEscape = (event) => {
+      if (event.key === "Escape" && !postDeletion.isLoading) {
+        setPendingDeletePostId(null);
+      }
+    };
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, [pendingDeletePostId, postDeletion.isLoading]);
 
   // ==================================================
   // Bookmark
@@ -302,7 +354,7 @@ export default function QACommunity({
 
     const imageUrls = imageFile
       ? await uploadQuestionImages([imageFile], uploadSingle, uploadMultiple)
-      : body.imageUrls ?? [];
+      : (body.imageUrls ?? []);
     await createPost({ ...body, imageUrls }).unwrap();
 
     setIsCreatingPost(false);
@@ -382,7 +434,7 @@ export default function QACommunity({
   return (
     <div
       style={googleSansStyle}
-      className={`shared-theme shared-page min-h-screen flex flex-col justify-between transition-colors duration-300 ${pageTheme}`}
+      className={`shared-theme shared-page min-h-screen transition-colors duration-300 ${pageTheme}`}
     >
       <main className="w-full max-w-[1600px] mx-auto px-4 py-6 sm:px-6 lg:px-8">
         {/* ==========================================
@@ -497,6 +549,8 @@ export default function QACommunity({
               darkMode={darkMode}
               language={currentLang}
               post={selectedPost}
+              onDeletePost={handleDeletePost}
+              isDeletingPost={postDeletion.isLoading}
               onBack={() => setSelectedPostId(null)}
               key={selectedPost.id}
             />
@@ -520,7 +574,7 @@ export default function QACommunity({
                   placeholder={t.post.placeholderInput}
                   onClick={openCreatePost}
                   readOnly
-                  className={`min-w-0 flex-1 cursor-pointer rounded-xl border px-4 py-2 text-base outline-none transition-colors ${
+                  className={`min-w-0 flex-1 cursor-pointer rounded-xl border px-4 py-2 text-lg outline-none transition-colors ${
                     darkMode
                       ? "border-zinc-700 bg-zinc-800/80 text-slate-200 placeholder-zinc-400 hover:bg-zinc-800"
                       : "border-gray-100 bg-gray-50 text-gray-700 placeholder-gray-400 hover:bg-gray-100"
@@ -529,7 +583,7 @@ export default function QACommunity({
 
                 <button
                   onClick={openCreatePost}
-                  className="shrink-0 rounded-xl bg-blue-600 px-4 py-2 text-base font-medium text-white transition-colors hover:bg-blue-700"
+                  className="shrink-0 rounded-xl bg-blue-600 px-4 py-2 text-lg font-medium text-white transition-colors hover:bg-blue-700"
                 >
                   {t.post.createPostBtn}
                 </button>
@@ -541,7 +595,7 @@ export default function QACommunity({
 
               {selectedTag && (
                 <button
-                  className="text-base text-blue-500 hover:underline"
+                  className="text-lg text-blue-500 hover:underline"
                   onClick={() => {
                     setSelectedTag(null);
                     setCurrentPage(1);
@@ -565,7 +619,7 @@ export default function QACommunity({
 
               {displayedPosts.length === 0 ? (
                 <div
-                  className={`rounded-2xl p-8 text-center text-base transition-colors ${
+                  className={`rounded-2xl p-8 text-center text-lg transition-colors ${
                     darkMode
                       ? "bg-zinc-900 text-zinc-500"
                       : "bg-white text-gray-400"
@@ -586,6 +640,7 @@ export default function QACommunity({
                       onSelectPost={handleSelectPost}
                       onToggleLike={handleToggleLike}
                       onDeletePost={handleDeletePost}
+                      isDeletingPost={postDeletion.isLoading}
                     />
                   ))}
                   <Pagination
@@ -604,19 +659,19 @@ export default function QACommunity({
 
           {!isCreatingPost && (
             <aside
-              className={`space-y-3 rounded-2xl p-5 text-base ${
+              className={`sticky top-24 self-start space-y-3 rounded-2xl p-5 text-lg ${
                 darkMode ? "bg-zinc-900" : "bg-white"
               }`}
             >
               <h2 className="font-semibold">Community Q&amp;A</h2>
 
-              <p className="text-base leading-relaxed opacity-70">
+              <p className="text-lg leading-relaxed opacity-70">
                 Ask a clear question, include what you have tried, and add code
                 to help others understand the problem.
               </p>
 
               <button
-                className="text-base text-blue-500 hover:underline"
+                className="text-lg text-blue-500 hover:underline"
                 onClick={openCreatePost}
               >
                 Ask a question →
@@ -625,6 +680,84 @@ export default function QACommunity({
           )}
         </div>
       </main>
+
+      {pendingDeletePostId != null && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/55 p-4 backdrop-blur-sm"
+          onMouseDown={(event) => {
+            if (
+              event.target === event.currentTarget &&
+              !postDeletion.isLoading
+            ) {
+              setPendingDeletePostId(null);
+            }
+          }}
+        >
+          <section
+            role="alertdialog"
+            aria-modal="true"
+            aria-labelledby="delete-question-title"
+            aria-describedby="delete-question-description"
+            className={`w-full max-w-md overflow-hidden rounded-3xl border shadow-2xl ${
+              darkMode
+                ? "border-zinc-700 bg-zinc-900 text-slate-100"
+                : "border-slate-200 bg-white text-slate-900"
+            }`}
+          >
+            <div className="p-6 sm:p-7">
+              <div className="flex items-start gap-4">
+                <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-rose-100 text-rose-600 dark:bg-rose-950/60 dark:text-rose-400">
+                  <AlertTriangle size={23} aria-hidden="true" />
+                </div>
+                <div className="min-w-0 flex-1 pt-0.5">
+                  <h2 id="delete-question-title" className="text-lg font-bold">
+                    {t.post.confirmDeleteTitle}
+                  </h2>
+                  <p
+                    id="delete-question-description"
+                    className={`mt-2 text-lg leading-relaxed ${darkMode ? "text-slate-400" : "text-slate-600"}`}
+                  >
+                    {t.post.confirmDeleteDescription}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  aria-label={t.post.cancel}
+                  disabled={postDeletion.isLoading}
+                  onClick={() => setPendingDeletePostId(null)}
+                  className={`-mr-2 -mt-2 rounded-xl p-2 transition-colors disabled:opacity-50 ${darkMode ? "text-slate-400 hover:bg-zinc-800 hover:text-white" : "text-slate-400 hover:bg-slate-100 hover:text-slate-700"}`}
+                >
+                  <X size={19} />
+                </button>
+              </div>
+            </div>
+            <div
+              className={`flex flex-col-reverse gap-3 border-t p-5 sm:flex-row sm:justify-end sm:px-7 ${darkMode ? "border-zinc-800 bg-zinc-950/40" : "border-slate-100 bg-slate-50/80"}`}
+            >
+              <button
+                type="button"
+                autoFocus
+                disabled={postDeletion.isLoading}
+                onClick={() => setPendingDeletePostId(null)}
+                className={`inline-flex h-11 items-center justify-center rounded-xl border px-5 text-lg font-semibold transition-colors disabled:opacity-50 ${darkMode ? "border-zinc-700 bg-zinc-900 text-slate-200 hover:bg-zinc-800" : "border-slate-200 bg-white text-slate-700 hover:bg-slate-100"}`}
+              >
+                {t.post.cancel}
+              </button>
+              <button
+                type="button"
+                disabled={postDeletion.isLoading}
+                onClick={confirmDeletePost}
+                className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-rose-600 px-5 text-lg font-semibold text-white transition-colors hover:bg-rose-700 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {postDeletion.isLoading && (
+                  <LoaderCircle size={17} className="animate-spin" />
+                )}
+                {postDeletion.isLoading ? t.post.deleting : t.post.delete}
+              </button>
+            </div>
+          </section>
+        </div>
+      )}
     </div>
   );
 }
