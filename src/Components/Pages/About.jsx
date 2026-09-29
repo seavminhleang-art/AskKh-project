@@ -14,10 +14,10 @@ import rattanakmonyPhoto from "../../assets/Mentor/pech_rattanakmony.jpg";
 import lisaPhoto from "../../assets/Team/Lisa.JPG";
 import seavminhPhoto from "../../assets/Team/Seavminh.JPG";
 import lyhengPhoto from "../../assets/Team/Lyheng.jpg";
-import monizaPhoto from "../../assets/Team/Niza.jpg";
+import monizaPhoto from "../../assets/Team/Niza.JPG";
 import tonganPhoto from "../../assets/Team/Tongan.JPG";
 import sothearithPhoto from "../../assets/Team/Rith.JPG";
-import thanaPhoto from "../../assets/Team/Thana.jpg";
+import thanaPhoto from "../../assets/Team/Thana.JPG";
 import tharathPhoto from "../../assets/Team/venthan_tharath.jpg";
 
 // ---------- Icons ----------

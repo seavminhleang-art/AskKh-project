@@ -1,5 +1,5 @@
 import LostFoundReportRow from "./LostFoundReportRow";
-import EditQuestionForm from "./EditQuestionForm";
+import EditQuestionForm from "../../Pages/user/EditQuestionForm.jsx";
 import { useWorkspaceTranslation } from "@/locales/workspace/useWorkspaceTranslation";
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
