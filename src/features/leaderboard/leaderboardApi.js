@@ -4,8 +4,9 @@ import { rankContributors } from './rankings';
 export const leaderboardApi = baseApi.injectEndpoints({
   endpoints: builder => ({
     getLeaderboard: builder.query({
-      async queryFn(period = 'all', api, _options, fetchWithBQ) {
+      async queryFn(arg = 'all', api, _options, fetchWithBQ) {
         try {
+          const period = typeof arg === 'string' ? arg : arg?.period || 'all';
           const response = await fetchWithBQ('/posts');
           if (response.error) return response;
           const body = response.data?.data ?? response.data;

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import {
   ArrowUp,
   MessageCircle,
@@ -1084,10 +1085,15 @@ export default function LeaderBoardComponent({
   const [period, setPeriod] = useState(0);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All Categories");
+  const { isAuthenticated, user } = useSelector((state) => state.auth);
 
   const periodKeys = ["all", "month", "week"];
 
-  const query = useGetLeaderboardQuery(periodKeys[period], {
+  const leaderboardQueryKey = isAuthenticated ? `user:${user?.id ?? "authenticated"}` : "guest";
+  const query = useGetLeaderboardQuery({
+    period: periodKeys[period],
+    authKey: leaderboardQueryKey,
+  }, {
     pollingInterval: 60000,
     refetchOnMountOrArgChange: true,
   });
