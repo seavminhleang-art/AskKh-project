@@ -100,7 +100,7 @@ export default function PrivacyPolicy() {
       "Read the NEXA Privacy Policy to learn how we protect, store, and manage member information across our developer and campus platform.",
     keywords:
       "NEXA privacy, privacy policy Cambodia, data security, developer community privacy",
-    canonicalUrl: "nexa-frontend.cheat.casa/privacy-policy",
+    canonicalUrl: "https://nexa-frontend.cheat.casa/privacy-policy",
   });
 
   // ==================================================

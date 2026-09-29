@@ -18,7 +18,7 @@ export default function LostAndFoundPage() {
       "Report missing items, track found belongings across university campuses, and verify ownership securely through NEXA Lost & Found.",
     keywords:
       "NEXA Lost and Found, campus lost belongings, recover lost items Cambodia, ISTAD campus lost found, student item recovery",
-    canonicalUrl: "nexa-frontend.cheat.casa/community/lost-found",
+    canonicalUrl: "https://nexa-frontend.cheat.casa/community/lost-found",
   });
 
   // --------------------------------------------------

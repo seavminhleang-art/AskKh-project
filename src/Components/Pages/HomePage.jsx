@@ -22,7 +22,7 @@ export default function HomePage() {
     title: "NEXA — Cambodian Developer & Student Community",
     description: "NEXA is Cambodia's premier developer community for programming Q&A, technical collaboration, and campus Lost & Found recovery.",
     keywords: "NEXA, NEXA Cambodia, Cambodian Developers, Cambodia Tech Community, ISTAD, Programming Q&A, Lost and Found Cambodia, Code Collaboration, Web Development, Phnom Penh Tech",
-    canonicalUrl: "nexa-frontend.cheat.casa/",
+    canonicalUrl: "https://nexa-frontend.cheat.casa/",
   });
 
   // --------------------------------------------------

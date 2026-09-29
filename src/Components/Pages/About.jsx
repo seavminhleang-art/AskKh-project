@@ -412,7 +412,7 @@ export default function AboutNexa() {
       "Learn about NEXA (Network, Explore, eXchange, Assist) — Cambodia's premier developer and student platform. Discover our mission, vision, campus asset recovery, and team.",
     keywords:
       "About NEXA, Cambodian developer platform, ISTAD mentors, student developers Cambodia, tech community Phnom Penh",
-    canonicalUrl: "nexa-frontend.cheat.casa/about",
+    canonicalUrl: "https://nexa-frontend.cheat.casa/about",
   });
 
   return (

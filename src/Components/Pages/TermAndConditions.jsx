@@ -86,7 +86,7 @@ export default function TermsAndConditions() {
       "Read the NEXA Terms & Conditions to understand community guidelines, user responsibilities, and service rules.",
     keywords:
       "NEXA terms, terms and conditions, community guidelines Cambodia, user agreement",
-    canonicalUrl: "nexa-frontend.cheat.casa/terms",
+    canonicalUrl: "https://nexa-frontend.cheat.casa/terms",
   });
 
   // ==================================================

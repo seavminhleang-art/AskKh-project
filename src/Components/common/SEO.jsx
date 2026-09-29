@@ -2,14 +2,14 @@ import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
 const SITE_NAME = "NEXA";
-const DEFAULT_ORIGIN = "nexa-frontend.cheat.casa";
+const DEFAULT_ORIGIN = "https://nexa-frontend.cheat.casa";
 const DEFAULT_THUMBNAIL = `${DEFAULT_ORIGIN}/thumbnail.jpg`;
 const DEFAULT_LOGO = `${DEFAULT_ORIGIN}/nexa-orbit-logo.svg`;
 const DEFAULT_TITLE = "NEXA — Cambodian Developer & Student Community";
 const DEFAULT_DESCRIPTION =
   "NEXA is Cambodia's premier developer community for programming Q&A, technical collaboration, and campus Lost & Found recovery.";
 const DEFAULT_KEYWORDS =
-  "NEXA, NEXA Cambodia, Cambodian Developers, Cambodia Tech Community, ISTAD, Programming Q&A, Lost and Found Cambodia, Code Collaboration, Web Development, Phnom Penh Tech, AskKh";
+  "NEXA, NEXA Cambodia, NEXA cheat casa, AskKh, Cambodian Developers, Cambodia Tech Community, ISTAD, Programming Q&A, Lost and Found Cambodia, Code Collaboration, Web Development, Phnom Penh Tech";
 
 /**
  * Custom SEO hook & component for NEXA
@@ -61,7 +61,10 @@ export function usePageSEO({
         ? window.location.origin
         : DEFAULT_ORIGIN;
 
-    const currentUrl = canonicalUrl || `${origin}${pathname}`;
+    let currentUrl = canonicalUrl || `${origin}${pathname}`;
+    if (!currentUrl.startsWith("http")) {
+      currentUrl = `https://${currentUrl.replace(/^\/+/, "")}`;
+    }
     const absoluteImage = image.startsWith("http")
       ? image
       : `${origin}${image.startsWith("/") ? "" : "/"}${image}`;

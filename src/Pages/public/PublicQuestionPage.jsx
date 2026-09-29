@@ -28,7 +28,7 @@ import {
 import { usePageSEO } from "../../Components/common/SEO";
 import { publicQuestionPath } from "../../utils/slug";
 
-const SITE_ORIGIN = "nexa-frontend.cheat.casa";
+const SITE_ORIGIN = "https://nexa-frontend.cheat.casa";
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 
