@@ -126,11 +126,11 @@ const translations = {
 
     githubFailed: "ការចុះឈ្មោះតាម GitHub បរាជ័យ។",
 
-    githubDisabled: "GitHub Authentication មិនទាន់បានបើកក្នុង Firebase។",
+    githubDisabled: "ការផ្ទៀងផ្ទាត់តាម GitHub មិនទាន់បានបើកក្នុង Firebase។",
 
     accountExists: "អ៊ីមែលនេះមានគណនីរួចហើយជាមួយវិធីចូលផ្សេង។",
 
-    popupBlocked: "Browser បានបិទ authentication popup។",
+    popupBlocked: "កម្មវិធីរុករកបានរារាំងផ្ទាំងផ្ទៀងផ្ទាត់។",
 
     successTitle: "បង្កើតគណនីជោគជ័យ",
 

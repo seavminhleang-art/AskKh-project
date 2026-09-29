@@ -8,13 +8,13 @@
     "yourPostDesc": "គ្រប់គ្រងអត្ថបទដែលបានផ្សព្វផ្សាយ",
     "community": "សហគមន៍",
     "qaCommunity": "សហគមន៍ សំណួរ និងចម្លើយ",
-    "lostFoundCommunity": "បាត់ និងរើសបាន",
+    "lostFoundCommunity": "របស់បាត់ និងរកឃើញ",
     "about": "អំពីយើង",
     "leaderboard": "តារាងពិន្ទុ",
     "getStarted": "ចាប់ផ្តើម"
   },
   "sidebar": {
-    "popularTags": "ប័ណ្ណពេញនិយម",
+    "popularTags": "ស្លាកពេញនិយម",
     "peopleYouKnow": "មនុស្សដែលអ្នកអាចស្គាល់",
     "viewAll": "មើលទាំងអស់",
     "follow": "តាមដាន",
@@ -43,7 +43,7 @@
     "uploadFile": "ចុចដើម្បីផ្ទុកឡើងរូបភាពគម្រប",
     "addBlog": "ផ្សព្វផ្សាយប្លុក",
     "cancel": "បោះបង់",
-    "tags": "ប័ណ្ណ",
+    "tags": "ស្លាក",
     "tagsPlaceholder": "ឧទាហរណ៍ react, javascript, tailwind"
   },
   "detail": {

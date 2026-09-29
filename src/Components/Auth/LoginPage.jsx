@@ -142,13 +142,13 @@ const translations = {
       "ការចូលតាម GitHub បរាជ័យ។",
 
     githubDisabled:
-      "GitHub Authentication មិនទាន់បានបើកក្នុង Firebase។",
+      "ការផ្ទៀងផ្ទាត់តាម GitHub មិនទាន់បានបើកក្នុង Firebase។",
 
     accountExists:
       "អ៊ីមែលនេះមានគណនីរួចហើយជាមួយវិធីចូលផ្សេង។",
 
     popupBlocked:
-      "Browser បានបិទ authentication popup។",
+      "កម្មវិធីរុករកបានរារាំងផ្ទាំងផ្ទៀងផ្ទាត់។",
 
     resetSent:
       "បានផ្ញើអ៊ីមែលកំណត់ពាក្យសម្ងាត់ឡើងវិញ។",

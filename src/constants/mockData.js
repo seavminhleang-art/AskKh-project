@@ -383,7 +383,7 @@ export const INITIAL_NOTIFICATIONS = [
     userId: 'user-1',
     type: 'question_answer',
     title: 'New Answer on your RTK Query question',
-    titleKh: 'មានចម្លើយថ្មីលើសំនួរ RTK Query របស់អ្នក',
+    titleKh: 'មានចម្លើយថ្មីលើសំណួរ RTK Query របស់អ្នក',
     message: 'Dr. Chan Vichea accepted your technical scenario and posted a solution on granular cache updates.',
     link: '/questions/q-101',
     isRead: false,
@@ -417,7 +417,7 @@ export const INITIAL_ACHIEVEMENTS = [
   {
     id: 'ach-1',
     title: 'First Question Asked',
-    titleKh: 'សំនួរដំបូងបង្អស់',
+    titleKh: 'សំណួរដំបូងបង្អស់',
     description: 'Posted your inaugural inquiry on the ISTAD technical forum.',
     tier: 'BRONZE',
     points: 50,

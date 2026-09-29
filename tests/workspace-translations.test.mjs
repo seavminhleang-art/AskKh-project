@@ -16,3 +16,38 @@ test('both workspaces include translated navigation and permission feedback', ()
     assert.match(khmer[key], /[\u1780-\u17ff]/);
   }
 });
+
+function flattenTranslations(value, path = '', entries = {}) {
+  if (typeof value === 'string') {
+    entries[path] = value;
+    return entries;
+  }
+
+  if (value && typeof value === 'object') {
+    for (const [key, child] of Object.entries(value)) {
+      flattenTranslations(child, path ? `${path}.${key}` : key, entries);
+    }
+  }
+
+  return entries;
+}
+
+test('site and community Khmer copy matches English keys and placeholders', () => {
+  const pairs = [
+    ['../src/locales/en.json', '../src/locales/kh.json'],
+    ['../src/Components/locales/en.json', '../src/Components/locales/km.json'],
+  ];
+  const placeholders = text => [...text.matchAll(/{{\s*([\w.]+)\s*}}/g)]
+    .map(match => match[1]).sort();
+
+  for (const [englishPath, khmerPath] of pairs) {
+    const source = flattenTranslations(JSON.parse(readFileSync(new URL(englishPath, import.meta.url))));
+    const translated = flattenTranslations(JSON.parse(readFileSync(new URL(khmerPath, import.meta.url))));
+
+    assert.deepEqual(Object.keys(translated).sort(), Object.keys(source).sort(), khmerPath);
+    for (const [key, value] of Object.entries(source)) {
+      assert.ok(translated[key].trim(), `Missing Khmer text: ${key}`);
+      assert.deepEqual(placeholders(translated[key]), placeholders(value), `Mismatched placeholders: ${key}`);
+    }
+  }
+});
