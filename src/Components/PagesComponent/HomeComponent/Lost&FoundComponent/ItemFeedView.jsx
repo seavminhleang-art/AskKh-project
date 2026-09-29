@@ -525,9 +525,7 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
             </div>
 
             <div
-              whileHover={{ scale: 1.03, y: -2 }}
-              whileTap={{ scale: 0.97 }}
-              className="w-full bg-[var(--color-brand-primary,#3b82f6)] hover:bg-blue-600 text-white font-semibold py-3.5 px-4 rounded-2xl text-lg transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer"
+              className="relative isolate overflow-hidden w-full bg-[var(--color-brand-primary,#3b82f6)] text-white font-semibold p-5 rounded-2xl"
             >
               <div className="absolute -right-6 -bottom-6 w-32 h-32 bg-white/10 rounded-full blur-2xl pointer-events-none" />
               <h4 className="font-bold text-lg mb-1">
@@ -541,7 +539,7 @@ export default function ItemFeedView({ onOpenReport, darkMode }) {
                 onClick={onOpenReport}
                 className="w-full bg-white text-blue-600 hover:bg-blue-50 font-bold py-3 px-4 rounded-2xl text-sm transition-all duration-200 flex items-center justify-center gap-2 shadow-lg cursor-pointer"
               >
-                <PlusCircle size={16} /> {t("feedReportBtn")}
+                <PlusCircle size={16} className="shrink-0" /> {t("feedReportBtn")}
               </button>
             </div>
           </aside>
