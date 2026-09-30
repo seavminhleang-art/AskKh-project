@@ -136,25 +136,33 @@ export default function FooterComponent() {
               {t("footer.organizedTitle")}
             </h3>
 
-            {/* Recolor only the wordmark to the right of the circular emblem. */}
+            {/* Keep the ISTAD wordmark blue and its dot red in both themes. */}
             <svg width="0" height="0" className="absolute" aria-hidden="true" focusable="false">
               <defs>
-                <filter id="istad-footer-light-lettering" x="0" y="0" width="100%" height="100%" primitiveUnits="objectBoundingBox" colorInterpolationFilters="sRGB">
-                  <feFlood x="0.38" y="0" width="0.62" height="1" floodColor="var(--color-brand-primary)" result="letterColor" />
+                <filter id="istad-footer-lettering" x="0" y="0" width="100%" height="100%" primitiveUnits="objectBoundingBox" colorInterpolationFilters="sRGB">
+                  <feFlood x="0.38" y="0.35" width="0.62" height="0.65" floodColor="#293b91" result="letterColor" />
                   <feComposite in="letterColor" in2="SourceAlpha" operator="in" result="letters" />
+                  <feFlood x="0.39" y="0.22" width="0.06" height="0.13" floodColor="#ed1b2f" result="dotColor" />
+                  <feComposite in="dotColor" in2="SourceAlpha" operator="in" result="dot" />
                   <feMerge>
                     <feMergeNode in="SourceGraphic" />
                     <feMergeNode in="letters" />
+                    <feMergeNode in="dot" />
                   </feMerge>
                 </filter>
               </defs>
             </svg>
-            <img
-              src={istadLogo}
-              alt="ISTAD logo"
-              className="ml-3 block h-auto w-[210px] max-w-[calc(100%-0.75rem)] object-contain"
-              style={{ filter: darkMode ? undefined : "url(#istad-footer-light-lettering)" }}
-            />
+            <div className="w-[234px] max-w-full rounded-lg bg-white p-3">
+              <img
+                src={istadLogo}
+                alt="ISTAD — Institute of Science and Technology Advanced Development"
+                width={12471}
+                height={4500}
+                loading="lazy"
+                className="block h-auto w-full object-contain"
+                style={{ filter: "url(#istad-footer-lettering)" }}
+              />
+            </div>
           </div>
         </div>
 
