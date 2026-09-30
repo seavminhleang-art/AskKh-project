@@ -15,7 +15,7 @@ export default function CodeEditor({
       value={value}
       onChange={(val) => onChange?.(val ?? "")}
       theme={darkMode ? "vs-dark" : "light"}
-      loading={<p className="p-4 text-lg">Loading code editor…</p>}
+      loading={<p className="p-4 text-base">Loading code editor…</p>}
       options={{
         minimap: { enabled: false },
         fontSize: 14,

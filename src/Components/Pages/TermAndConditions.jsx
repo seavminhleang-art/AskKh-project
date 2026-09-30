@@ -32,7 +32,7 @@ function SectionBlock({ num, title, paragraphs = [], list = [], outro = [] }) {
     <article id={`section-${num}`} className="scroll-mt-24">
       <div className="flex items-start gap-4">
         {/* Section Number */}
-        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-primary text-lg font-bold text-white">
+        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-primary text-base font-bold text-white">
           {num}
         </span>
 
@@ -86,7 +86,7 @@ export default function TermsAndConditions() {
       "Read the NEXA Terms & Conditions to understand community guidelines, user responsibilities, and service rules.",
     keywords:
       "NEXA terms, terms and conditions, community guidelines Cambodia, user agreement",
-    canonicalUrl: "https://ask-kh-project.vercel.app/terms",
+    canonicalUrl: "https://nexa-frontend.cheat.casa/terms",
   });
 
   // ==================================================
@@ -132,7 +132,7 @@ export default function TermsAndConditions() {
       <section className={`${heroTheme} transition-colors duration-300`}>
         <div className="mx-auto max-w-4xl px-6 py-16 text-center">
           <ScrollReveal animation="fadeInUp">
-            <span className="text-lg font-semibold uppercase tracking-wide text-brand-primary">
+            <span className="text-base font-semibold uppercase tracking-wide text-brand-primary">
               {t("termsPage.legalLabel")}
             </span>
 

@@ -6,8 +6,8 @@ export function Heading({ title, description, children }) {
   return (
     <header className="uw-heading">
       <div>
-        <h1 className="text-2xl">{title}</h1>
-        <p className="text-lg">{w(description)}</p>
+        <h1>{title}</h1>
+        <p>{w(description)}</p>
       </div>
       {children}
     </header>
@@ -52,7 +52,7 @@ export function Empty({ children = "No records yet." }) {
 }
 export function Badge({ children }) {
   const { w } = useWorkspaceTranslation();
-  return <span className="uw-badge text-base">{children || w("Pending")}</span>;
+  return <span className="uw-badge">{children || w("Pending")}</span>;
 }
 export function QuickLinks() {
   const { w } = useWorkspaceTranslation();

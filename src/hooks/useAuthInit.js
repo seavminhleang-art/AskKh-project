@@ -1,21 +1,19 @@
-import { authCredentials, getRefreshToken, extractToken } from '../features/auth/authSession';
-import { useEffect, useRef } from 'react';
+import { authCredentials, getRefreshToken } from '../features/auth/authSession';
+import { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from './useAppStore';
 import { setCredentials, setInitialized, logout } from '../features/auth/authSlice';
 import { BASE_API_URL } from '../store/api/baseQueryWithReauth';
 
-let pendingRefreshPromise = null;
+let pendingRefresh;
+let pendingToken;
 
 export function useAuthInit() {
   const dispatch = useAppDispatch();
   const { accessToken, isInitialized } = useAppSelector((state) => state.auth);
-  const attemptedRef = useRef(false);
 
   useEffect(() => {
     // Ensure any legacy insecure tokens are removed from localStorage
-    try {
-      localStorage.removeItem('nexa_token');
-    } catch {}
+    localStorage.removeItem('nexa_token');
 
     const refreshToken = getRefreshToken();
 
@@ -25,55 +23,58 @@ export function useAuthInit() {
       return;
     }
 
-    if (attemptedRef.current) return;
-    attemptedRef.current = true;
+    // Silent session restoration on browser startup/reload
+    let isCancelled = false;
 
     async function silentRefresh() {
       try {
-        if (!pendingRefreshPromise) {
-          pendingRefreshPromise = (async () => {
-            const response = await fetch(`${BASE_API_URL}/auth/refresh`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ refreshToken }),
-              signal: AbortSignal.timeout(15000),
-            });
-
+        if (!pendingRefresh || pendingToken !== refreshToken) {
+          pendingToken = refreshToken;
+          pendingRefresh = fetch(`${BASE_API_URL}/auth/refresh`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ refreshToken }),
+            signal: AbortSignal.timeout(15000),
+          }).then(response => {
             if (!response.ok) {
-              const err = new Error(`Refresh failed with status ${response.status}`);
-              err.status = response.status;
-              throw err;
+              const error = new Error('Refresh failed');
+              error.status = response.status;
+              throw error;
             }
-            return await response.json();
-          })().finally(() => {
-            pendingRefreshPromise = null;
-          });
+            return response.json();
+          }).finally(() => { pendingRefresh = undefined; });
         }
-
-        const data = await pendingRefreshPromise;
-        const newAccessToken = extractToken(data);
-
-        if (newAccessToken) {
-          const creds = authCredentials(data, data?.refreshToken || refreshToken);
-          dispatch(setCredentials(creds));
-        } else {
+        const data = await pendingRefresh;
+        if (getRefreshToken() !== refreshToken) return;
+        if (!isCancelled && data.accessToken) {
+          dispatch(
+            setCredentials(authCredentials(data, data.refreshToken || refreshToken))
+          );
+        } else if (!isCancelled) {
           dispatch(logout());
         }
       } catch (error) {
-        // If the server explicitly rejected the refresh token (401 or 403), invalidate session
-        if (error?.status === 401 || error?.status === 403) {
+        // Keep the saved session when refresh fails because of a temporary
+        // network/server issue. Only clear credentials when the server says
+        // the refresh token is no longer valid.
+        if (!isCancelled && [400, 401, 403].includes(error.status)) {
           dispatch(logout());
         }
       } finally {
-        dispatch(setInitialized());
+        if (!isCancelled) {
+          dispatch(setInitialized());
+        }
       }
     }
 
     silentRefresh();
+
+    return () => {
+      isCancelled = true;
+    };
   }, [accessToken, dispatch]);
 
   return isInitialized;
 }
 
 export default useAuthInit;
-

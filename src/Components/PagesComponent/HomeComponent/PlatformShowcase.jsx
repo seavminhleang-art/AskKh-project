@@ -61,13 +61,13 @@ export default function PlatformShowcase({ darkMode }) {
           ></div>
 
           <div className="relative z-10 text-center py-16 px-6">
-            <span className="inline-block bg-white/20 text-white text-lg font-semibold px-3 py-1 rounded-full mb-3 backdrop-blur-md">
+            <span className="inline-block bg-white/20 text-white text-base font-semibold px-3 py-1 rounded-full mb-3 backdrop-blur-md">
               {t("showcaseBadge")}
             </span>
             <h2 className="text-5xl md:text-5xl font-bold mb-2 text-white">
               {t("showcaseTitle")}
             </h2>
-            <p className="text-white/80 max-w-2xl mx-auto leading-relaxed text-lg md:text-lg">
+            <p className="text-white/80 max-w-2xl mx-auto leading-relaxed text-base md:text-base">
               {t("showcaseSubtitle")}
             </p>
           </div>
@@ -75,7 +75,7 @@ export default function PlatformShowcase({ darkMode }) {
 
         <div className="p-8">
           <span
-            className={`inline-block text-lg font-semibold px-3 py-1 rounded-full mb-3 ${
+            className={`inline-block text-base font-semibold px-3 py-1 rounded-full mb-3 ${
               darkMode
                 ? "bg-zinc-800 text-[var(--home-primary-text)]"
                 : "bg-[var(--color-brand-primary-light)] text-[var(--home-primary-text)]"
@@ -89,12 +89,12 @@ export default function PlatformShowcase({ darkMode }) {
             {t("showcaseCoreHeading")}
           </h3>
           <p
-            className={`mb-6 text-lg leading-relaxed ${darkMode ? "text-slate-400" : "text-gray-600"}`}
+            className={`mb-6 text-base leading-relaxed ${darkMode ? "text-slate-400" : "text-gray-600"}`}
           >
             {t("showcaseCoreDesc")}
           </p>
           <div
-            className={`flex justify-between items-center text-lg pt-4 border-t ${
+            className={`flex justify-between items-center text-base pt-4 border-t ${
               darkMode
                 ? "border-zinc-800 text-slate-400"
                 : "border-gray-100 text-gray-600"
@@ -102,11 +102,7 @@ export default function PlatformShowcase({ darkMode }) {
           >
             <div className="flex items-center gap-3">
               <span className="w-11 h-11 shrink-0 overflow-hidden rounded-full border-2 border-white shadow-sm ring-1 ring-brand-primary/20">
-                <img
-                  src={teamPhoto}
-                  alt="NEXA team"
-                  className="w-full h-full object-cover object-[52%_58%]"
-                />
+                <img src={teamPhoto} alt="NEXA team" className="w-full h-full object-cover object-[52%_58%]" />
               </span>
               <div>
                 <p
@@ -115,7 +111,7 @@ export default function PlatformShowcase({ darkMode }) {
                   {t("showcaseTeamName")}
                 </p>
                 <p
-                  className={`text-lg ${darkMode ? "text-slate-300" : "text-gray-600"}`}
+                  className={`text-base ${darkMode ? "text-slate-300" : "text-gray-600"}`}
                 >
                   {t("brand")}
                 </p>
@@ -150,12 +146,12 @@ export default function PlatformShowcase({ darkMode }) {
           >
             <div className="flex-1 pr-4">
               <span
-                className={`inline-block ${card.labelColor} text-lg font-semibold px-3 py-1 rounded-full mb-2`}
+                className={`inline-block ${card.labelColor} text-base font-semibold px-3 py-1 rounded-full mb-2`}
               >
                 {card.label}
               </span>
               <p
-                className={`font-medium text-lg leading-snug ${darkMode ? "text-slate-200" : "text-gray-900"}`}
+                className={`font-medium text-base leading-snug ${darkMode ? "text-slate-200" : "text-gray-900"}`}
               >
                 {card.text}
               </p>

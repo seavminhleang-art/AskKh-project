@@ -41,6 +41,7 @@ import {
 } from "../Language/LanguageContext.jsx";
 
 import { useLoginMutation, useForgotPasswordMutation } from "../../features/auth/authApi";
+import { authCredentials } from "../../features/auth/authSession";
 import { authError } from "../../features/auth/authError";
 
 
@@ -141,13 +142,13 @@ const translations = {
       "ការចូលតាម GitHub បរាជ័យ។",
 
     githubDisabled:
-      "GitHub Authentication មិនទាន់បានបើកក្នុង Firebase។",
+      "ការផ្ទៀងផ្ទាត់តាម GitHub មិនទាន់បានបើកក្នុង Firebase។",
 
     accountExists:
       "អ៊ីមែលនេះមានគណនីរួចហើយជាមួយវិធីចូលផ្សេង។",
 
     popupBlocked:
-      "Browser បានបិទ authentication popup។",
+      "កម្មវិធីរុករកបានរារាំងផ្ទាំងផ្ទៀងផ្ទាត់។",
 
     resetSent:
       "បានផ្ញើអ៊ីមែលកំណត់ពាក្យសម្ងាត់ឡើងវិញ។",
@@ -515,7 +516,7 @@ export default function LoginPage() {
     defaultValues: {
       email: "",
       password: "",
-      rememberMe: false,
+      rememberMe: true,
     },
   });
 
@@ -543,7 +544,7 @@ export default function LoginPage() {
     try {
       const result = await login({ email: data.email.trim(), password: data.password, rememberMe: data.rememberMe }).unwrap();
       toast.success(t.successTitle, { toastId: "login-success" });
-      navigate("/dashboard", { replace: true });
+      navigate(authCredentials(result).user.role === "admin" ? "/admin/dashboard" : "/dashboard", { replace: true });
     } catch (error) {
       notifyError(authError(error, t.loginFailed));
     }

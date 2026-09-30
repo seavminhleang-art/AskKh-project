@@ -38,11 +38,11 @@ export default function Navbar({
                 <span className="text-xl font-bold bg-gradient-to-r from-slate-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent">
                   Ask & Found
                 </span>
-                <span className="px-2 py-0.5 text-lg font-bold bg-amber-100 text-amber-800 rounded-full border border-amber-200">
+                <span className="px-2 py-0.5 text-base font-bold bg-amber-100 text-amber-800 rounded-full border border-amber-200">
                   KH
                 </span>
               </div>
-              <p className="text-lg text-slate-500 font-medium">
+              <p className="text-base text-slate-500 font-medium">
                 Reconnecting Cambodia
               </p>
             </div>
@@ -56,7 +56,7 @@ export default function Navbar({
                 placeholder="Search lost IDs, phones, wallets, pets..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-11 pr-4 py-2.5 bg-slate-100/80 hover:bg-slate-100 focus:bg-white text-slate-800 placeholder-slate-400 rounded-full border border-transparent focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all text-lg outline-none"
+                className="w-full pl-11 pr-4 py-2.5 bg-slate-100/80 hover:bg-slate-100 focus:bg-white text-slate-800 placeholder-slate-400 rounded-full border border-transparent focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all text-base outline-none"
               />
               <Search className="w-4 h-4 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
             </div>
@@ -66,7 +66,7 @@ export default function Navbar({
           <nav className="hidden lg:flex items-center gap-1">
             <button
               onClick={() => setCurrentTab("home")}
-              className={`px-4 py-2 rounded-full text-lg font-semibold transition-colors ${
+              className={`px-4 py-2 rounded-full text-base font-semibold transition-colors ${
                 currentTab === "home"
                   ? "bg-blue-50 text-blue-600"
                   : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
@@ -76,7 +76,7 @@ export default function Navbar({
             </button>
             <button
               onClick={() => setCurrentTab("explore")}
-              className={`px-4 py-2 rounded-full text-lg font-semibold transition-colors flex items-center gap-1.5 ${
+              className={`px-4 py-2 rounded-full text-base font-semibold transition-colors flex items-center gap-1.5 ${
                 currentTab === "explore"
                   ? "bg-blue-50 text-blue-600"
                   : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
@@ -87,7 +87,7 @@ export default function Navbar({
             </button>
             <button
               onClick={() => setCurrentTab("about")}
-              className={`px-4 py-2 rounded-full text-lg font-semibold transition-colors ${
+              className={`px-4 py-2 rounded-full text-base font-semibold transition-colors ${
                 currentTab === "about"
                   ? "bg-blue-50 text-blue-600"
                   : "text-slate-600 hover:text-slate-900 hover:bg-slate-50"
@@ -101,7 +101,7 @@ export default function Navbar({
           <div className="hidden sm:flex items-center gap-3">
             <button
               onClick={onOpenPostModal}
-              className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold text-lg rounded-full shadow-md shadow-blue-600/20 hover:shadow-lg hover:shadow-blue-600/30 transition-all transform active:scale-95"
+              className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold text-base rounded-full shadow-md shadow-blue-600/20 hover:shadow-lg hover:shadow-blue-600/30 transition-all transform active:scale-95"
             >
               <PlusCircle className="w-4 h-4" />
               Report Item
@@ -109,7 +109,7 @@ export default function Navbar({
 
             <button
               onClick={onOpenAuthModal}
-              className="flex items-center gap-2 px-4 py-2.5 text-slate-700 hover:bg-slate-100 rounded-full font-semibold text-lg transition-colors border border-slate-200"
+              className="flex items-center gap-2 px-4 py-2.5 text-slate-700 hover:bg-slate-100 rounded-full font-semibold text-base transition-colors border border-slate-200"
             >
               <User className="w-4 h-4 text-slate-500" />
               Sign In
@@ -148,7 +148,7 @@ export default function Navbar({
               placeholder="Search lost or found items..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 bg-slate-100 text-slate-800 placeholder-slate-400 rounded-full text-lg outline-none"
+              className="w-full pl-10 pr-4 py-2 bg-slate-100 text-slate-800 placeholder-slate-400 rounded-full text-base outline-none"
             />
             <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
           </div>
@@ -159,7 +159,7 @@ export default function Navbar({
                 setCurrentTab("home");
                 setMobileMenuOpen(false);
               }}
-              className={`px-4 py-2.5 rounded-xl font-medium text-left text-lg ${
+              className={`px-4 py-2.5 rounded-xl font-medium text-left text-base ${
                 currentTab === "home"
                   ? "bg-blue-50 text-blue-600 font-semibold"
                   : "text-slate-700"
@@ -172,7 +172,7 @@ export default function Navbar({
                 setCurrentTab("explore");
                 setMobileMenuOpen(false);
               }}
-              className={`px-4 py-2.5 rounded-xl font-medium text-left text-lg ${
+              className={`px-4 py-2.5 rounded-xl font-medium text-left text-base ${
                 currentTab === "explore"
                   ? "bg-blue-50 text-blue-600 font-semibold"
                   : "text-slate-700"
@@ -185,7 +185,7 @@ export default function Navbar({
                 setCurrentTab("about");
                 setMobileMenuOpen(false);
               }}
-              className={`px-4 py-2.5 rounded-xl font-medium text-left text-lg ${
+              className={`px-4 py-2.5 rounded-xl font-medium text-left text-base ${
                 currentTab === "about"
                   ? "bg-blue-50 text-blue-600 font-semibold"
                   : "text-slate-700"
@@ -198,7 +198,7 @@ export default function Navbar({
                 onOpenAuthModal();
                 setMobileMenuOpen(false);
               }}
-              className="px-4 py-2.5 rounded-xl font-medium text-left text-lg text-slate-700 border border-slate-200 flex items-center justify-between"
+              className="px-4 py-2.5 rounded-xl font-medium text-left text-base text-slate-700 border border-slate-200 flex items-center justify-between"
             >
               <span>Sign In / Register</span>
               <User className="w-4 h-4 text-slate-400" />

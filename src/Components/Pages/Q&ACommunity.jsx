@@ -65,7 +65,7 @@ export default function QACommunity({
       "Browse, ask, and answer programming questions with Cambodia's developer community. Find solutions for React, Spring Boot, Java, Python, and more on NEXA.",
     keywords:
       "NEXA Q&A, developer community Cambodia, programming solutions, coding questions, React Cambodia, Spring Boot, ISTAD developers",
-    canonicalUrl: "https://ask-kh-project.vercel.app/community/qa",
+    canonicalUrl: "https://nexa-frontend.cheat.casa/community/qa",
   });
   // ==================================================
   // Context & Language
@@ -121,6 +121,7 @@ export default function QACommunity({
       return {};
     }
   });
+  const [voteCounts, setVoteCounts] = useState({});
   const [deletePost, postDeletion] = useDeletePostMutation();
 
   const busy = useRef(new Set());
@@ -205,6 +206,14 @@ export default function QACommunity({
 
     return {
       ...mappedPost,
+      likes: Math.max(
+        Number(voteCounts[String(mappedPost.id)]?.likes ?? mappedPost.likes ?? 0),
+        votes[voteKey]?.voteTypeId === 1 ? 1 : 0,
+      ),
+      dislikes: Math.max(
+        Number(voteCounts[String(mappedPost.id)]?.dislikes ?? mappedPost.dislikes ?? 0),
+        votes[voteKey]?.voteTypeId === 2 ? 1 : 0,
+      ),
       isLiked: votes[voteKey]?.voteTypeId === 1,
       isDisliked: votes[voteKey]?.voteTypeId === 2,
     };
@@ -262,29 +271,61 @@ export default function QACommunity({
 
   const handleToggleLike = (postId, voteTypeId) =>
     perform(`vote:${postId}`, async () => {
+      const normalizedVoteTypeId = Number(voteTypeId);
       const voteKey = `${userId}:${postId}`;
       const currentVote = votes[voteKey];
+      const post = posts.find((item) => String(item.id) === String(postId));
+      if (![1, 2].includes(normalizedVoteTypeId)) {
+        setError("Please choose a valid like or dislike vote.");
+        return;
+      }
+      if (post?.isOwnPost) {
+        setError("You cannot vote on your own post.");
+        return;
+      }
+      const reportCounts = voteCounts[String(postId)] || {};
+      const currentLikes = Number(reportCounts.likes ?? post?.likes ?? 0);
+      const currentDislikes = Number(reportCounts.dislikes ?? post?.dislikes ?? 0);
+      const scoreBeforeVote = Number(post?.score ?? post?.likes ?? 0);
 
-      if (currentVote?.id && currentVote.voteTypeId === voteTypeId) {
+      if (currentVote?.id && currentVote.voteTypeId === normalizedVoteTypeId) {
         await deleteVote(currentVote.id).unwrap();
         setVotes((previous) => ({ ...previous, [voteKey]: null }));
+        setVoteCounts((previous) => ({
+          ...previous,
+          [String(postId)]: {
+            likes: Math.max(0, currentLikes - (normalizedVoteTypeId === 1 ? 1 : 0)),
+            dislikes: Math.max(0, currentDislikes - (normalizedVoteTypeId === 2 ? 1 : 0)),
+          },
+        }));
         return;
       }
 
-      const value = voteTypeId === 1 ? 1 : -1;
+      const value = normalizedVoteTypeId === 1 ? 1 : -1;
       const result = currentVote?.id
         ? await updateVote({
             voteId: currentVote.id,
             postId,
             userId,
-            voteTypeId,
+            voteTypeId: normalizedVoteTypeId,
             value,
           }).unwrap()
-        : await votePost({ postId, userId, voteTypeId, value }).unwrap();
+        : await votePost({ postId, userId, voteTypeId: normalizedVoteTypeId, value }).unwrap();
 
       setVotes((previous) => ({
         ...previous,
-        [voteKey]: { id: result.id ?? currentVote?.id, voteTypeId },
+        [voteKey]: {
+          id: result.id ?? currentVote?.id,
+          voteTypeId: normalizedVoteTypeId,
+          baseScore: Number.isFinite(scoreBeforeVote) ? scoreBeforeVote : 0,
+        },
+      }));
+      setVoteCounts((previous) => ({
+        ...previous,
+        [String(postId)]: {
+          likes: Math.max(0, currentLikes + (normalizedVoteTypeId === 1 ? 1 : 0) - (currentVote?.voteTypeId === 1 ? 1 : 0)),
+          dislikes: Math.max(0, currentDislikes + (normalizedVoteTypeId === 2 ? 1 : 0) - (currentVote?.voteTypeId === 2 ? 1 : 0)),
+        },
       }));
     });
 

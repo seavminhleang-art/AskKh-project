@@ -1,7 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
-import { MapPin, Search, ShieldCheck } from "lucide-react";
+import { MapPin, BellRing, CheckCircle2, XCircle } from "lucide-react";
 
 export default function HowSecureRecoveryWorks({ darkMode }) {
   const { t } = useTranslation();
@@ -22,13 +22,13 @@ export default function HowSecureRecoveryWorks({ darkMode }) {
               <div className="w-20 h-20 bg-[var(--color-brand-primary)] rounded-3xl flex items-center justify-center shadow-lg shadow-[var(--color-brand-primary)]/30 transform -rotate-6">
                 <MapPin className="w-10 h-10 text-white" />
               </div>
-              <div className="absolute -top-2 -right-4 bg-white dark:bg-zinc-800 px-2.5 py-1 rounded-full text-lg font-bold text-[var(--home-secondary-text)] shadow-md">
+              <div className="absolute -top-2 -right-4 bg-white dark:bg-zinc-800 px-2.5 py-1 rounded-full text-base font-bold text-[var(--home-secondary-text)] shadow-md">
                 {t("tagScope", { defaultValue: "ISTAD" })}
               </div>
             </div>
             <div className="mt-4 bg-white/90 dark:bg-zinc-800/90 backdrop-blur-sm px-4 py-2 rounded-xl shadow-sm flex items-center gap-2">
               <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-lg font-medium text-slate-700 dark:text-slate-200">
+              <span className="text-base font-medium text-slate-700 dark:text-slate-200">
                 {t("recoveryLocationTagged", {
                   defaultValue: "Location Tagged",
                 })}
@@ -40,44 +40,40 @@ export default function HowSecureRecoveryWorks({ darkMode }) {
     },
     {
       id: 2,
-      title: t("recoveryStep2Title", { defaultValue: "Smart Match Engine" }),
+      title: t("recoveryStep2Title", { defaultValue: "Finder Approval" }),
       desc: t("recoveryStep2Desc", {
         defaultValue:
-          "Our platform automatically cross-references lost logs with items handed into security custody using matching score metrics.",
+          "The person who found the item reviews your request and chooses to approve or reject the claim.",
       }),
       graphic: (
         <div className="relative w-full h-full flex items-center justify-center bg-gradient-to-br from-[var(--color-brand-secondary-light)]/40 to-indigo-50/20 rounded-2xl p-4 overflow-hidden">
-          <div className="relative z-10 w-full max-w-[220px]">
+          <div className="relative z-10 w-full max-w-[230px]">
             <div className="bg-slate-900 rounded-xl p-3 shadow-xl">
-              <div className="grid grid-cols-2 gap-2 mb-3">
-                <div className="bg-rose-500/10 rounded-lg p-2 text-center">
-                  <span className="text-lg font-bold text-rose-500 block uppercase">
-                    {t("recoveryLostLog", { defaultValue: "LOST LOG" })}
-                  </span>
-                  <span className="text-lg font-extrabold text-white mt-1 block">
-                    92%
-                  </span>
-                  <span className="text-lg text-slate-400">
-                    {t("recoveryMatchScore", { defaultValue: "Match Score" })}
-                  </span>
-                </div>
-                <div className="bg-amber-500/10 rounded-lg p-2 text-center">
-                  <span className="text-lg font-bold text-amber-500 block uppercase">
-                    {t("recoveryFoundItem", { defaultValue: "FOUND ITEM" })}
-                  </span>
-                  <span className="text-lg font-extrabold text-white mt-1 block">
-                    92%
-                  </span>
-                  <span className="text-lg text-slate-400">
-                    {t("recoveryMatchScore", { defaultValue: "Match Score" })}
-                  </span>
-                </div>
-              </div>
-              <div className="bg-emerald-500/20 rounded-lg py-1 px-2 flex items-center justify-center gap-1.5">
-                <Search className="w-3.5 h-3.5 text-emerald-400" />
-                <span className="text-lg font-semibold text-emerald-400">
-                  {t("recoveryMatchedAsset", { defaultValue: "Matched Asset" })}
+              <div className="flex items-center justify-between mb-2 pb-2 border-b border-slate-800">
+                <span className="text-xs font-bold text-indigo-400 uppercase tracking-wider flex items-center gap-1.5">
+                  <BellRing className="w-3.5 h-3.5 animate-bounce" />
+                  {t("recoveryClaimAlert", { defaultValue: "Claim Notification" })}
                 </span>
+                <span className="text-[10px] bg-indigo-500/20 text-indigo-300 px-1.5 py-0.5 rounded">
+                  {t("recoveryNew", { defaultValue: "New" })}
+                </span>
+              </div>
+              <p className="text-[11px] text-slate-300 mb-3 bg-slate-800/60 p-2 rounded-lg italic">
+                "{t("recoverySampleDetail", { defaultValue: "Logo sticker near charging port" })}"
+              </p>
+              <div className="grid grid-cols-2 gap-2">
+                <div className="bg-emerald-500/15 border border-emerald-500/30 rounded-lg py-1.5 px-2 flex items-center justify-center gap-1">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                  <span className="text-xs font-semibold text-emerald-400">
+                    {t("recoveryApprove", { defaultValue: "Approve" })}
+                  </span>
+                </div>
+                <div className="bg-rose-500/15 border border-rose-500/30 rounded-lg py-1.5 px-2 flex items-center justify-center gap-1">
+                  <XCircle className="w-3.5 h-3.5 text-rose-400" />
+                  <span className="text-xs font-semibold text-rose-400">
+                    {t("recoveryReject", { defaultValue: "Reject" })}
+                  </span>
+                </div>
               </div>
             </div>
             <div className="w-12 h-3 bg-slate-700 mx-auto rounded-b-md" />
@@ -88,26 +84,26 @@ export default function HowSecureRecoveryWorks({ darkMode }) {
     },
     {
       id: 3,
-      title: t("recoveryStep3Title", { defaultValue: "Verify & Collect" }),
+      title: t("recoveryStep3Title", { defaultValue: "Collect Your Item" }),
       desc: t("recoveryStep3Desc", {
         defaultValue:
-          "Answer unique security verification queries (e.g., serial code, wallpaper) and pick up your asset from the building office.",
+          "If the finder approves your claim, arrange a safe handover and collect your item from the building office.",
       }),
       graphic: (
         <div className="relative w-full h-full flex items-center justify-center bg-gradient-to-br from-[var(--color-brand-secondary-light)]/40 to-indigo-50/20 rounded-2xl p-4 overflow-hidden">
           <div className="relative z-10 flex flex-col items-center">
             <div className="w-16 h-16 bg-[var(--color-brand-primary)] rounded-full flex items-center justify-center shadow-lg shadow-[var(--color-brand-primary)]/30 mb-3">
-              <ShieldCheck className="w-9 h-9 text-white" />
+              <CheckCircle2 className="w-9 h-9 text-white" />
             </div>
             <div className="bg-white dark:bg-zinc-800 px-3 py-1.5 rounded-lg shadow-md text-center">
-              <p className="text-lg font-semibold text-slate-700 dark:text-slate-200">
+              <p className="text-base font-semibold text-slate-700 dark:text-slate-200">
                 {t("recoverySecVerification", {
-                  defaultValue: "Security Verification",
+                  defaultValue: "Claim Approved",
                 })}
               </p>
-              <p className="text-lg text-slate-400 dark:text-slate-400">
+              <p className="text-base text-slate-400 dark:text-slate-400">
                 {t("recoverySecRequirement", {
-                  defaultValue: "Provide Serial Code / Wallpaper",
+                  defaultValue: "Ready for Collection",
                 })}
               </p>
             </div>
@@ -124,7 +120,7 @@ export default function HowSecureRecoveryWorks({ darkMode }) {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         whileHover={{ scale: 1.05 }}
-        className={`inline-block text-lg font-semibold uppercase tracking-wider px-4 py-1.5 rounded-full mb-4 shadow-sm cursor-pointer ${
+        className={`inline-block text-base font-semibold uppercase tracking-wider px-4 py-1.5 rounded-full mb-4 shadow-sm cursor-pointer ${
           darkMode
             ? "bg-zinc-800 text-[var(--home-primary-text)]"
             : "bg-[var(--color-brand-primary-light)] text-[var(--home-primary-text)]"
@@ -140,7 +136,7 @@ export default function HowSecureRecoveryWorks({ darkMode }) {
       </h2>
 
       <p
-        className={`max-w-xl mx-auto text-lg md:text-lg mb-12 leading-relaxed ${
+        className={`max-w-xl mx-auto text-base md:text-base mb-12 leading-relaxed ${
           darkMode ? "text-slate-400" : "text-gray-600"
         }`}
       >
@@ -164,12 +160,12 @@ export default function HowSecureRecoveryWorks({ darkMode }) {
           >
             <div>
               <div
-                className={`h-52 sm:h-56 rounded-2xl overflow-hidden mb-6 ${darkMode ? "bg-zinc-950" : "bg-gray-900/5"}`}
+                className={`h-52 sm:h-56 rounded-2xl  overflow-hidden mb-6 ${darkMode ? "bg-zinc-950" : "bg-gray-900/5"}`}
               >
                 {item.graphic}
               </div>
               <div className="flex items-center gap-3 mb-2">
-                <span className="w-6 h-6 bg-[var(--color-brand-primary)] text-white font-bold text-lg rounded-md flex items-center justify-center shrink-0 shadow">
+                <span className="w-6 h-6 bg-[var(--color-brand-primary)] text-white font-bold text-base rounded-md flex items-center justify-center shrink-0 shadow">
                   {item.id}
                 </span>
                 <h3
@@ -179,7 +175,7 @@ export default function HowSecureRecoveryWorks({ darkMode }) {
                 </h3>
               </div>
               <p
-                className={`text-lg leading-relaxed ${darkMode ? "text-slate-400" : "text-gray-600"}`}
+                className={`text-base leading-relaxed ${darkMode ? "text-slate-400" : "text-gray-600"}`}
               >
                 {item.desc}
               </p>

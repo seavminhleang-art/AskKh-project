@@ -11,8 +11,8 @@ import {
   Plus,
   Zap,
   History,
-  Sparkles,
-  Search,
+  BellRing,
+  ShieldCheck,
 } from "lucide-react";
 import { useWorkspaceDataQuery } from "../../features/workspace/workspaceApi";
 import { rows, dateLabel } from "../../features/workspace/workspaceModel";
@@ -318,28 +318,27 @@ function Overview() {
           </section>
           <section className="uw-card">
             <div className="uw-panel-heading">
-              <Sparkles size={18} />
+              <BellRing size={18} />
               <div>
-                <h2 className="text-lg font-semibold">{w("Match Summary")}</h2>
+                <h2 className="text-lg font-semibold">{w("Claim Requests")}</h2>
                 <p className="text-lg">
-                  {w("Review potential matches for reported belongings.")}
+                  {w("Review requests for items you have found.")}
                 </p>
               </div>
-              <Link to="/dashboard/matches">{w("View all")}</Link>
             </div>
-            <div className="uw-match-prompt">
-              <Search size={30} />
-              <h2 className="text-lg font-semibold">
-                {w("Find a matching report")}
-              </h2>
+            <div className="uw-claim-prompt">
+              <div className="uw-claim-prompt-alert">
+                <ShieldCheck size={24} />
+                <div>
+                  <strong>{w("A person is claiming a found item")}</strong>
+                  <span>{w("Review their request and submitted ownership details.")}</span>
+                </div>
+              </div>
               <p className="text-lg">
-                {w("Select a report to see its latest matches.")}
+                {w("You decide whether to approve or reject each claim.")}
               </p>
-              <Link
-                className="uw-button secondary text-lg"
-                to="/dashboard/matches"
-              >
-                {w("Open Match Center")}
+              <Link className="uw-button secondary text-lg" to="/dashboard/claims">
+                {w("Review Claims")}
               </Link>
             </div>
           </section>

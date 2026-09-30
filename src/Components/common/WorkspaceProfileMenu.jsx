@@ -13,8 +13,9 @@ import { useWorkspaceTranslation } from "@/locales/workspace/useWorkspaceTransla
 import { logout } from "../../store/slices/authSlice";
 import { useLogoutApiMutation } from "@/features/auth/authApi";
 import { baseApi } from "../../store/api/baseApi";
+import useLogoutPrompt from "../../hooks/useLogoutPrompt";
 
-export default function WorkspaceProfileMenu({ user }) {
+export default function WorkspaceProfileMenu({ user, mode = "user" }) {
   const { w } = useWorkspaceTranslation();
   const ref = useRef(null);
   const hoverTimer = useRef(null);
@@ -76,7 +77,6 @@ export default function WorkspaceProfileMenu({ user }) {
   };
 
   const handleLogout = async () => {
-    if (!window.confirm("Are you sure you want to log out?")) return;
     if (ref.current) ref.current.open = false;
     try {
       await logoutApi();
@@ -86,12 +86,14 @@ export default function WorkspaceProfileMenu({ user }) {
       navigate("/login");
     }
   };
+  const logoutPrompt = useLogoutPrompt(handleLogout);
 
   useEffect(() => {
     setPhotoError(false);
   }, [user?.profileImage, user?.avatar]);
 
   return (
+    <>
     <details
       className="workspace-profile"
       ref={ref}
@@ -99,7 +101,7 @@ export default function WorkspaceProfileMenu({ user }) {
       onMouseLeave={handleMouseLeave}
     >
       <summary aria-label={w("My profile")}>
-        <span className="workspace-profile-avatar text-base">
+        <span className="workspace-profile-avatar">
           {photo ? (
             <img
               src={photo}
@@ -112,16 +114,15 @@ export default function WorkspaceProfileMenu({ user }) {
             initials
           )}
         </span>
-        <span className="workspace-profile-name text-base">{name}</span>
+        <span className="workspace-profile-name">{name}</span>
         <ChevronDown size={14} aria-hidden="true" />
       </summary>
       <div className="workspace-profile-panel">
         <div className="workspace-profile-info">
-          <strong className="text-base">{name}</strong>
-          {user?.email && <span className="text-base">{user.email}</span>}
+          <strong>{name}</strong>
+          {user?.email && <span>{user.email}</span>}
         </div>
         <Link
-          className="text-base"
           to="/"
           onClick={() => {
             if (ref.current) ref.current.open = false;
@@ -131,8 +132,7 @@ export default function WorkspaceProfileMenu({ user }) {
           {w("Home")}
         </Link>
         <Link
-          className="text-base"
-          to={"/dashboard"}
+          to={mode === "admin" ? "/admin/dashboard" : "/dashboard"}
           onClick={() => {
             if (ref.current) ref.current.open = false;
           }}
@@ -141,8 +141,7 @@ export default function WorkspaceProfileMenu({ user }) {
           {w("Dashboard")}
         </Link>
         <Link
-          className="text-base"
-          to={"/dashboard/profile"}
+          to={mode === "admin" ? "/admin/settings" : "/dashboard/profile"}
           onClick={() => {
             if (ref.current) ref.current.open = false;
           }}
@@ -152,13 +151,16 @@ export default function WorkspaceProfileMenu({ user }) {
         </Link>
         <button
           type="button"
-          className="workspace-profile-logout text-base"
-          onClick={handleLogout}
+          className="workspace-profile-logout"
+          onClick={logoutPrompt.requestLogout}
         >
           <LogOut size={17} />
           {w("Log out")}
         </button>
       </div>
     </details>
+    {logoutPrompt.dialog}
+    </>
   );
 }
+

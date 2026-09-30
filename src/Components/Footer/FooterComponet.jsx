@@ -30,7 +30,9 @@ export default function FooterComponent() {
   ];
 
   return (
-    <footer className="site-footer relative overflow-hidden border-t border-slate-200 bg-white text-slate-700 transition-colors duration-300 dark:border-slate-800 dark:bg-zinc-950 dark:text-gray-300">
+    <footer
+      className="site-footer relative overflow-hidden border-t border-slate-200 bg-white text-slate-700 transition-colors duration-300 dark:border-slate-800 dark:bg-zinc-950 dark:text-gray-300"
+    >
       {/* subtle vertical stripe background, matches reference */}
       <div
         className="pointer-events-none absolute inset-0 opacity-10"
@@ -53,7 +55,7 @@ export default function FooterComponent() {
                 />
               </Link>
             </div>
-            <p className="text-lg leading-relaxed text-slate-600 dark:text-gray-400 max-w-[220px]">
+            <p className="text-base leading-relaxed text-slate-600 dark:text-gray-400 max-w-[220px]">
               {t("footer.brandDesc")}
             </p>
           </div>
@@ -69,7 +71,7 @@ export default function FooterComponent() {
                 <li key={link.label}>
                   <Link
                     to={link.to}
-                    className="text-lg text-slate-600 dark:text-gray-400 hover:text-brand-secondary transition-all duration-200 no-underline hover:translate-x-1 inline-block"
+                    className="text-base text-slate-600 dark:text-gray-400 hover:text-brand-secondary transition-all duration-200 no-underline hover:translate-x-1 inline-block"
                   >
                     {link.label}
                   </Link>
@@ -89,7 +91,7 @@ export default function FooterComponent() {
                 <li key={item.label}>
                   <Link
                     to={item.to}
-                    className="text-lg text-slate-600 dark:text-gray-400 hover:text-brand-secondary transition-all duration-200 no-underline hover:translate-x-1 inline-block"
+                    className="text-base text-slate-600 dark:text-gray-400 hover:text-brand-secondary transition-all duration-200 no-underline hover:translate-x-1 inline-block"
                   >
                     {item.label}
                   </Link>
@@ -105,7 +107,7 @@ export default function FooterComponent() {
             </h3>
 
             <ul className="space-y-3">
-              <li className="flex items-start gap-2.5 text-lg text-slate-600 dark:text-gray-400">
+              <li className="flex items-start gap-2.5 text-base text-slate-600 dark:text-gray-400">
                 <MapPin
                   size={16}
                   className="mt-0.5 shrink-0 text-brand-secondary"
@@ -116,12 +118,12 @@ export default function FooterComponent() {
                 </span>
               </li>
 
-              <li className="flex items-center gap-2.5 text-lg text-slate-600 dark:text-gray-400">
+              <li className="flex items-center gap-2.5 text-base text-slate-600 dark:text-gray-400">
                 <Phone size={16} className="shrink-0 text-brand-secondary" />
                 <span>(+855) 95-990-910</span>
               </li>
 
-              <li className="flex items-center gap-2.5 text-lg text-slate-600 dark:text-gray-400">
+              <li className="flex items-center gap-2.5 text-base text-slate-600 dark:text-gray-400">
                 <Mail size={16} className="shrink-0 text-brand-secondary" />
                 <span>info.istad@gmail.com</span>
               </li>
@@ -135,37 +137,11 @@ export default function FooterComponent() {
             </h3>
 
             {/* Recolor only the wordmark to the right of the circular emblem. */}
-            <svg
-              width="0"
-              height="0"
-              className="absolute"
-              aria-hidden="true"
-              focusable="false"
-            >
+            <svg width="0" height="0" className="absolute" aria-hidden="true" focusable="false">
               <defs>
-                <filter
-                  id="istad-footer-light-lettering"
-                  x="0"
-                  y="0"
-                  width="100%"
-                  height="100%"
-                  primitiveUnits="objectBoundingBox"
-                  colorInterpolationFilters="sRGB"
-                >
-                  <feFlood
-                    x="0.38"
-                    y="0"
-                    width="0.62"
-                    height="1"
-                    floodColor="var(--color-brand-primary)"
-                    result="letterColor"
-                  />
-                  <feComposite
-                    in="letterColor"
-                    in2="SourceAlpha"
-                    operator="in"
-                    result="letters"
-                  />
+                <filter id="istad-footer-light-lettering" x="0" y="0" width="100%" height="100%" primitiveUnits="objectBoundingBox" colorInterpolationFilters="sRGB">
+                  <feFlood x="0.38" y="0" width="0.62" height="1" floodColor="var(--color-brand-primary)" result="letterColor" />
+                  <feComposite in="letterColor" in2="SourceAlpha" operator="in" result="letters" />
                   <feMerge>
                     <feMergeNode in="SourceGraphic" />
                     <feMergeNode in="letters" />
@@ -177,18 +153,14 @@ export default function FooterComponent() {
               src={istadLogo}
               alt="ISTAD logo"
               className="ml-3 block h-auto w-[210px] max-w-[calc(100%-0.75rem)] object-contain"
-              style={{
-                filter: darkMode
-                  ? undefined
-                  : "url(#istad-footer-light-lettering)",
-              }}
+              style={{ filter: darkMode ? undefined : "url(#istad-footer-light-lettering)" }}
             />
           </div>
         </div>
 
         {/* Bottom bar */}
         <div className="mt-12 pt-6 border-t border-slate-200 dark:border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-lg text-slate-600 dark:text-gray-400 order-2 sm:order-1">
+          <p className="text-base text-slate-600 dark:text-gray-400 order-2 sm:order-1">
             {t("footer.copyright")}
           </p>
           <div className="flex items-center gap-3 order-1 sm:order-2">

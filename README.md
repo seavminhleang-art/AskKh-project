@@ -1,11 +1,5 @@
 # React + Vite
 
-## App structure
-
-AskKh contains the public site and user dashboard. The administrator app lives in
-`Admin-Nexa/`, with its own repository, dependencies, and deployment. Run admin
-commands from that directory; AskKh does not serve `/admin` routes.
-
 ## Vercel API routing
 
 The browser calls `/__forum_api`. Vite proxies this path during development,

@@ -17,7 +17,7 @@ export function Tabs({ tabs, activeTab, onChange, className }) {
             key={tab.id}
             onClick={() => onChange(tab.id)}
             className={cn(
-              "flex items-center gap-2 px-4 py-2 text-lg font-semibold rounded-xl transition-all select-none cursor-pointer",
+              "flex items-center gap-2 px-4 py-2 text-base font-semibold rounded-xl transition-all select-none cursor-pointer",
               isActive
                 ? "bg-white text-blue-600 shadow-xs dark:bg-slate-900 dark:text-blue-400"
                 : "text-slate-600 hover:text-slate-900 hover:bg-white/50 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:bg-slate-700/50",
@@ -28,7 +28,7 @@ export function Tabs({ tabs, activeTab, onChange, className }) {
             {tab.badge !== undefined && (
               <span
                 className={cn(
-                  "px-2 py-0.5 text-lg rounded-full font-bold",
+                  "px-2 py-0.5 text-base rounded-full font-bold",
                   isActive
                     ? "bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300"
                     : "bg-slate-200 text-slate-700 dark:bg-slate-700 dark:text-slate-300",

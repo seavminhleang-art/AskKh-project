@@ -126,11 +126,11 @@ const translations = {
 
     githubFailed: "ការចុះឈ្មោះតាម GitHub បរាជ័យ។",
 
-    githubDisabled: "GitHub Authentication មិនទាន់បានបើកក្នុង Firebase។",
+    githubDisabled: "ការផ្ទៀងផ្ទាត់តាម GitHub មិនទាន់បានបើកក្នុង Firebase។",
 
     accountExists: "អ៊ីមែលនេះមានគណនីរួចហើយជាមួយវិធីចូលផ្សេង។",
 
-    popupBlocked: "Browser បានបិទ authentication popup។",
+    popupBlocked: "កម្មវិធីរុករកបានរារាំងផ្ទាំងផ្ទៀងផ្ទាត់។",
 
     successTitle: "បង្កើតគណនីជោគជ័យ",
 
@@ -414,8 +414,7 @@ export default function RegisterPage() {
 
   usePageSEO({
     title: "Create an Account | NEXA",
-    description:
-      "Join the NEXA developer community to ask programming questions, share knowledge, and recover lost campus belongings.",
+    description: "Join the NEXA developer community to ask programming questions, share knowledge, and recover lost campus belongings.",
     noIndex: true,
   });
 
@@ -572,7 +571,7 @@ export default function RegisterPage() {
                   </div>
 
                   {errors.firstName && (
-                    <p className="auth-field-error mt-1.5 text-lg font-medium text-red-500">
+                    <p className="auth-field-error mt-1.5 text-base font-medium text-red-500">
                       {errors.firstName.message}
                     </p>
                   )}
@@ -601,7 +600,7 @@ export default function RegisterPage() {
                   </div>
 
                   {errors.lastName && (
-                    <p className="auth-field-error mt-1.5 text-lg font-medium text-red-500">
+                    <p className="auth-field-error mt-1.5 text-base font-medium text-red-500">
                       {errors.lastName.message}
                     </p>
                   )}
@@ -633,7 +632,7 @@ export default function RegisterPage() {
                 </div>
 
                 {errors.email && (
-                  <p className="auth-field-error mt-1.5 text-lg font-medium text-red-500">
+                  <p className="auth-field-error mt-1.5 text-base font-medium text-red-500">
                     {errors.email.message}
                   </p>
                 )}
@@ -675,7 +674,7 @@ export default function RegisterPage() {
                 </div>
 
                 {errors.password && (
-                  <p className="auth-field-error mt-1.5 text-lg font-medium text-red-500">
+                  <p className="auth-field-error mt-1.5 text-base font-medium text-red-500">
                     {errors.password.message}
                   </p>
                 )}
@@ -723,7 +722,7 @@ export default function RegisterPage() {
                 </div>
 
                 {errors.confirmPassword && (
-                  <p className="auth-field-error mt-1.5 text-lg font-medium text-red-500">
+                  <p className="auth-field-error mt-1.5 text-base font-medium text-red-500">
                     {errors.confirmPassword.message}
                   </p>
                 )}
@@ -743,7 +742,7 @@ export default function RegisterPage() {
                 </label>
 
                 {errors.agreeToTerms && (
-                  <p className="auth-field-error mt-1.5 text-lg font-medium text-red-500">
+                  <p className="auth-field-error mt-1.5 text-base font-medium text-red-500">
                     {errors.agreeToTerms.message}
                   </p>
                 )}

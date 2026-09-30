@@ -7,8 +7,10 @@ import PageTransition from './Components/Animations/PageTransition.jsx'
 import ScrollProgress from './Components/Animations/ScrollProgress.jsx'
 import { useTheme } from './context/ThemeContext.jsx'
 import { useLanguage } from './Components/Language/LanguageContext.jsx'
+import { useAuthInit } from './hooks/useAuthInit'
 
 function App() {
+  useAuthInit()
   const { pathname } = useLocation();
   const { darkMode } = useTheme()
   const { language } = useLanguage()

@@ -15,7 +15,7 @@ export default function LeaderboardPage() {
       "Discover top question solvers, helpful developers, and campus asset recovery heroes on the NEXA community leaderboard.",
     keywords:
       "NEXA leaderboard, top developers Cambodia, coding ranking, student achievements, ISTAD leaderboard",
-    canonicalUrl: "https://ask-kh-project.vercel.app/leaderboard",
+    canonicalUrl: "https://nexa-frontend.cheat.casa/leaderboard",
   });
 
   return <LeaderBoardComponent dark={isDarkMode} lang={language} />;

@@ -3,26 +3,37 @@ import { Outlet } from "react-router-dom";
 import Sidebar from "../Components/common/Sidebar";
 import WorkspaceTopbar from "./WorkspaceTopbar";
 import { usePageSEO } from "../Components/common/SEO";
-import { useRealtimeNotifications } from "../features/notifications/useRealtimeNotifications.jsx";
 
-export default function UserLayout() {
+export default function UserLayout({ mode = "user" }) {
   const [collapsed, setCollapsed] = useState(false);
-  // Establish WebSocket connection for real-time claim approve/reject notifications
-  useRealtimeNotifications();
 
   usePageSEO({
-    title: "User Dashboard | NEXA",
+    title: mode === "admin" ? "Admin Workspace | NEXA" : "User Dashboard | NEXA",
     description: "Manage your personal questions, answers, lost & found reports, and notifications on NEXA.",
     noIndex: true,
   });
+  if (mode === "admin") {
+    return (
+      <div className="admin-workspace min-h-screen flex text-slate-100">
+        <Sidebar mode="admin" />
+        <div className="min-w-0 flex-1 w-full">
+          <WorkspaceTopbar mode="admin" />
+          <main className="min-w-0 p-4 sm:p-6 lg:p-8">
+            <Outlet />
+          </main>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
-      className={`user-workspace uw-shell text-sm ${collapsed ? "sidebar-collapsed" : ""}`}
+      className={`user-workspace uw-shell ${collapsed ? "sidebar-collapsed" : ""}`}
     >
-      <Sidebar />
+      <Sidebar mode={mode} />
       <div className="uw-shell-content">
         <WorkspaceTopbar
+          mode={mode}
           collapsed={collapsed}
           onToggleSidebar={() => setCollapsed((value) => !value)}
         />

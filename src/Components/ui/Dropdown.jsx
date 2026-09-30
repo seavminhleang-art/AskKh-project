@@ -45,7 +45,7 @@ export function DropdownItem({ children, onClick, className, destructive }) {
     <button
       onClick={onClick}
       className={cn(
-        "flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-lg font-medium transition-colors text-left select-none cursor-pointer",
+        "flex w-full items-center gap-2.5 rounded-xl px-3 py-2 text-base font-medium transition-colors text-left select-none cursor-pointer",
         destructive
           ? "text-rose-600 hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-950/40"
           : "text-slate-700 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-white",

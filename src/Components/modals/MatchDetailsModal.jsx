@@ -50,7 +50,7 @@ export default function MatchDetailsModal({ isOpen, onClose, match }) {
 
         <div className="flex items-center justify-between pr-8">
           <div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-400 text-lg font-bold mb-2">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800 text-blue-600 dark:text-blue-400 text-base font-bold mb-2">
               <Sparkles className="w-3.5 h-3.5" />
               <span>Smart Match Engine Analysis</span>
             </div>
@@ -66,10 +66,10 @@ export default function MatchDetailsModal({ isOpen, onClose, match }) {
           {/* Lost Item */}
           <div className="p-4 rounded-2xl bg-rose-50/50 dark:bg-rose-950/20 border border-rose-200/80 dark:border-rose-900/40 space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-lg font-bold uppercase tracking-wider text-rose-600 dark:text-rose-400">
+              <span className="text-base font-bold uppercase tracking-wider text-rose-600 dark:text-rose-400">
                 Lost Item Report
               </span>
-              <span className="text-lg text-slate-500 dark:text-slate-400">
+              <span className="text-base text-slate-500 dark:text-slate-400">
                 {match.lostItem.date}
               </span>
             </div>
@@ -78,13 +78,13 @@ export default function MatchDetailsModal({ isOpen, onClose, match }) {
               alt={match.lostItem.name}
               className="w-full h-36 object-cover rounded-xl border border-rose-200/60 dark:border-rose-900/60"
             />
-            <h4 className="font-bold text-lg text-slate-900 dark:text-white">
+            <h4 className="font-bold text-base text-slate-900 dark:text-white">
               {match.lostItem.name}
             </h4>
-            <p className="text-lg text-slate-600 dark:text-slate-300 line-clamp-2">
+            <p className="text-base text-slate-600 dark:text-slate-300 line-clamp-2">
               {match.lostItem.description}
             </p>
-            <div className="text-lg text-slate-500 dark:text-slate-400 flex items-center gap-1">
+            <div className="text-base text-slate-500 dark:text-slate-400 flex items-center gap-1">
               <MapPin className="w-3.5 h-3.5 text-rose-500 shrink-0" />
               <span className="truncate">{match.lostItem.location}</span>
             </div>
@@ -93,10 +93,10 @@ export default function MatchDetailsModal({ isOpen, onClose, match }) {
           {/* Found Item */}
           <div className="p-4 rounded-2xl bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200/80 dark:border-emerald-900/40 space-y-3">
             <div className="flex items-center justify-between">
-              <span className="text-lg font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+              <span className="text-base font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
                 Found Item Turned In
               </span>
-              <span className="text-lg text-slate-500 dark:text-slate-400">
+              <span className="text-base text-slate-500 dark:text-slate-400">
                 {match.foundItem.date}
               </span>
             </div>
@@ -105,13 +105,13 @@ export default function MatchDetailsModal({ isOpen, onClose, match }) {
               alt={match.foundItem.name}
               className="w-full h-36 object-cover rounded-xl border border-emerald-200/60 dark:border-emerald-900/60"
             />
-            <h4 className="font-bold text-lg text-slate-900 dark:text-white">
+            <h4 className="font-bold text-base text-slate-900 dark:text-white">
               {match.foundItem.name}
             </h4>
-            <p className="text-lg text-slate-600 dark:text-slate-300 line-clamp-2">
+            <p className="text-base text-slate-600 dark:text-slate-300 line-clamp-2">
               {match.foundItem.description}
             </p>
-            <div className="text-lg text-slate-500 dark:text-slate-400 flex items-center gap-1">
+            <div className="text-base text-slate-500 dark:text-slate-400 flex items-center gap-1">
               <MapPin className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
               <span className="truncate">{match.foundItem.location}</span>
             </div>
@@ -120,7 +120,7 @@ export default function MatchDetailsModal({ isOpen, onClose, match }) {
 
         {/* Attribute Breakdown */}
         <div className="space-y-2.5">
-          <h4 className="text-lg font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
+          <h4 className="text-base font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
             Matching Factor Breakdown
           </h4>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
@@ -130,14 +130,14 @@ export default function MatchDetailsModal({ isOpen, onClose, match }) {
                 className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-800 flex items-center justify-between"
               >
                 <div>
-                  <div className="text-lg font-bold text-slate-900 dark:text-white">
+                  <div className="text-base font-bold text-slate-900 dark:text-white">
                     {attr.label}
                   </div>
-                  <div className="text-lg text-slate-500 dark:text-slate-400">
+                  <div className="text-base text-slate-500 dark:text-slate-400">
                     {attr.detail}
                   </div>
                 </div>
-                <span className="text-lg font-extrabold text-blue-600 dark:text-blue-400 ml-2">
+                <span className="text-base font-extrabold text-blue-600 dark:text-blue-400 ml-2">
                   {attr.score}
                 </span>
               </div>

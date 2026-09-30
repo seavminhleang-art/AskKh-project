@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import {
   ArrowUp,
   MessageCircle,
@@ -369,7 +370,7 @@ function PointsLegend({ t, c }) {
         {c.points.map((item, index) => (
           <li
             key={item.label}
-            className="flex flex-wrap items-center gap-2 text-lg"
+            className="flex flex-wrap items-center gap-2 text-base"
             style={{ color: t.muted }}
           >
             <span
@@ -535,7 +536,7 @@ function ChampionsSection({
     <section className="mx-auto max-w-7xl px-4 pt-16 pb-12 sm:px-6">
       {/* Header with Pill & Main Title */}
       <div className="flex flex-col items-center text-center mb-12">
-        <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full text-lg font-semibold bg-amber-50/90 text-amber-800 dark:bg-amber-950/40 dark:text-amber-300 border border-amber-200/80 dark:border-amber-800/50 mb-3 shadow-xs">
+        <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full text-base font-semibold bg-amber-50/90 text-amber-800 dark:bg-amber-950/40 dark:text-amber-300 border border-amber-200/80 dark:border-amber-800/50 mb-3 shadow-xs">
           <Crown size={14} className="text-amber-500 fill-amber-500" />
           <span>{c.podiumEyebrow}</span>
         </div>
@@ -547,9 +548,9 @@ function ChampionsSection({
       {/* 3-Column Podium Grid: #2 Silver (Left), #1 Champion (Center), #3 Bronze (Right) */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 items-end max-w-6xl mx-auto">
         {/* CARD 1: #2 Silver */}
-        <div className="bg-white dark:bg-zinc-900/95 border border-slate-200 dark:border-zinc-800 rounded-3xl p-6 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col items-center text-center relative">
+        <div className="bg-white dark:bg-zinc-900/95 rounded-3xl p-6 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col items-center text-center relative">
           {/* Rank Badge */}
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-lg font-semibold bg-slate-100 dark:bg-zinc-800 text-slate-600 dark:text-slate-300 border border-slate-200/80 dark:border-zinc-700">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-base font-semibold bg-slate-100 dark:bg-zinc-800 text-slate-600 dark:text-slate-300 border border-slate-200/80 dark:border-zinc-700">
             <Shield size={13} className="text-slate-400" />
             <span>{c.silverRank}</span>
           </span>
@@ -582,26 +583,28 @@ function ChampionsSection({
           <h3 className="text-lg font-bold text-slate-900 dark:text-white mt-1">
             {podium2.name}
           </h3>
-          <p className="text-lg font-semibold text-blue-600 dark:text-blue-400 mt-0.5">
+          <p className="text-base font-semibold text-blue-600 dark:text-blue-400 mt-0.5">
             {podium2.khmerName}
           </p>
-          <p className="text-lg text-slate-500 dark:text-slate-400 mt-1 line-clamp-1">
+          <p className="text-base text-slate-500 dark:text-slate-400 mt-1 line-clamp-1">
             {podium2.department}
           </p>
 
           {/* Score Box */}
-          <div className="w-full bg-slate-50/80 dark:bg-zinc-800/60 border border-slate-200/60 dark:border-zinc-700/60 py-2.5 px-4 rounded-xl flex items-center justify-between mt-4">
-            <span className="text-lg text-slate-400 dark:text-slate-500 font-medium">
+          <div className="w-full bg-slate-50/80 dark:bg-zinc-800/60 py-2.5 px-4 rounded-xl flex items-center justify-between mt-4">
+            <span className="text-base text-slate-400 dark:text-slate-500 font-medium">
               {c.score}
             </span>
-            <span className="text-lg font-bold text-slate-900 dark:text-white">
+            <span className="text-base font-bold text-slate-900 dark:text-white">
               {Number(podium2.points).toLocaleString()}{" "}
-              <span className="text-amber-500 font-extrabold text-lg">XP</span>
+              <span className="text-amber-500 font-extrabold text-base">
+                XP
+              </span>
             </span>
           </div>
 
           {/* Stats Row */}
-          <div className="flex items-center justify-center gap-3 text-lg font-medium text-slate-600 dark:text-slate-300 mt-3.5">
+          <div className="flex items-center justify-center gap-3 text-base font-medium text-slate-600 dark:text-slate-300 mt-3.5">
             <span className="inline-flex items-center gap-1.5">
               <Bookmark size={13} className="text-amber-600" />
               <span>
@@ -621,16 +624,16 @@ function ChampionsSection({
           <button
             type="button"
             onClick={() => onViewHonors?.(podium2)}
-            className="w-full mt-4 py-2.5 px-4 rounded-xl border border-slate-200 dark:border-zinc-700 hover:bg-slate-50 dark:hover:bg-zinc-800 text-slate-700 dark:text-slate-200 text-lg font-semibold transition-all duration-200 cursor-pointer shadow-2xs active:scale-[0.98]"
+            className="w-full mt-4 py-2.5 px-4 rounded-xl border border-slate-200 dark:border-zinc-700 hover:bg-slate-50 dark:hover:bg-zinc-800 text-slate-700 dark:text-slate-200 text-base font-semibold transition-all duration-200 cursor-pointer shadow-2xs active:scale-[0.98]"
           >
             {c.viewHonors}
           </button>
         </div>
 
         {/* CARD 2: #1 CHAMPION (Elevated, Prominent Gold Border & Warm Glow) */}
-        <div className="bg-amber-50/40 dark:bg-amber-950/20 border-2 border-amber-300 dark:border-amber-500/70 rounded-3xl p-6 sm:p-7 shadow-xl shadow-amber-500/5 hover:shadow-2xl transition-all duration-300 flex flex-col items-center text-center relative md:-translate-y-4 z-10">
+        <div className="bg-amber-50/40 dark:bg-amber-950/20 rounded-3xl p-6 sm:p-7 shadow-xl shadow-amber-500/5 hover:shadow-2xl transition-all duration-300 flex flex-col items-center text-center relative md:-translate-y-4 z-10">
           {/* Rank Badge */}
-          <span className="inline-flex items-center gap-1.5 px-4 py-1 rounded-full text-lg font-bold bg-amber-400 text-amber-950 shadow-xs">
+          <span className="inline-flex items-center gap-1.5 px-4 py-1 rounded-full text-base font-bold bg-amber-400 text-amber-950 shadow-xs">
             <Crown size={13} className="fill-amber-950 text-amber-950" />
             <span>{c.championRank}</span>
           </span>
@@ -663,10 +666,10 @@ function ChampionsSection({
           <h3 className="text-xl font-extrabold text-slate-900 dark:text-white mt-1">
             {podium1.name}
           </h3>
-          <p className="text-lg font-bold text-amber-700 dark:text-amber-400 mt-0.5">
+          <p className="text-base font-bold text-amber-700 dark:text-amber-400 mt-0.5">
             {podium1.khmerName}
           </p>
-          <p className="text-lg text-slate-600 dark:text-slate-300 mt-1 line-clamp-1">
+          <p className="text-base text-slate-600 dark:text-slate-300 mt-1 line-clamp-1">
             {podium1.department}
           </p>
 
@@ -680,16 +683,16 @@ function ChampionsSection({
             <span className="text-[14px] font-bold tracking-wider text-amber-900 dark:text-amber-300 uppercase">
               {c.championScore}
             </span>
-            <span className="text-lg font-black text-amber-900 dark:text-amber-100">
+            <span className="text-base font-black text-amber-900 dark:text-amber-100">
               {Number(podium1.points).toLocaleString()}{" "}
-              <span className="text-amber-600 dark:text-amber-400 font-extrabold text-lg">
+              <span className="text-amber-600 dark:text-amber-400 font-extrabold text-base">
                 XP
               </span>
             </span>
           </div>
 
           {/* Stats Row */}
-          <div className="flex items-center justify-center gap-3 text-lg font-semibold text-amber-900 dark:text-amber-200 mt-3.5">
+          <div className="flex items-center justify-center gap-3 text-base font-semibold text-amber-900 dark:text-amber-200 mt-3.5">
             <span className="inline-flex items-center gap-1.5 text-amber-800 dark:text-amber-300">
               <Bookmark
                 size={13}
@@ -713,14 +716,14 @@ function ChampionsSection({
             <button
               type="button"
               onClick={() => onViewHonors?.(podium1)}
-              className="flex-1 py-2.5 px-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-lg font-bold transition-all duration-200 shadow-sm cursor-pointer active:scale-[0.98]"
+              className="flex-1 py-2.5 px-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-base font-bold transition-all duration-200 shadow-sm cursor-pointer active:scale-[0.98]"
             >
               {c.honors}
             </button>
             <button
               type="button"
               onClick={() => onAwardBadge?.(podium1)}
-              className="flex-1 py-2.5 px-3 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-lg font-bold transition-all duration-200 shadow-sm flex items-center justify-center gap-1 cursor-pointer active:scale-[0.98]"
+              className="flex-1 py-2.5 px-3 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-base font-bold transition-all duration-200 shadow-sm flex items-center justify-center gap-1 cursor-pointer active:scale-[0.98]"
             >
               {c.awardBadge}
             </button>
@@ -728,9 +731,9 @@ function ChampionsSection({
         </div>
 
         {/* CARD 3: #3 Bronze */}
-        <div className="bg-white dark:bg-zinc-900/95 border border-slate-200 dark:border-zinc-800 rounded-3xl p-6 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col items-center text-center relative">
+        <div className="bg-white dark:bg-zinc-900/95 rounded-3xl p-6 shadow-sm hover:shadow-md transition-all duration-300 flex flex-col items-center text-center relative">
           {/* Rank Badge */}
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-lg font-semibold bg-amber-100/70 text-amber-800 dark:bg-amber-950/60 dark:text-amber-400 border border-amber-200/80 dark:border-amber-800/40">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-base font-semibold bg-amber-100/70 text-amber-800 dark:bg-amber-950/60 dark:text-amber-400 border border-amber-200/80 dark:border-amber-800/40">
             <Shield size={13} className="text-amber-600" />
             <span>{c.bronzeRank}</span>
           </span>
@@ -763,26 +766,28 @@ function ChampionsSection({
           <h3 className="text-lg font-bold text-slate-900 dark:text-white mt-1">
             {podium3.name}
           </h3>
-          <p className="text-lg font-semibold text-blue-600 dark:text-blue-400 mt-0.5">
+          <p className="text-base font-semibold text-blue-600 dark:text-blue-400 mt-0.5">
             {podium3.khmerName}
           </p>
-          <p className="text-lg text-slate-500 dark:text-slate-400 mt-1 line-clamp-1">
+          <p className="text-base text-slate-500 dark:text-slate-400 mt-1 line-clamp-1">
             {podium3.department}
           </p>
 
           {/* Score Box */}
-          <div className="w-full bg-slate-50/80 dark:bg-zinc-800/60 border border-slate-200/60 dark:border-zinc-700/60 py-2.5 px-4 rounded-xl flex items-center justify-between mt-4">
-            <span className="text-lg text-slate-400 dark:text-slate-500 font-medium">
+          <div className="w-full bg-slate-50/80 dark:bg-zinc-800/60 py-2.5 px-4 rounded-xl flex items-center justify-between mt-4">
+            <span className="text-base text-slate-400 dark:text-slate-500 font-medium">
               {c.score}
             </span>
-            <span className="text-lg font-bold text-slate-900 dark:text-white">
+            <span className="text-base font-bold text-slate-900 dark:text-white">
               {Number(podium3.points).toLocaleString()}{" "}
-              <span className="text-amber-500 font-extrabold text-lg">XP</span>
+              <span className="text-amber-500 font-extrabold text-base">
+                XP
+              </span>
             </span>
           </div>
 
           {/* Stats Row */}
-          <div className="flex items-center justify-center gap-3 text-lg font-medium text-slate-600 dark:text-slate-300 mt-3.5">
+          <div className="flex items-center justify-center gap-3 text-base font-medium text-slate-600 dark:text-slate-300 mt-3.5">
             <span className="inline-flex items-center gap-1.5">
               <Bookmark size={13} className="text-amber-600" />
               <span>
@@ -802,7 +807,7 @@ function ChampionsSection({
           <button
             type="button"
             onClick={() => onViewHonors?.(podium3)}
-            className="w-full mt-4 py-2.5 px-4 rounded-xl border border-slate-200 dark:border-zinc-700 hover:bg-slate-50 dark:hover:bg-zinc-800 text-slate-700 dark:text-slate-200 text-lg font-semibold transition-all duration-200 cursor-pointer shadow-2xs active:scale-[0.98]"
+            className="w-full mt-4 py-2.5 px-4 rounded-xl border border-slate-200 dark:border-zinc-700 hover:bg-slate-50 dark:hover:bg-zinc-800 text-slate-700 dark:text-slate-200 text-base font-semibold transition-all duration-200 cursor-pointer shadow-2xs active:scale-[0.98]"
           >
             {c.viewHonors}
           </button>
@@ -840,7 +845,7 @@ function CategoryBadge({ t, c, category }) {
 
   return (
     <span
-      className="whitespace-nowrap rounded-md px-2 py-1 text-lg font-medium"
+      className="whitespace-nowrap rounded-md px-2 py-1 text-base font-medium"
       style={{
         backgroundColor: style.bg,
         color: style.text,
@@ -885,7 +890,7 @@ function LeaderboardControls({
               key={tab}
               type="button"
               onClick={() => setActiveTab(tab)}
-              className="rounded-lg px-3 py-2 text-lg font-medium transition-colors"
+              className="rounded-lg px-3 py-2 text-base font-medium transition-colors"
               style={
                 isActive
                   ? {
@@ -919,7 +924,7 @@ function LeaderboardControls({
             value={search}
             onChange={(event) => setSearch(event.target.value)}
             placeholder={c.searchPlaceholder}
-            className="search-input w-full rounded-lg border py-2 pl-9 pr-3 text-lg outline-none sm:w-60"
+            className="search-input w-full rounded-lg border py-2 pl-9 pr-3 text-base outline-none sm:w-60"
             style={{
               borderColor: t.border,
               color: t.heading,
@@ -932,7 +937,7 @@ function LeaderboardControls({
           aria-label={c.allCategories}
           value={category}
           onChange={(event) => setCategory(event.target.value)}
-          className="search-input rounded-lg border px-3 py-2 text-lg outline-none"
+          className="search-input rounded-lg border px-3 py-2 text-base outline-none"
           style={{
             borderColor: t.border,
             color: t.muted,
@@ -964,10 +969,10 @@ function LeaderboardTable({ t, c, lang, rows }) {
         fontFamily: lang === "km" ? KHMER_FONT_STACK : FONT_STACK,
       }}
     >
-      <table className="w-full min-w-[720px] border-collapse text-lg">
+      <table className="w-full min-w-[720px] border-collapse text-base">
         <thead>
           <tr
-            className="text-left text-lg"
+            className="text-left text-base"
             style={{
               color: t.mutedLight,
               backgroundColor: t.surfaceAlt,
@@ -1022,7 +1027,7 @@ function LeaderboardTable({ t, c, lang, rows }) {
                       {row.name}
                     </p>
 
-                    <p className="text-lg" style={{ color: t.mutedLight }}>
+                    <p className="text-base" style={{ color: t.mutedLight }}>
                       {row.handle}
                     </p>
                   </div>
@@ -1045,7 +1050,7 @@ function LeaderboardTable({ t, c, lang, rows }) {
 
       {rows.length === 0 && (
         <p
-          className="py-12 text-center text-lg"
+          className="py-12 text-center text-base"
           style={{ color: t.mutedLight }}
         >
           {c.noResults}
@@ -1080,10 +1085,15 @@ export default function LeaderBoardComponent({
   const [period, setPeriod] = useState(0);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All Categories");
+  const { isAuthenticated, user } = useSelector((state) => state.auth);
 
   const periodKeys = ["all", "month", "week"];
 
-  const query = useGetLeaderboardQuery(periodKeys[period], {
+  const leaderboardQueryKey = isAuthenticated ? `user:${user?.id ?? "authenticated"}` : "guest";
+  const query = useGetLeaderboardQuery({
+    period: periodKeys[period],
+    authKey: leaderboardQueryKey,
+  }, {
     pollingInterval: 60000,
     refetchOnMountOrArgChange: true,
   });
@@ -1188,13 +1198,35 @@ export default function LeaderBoardComponent({
     },
   ];
 
-  const users =
+  const sourceUsers =
     query.data && query.data.length > 0
       ? query.data
       : query.isError ||
           (!query.isLoading && (!query.data || query.data.length === 0))
         ? fallbackMembers
         : [];
+
+  const scoreOf = (user) => {
+    const score = Number(user.points ?? user.upvotes ?? 0);
+    return Number.isFinite(score) ? score : 0;
+  };
+  const metricOf = (user, key) => {
+    const metric = Number(user[key] ?? 0);
+    return Number.isFinite(metric) ? metric : 0;
+  };
+  const sortedUsers = [...sourceUsers].sort((a, b) =>
+    scoreOf(b) - scoreOf(a) ||
+    metricOf(b, "answers") - metricOf(a, "answers") ||
+    metricOf(b, "solutions") - metricOf(a, "solutions") ||
+    metricOf(b, "helpful") - metricOf(a, "helpful") ||
+    String(a.id).localeCompare(String(b.id), undefined, { numeric: true }),
+  );
+  const users = sortedUsers.map((user, index) => ({
+    ...user,
+    points: scoreOf(user),
+    upvotes: scoreOf(user),
+    rank: index + 1,
+  }));
 
   const categories = Array.from(
     new Set(users.map((user) => user.category).filter(Boolean)),
@@ -1304,7 +1336,7 @@ export default function LeaderBoardComponent({
       {toastMessage && (
         <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2 bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-xl border border-slate-700 animate-in fade-in slide-in-from-bottom-4 duration-300">
           <CheckCircle2 size={18} className="text-emerald-400" />
-          <span className="text-lg font-medium">{toastMessage}</span>
+          <span className="text-base font-medium">{toastMessage}</span>
         </div>
       )}
 
@@ -1343,7 +1375,7 @@ export default function LeaderBoardComponent({
               )}
             </div>
 
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-lg font-bold bg-amber-100 text-amber-900 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200 mb-2">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-base font-bold bg-amber-100 text-amber-900 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200 mb-2">
               <Trophy size={13} className="text-amber-600" />
               <span>
                 Rank #{selectedHonor.rank} • Lv.{selectedHonor.level}
@@ -1354,17 +1386,17 @@ export default function LeaderBoardComponent({
               {selectedHonor.name}
             </h3>
             {selectedHonor.khmerName && (
-              <p className="text-lg font-semibold text-blue-600 dark:text-blue-400 mt-0.5">
+              <p className="text-base font-semibold text-blue-600 dark:text-blue-400 mt-0.5">
                 {selectedHonor.khmerName}
               </p>
             )}
-            <p className="text-lg text-slate-500 dark:text-slate-400 mt-1">
+            <p className="text-base text-slate-500 dark:text-slate-400 mt-1">
               {selectedHonor.department}
             </p>
 
             {/* Honors & Accolades */}
             <div className="mt-6 text-left space-y-3">
-              <h4 className="text-lg font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+              <h4 className="text-base font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
                 {lang === "km"
                   ? "សមិទ្ធផល & ផ្លាកសញ្ញាកិត្តិយស"
                   : "Honors & Community Accolades"}
@@ -1376,7 +1408,7 @@ export default function LeaderBoardComponent({
                     <Bookmark size={17} />
                   </div>
                   <div>
-                    <strong className="block text-lg text-slate-900 dark:text-white font-bold">
+                    <strong className="block text-base text-slate-900 dark:text-white font-bold">
                       {selectedHonor.badges} Badges
                     </strong>
                     <span className="text-[14px] text-slate-500">
@@ -1390,7 +1422,7 @@ export default function LeaderBoardComponent({
                     <Package size={17} />
                   </div>
                   <div>
-                    <strong className="block text-lg text-slate-900 dark:text-white font-bold">
+                    <strong className="block text-base text-slate-900 dark:text-white font-bold">
                       {selectedHonor.returned} Returned
                     </strong>
                     <span className="text-[14px] text-slate-500">
@@ -1404,7 +1436,7 @@ export default function LeaderBoardComponent({
                     <Zap size={17} />
                   </div>
                   <div>
-                    <strong className="block text-lg text-slate-900 dark:text-white font-bold">
+                    <strong className="block text-base text-slate-900 dark:text-white font-bold">
                       {Number(selectedHonor.points).toLocaleString()} XP
                     </strong>
                     <span className="text-[14px] text-slate-500">
@@ -1418,7 +1450,7 @@ export default function LeaderBoardComponent({
                     <Sparkles size={17} />
                   </div>
                   <div>
-                    <strong className="block text-lg text-slate-900 dark:text-white font-bold">
+                    <strong className="block text-base text-slate-900 dark:text-white font-bold">
                       {selectedHonor.tag || "Grandmaster"}
                     </strong>
                     <span className="text-[14px] text-slate-500">
@@ -1431,7 +1463,7 @@ export default function LeaderBoardComponent({
 
             <button
               onClick={() => setSelectedHonor(null)}
-              className="w-full mt-6 py-3 px-4 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold text-lg transition-all duration-200 cursor-pointer shadow-md hover:opacity-90 active:scale-[0.98]"
+              className="w-full mt-6 py-3 px-4 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold text-base transition-all duration-200 cursor-pointer shadow-md hover:opacity-90 active:scale-[0.98]"
             >
               {lang === "km" ? "បិទ" : "Close"}
             </button>
@@ -1495,7 +1527,7 @@ export default function LeaderBoardComponent({
                     ? "ផ្លាកសញ្ញាត្រូវបានប្រគល់ជោគជ័យ!"
                     : "Badge Awarded Successfully!"}
                 </h4>
-                <p className="text-lg text-slate-500">
+                <p className="text-base text-slate-500">
                   {lang === "km"
                     ? "សូមអរគុណសម្រាប់ការលើកទឹកចិត្តដល់សមាជិកឆ្នើម។"
                     : "Thank you for recognizing top campus excellence."}
@@ -1503,7 +1535,7 @@ export default function LeaderBoardComponent({
               </div>
             ) : (
               <form onSubmit={handleSendAward} className="space-y-4">
-                <label className="block text-lg font-bold text-slate-600 dark:text-slate-300">
+                <label className="block text-base font-bold text-slate-600 dark:text-slate-300">
                   {lang === "km"
                     ? "ជ្រើសរើសផ្លាកសញ្ញា:"
                     : "Select Recognition Badge:"}
@@ -1530,7 +1562,7 @@ export default function LeaderBoardComponent({
                           <Icon size={16} />
                         </div>
                         <div className="min-w-0">
-                          <strong className="block text-lg font-bold text-slate-900 dark:text-white truncate">
+                          <strong className="block text-base font-bold text-slate-900 dark:text-white truncate">
                             {badge.name}
                           </strong>
                           <span className="text-[10px] text-slate-500 line-clamp-2 leading-tight mt-0.5">
@@ -1543,7 +1575,7 @@ export default function LeaderBoardComponent({
                 </div>
 
                 <div>
-                  <label className="block text-lg font-bold text-slate-600 dark:text-slate-300 mb-1">
+                  <label className="block text-base font-bold text-slate-600 dark:text-slate-300 mb-1">
                     {lang === "km"
                       ? "សារលើកទឹកចិត្ត (ស្រេចចិត្ត):"
                       : "Encouragement Note (Optional):"}
@@ -1557,7 +1589,7 @@ export default function LeaderBoardComponent({
                         ? "សរសេរសារកោតសរសើរ..."
                         : "e.g. Thanks for your outstanding help with mentoring!"
                     }
-                    className="w-full text-lg p-3 rounded-xl border border-slate-200 dark:border-zinc-700 bg-slate-50 dark:bg-zinc-800 text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-amber-400"
+                    className="w-full text-base p-3 rounded-xl border border-slate-200 dark:border-zinc-700 bg-slate-50 dark:bg-zinc-800 text-slate-900 dark:text-white outline-none focus:ring-2 focus:ring-amber-400"
                   />
                 </div>
 
@@ -1565,13 +1597,13 @@ export default function LeaderBoardComponent({
                   <button
                     type="button"
                     onClick={() => setAwardModalUser(null)}
-                    className="flex-1 py-2.5 px-4 rounded-xl border border-slate-200 dark:border-zinc-700 hover:bg-slate-50 dark:hover:bg-zinc-800 text-slate-700 dark:text-slate-300 text-lg font-semibold cursor-pointer"
+                    className="flex-1 py-2.5 px-4 rounded-xl border border-slate-200 dark:border-zinc-700 hover:bg-slate-50 dark:hover:bg-zinc-800 text-slate-700 dark:text-slate-300 text-base font-semibold cursor-pointer"
                   >
                     {lang === "km" ? "បោះបង់" : "Cancel"}
                   </button>
                   <button
                     type="submit"
-                    className="flex-1 py-2.5 px-4 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-lg font-bold shadow-md cursor-pointer transition-all active:scale-[0.98]"
+                    className="flex-1 py-2.5 px-4 rounded-xl bg-amber-500 hover:bg-amber-600 text-white text-base font-bold shadow-md cursor-pointer transition-all active:scale-[0.98]"
                   >
                     {lang === "km" ? "ប្រគល់ផ្លាកសញ្ញា" : "Confirm Award"}
                   </button>
@@ -1597,7 +1629,7 @@ export default function LeaderBoardComponent({
           className="mx-auto max-w-7xl px-4 pt-6 sm:px-6"
           style={{ color: t.muted }}
         >
-          <p className="text-lg">
+          <p className="text-base">
             {lang === "km"
               ? "ពិន្ទុសរុបនៃការបង្ហោះដែលបានផ្ទុក។ តម្រងពេលវេលាយោងតាមថ្ងៃបង្កើតមាតិកា។"
               : "Ranked by total post scores in loaded posts. Time filters use content creation dates, not vote dates. Equal scores share a rank."}
@@ -1605,7 +1637,7 @@ export default function LeaderBoardComponent({
 
           <button
             type="button"
-            className="mt-3 text-lg underline"
+            className="mt-3 text-base underline"
             disabled={query.isFetching}
             onClick={query.refetch}
           >

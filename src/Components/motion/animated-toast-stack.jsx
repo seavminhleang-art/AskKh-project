@@ -369,7 +369,7 @@ const ToastItem = memo(
                   >
                     <p
                       className={cn(
-                        "truncate text-lg font-medium leading-5 text-foreground",
+                        "truncate text-base font-medium leading-5 text-foreground",
                         classNames?.title,
                       )}
                     >
@@ -378,7 +378,7 @@ const ToastItem = memo(
                     {toast.description ? (
                       <p
                         className={cn(
-                          "mt-0.5 line-clamp-2 text-lg leading-4 text-muted-foreground",
+                          "mt-0.5 line-clamp-2 text-base leading-4 text-muted-foreground",
                           classNames?.description,
                         )}
                       >
@@ -393,7 +393,7 @@ const ToastItem = memo(
                     type="button"
                     onClick={() => toast.action?.onClick(toast)}
                     className={cn(
-                      "mt-2 inline-flex h-7 items-center rounded-full bg-primary/[0.06] px-3 text-lg font-medium text-foreground transition-colors hover:bg-primary/[0.1]",
+                      "mt-2 inline-flex h-7 items-center rounded-full bg-primary/[0.06] px-3 text-base font-medium text-foreground transition-colors hover:bg-primary/[0.1]",
                       classNames?.action,
                     )}
                   >

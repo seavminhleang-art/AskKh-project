@@ -109,7 +109,7 @@ export default function TrendingDiscussions({ darkMode }) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           whileHover={{ scale: 1.05 }}
-          className={`inline-block text-lg font-bold uppercase tracking-wider px-4 py-1.5 rounded-full mb-3 cursor-pointer ${
+          className={`inline-block text-base font-bold uppercase tracking-wider px-4 py-1.5 rounded-full mb-3 cursor-pointer ${
             darkMode
               ? "bg-red-950/80 text-red-400"
               : "bg-[#fde0e0]/90 text-[var(--home-secondary-text)]"
@@ -129,7 +129,7 @@ export default function TrendingDiscussions({ darkMode }) {
         <div className="flex justify-end max-w-7xl mx-auto px-2">
           <Link
             to="/community/qa"
-            className="text-[var(--home-link-text)] font-semibold text-lg flex items-center gap-1 hover:underline cursor-pointer"
+            className="text-[var(--home-link-text)] font-semibold text-base flex items-center gap-1 hover:underline cursor-pointer"
           >
             {t("discViewAll")} →
           </Link>
@@ -157,7 +157,7 @@ export default function TrendingDiscussions({ darkMode }) {
                   {discussion.tags.slice(0, 3).map((tag, tIdx) => (
                     <span
                       key={tIdx}
-                      className={`text-lg font-semibold px-2.5 py-1 rounded-full ${
+                      className={`text-base font-semibold px-2.5 py-1 rounded-full ${
                         discussion.tagColors[tIdx] || discussion.tagColors[0]
                       }`}
                     >
@@ -167,14 +167,14 @@ export default function TrendingDiscussions({ darkMode }) {
                 </div>
 
                 <h3
-                  className={`text-lg font-bold mb-2 leading-snug line-clamp-2 ${
+                  className={`text-base font-bold mb-2 leading-snug line-clamp-2 ${
                     darkMode ? "text-slate-100" : "text-gray-900"
                   }`}
                 >
                   {discussion.title}
                 </h3>
                 <p
-                  className={`text-lg leading-relaxed mb-6 line-clamp-3 ${
+                  className={`text-base leading-relaxed mb-6 line-clamp-3 ${
                     darkMode ? "text-slate-400" : "text-gray-600"
                   }`}
                 >
@@ -183,7 +183,7 @@ export default function TrendingDiscussions({ darkMode }) {
               </div>
 
               <div
-                className={`flex items-center justify-between pt-4 border-t text-lg ${
+                className={`flex items-center justify-between pt-4 border-t text-base ${
                   darkMode
                     ? "border-zinc-800 text-slate-400"
                     : "border-gray-100 text-gray-500"
@@ -198,7 +198,7 @@ export default function TrendingDiscussions({ darkMode }) {
                     }`}
                   />
                   <span
-                    className={`font-medium text-lg sm:text-lg truncate max-w-[110px] ${
+                    className={`font-medium text-base sm:text-base truncate max-w-[110px] ${
                       darkMode ? "text-slate-300" : "text-gray-700"
                     }`}
                   >
@@ -208,7 +208,7 @@ export default function TrendingDiscussions({ darkMode }) {
 
                 <div className="flex items-center gap-3">
                   <span
-                    className={`flex items-center gap-1 text-lg ${
+                    className={`flex items-center gap-1 text-base ${
                       darkMode ? "text-slate-400" : "text-gray-500"
                     }`}
                   >
@@ -216,7 +216,7 @@ export default function TrendingDiscussions({ darkMode }) {
                     {discussion.answers}
                   </span>
                   <span
-                    className={`flex items-center gap-1 font-semibold text-lg ${
+                    className={`flex items-center gap-1 font-semibold text-base ${
                       darkMode ? "text-blue-400" : "text-blue-600"
                     }`}
                   >

@@ -10,6 +10,15 @@ import { useWorkspaceDataQuery } from "@/features/workspace/workspaceApi";
 import { rows, dateLabel } from "@/features/workspace/workspaceModel";
 import { formatMediaUrl } from "@/features/workspace/profileImage";
 
+function memberLabel(item) {
+  const scope = String(item.scope || item.visibility || item.reportScope || "")
+    .trim()
+    .toLowerCase();
+  if (scope === "istad") return "ISTAD Member";
+  if (scope === "public") return "Public Member";
+  return "Campus Member";
+}
+
 export default function RecentRecoveries({ darkMode }) {
   const { t, i18n } = useTranslation();
   const reportsQuery = useWorkspaceDataQuery({ resource: "reports" });
@@ -40,6 +49,7 @@ export default function RecentRecoveries({ darkMode }) {
 
       return {
         id: item.id,
+        scope: item.scope || item.visibility || item.reportScope,
         status: isLost ? t("recStatusLost") : t("recStatusFound"),
         statusBg: isLost
           ? "bg-[var(--color-brand-secondary)] text-white"
@@ -48,7 +58,7 @@ export default function RecentRecoveries({ darkMode }) {
         desc: item.description || "Reported on campus via NEXA.",
         location: loc,
         date: dateLabel(item.createdAt || item.itemDate, i18n.language),
-        author: item.reporterName || item.user?.username || "Campus Member",
+        author: item.reporterName || item.user?.username || memberLabel(item),
         avatar:
           item.user?.profileImageUrl ||
           `https://randomuser.me/api/portraits/men/${22 + idx * 10}.jpg`,
@@ -113,7 +123,7 @@ export default function RecentRecoveries({ darkMode }) {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           transition={{ duration: 0.2 }}
-          className={`inline-block text-lg font-bold uppercase tracking-wider px-4 py-1.5 rounded-full mb-3 cursor-pointer ${
+          className={`inline-block text-base font-bold uppercase tracking-wider px-4 py-1.5 rounded-full mb-3 cursor-pointer ${
             darkMode
               ? "bg-zinc-800 text-[var(--home-secondary-text)]"
               : "bg-[var(--color-brand-secondary-light)] text-[var(--home-secondary-text)]"
@@ -127,7 +137,7 @@ export default function RecentRecoveries({ darkMode }) {
         </h2>
 
         <p
-          className={`max-w-xl mx-auto text-lg md:text-lg leading-relaxed ${
+          className={`max-w-xl mx-auto text-base md:text-base leading-relaxed ${
             darkMode ? "text-slate-400" : "text-gray-600"
           }`}
         >
@@ -158,7 +168,7 @@ export default function RecentRecoveries({ darkMode }) {
                   }`}
                 >
                   <span
-                    className={`absolute top-3 left-3 z-10 text-lg font-bold px-3 py-1 rounded-full uppercase tracking-wider ${item.statusBg} shadow-md`}
+                    className={`absolute top-3 left-3 z-10 text-base font-bold px-3 py-1 rounded-full uppercase tracking-wider ${item.statusBg} shadow-md`}
                   >
                     {item.status}
                   </span>
@@ -175,7 +185,7 @@ export default function RecentRecoveries({ darkMode }) {
                 </div>
 
                 <div
-                  className={`flex items-center justify-between text-lg mb-2 ${
+                  className={`flex items-center justify-between text-base mb-2 ${
                     darkMode ? "text-slate-400" : "text-gray-400"
                   }`}
                 >
@@ -191,14 +201,14 @@ export default function RecentRecoveries({ darkMode }) {
                 </div>
 
                 <h3
-                  className={`text-lg font-bold mb-1.5 leading-snug line-clamp-1 ${
+                  className={`text-base font-bold mb-1.5 leading-snug line-clamp-1 ${
                     darkMode ? "text-slate-100" : "text-gray-900"
                   }`}
                 >
                   {item.title}
                 </h3>
                 <p
-                  className={`text-lg leading-relaxed mb-6 line-clamp-2 ${
+                  className={`text-base leading-relaxed mb-6 line-clamp-2 ${
                     darkMode ? "text-slate-400" : "text-gray-600"
                   }`}
                 >
@@ -220,7 +230,7 @@ export default function RecentRecoveries({ darkMode }) {
                     }`}
                   />
                   <span
-                    className={`text-lg font-medium truncate max-w-[120px] ${
+                    className={`text-base font-medium truncate max-w-[120px] ${
                       darkMode ? "text-slate-300" : "text-gray-700"
                     }`}
                   >
@@ -231,7 +241,7 @@ export default function RecentRecoveries({ darkMode }) {
                 <motion.span
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className={`text-lg font-semibold px-3.5 py-1.5 rounded-full transition ${
+                  className={`text-base font-semibold px-3.5 py-1.5 rounded-full transition ${
                     darkMode
                       ? "bg-emerald-950/80 text-emerald-400 hover:bg-emerald-900/80"
                       : "bg-emerald-50 text-[var(--color-brand-accent)] hover:bg-emerald-100"

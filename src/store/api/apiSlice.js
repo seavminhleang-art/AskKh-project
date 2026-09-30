@@ -117,6 +117,7 @@ import {
   notificationApi,
   useGetNotificationsQuery,
   useGetUnreadCountQuery,
+  useStreamNotificationsQuery,
   useMarkReadMutation,
   useMarkAllReadMutation,
   useMarkNotificationAsReadMutation,
@@ -141,6 +142,16 @@ import {
   achievementsApi,
   useGetAchievementsQuery,
 } from '../../features/achievements/achievementsApi';
+
+import {
+  adminApi,
+  useGetAdminAnalyticsQuery,
+  useGetUsersQuery,
+  useUpdateUserRoleMutation,
+  useToggleBlockUserMutation,
+  useUpdateClaimStatusMutation,
+  useUpdateReportStatusMutation,
+} from '../../features/admin/adminApi';
 
 // Re-export all hooks and endpoints
 export const useGetItemByIdQuery = useGetReportByIdQuery;
@@ -233,6 +244,7 @@ export {
   notificationApi,
   useGetNotificationsQuery,
   useGetUnreadCountQuery,
+  useStreamNotificationsQuery,
   useMarkReadMutation,
   useMarkAllReadMutation,
   useMarkNotificationAsReadMutation,
@@ -247,4 +259,11 @@ export {
   useGetLeaderboardQuery,
   achievementsApi,
   useGetAchievementsQuery,
+  adminApi,
+  useGetAdminAnalyticsQuery,
+  useGetUsersQuery,
+  useUpdateUserRoleMutation,
+  useToggleBlockUserMutation,
+  useUpdateClaimStatusMutation,
+  useUpdateReportStatusMutation,
 };

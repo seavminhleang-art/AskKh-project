@@ -9,31 +9,6 @@ Allow: /privacy-policy
 Allow: /privacy
 Allow: /questions/
 
-# Social and Search Engine Bots
-User-agent: facebookexternalhit
-Allow: /
-
-User-agent: TelegramBot
-Allow: /
-
-User-agent: Twitterbot
-Allow: /
-
-User-agent: WhatsApp
-Allow: /
-
-User-agent: LinkedInBot
-Allow: /
-
-User-agent: Googlebot
-Allow: /
-
-User-agent: Bingbot
-Allow: /
-
-User-agent: Applebot
-Allow: /
-
 # Disallow private user workspace & administrative areas from search indexation
 Disallow: /dashboard/
 Disallow: /admin/
@@ -48,5 +23,30 @@ Disallow: /reset
 Disallow: /forgot-password
 Disallow: /__forum_api/
 
-# Sitemap location (dynamic — includes individual question pages)
-Sitemap: https://ask-kh-project.vercel.app/sitemap.xml
+# Social and Search Engine Bots
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: TelegramBot
+Allow: /
+
+User-agent: WhatsApp
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /
+
+# Sitemap location
+Sitemap: https://nexa-frontend.cheat.casa/sitemap.xml

@@ -28,7 +28,7 @@ export default function StatCard({
     <Card className={cn("p-5 overflow-hidden relative", className)} hover>
       <div className="flex items-start justify-between">
         <div className="space-y-1">
-          <p className="text-lg font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
+          <p className="text-base font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">
             {title}
           </p>
           <h4 className="text-5xl sm:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight">
@@ -49,7 +49,7 @@ export default function StatCard({
       </div>
 
       {(subtitle || trend) && (
-        <div className="flex items-center gap-2 mt-3 pt-3 border-t border-slate-100 dark:border-slate-800 text-lg">
+        <div className="flex items-center gap-2 mt-3 pt-3 border-t border-slate-100 dark:border-slate-800 text-base">
           {trend && (
             <span
               className={cn(

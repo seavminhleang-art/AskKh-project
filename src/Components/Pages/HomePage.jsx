@@ -20,11 +20,9 @@ export default function HomePage() {
 
   usePageSEO({
     title: "NEXA — Cambodian Developer & Student Community",
-    description:
-      "NEXA is Cambodia's premier developer community for programming Q&A, technical collaboration, and campus Lost & Found recovery.",
-    keywords:
-      "NEXA, NEXA Cambodia, Cambodian Developers, Cambodia Tech Community, ISTAD, Programming Q&A, Lost and Found Cambodia, Code Collaboration, Web Development, Phnom Penh Tech",
-    canonicalUrl: "https://ask-kh-project.vercel.app/",
+    description: "NEXA is Cambodia's premier developer community for programming Q&A, technical collaboration, and campus Lost & Found recovery.",
+    keywords: "NEXA, NEXA Cambodia, Cambodian Developers, Cambodia Tech Community, ISTAD, Programming Q&A, Lost and Found Cambodia, Code Collaboration, Web Development, Phnom Penh Tech",
+    canonicalUrl: "https://nexa-frontend.cheat.casa/",
   });
 
   // --------------------------------------------------
@@ -68,7 +66,7 @@ export default function HomePage() {
           Custom Mouse Follower Tooltip
       ------------------------------------------------ */}
       <motion.div
-        className={`hidden lg:flex fixed top-0 left-0 z-50 pointer-events-none items-center justify-center px-3 py-1.5 rounded-full backdrop-blur-md text-lg font-medium shadow-xl ${
+        className={`hidden lg:flex fixed top-0 left-0 z-50 pointer-events-none items-center justify-center px-3 py-1.5 rounded-full backdrop-blur-md text-base font-medium shadow-xl ${
           darkMode
             ? "bg-gray-100/90 text-gray-900"
             : "bg-gray-900/90 text-white"

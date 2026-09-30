@@ -15,12 +15,6 @@ export default function SocialAuthButtons({ t, isKhmer, disabled }) {
   const handleError = (error, provider) => {
     const messages = {
       "auth/popup-blocked": t.popupBlocked,
-      "auth/unauthorized-domain": isKhmer
-        ? "ដែនគេហទំព័រនេះមិនទាន់ត្រូវបានអនុញ្ញាតក្នុង Firebase Authentication ទេ។"
-        : "This website domain is not authorized in Firebase Authentication.",
-      "auth/invalid-api-key": isKhmer
-        ? "ការកំណត់ Firebase មិនត្រឹមត្រូវ។ សូមទាក់ទងអ្នកគ្រប់គ្រង។"
-        : "Firebase configuration is invalid. Please contact the administrator.",
       "auth/account-exists-with-different-credential": t.accountExists,
       "auth/network-request-failed": t.network,
       "auth/too-many-requests": t.tooMany,
