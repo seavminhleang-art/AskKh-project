@@ -15,7 +15,7 @@ import { useLogoutApiMutation } from "@/features/auth/authApi";
 import { baseApi } from "../../store/api/baseApi";
 import useLogoutPrompt from "../../hooks/useLogoutPrompt";
 
-export default function WorkspaceProfileMenu({ user, mode = "user" }) {
+export default function WorkspaceProfileMenu({ user }) {
   const { w } = useWorkspaceTranslation();
   const ref = useRef(null);
   const hoverTimer = useRef(null);
@@ -132,7 +132,7 @@ export default function WorkspaceProfileMenu({ user, mode = "user" }) {
           {w("Home")}
         </Link>
         <Link
-          to={mode === "admin" ? "/admin/dashboard" : "/dashboard"}
+          to="/dashboard"
           onClick={() => {
             if (ref.current) ref.current.open = false;
           }}
@@ -141,7 +141,7 @@ export default function WorkspaceProfileMenu({ user, mode = "user" }) {
           {w("Dashboard")}
         </Link>
         <Link
-          to={mode === "admin" ? "/admin/settings" : "/dashboard/profile"}
+          to="/dashboard/profile"
           onClick={() => {
             if (ref.current) ref.current.open = false;
           }}

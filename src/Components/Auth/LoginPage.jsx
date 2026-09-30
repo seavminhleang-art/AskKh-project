@@ -544,7 +544,7 @@ export default function LoginPage() {
     try {
       const result = await login({ email: data.email.trim(), password: data.password, rememberMe: data.rememberMe }).unwrap();
       toast.success(t.successTitle, { toastId: "login-success" });
-      navigate(authCredentials(result).user.role === "admin" ? "/admin/dashboard" : "/dashboard", { replace: true });
+      navigate("/dashboard", { replace: true });
     } catch (error) {
       notifyError(authError(error, t.loginFailed));
     }

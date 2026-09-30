@@ -42,6 +42,8 @@ import {
 } from "../../features/upload/uploadApi";
 import { uploadQuestionImages } from "../../features/qa/uploadQuestionImages";
 
+import { hasLocalView, recordLocalView } from "../../features/qa/localViews.js";
+
 // Helpers
 import {
   rowsOf,
@@ -237,6 +239,7 @@ export default function QACommunity({
   // ==================================================
 
   const handleSelectPost = (id) => {
+    recordLocalView(id);
     setSelectedPostId(id);
   };
 
@@ -674,6 +677,7 @@ export default function QACommunity({
                     <PostCard
                       key={post.id}
                       {...post}
+                      views={hasLocalView(post.id) ? 1 : 0}
                       darkMode={darkMode}
                       language={currentLang}
                       isBookmarked={bookmarkedPostIds.includes(post.id)}

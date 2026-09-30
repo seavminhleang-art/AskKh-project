@@ -29,7 +29,7 @@ export default function NotificationButton({ className = "" }) {
   return (
     <button
       type="button"
-      onClick={() => navigate("/notifications")}
+      onClick={() => navigate("/dashboard/notifications")}
       className={`relative w-10 h-10 rounded-xl border border-[#E5E7EB] dark:border-slate-800 bg-white dark:bg-slate-900 text-[#667085] hover:text-[#111827] dark:text-slate-400 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-800/80 transition-all flex items-center justify-center cursor-pointer select-none ${className}`}
       aria-label="Notifications"
       title="Notifications"

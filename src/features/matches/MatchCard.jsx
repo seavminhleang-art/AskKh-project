@@ -8,8 +8,8 @@ import {
   ArrowRight,
   ShieldCheck,
 } from "lucide-react";
-import Card from "../../Components/Admin/common/Card";
-import Button from "../../Components/Admin/common/Button";
+import Card from "../../Components/common/Card";
+import Button from "../../Components/common/Button";
 import StatusBadge from "../../Components/ui/StatusBadge";
 import MatchDetailsModal from "../../Components/modals/MatchDetailsModal";
 import { useUpdateMatchStatusMutation } from "../../store/api/apiSlice";

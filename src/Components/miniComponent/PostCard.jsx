@@ -160,6 +160,9 @@ const PostCard = ({
               className={`flex items-center space-x-3 text-lg ${darkMode ? "text-zinc-400" : "text-gray-500"}`}
             >
               <button
+                type="button"
+                title="Views in this browser"
+                aria-label={`Open question; ${Number(views)} views in this browser`}
                 onClick={() => onSelectPost(id)}
                 className="flex items-center gap-1 hover:text-blue-500 transition-colors"
               >
@@ -206,6 +209,9 @@ const PostCard = ({
               </button>
 
               <button
+                type="button"
+                title="Views in this browser"
+                aria-label={`Open question; ${Number(views)} views in this browser`}
                 onClick={() => onSelectPost(id)}
                 className="flex items-center gap-1 hover:text-blue-500 transition-colors"
               >

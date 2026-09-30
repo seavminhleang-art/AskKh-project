@@ -17,7 +17,6 @@ import { useSelector } from "react-redux";
 import { useTheme } from "../context/ThemeContext";
 import { useWorkspaceDataQuery } from "../features/workspace/workspaceApi";
 export default function WorkspaceTopbar({
-  mode = "user",
   collapsed = false,
   onToggleSidebar,
 }) {
@@ -110,7 +109,7 @@ export default function WorkspaceTopbar({
             <span className="absolute -right-1 -top-1 h-2 w-2 rounded-full bg-red-500" />
           )}
         </Link>
-        <WorkspaceProfileMenu user={user} mode={mode} />
+        <WorkspaceProfileMenu user={user} />
         <button
           type="button"
           className="workspace-icon-button md:hidden"
@@ -130,7 +129,7 @@ export default function WorkspaceTopbar({
             if (event.key === "Escape") setMenuOpen(false);
           }}
         >
-          <Sidebar mode={mode} mobile />
+          <Sidebar mobile />
         </div>
       )}
     </header>

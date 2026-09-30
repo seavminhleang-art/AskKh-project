@@ -14,7 +14,7 @@ The `/dashboard` routes use the supplied user-screen reference: a shared sidebar
 
 The public contract was read from `https://forum-istad-api.cheat.casa/api/v1/v3/api-docs`. No unsupported account deletion, notification-preference persistence, claim withdrawal, or private-post controls are shown.
 
-Requests share the existing Firebase-aware transport with the admin workspace. A Firebase token is retried once after refresh on a 401. Backend errors remain visible. Protected routes restore a persisted Firebase session before redirecting to login.
+Requests use the Firebase-aware transport. A Firebase token is retried once after refresh on a 401. Backend errors remain visible. Protected routes restore a persisted Firebase session before redirecting to login.
 
 ## Verification
 

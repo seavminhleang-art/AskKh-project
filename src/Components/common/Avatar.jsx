@@ -1,4 +1,4 @@
-export default function Avatar({ name = "Admin", src, size = 32 }) {
+export default function Avatar({ name = "Member", src, size = 32 }) {
   const initials = name
     .split(/\s+/)
     .filter(Boolean)

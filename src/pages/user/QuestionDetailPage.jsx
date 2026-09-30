@@ -1,9 +1,10 @@
+import { useGetCommentsByPostQuery } from "../../features/comments/commentApi";
 import { formatMediaUrl } from "../../features/workspace/profileImage.js";
 import FormattedText from "../../Components/editor/FormattedText.jsx";
 import { ANSWER_POST_TYPE_ID } from "../../config/postTypes.js";
 import { useWorkspaceTranslation } from "@/locales/workspace/useWorkspaceTranslation";
-import { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { Link, useLocation, useParams } from "react-router-dom";
 import {
   useWorkspaceDataQuery,
   useWorkspaceSaveMutation,
@@ -18,6 +19,9 @@ import { usePageSEO } from "../../Components/common/SEO";
 export default function QuestionDetailPage() {
   const { w, locale } = useWorkspaceTranslation();
   const { id } = useParams();
+  const { hash, key: navigationKey } = useLocation();
+  const commentsRef = useRef(null);
+  const comments = useGetCommentsByPostQuery(id, { refetchOnMountOrArgChange: true });
   const query = useWorkspaceDataQuery({
     resource: "post",
     id,
@@ -30,6 +34,13 @@ export default function QuestionDetailPage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const post = query.data?.data ?? query.data;
+
+  useEffect(() => {
+    if (hash === "#comments" && post && !comments.isFetching) {
+      commentsRef.current?.scrollIntoView({ block: "start" });
+      commentsRef.current?.focus({ preventScroll: true });
+    }
+  }, [hash, navigationKey, post, comments.isFetching]);
 
   usePageSEO({
     title: post?.title
@@ -105,13 +116,14 @@ export default function QuestionDetailPage() {
                   {w("views")}
                 </span>
               </div>
-              {post.comments?.length > 0 && (
-                <section>
+              <section id="comments" ref={commentsRef} tabIndex={-1} className="scroll-mt-24">
                   <h2>{w("Comments")}</h2>
-                  {post.comments.map((comment) => (
+                  <QueryState query={comments}>
+                  {rows(comments.currentData).length === 0 && <Empty>{w("No comments yet.")}</Empty>}
+                  {rows(comments.currentData).map((comment) => (
                     <div className="uw-row" key={comment.id}>
                       <div>
-                        <p>{comment.text}</p>
+                        <FormattedText>{comment.text}</FormattedText>
                         <p>
                           {comment.userDisplayName} ·{" "}
                           {dateLabel(comment.creationDate, locale)}
@@ -119,8 +131,8 @@ export default function QuestionDetailPage() {
                       </div>
                     </div>
                   ))}
+                  </QueryState>
                 </section>
-              )}
             </article>
           </>
         )}
