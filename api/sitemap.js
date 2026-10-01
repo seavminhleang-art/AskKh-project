@@ -13,7 +13,7 @@
 
 const SITE_ORIGIN = "https://nexa-frontend.cheat.casa";
 const API_BASE = "https://forum-istad-api.cheat.casa/api/v1";
-const QUESTION_TYPE_ID = 3;
+const QUESTION_TYPE_ID = 2;
 const TODAY = new Date().toISOString().slice(0, 10);
 
 /** Static pages that are always in the sitemap */
