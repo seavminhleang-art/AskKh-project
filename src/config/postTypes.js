@@ -1,6 +1,6 @@
 // Backend post type used for both questions and replies.
 export const QUESTION_POST_TYPE_ID = 2;
-export const ANSWER_POST_TYPE_ID = 2;
+export const ANSWER_POST_TYPE_ID = 1;
 
 export function isAnswerPost(post) {
   if (post.parentId != null) return true;
