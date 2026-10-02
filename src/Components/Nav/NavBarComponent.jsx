@@ -591,44 +591,43 @@ export default function Navbar({
             {/* Notification Dropdown Popover */}
             {notificationOpen && (
               <div className="absolute right-0 mt-2 w-80 sm:w-96 max-w-[calc(100vw-2rem)] rounded-2xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-2xl z-50 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
-                <div className="p-3.5 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between">
-                  <div className="flex items-center gap-2">
+                <div className="p-4 border-b border-gray-100 dark:border-gray-800 space-y-3">
+                  <div className="flex min-w-0 flex-wrap items-center gap-2">
                     <h3 className="font-semibold text-base text-gray-900 dark:text-white">
                       {t("notificationLabel", "Notifications")}
                     </h3>
                     {notificationCount > 0 && (
-                      <span className="px-2 py-0.5 rounded-full text-base font-semibold bg-brand-primary-light dark:bg-gray-800 text-brand-primary">
+                      <span className="shrink-0 whitespace-nowrap px-2 py-0.5 rounded-full text-xs font-semibold bg-brand-primary-light dark:bg-gray-800 text-brand-primary dark:text-blue-300">
                         {notificationCount} {isKhmer ? "ថ្មី" : "new"}
                       </span>
                     )}
                   </div>
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-1.5">
                     <button
                       type="button"
                       onClick={() => setNotificationSoundEnabled((enabled) => !enabled)}
-                      className="text-base text-brand-primary hover:text-brand-secondary font-medium flex items-center gap-1 transition-colors"
+                      className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-brand-primary dark:hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary transition-colors"
                       aria-label={notificationSoundEnabled ? (isKhmer ? "បិទសំឡេង" : "Mute notification sound") : (isKhmer ? "បើកសំឡេង" : "Enable notification sound")}
                       title={notificationSoundEnabled ? (isKhmer ? "បិទសំឡេង" : "Mute notification sound") : (isKhmer ? "បើកសំឡេង" : "Enable notification sound")}
                     >
-                      {notificationSoundEnabled ? <Volume2 size={14} /> : <VolumeX size={14} />}
+                      {notificationSoundEnabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
                     </button>
                     <button
                       type="button"
                       disabled={notificationsFetching}
                       onClick={() => refetchNotifications()}
-                      className="text-base text-brand-primary hover:text-brand-secondary font-medium flex items-center gap-1 transition-colors disabled:opacity-50"
+                      className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-brand-primary dark:hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary transition-colors disabled:opacity-50"
                       aria-label={isKhmer ? "ផ្ទុកការជូនដំណឹងឡើងវិញ" : "Refresh notifications"}
                       title={isKhmer ? "ផ្ទុកការជូនដំណឹងឡើងវិញ" : "Refresh notifications"}
                     >
-                      <RefreshCw size={14} className={notificationsFetching ? "animate-spin" : ""} />
-                      {isKhmer ? "ផ្ទុកឡើងវិញ" : "Refresh"}
+                      <RefreshCw size={16} className={notificationsFetching ? "animate-spin" : ""} />
                     </button>
                     {notificationCount > 0 && (
                       <button
                         type="button"
                         disabled={isMarkingAll}
                         onClick={() => markAllRead()}
-                        className="text-base text-brand-primary hover:text-brand-secondary font-medium flex items-center gap-1 transition-colors disabled:opacity-50"
+                        className="ml-auto inline-flex min-h-8 items-center justify-center gap-1.5 rounded-lg px-2.5 py-1 text-sm whitespace-nowrap text-brand-primary dark:text-blue-300 hover:bg-brand-primary-light dark:hover:bg-gray-800 font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary transition-colors disabled:opacity-50"
                       >
                         <CheckCheck size={14} />
                         {isKhmer ? "អានទាំងអស់" : "Mark all read"}
