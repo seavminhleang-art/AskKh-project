@@ -1,5 +1,13 @@
 export function authError(error, fallback = 'Something went wrong. Please try again.') {
   if (!error) return fallback;
+  const validationErrors = error.data?.validationErrors;
+  if (validationErrors && typeof validationErrors === 'object') {
+    const messages = Object.values(validationErrors).filter((message) => typeof message === 'string');
+    if (messages.length) return messages.join(' ');
+  }
+  if (error.status === 'FETCH_ERROR' || error.status === 'TIMEOUT_ERROR') {
+    return 'Unable to reach the server. Please check your internet connection and try again.';
+  }
   if (typeof error === 'string') {
     if (error.toLowerCase().includes('cors')) {
       return 'The server rejected this request due to CORS policy. Please ensure the backend allows requests from this domain.';

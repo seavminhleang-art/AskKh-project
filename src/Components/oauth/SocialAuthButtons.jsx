@@ -18,6 +18,12 @@ export default function SocialAuthButtons({ t, isKhmer, disabled }) {
       "auth/account-exists-with-different-credential": t.accountExists,
       "auth/network-request-failed": t.network,
       "auth/too-many-requests": t.tooMany,
+      "auth/unauthorized-domain": isKhmer
+        ? "Domain នេះមិនទាន់បានអនុញ្ញាតក្នុង Firebase Authentication។ សូមទាក់ទងអ្នកគ្រប់គ្រង។"
+        : "This website domain is not authorized in Firebase Authentication. Add it to the project's authorized domains.",
+      "auth/invalid-api-key": isKhmer
+        ? "ការកំណត់ Firebase មិនត្រឹមត្រូវ។ សូមទាក់ទងអ្នកគ្រប់គ្រង។"
+        : "The Firebase API key is invalid. Check the website's Firebase configuration.",
     };
     const message = error.code === "auth/operation-not-allowed"
       ? (isKhmer
